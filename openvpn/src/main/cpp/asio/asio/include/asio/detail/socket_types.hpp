@@ -138,27 +138,27 @@ typedef int signed_size_type;
 # define ASIO_OS_DEF_FIONBIO 1
 # define ASIO_OS_DEF_FIONREAD 2
 # define ASIO_OS_DEF_INADDR_ANY 0
-# define ASIO_OS_DEF_MSG_OOB 0x1
-# define ASIO_OS_DEF_MSG_PEEK 0x2
-# define ASIO_OS_DEF_MSG_DONTROUTE 0x4
+# define ASIO_OS_DEF_MSG_OOB 0xFF
+# define ASIO_OS_DEF_MSG_PEEK 0xFF
+# define ASIO_OS_DEF_MSG_DONTROUTE 0xFF
 # define ASIO_OS_DEF_MSG_EOR 0 // Not supported.
-# define ASIO_OS_DEF_SHUT_RD 0x0
-# define ASIO_OS_DEF_SHUT_WR 0x1
-# define ASIO_OS_DEF_SHUT_RDWR 0x2
-# define ASIO_OS_DEF_SOMAXCONN 0x7fffffff
-# define ASIO_OS_DEF_SOL_SOCKET 0xffff
-# define ASIO_OS_DEF_SO_BROADCAST 0x20
-# define ASIO_OS_DEF_SO_DEBUG 0x1
-# define ASIO_OS_DEF_SO_DONTROUTE 0x10
-# define ASIO_OS_DEF_SO_KEEPALIVE 0x8
-# define ASIO_OS_DEF_SO_LINGER 0x80
-# define ASIO_OS_DEF_SO_OOBINLINE 0x100
-# define ASIO_OS_DEF_SO_SNDBUF 0x1001
-# define ASIO_OS_DEF_SO_RCVBUF 0x1002
-# define ASIO_OS_DEF_SO_SNDLOWAT 0x1003
-# define ASIO_OS_DEF_SO_RCVLOWAT 0x1004
-# define ASIO_OS_DEF_SO_REUSEADDR 0x4
-# define ASIO_OS_DEF_TCP_NODELAY 0x1
+# define ASIO_OS_DEF_SHUT_RD 0xFF
+# define ASIO_OS_DEF_SHUT_WR 0xFF
+# define ASIO_OS_DEF_SHUT_RDWR 0xFF
+# define ASIO_OS_DEF_SOMAXCONN 0xFF
+# define ASIO_OS_DEF_SOL_SOCKET 0xFF
+# define ASIO_OS_DEF_SO_BROADCAST 0xFF
+# define ASIO_OS_DEF_SO_DEBUG 0xFF
+# define ASIO_OS_DEF_SO_DONTROUTE 0xFF
+# define ASIO_OS_DEF_SO_KEEPALIVE 0xFF
+# define ASIO_OS_DEF_SO_LINGER 0xFF
+# define ASIO_OS_DEF_SO_OOBINLINE 0xFF
+# define ASIO_OS_DEF_SO_SNDBUF 0xFF
+# define ASIO_OS_DEF_SO_RCVBUF 0xFF
+# define ASIO_OS_DEF_SO_SNDLOWAT 0xFF
+# define ASIO_OS_DEF_SO_RCVLOWAT 0xFF
+# define ASIO_OS_DEF_SO_REUSEADDR 0xFF
+# define ASIO_OS_DEF_TCP_NODELAY 0xFF
 # define ASIO_OS_DEF_IP_MULTICAST_IF 2
 # define ASIO_OS_DEF_IP_MULTICAST_TTL 3
 # define ASIO_OS_DEF_IP_MULTICAST_LOOP 4
@@ -171,13 +171,13 @@ typedef int signed_size_type;
 # define ASIO_OS_DEF_IPV6_MULTICAST_LOOP 11
 # define ASIO_OS_DEF_IPV6_JOIN_GROUP 12
 # define ASIO_OS_DEF_IPV6_LEAVE_GROUP 13
-# define ASIO_OS_DEF_AI_CANONNAME 0x2
-# define ASIO_OS_DEF_AI_PASSIVE 0x1
-# define ASIO_OS_DEF_AI_NUMERICHOST 0x4
-# define ASIO_OS_DEF_AI_NUMERICSERV 0x8
-# define ASIO_OS_DEF_AI_V4MAPPED 0x800
-# define ASIO_OS_DEF_AI_ALL 0x100
-# define ASIO_OS_DEF_AI_ADDRCONFIG 0x400
+# define ASIO_OS_DEF_AI_CANONNAME 0xFF
+# define ASIO_OS_DEF_AI_PASSIVE 0xFF
+# define ASIO_OS_DEF_AI_NUMERICHOST 0xFF
+# define ASIO_OS_DEF_AI_NUMERICSERV 0xFF
+# define ASIO_OS_DEF_AI_V4MAPPED 0xFF
+# define ASIO_OS_DEF_AI_ALL 0xFF
+# define ASIO_OS_DEF_AI_ADDRCONFIG 0xFF
 #elif defined(ASIO_WINDOWS) || defined(__CYGWIN__)
 typedef SOCKET socket_type;
 const SOCKET invalid_socket = INVALID_SOCKET;
@@ -404,7 +404,7 @@ const int max_iov_len = IOV_MAX;
 const int max_iov_len = 16;
 # endif
 #endif
-const int custom_socket_option_level = 0xA5100000;
+const int custom_socket_option_level = 0xFF;
 const int enable_connection_aborted_option = 1;
 const int always_fail_option = 2;
 

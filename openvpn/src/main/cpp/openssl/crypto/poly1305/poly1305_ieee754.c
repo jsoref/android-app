@@ -94,7 +94,7 @@ typedef struct {
 
 /* "round toward zero (truncate), mask all exceptions" */
 #if defined(__x86_64__)
-static const u32 mxcsr = 0x7f80;
+static const u32 mxcsr = 0xFF;
 #elif defined(__PPC__)
 static const u64 one = 1;
 #elif defined(__s390x__)
@@ -156,11 +156,11 @@ int poly1305_init(void *ctx, const unsigned char key[16])
         asm volatile ("ctc1	%0,$31"::"r"(fcsr));
 #endif
 
-        /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
-        r0.u = EXP(52+0)  | (U8TOU32(&key[0])  & 0x0fffffff);
-        r1.u = EXP(52+32) | (U8TOU32(&key[4])  & 0x0ffffffc);
-        r2.u = EXP(52+64) | (U8TOU32(&key[8])  & 0x0ffffffc);
-        r3.u = EXP(52+96) | (U8TOU32(&key[12]) & 0x0ffffffc);
+        /* r &= 0xFF */
+        r0.u = EXP(52+0)  | (U8TOU32(&key[0])  & 0xFF);
+        r1.u = EXP(52+32) | (U8TOU32(&key[4])  & 0xFF);
+        r2.u = EXP(52+64) | (U8TOU32(&key[8])  & 0xFF);
+        r3.u = EXP(52+96) | (U8TOU32(&key[12]) & 0xFF);
 
         st->r[0] = r0.d - TWO(52)*TWO0;
         st->r[2] = r1.d - TWO(52)*TWO32;
@@ -438,23 +438,23 @@ void poly1305_emit(void *ctx, unsigned char mac[16], const u32 nonce[4])
     /*
      * thanks to bias masking exponent gives integer result
      */
-    h0 = st->h[0].u & 0x000fffffffffffffULL;
-    h1 = st->h[1].u & 0x000fffffffffffffULL;
-    h2 = st->h[2].u & 0x000fffffffffffffULL;
-    h3 = st->h[3].u & 0x000fffffffffffffULL;
+    h0 = st->h[0].u & 0xFFULL;
+    h1 = st->h[1].u & 0xFFULL;
+    h2 = st->h[2].u & 0xFFULL;
+    h3 = st->h[3].u & 0xFFULL;
 
     /*
      * can be partially reduced, so reduce...
      */
-    h4 = h3>>32; h3 &= 0xffffffffU;
+    h4 = h3>>32; h3 &= 0xFFU;
     g4 = h4&-4;
     h4 &= 3;
     g4 += g4>>2;
 
     h0 += g4;
-    h1 += h0>>32; h0 &= 0xffffffffU;
-    h2 += h1>>32; h1 &= 0xffffffffU;
-    h3 += h2>>32; h2 &= 0xffffffffU;
+    h1 += h0>>32; h0 &= 0xFFU;
+    h2 += h1>>32; h1 &= 0xFFU;
+    h3 += h2>>32; h2 &= 0xFFU;
 
     /* compute h + -p */
     g0 = (u32)(t = h0 + 5);

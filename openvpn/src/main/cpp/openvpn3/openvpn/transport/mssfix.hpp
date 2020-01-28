@@ -137,8 +137,8 @@ namespace openvpn {
 		  {
 		    OPENVPN_LOG_MSSFIX("MTU MSS " << mssval << " -> " << max_mss);
 		    int accumulate = htons(mssval);
-		    opt[2] = (max_mss >> 8) & 0xff;
-		    opt[3] = max_mss & 0xff;
+		    opt[2] = (max_mss >> 8) & 0xFF;
+		    opt[3] = max_mss & 0xFF;
 		    accumulate -= htons(max_mss);
 		    tcp_adjust_checksum(accumulate, tcphdr->check);
 		  }

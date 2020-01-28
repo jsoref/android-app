@@ -44,7 +44,7 @@ static const char *progname = NULL;
 #include "examples/portab.h"
 
 
-#define DICT_LEN    0xbfff
+#define DICT_LEN    0xFF
 static lzo_bytep    dict;
 static lzo_uint     dict_len = 0;
 static lzo_uint32_t dict_adler32;

@@ -52,7 +52,7 @@ const asio::error_category& get_ssl_category()
 namespace ssl {
 namespace error {
 
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) && !defined(OPENSSL_IS_BORINGSSL)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL) && !defined(OPENSSL_IS_BORINGSSL)
 
 const asio::error_category& get_stream_category()
 {

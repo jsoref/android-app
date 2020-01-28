@@ -55,45 +55,45 @@ $code.=<<___;
 .globl	des_t4_key_expand
 .type	des_t4_key_expand,#function
 des_t4_key_expand:
-	andcc		$inp, 0x7, %g0
+	andcc		$inp, 0xFF, %g0
 	alignaddr	$inp, %g0, $inp
 	bz,pt		%icc, 1f
-	ldd		[$inp + 0x00], %f0
-	ldd		[$inp + 0x08], %f2
+	ldd		[$inp + 0xFF], %f0
+	ldd		[$inp + 0xFF], %f2
 	faligndata	%f0, %f2, %f0
 1:	des_kexpand	%f0, 0, %f0
 	des_kexpand	%f0, 1, %f2
-	std		%f0, [$out + 0x00]
+	std		%f0, [$out + 0xFF]
 	des_kexpand	%f2, 3, %f6
-	std		%f2, [$out + 0x08]
+	std		%f2, [$out + 0xFF]
 	des_kexpand	%f2, 2, %f4
 	des_kexpand	%f6, 3, %f10
-	std		%f6, [$out + 0x18]
+	std		%f6, [$out + 0xFF]
 	des_kexpand	%f6, 2, %f8
-	std		%f4, [$out + 0x10]
+	std		%f4, [$out + 0xFF]
 	des_kexpand	%f10, 3, %f14
-	std		%f10, [$out + 0x28]
+	std		%f10, [$out + 0xFF]
 	des_kexpand	%f10, 2, %f12
-	std		%f8, [$out + 0x20]
+	std		%f8, [$out + 0xFF]
 	des_kexpand	%f14, 1, %f16
-	std		%f14, [$out + 0x38]
+	std		%f14, [$out + 0xFF]
 	des_kexpand	%f16, 3, %f20
-	std		%f12, [$out + 0x30]
+	std		%f12, [$out + 0xFF]
 	des_kexpand	%f16, 2, %f18
-	std		%f16, [$out + 0x40]
+	std		%f16, [$out + 0xFF]
 	des_kexpand	%f20, 3, %f24
-	std		%f20, [$out + 0x50]
+	std		%f20, [$out + 0xFF]
 	des_kexpand	%f20, 2, %f22
-	std		%f18, [$out + 0x48]
+	std		%f18, [$out + 0xFF]
 	des_kexpand	%f24, 3, %f28
-	std		%f24, [$out + 0x60]
+	std		%f24, [$out + 0xFF]
 	des_kexpand	%f24, 2, %f26
-	std		%f22, [$out + 0x58]
+	std		%f22, [$out + 0xFF]
 	des_kexpand	%f28, 1, %f30
-	std		%f28, [$out + 0x70]
-	std		%f26, [$out + 0x68]
+	std		%f28, [$out + 0xFF]
+	std		%f26, [$out + 0xFF]
 	retl
-	std		%f30, [$out + 0x78]
+	std		%f30, [$out + 0xFF]
 .size	des_t4_key_expand,.-des_t4_key_expand
 ___
 }
@@ -113,7 +113,7 @@ des_t4_cbc_encrypt:
 	and		$inp, 7, $ileft
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	prefetch	[$inp], 20
 	prefetch	[$inp + 63], 20
 	sub		%g0, $ileft, $iright
@@ -124,22 +124,22 @@ des_t4_cbc_encrypt:
 	movrz		%g4, 0, $omask
 	prefetch	[$out], 22
 
-	ldd		[$key + 0x00], %f4	! load key schedule
-	ldd		[$key + 0x08], %f6
-	ldd		[$key + 0x10], %f8
-	ldd		[$key + 0x18], %f10
-	ldd		[$key + 0x20], %f12
-	ldd		[$key + 0x28], %f14
-	ldd		[$key + 0x30], %f16
-	ldd		[$key + 0x38], %f18
-	ldd		[$key + 0x40], %f20
-	ldd		[$key + 0x48], %f22
-	ldd		[$key + 0x50], %f24
-	ldd		[$key + 0x58], %f26
-	ldd		[$key + 0x60], %f28
-	ldd		[$key + 0x68], %f30
-	ldd		[$key + 0x70], %f32
-	ldd		[$key + 0x78], %f34
+	ldd		[$key + 0xFF], %f4	! load key schedule
+	ldd		[$key + 0xFF], %f6
+	ldd		[$key + 0xFF], %f8
+	ldd		[$key + 0xFF], %f10
+	ldd		[$key + 0xFF], %f12
+	ldd		[$key + 0xFF], %f14
+	ldd		[$key + 0xFF], %f16
+	ldd		[$key + 0xFF], %f18
+	ldd		[$key + 0xFF], %f20
+	ldd		[$key + 0xFF], %f22
+	ldd		[$key + 0xFF], %f24
+	ldd		[$key + 0xFF], %f26
+	ldd		[$key + 0xFF], %f28
+	ldd		[$key + 0xFF], %f30
+	ldd		[$key + 0xFF], %f32
+	ldd		[$key + 0xFF], %f34
 
 .Ldes_cbc_enc_loop:
 	ldx		[$inp + 0], %g4
@@ -183,15 +183,15 @@ des_t4_cbc_encrypt:
 	nop
 
 .align	16
-2:	ldxa		[$inp]0x82, %g4		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %g4		! avoid read-after-write hazard
 						! and ~4x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f2		! handle unaligned output
 
-	stda		%f2, [$out + $omask]0xc0	! partial store
+	stda		%f2, [$out + $omask]0xFF	! partial store
 	add		$out, 8, $out
 	orn		%g0, $omask, $omask
-	stda		%f2, [$out + $omask]0xc0	! partial store
+	stda		%f2, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .Ldes_cbc_enc_loop+4
 	orn		%g0, $omask, $omask
@@ -214,7 +214,7 @@ des_t4_cbc_decrypt:
 	and		$inp, 7, $ileft
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	prefetch	[$inp], 20
 	prefetch	[$inp + 63], 20
 	sub		%g0, $ileft, $iright
@@ -225,22 +225,22 @@ des_t4_cbc_decrypt:
 	movrz		%g4, 0, $omask
 	prefetch	[$out], 22
 
-	ldd		[$key + 0x78], %f4	! load key schedule
-	ldd		[$key + 0x70], %f6
-	ldd		[$key + 0x68], %f8
-	ldd		[$key + 0x60], %f10
-	ldd		[$key + 0x58], %f12
-	ldd		[$key + 0x50], %f14
-	ldd		[$key + 0x48], %f16
-	ldd		[$key + 0x40], %f18
-	ldd		[$key + 0x38], %f20
-	ldd		[$key + 0x30], %f22
-	ldd		[$key + 0x28], %f24
-	ldd		[$key + 0x20], %f26
-	ldd		[$key + 0x18], %f28
-	ldd		[$key + 0x10], %f30
-	ldd		[$key + 0x08], %f32
-	ldd		[$key + 0x00], %f34
+	ldd		[$key + 0xFF], %f4	! load key schedule
+	ldd		[$key + 0xFF], %f6
+	ldd		[$key + 0xFF], %f8
+	ldd		[$key + 0xFF], %f10
+	ldd		[$key + 0xFF], %f12
+	ldd		[$key + 0xFF], %f14
+	ldd		[$key + 0xFF], %f16
+	ldd		[$key + 0xFF], %f18
+	ldd		[$key + 0xFF], %f20
+	ldd		[$key + 0xFF], %f22
+	ldd		[$key + 0xFF], %f24
+	ldd		[$key + 0xFF], %f26
+	ldd		[$key + 0xFF], %f28
+	ldd		[$key + 0xFF], %f30
+	ldd		[$key + 0xFF], %f32
+	ldd		[$key + 0xFF], %f34
 
 .Ldes_cbc_dec_loop:
 	ldx		[$inp + 0], %g4
@@ -283,15 +283,15 @@ des_t4_cbc_decrypt:
 	st		%f3, [$ivec + 4]
 
 .align	16
-2:	ldxa		[$inp]0x82, %g4		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %g4		! avoid read-after-write hazard
 						! and ~4x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f0		! handle unaligned output
 
-	stda		%f0, [$out + $omask]0xc0	! partial store
+	stda		%f0, [$out + $omask]0xFF	! partial store
 	add		$out, 8, $out
 	orn		%g0, $omask, $omask
-	stda		%f0, [$out + $omask]0xc0	! partial store
+	stda		%f0, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .Ldes_cbc_dec_loop+4
 	orn		%g0, $omask, $omask
@@ -322,7 +322,7 @@ des_t4_ede3_cbc_encrypt:
 	and		$inp, 7, $ileft
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	prefetch	[$inp], 20
 	prefetch	[$inp + 63], 20
 	sub		%g0, $ileft, $iright
@@ -333,22 +333,22 @@ des_t4_ede3_cbc_encrypt:
 	movrz		%g4, 0, $omask
 	prefetch	[$out], 22
 
-	ldd		[$key + 0x00], %f4	! load key schedule
-	ldd		[$key + 0x08], %f6
-	ldd		[$key + 0x10], %f8
-	ldd		[$key + 0x18], %f10
-	ldd		[$key + 0x20], %f12
-	ldd		[$key + 0x28], %f14
-	ldd		[$key + 0x30], %f16
-	ldd		[$key + 0x38], %f18
-	ldd		[$key + 0x40], %f20
-	ldd		[$key + 0x48], %f22
-	ldd		[$key + 0x50], %f24
-	ldd		[$key + 0x58], %f26
-	ldd		[$key + 0x60], %f28
-	ldd		[$key + 0x68], %f30
-	ldd		[$key + 0x70], %f32
-	ldd		[$key + 0x78], %f34
+	ldd		[$key + 0xFF], %f4	! load key schedule
+	ldd		[$key + 0xFF], %f6
+	ldd		[$key + 0xFF], %f8
+	ldd		[$key + 0xFF], %f10
+	ldd		[$key + 0xFF], %f12
+	ldd		[$key + 0xFF], %f14
+	ldd		[$key + 0xFF], %f16
+	ldd		[$key + 0xFF], %f18
+	ldd		[$key + 0xFF], %f20
+	ldd		[$key + 0xFF], %f22
+	ldd		[$key + 0xFF], %f24
+	ldd		[$key + 0xFF], %f26
+	ldd		[$key + 0xFF], %f28
+	ldd		[$key + 0xFF], %f30
+	ldd		[$key + 0xFF], %f32
+	ldd		[$key + 0xFF], %f34
 
 .Ldes_ede3_cbc_enc_loop:
 	ldx		[$inp + 0], %g4
@@ -371,57 +371,57 @@ des_t4_ede3_cbc_encrypt:
 	des_round	%f8, %f10, %f0, %f0
 	des_round	%f12, %f14, %f0, %f0
 	des_round	%f16, %f18, %f0, %f0
-	ldd		[$key + 0x100-0x08], %f36
-	ldd		[$key + 0x100-0x10], %f38
+	ldd		[$key + 0xFF-0xFF], %f36
+	ldd		[$key + 0xFF-0xFF], %f38
 	des_round	%f20, %f22, %f0, %f0
-	ldd		[$key + 0x100-0x18], %f40
-	ldd		[$key + 0x100-0x20], %f42
+	ldd		[$key + 0xFF-0xFF], %f40
+	ldd		[$key + 0xFF-0xFF], %f42
 	des_round	%f24, %f26, %f0, %f0
-	ldd		[$key + 0x100-0x28], %f44
-	ldd		[$key + 0x100-0x30], %f46
+	ldd		[$key + 0xFF-0xFF], %f44
+	ldd		[$key + 0xFF-0xFF], %f46
 	des_round	%f28, %f30, %f0, %f0
-	ldd		[$key + 0x100-0x38], %f48
-	ldd		[$key + 0x100-0x40], %f50
+	ldd		[$key + 0xFF-0xFF], %f48
+	ldd		[$key + 0xFF-0xFF], %f50
 	des_round	%f32, %f34, %f0, %f0
-	ldd		[$key + 0x100-0x48], %f52
-	ldd		[$key + 0x100-0x50], %f54
+	ldd		[$key + 0xFF-0xFF], %f52
+	ldd		[$key + 0xFF-0xFF], %f54
 	des_iip		%f0, %f0
 
-	ldd		[$key + 0x100-0x58], %f56
-	ldd		[$key + 0x100-0x60], %f58
+	ldd		[$key + 0xFF-0xFF], %f56
+	ldd		[$key + 0xFF-0xFF], %f58
 	des_ip		%f0, %f0
-	ldd		[$key + 0x100-0x68], %f60
-	ldd		[$key + 0x100-0x70], %f62
+	ldd		[$key + 0xFF-0xFF], %f60
+	ldd		[$key + 0xFF-0xFF], %f62
 	des_round	%f36, %f38, %f0, %f0
-	ldd		[$key + 0x100-0x78], %f36
-	ldd		[$key + 0x100-0x80], %f38
+	ldd		[$key + 0xFF-0xFF], %f36
+	ldd		[$key + 0xFF-0xFF], %f38
 	des_round	%f40, %f42, %f0, %f0
 	des_round	%f44, %f46, %f0, %f0
 	des_round	%f48, %f50, %f0, %f0
-	ldd		[$key + 0x100+0x00], %f40
-	ldd		[$key + 0x100+0x08], %f42
+	ldd		[$key + 0xFF+0xFF], %f40
+	ldd		[$key + 0xFF+0xFF], %f42
 	des_round	%f52, %f54, %f0, %f0
-	ldd		[$key + 0x100+0x10], %f44
-	ldd		[$key + 0x100+0x18], %f46
+	ldd		[$key + 0xFF+0xFF], %f44
+	ldd		[$key + 0xFF+0xFF], %f46
 	des_round	%f56, %f58, %f0, %f0
-	ldd		[$key + 0x100+0x20], %f48
-	ldd		[$key + 0x100+0x28], %f50
+	ldd		[$key + 0xFF+0xFF], %f48
+	ldd		[$key + 0xFF+0xFF], %f50
 	des_round	%f60, %f62, %f0, %f0
-	ldd		[$key + 0x100+0x30], %f52
-	ldd		[$key + 0x100+0x38], %f54
+	ldd		[$key + 0xFF+0xFF], %f52
+	ldd		[$key + 0xFF+0xFF], %f54
 	des_round	%f36, %f38, %f0, %f0
-	ldd		[$key + 0x100+0x40], %f56
-	ldd		[$key + 0x100+0x48], %f58
+	ldd		[$key + 0xFF+0xFF], %f56
+	ldd		[$key + 0xFF+0xFF], %f58
 	des_iip		%f0, %f0
 
-	ldd		[$key + 0x100+0x50], %f60
-	ldd		[$key + 0x100+0x58], %f62
+	ldd		[$key + 0xFF+0xFF], %f60
+	ldd		[$key + 0xFF+0xFF], %f62
 	des_ip		%f0, %f0
-	ldd		[$key + 0x100+0x60], %f36
-	ldd		[$key + 0x100+0x68], %f38
+	ldd		[$key + 0xFF+0xFF], %f36
+	ldd		[$key + 0xFF+0xFF], %f38
 	des_round	%f40, %f42, %f0, %f0
-	ldd		[$key + 0x100+0x70], %f40
-	ldd		[$key + 0x100+0x78], %f42
+	ldd		[$key + 0xFF+0xFF], %f40
+	ldd		[$key + 0xFF+0xFF], %f42
 	des_round	%f44, %f46, %f0, %f0
 	des_round	%f48, %f50, %f0, %f0
 	des_round	%f52, %f54, %f0, %f0
@@ -443,15 +443,15 @@ des_t4_ede3_cbc_encrypt:
 	st		%f1, [$ivec + 4]
 
 .align	16
-2:	ldxa		[$inp]0x82, %g4		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %g4		! avoid read-after-write hazard
 						! and ~2x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f2		! handle unaligned output
 
-	stda		%f2, [$out + $omask]0xc0	! partial store
+	stda		%f2, [$out + $omask]0xFF	! partial store
 	add		$out, 8, $out
 	orn		%g0, $omask, $omask
-	stda		%f2, [$out + $omask]0xc0	! partial store
+	stda		%f2, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .Ldes_ede3_cbc_enc_loop+4
 	orn		%g0, $omask, $omask
@@ -474,7 +474,7 @@ des_t4_ede3_cbc_decrypt:
 	and		$inp, 7, $ileft
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	prefetch	[$inp], 20
 	prefetch	[$inp + 63], 20
 	sub		%g0, $ileft, $iright
@@ -485,22 +485,22 @@ des_t4_ede3_cbc_decrypt:
 	movrz		%g4, 0, $omask
 	prefetch	[$out], 22
 
-	ldd		[$key + 0x100+0x78], %f4	! load key schedule
-	ldd		[$key + 0x100+0x70], %f6
-	ldd		[$key + 0x100+0x68], %f8
-	ldd		[$key + 0x100+0x60], %f10
-	ldd		[$key + 0x100+0x58], %f12
-	ldd		[$key + 0x100+0x50], %f14
-	ldd		[$key + 0x100+0x48], %f16
-	ldd		[$key + 0x100+0x40], %f18
-	ldd		[$key + 0x100+0x38], %f20
-	ldd		[$key + 0x100+0x30], %f22
-	ldd		[$key + 0x100+0x28], %f24
-	ldd		[$key + 0x100+0x20], %f26
-	ldd		[$key + 0x100+0x18], %f28
-	ldd		[$key + 0x100+0x10], %f30
-	ldd		[$key + 0x100+0x08], %f32
-	ldd		[$key + 0x100+0x00], %f34
+	ldd		[$key + 0xFF+0xFF], %f4	! load key schedule
+	ldd		[$key + 0xFF+0xFF], %f6
+	ldd		[$key + 0xFF+0xFF], %f8
+	ldd		[$key + 0xFF+0xFF], %f10
+	ldd		[$key + 0xFF+0xFF], %f12
+	ldd		[$key + 0xFF+0xFF], %f14
+	ldd		[$key + 0xFF+0xFF], %f16
+	ldd		[$key + 0xFF+0xFF], %f18
+	ldd		[$key + 0xFF+0xFF], %f20
+	ldd		[$key + 0xFF+0xFF], %f22
+	ldd		[$key + 0xFF+0xFF], %f24
+	ldd		[$key + 0xFF+0xFF], %f26
+	ldd		[$key + 0xFF+0xFF], %f28
+	ldd		[$key + 0xFF+0xFF], %f30
+	ldd		[$key + 0xFF+0xFF], %f32
+	ldd		[$key + 0xFF+0xFF], %f34
 
 .Ldes_ede3_cbc_dec_loop:
 	ldx		[$inp + 0], %g4
@@ -522,57 +522,57 @@ des_t4_ede3_cbc_decrypt:
 	des_round	%f8, %f10, %f0, %f0
 	des_round	%f12, %f14, %f0, %f0
 	des_round	%f16, %f18, %f0, %f0
-	ldd		[$key + 0x80+0x00], %f36
-	ldd		[$key + 0x80+0x08], %f38
+	ldd		[$key + 0xFF+0xFF], %f36
+	ldd		[$key + 0xFF+0xFF], %f38
 	des_round	%f20, %f22, %f0, %f0
-	ldd		[$key + 0x80+0x10], %f40
-	ldd		[$key + 0x80+0x18], %f42
+	ldd		[$key + 0xFF+0xFF], %f40
+	ldd		[$key + 0xFF+0xFF], %f42
 	des_round	%f24, %f26, %f0, %f0
-	ldd		[$key + 0x80+0x20], %f44
-	ldd		[$key + 0x80+0x28], %f46
+	ldd		[$key + 0xFF+0xFF], %f44
+	ldd		[$key + 0xFF+0xFF], %f46
 	des_round	%f28, %f30, %f0, %f0
-	ldd		[$key + 0x80+0x30], %f48
-	ldd		[$key + 0x80+0x38], %f50
+	ldd		[$key + 0xFF+0xFF], %f48
+	ldd		[$key + 0xFF+0xFF], %f50
 	des_round	%f32, %f34, %f0, %f0
-	ldd		[$key + 0x80+0x40], %f52
-	ldd		[$key + 0x80+0x48], %f54
+	ldd		[$key + 0xFF+0xFF], %f52
+	ldd		[$key + 0xFF+0xFF], %f54
 	des_iip		%f0, %f0
 
-	ldd		[$key + 0x80+0x50], %f56
-	ldd		[$key + 0x80+0x58], %f58
+	ldd		[$key + 0xFF+0xFF], %f56
+	ldd		[$key + 0xFF+0xFF], %f58
 	des_ip		%f0, %f0
-	ldd		[$key + 0x80+0x60], %f60
-	ldd		[$key + 0x80+0x68], %f62
+	ldd		[$key + 0xFF+0xFF], %f60
+	ldd		[$key + 0xFF+0xFF], %f62
 	des_round	%f36, %f38, %f0, %f0
-	ldd		[$key + 0x80+0x70], %f36
-	ldd		[$key + 0x80+0x78], %f38
+	ldd		[$key + 0xFF+0xFF], %f36
+	ldd		[$key + 0xFF+0xFF], %f38
 	des_round	%f40, %f42, %f0, %f0
 	des_round	%f44, %f46, %f0, %f0
 	des_round	%f48, %f50, %f0, %f0
-	ldd		[$key + 0x80-0x08], %f40
-	ldd		[$key + 0x80-0x10], %f42
+	ldd		[$key + 0xFF-0xFF], %f40
+	ldd		[$key + 0xFF-0xFF], %f42
 	des_round	%f52, %f54, %f0, %f0
-	ldd		[$key + 0x80-0x18], %f44
-	ldd		[$key + 0x80-0x20], %f46
+	ldd		[$key + 0xFF-0xFF], %f44
+	ldd		[$key + 0xFF-0xFF], %f46
 	des_round	%f56, %f58, %f0, %f0
-	ldd		[$key + 0x80-0x28], %f48
-	ldd		[$key + 0x80-0x30], %f50
+	ldd		[$key + 0xFF-0xFF], %f48
+	ldd		[$key + 0xFF-0xFF], %f50
 	des_round	%f60, %f62, %f0, %f0
-	ldd		[$key + 0x80-0x38], %f52
-	ldd		[$key + 0x80-0x40], %f54
+	ldd		[$key + 0xFF-0xFF], %f52
+	ldd		[$key + 0xFF-0xFF], %f54
 	des_round	%f36, %f38, %f0, %f0
-	ldd		[$key + 0x80-0x48], %f56
-	ldd		[$key + 0x80-0x50], %f58
+	ldd		[$key + 0xFF-0xFF], %f56
+	ldd		[$key + 0xFF-0xFF], %f58
 	des_iip		%f0, %f0
 
-	ldd		[$key + 0x80-0x58], %f60
-	ldd		[$key + 0x80-0x60], %f62
+	ldd		[$key + 0xFF-0xFF], %f60
+	ldd		[$key + 0xFF-0xFF], %f62
 	des_ip		%f0, %f0
-	ldd		[$key + 0x80-0x68], %f36
-	ldd		[$key + 0x80-0x70], %f38
+	ldd		[$key + 0xFF-0xFF], %f36
+	ldd		[$key + 0xFF-0xFF], %f38
 	des_round	%f40, %f42, %f0, %f0
-	ldd		[$key + 0x80-0x78], %f40
-	ldd		[$key + 0x80-0x80], %f42
+	ldd		[$key + 0xFF-0xFF], %f40
+	ldd		[$key + 0xFF-0xFF], %f42
 	des_round	%f44, %f46, %f0, %f0
 	des_round	%f48, %f50, %f0, %f0
 	des_round	%f52, %f54, %f0, %f0
@@ -597,15 +597,15 @@ des_t4_ede3_cbc_decrypt:
 	st		%f3, [$ivec + 4]
 
 .align	16
-2:	ldxa		[$inp]0x82, %g4		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %g4		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f0		! handle unaligned output
 
-	stda		%f0, [$out + $omask]0xc0	! partial store
+	stda		%f0, [$out + $omask]0xFF	! partial store
 	add		$out, 8, $out
 	orn		%g0, $omask, $omask
-	stda		%f0, [$out + $omask]0xc0	! partial store
+	stda		%f0, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .Ldes_ede3_cbc_dec_loop+4
 	orn		%g0, $omask, $omask

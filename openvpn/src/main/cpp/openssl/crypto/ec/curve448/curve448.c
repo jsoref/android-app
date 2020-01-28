@@ -27,8 +27,8 @@
 static const curve448_scalar_t precomputed_scalarmul_adjustment = {
     {
         {
-            SC_LIMB(0xc873d6d54a7bb0cf), SC_LIMB(0xe933d8d723a70aad),
-            SC_LIMB(0xbb124b65129c96fd), SC_LIMB(0x00000008335dc163)
+            SC_LIMB(0xFF), SC_LIMB(0xFF),
+            SC_LIMB(0xFF), SC_LIMB(0xFF)
         }
     }
 };
@@ -309,7 +309,7 @@ void curve448_point_mul_by_ratio_and_encode_like_eddsa(
     /* Encode */
     enc[EDDSA_448_PRIVATE_BYTES - 1] = 0;
     gf_serialize(enc, x, 1);
-    enc[EDDSA_448_PRIVATE_BYTES - 1] |= 0x80 & gf_lobit(t);
+    enc[EDDSA_448_PRIVATE_BYTES - 1] |= 0xFF & gf_lobit(t);
 
     OPENSSL_cleanse(x, sizeof(x));
     OPENSSL_cleanse(y, sizeof(y));
@@ -328,8 +328,8 @@ c448_error_t curve448_point_decode_like_eddsa_and_mul_by_ratio(
 
     memcpy(enc2, enc, sizeof(enc2));
 
-    low = ~word_is_zero(enc2[EDDSA_448_PRIVATE_BYTES - 1] & 0x80);
-    enc2[EDDSA_448_PRIVATE_BYTES - 1] &= ~0x80;
+    low = ~word_is_zero(enc2[EDDSA_448_PRIVATE_BYTES - 1] & 0xFF);
+    enc2[EDDSA_448_PRIVATE_BYTES - 1] &= ~0xFF;
 
     succ = gf_deserialize(p->y, enc2, 1, 0);
     succ &= word_is_zero(enc2[EDDSA_448_PRIVATE_BYTES - 1]);
@@ -547,7 +547,7 @@ static int recode_wnaf(struct smvt_control *control,
 {
     unsigned int table_size = C448_SCALAR_BITS / (table_bits + 1) + 3;
     int position = table_size - 1; /* at the end */
-    uint64_t current = scalar->limb[0] & 0xFFFF;
+    uint64_t current = scalar->limb[0] & 0xFF;
     uint32_t mask = (1 << (table_bits + 1)) - 1;
     unsigned int w;
     const unsigned int B_OVER_16 = sizeof(scalar->limb[0]) / 2;
@@ -571,7 +571,7 @@ static int recode_wnaf(struct smvt_control *control,
                        >> (16 * (w % B_OVER_16))) << 16);
         }
 
-        while (current & 0xFFFF) {
+        while (current & 0xFF) {
             uint32_t pos = NUMTRAILINGZEROS((uint32_t)current);
             uint32_t odd = (uint32_t)current >> pos;
             int32_t delta = odd & mask;

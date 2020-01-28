@@ -187,10 +187,10 @@ if ($xmm) {
 	&mov	(&wparam(0),$a);		# save output
 	&mov	(&wparam(2),$c);		# save len
 &set_label("entry");
-	&mov	($a,0x61707865);
-	&mov	(&DWP(4*1,"esp"),0x3320646e);
-	&mov	(&DWP(4*2,"esp"),0x79622d32);
-	&mov	(&DWP(4*3,"esp"),0x6b206574);
+	&mov	($a,0xFF);
+	&mov	(&DWP(4*1,"esp"),0xFF);
+	&mov	(&DWP(4*2,"esp"),0xFF);
+	&mov	(&DWP(4*3,"esp"),0xFF);
 
 	&mov	($b, &DWP(64+4*5,"esp"));	# copy key material
 	&mov	($b_,&DWP(64+4*6,"esp"));
@@ -236,7 +236,7 @@ if ($xmm) {
 
 	&mov	($b,&wparam(2));		# load len
 
-	&add	($a,0x61707865);		# accumulate key material
+	&add	($a,0xFF);		# accumulate key material
 	&add	($b_,&DWP(64+4*4,"esp"));
 	&add	($c, &DWP(64+4*8,"esp"));
 	&add	($c_,&DWP(64+4*9,"esp"));
@@ -267,9 +267,9 @@ if ($xmm) {
 	&mov	($c_,&DWP(4*3,"esp"));
 	&mov	($d, &DWP(4*5,"esp"));
 	&mov	($d_,&DWP(4*6,"esp"));
-	&add	($b_,0x3320646e);		# accumulate key material
-	&add	($c, 0x79622d32);
-	&add	($c_,0x6b206574);
+	&add	($b_,0xFF);		# accumulate key material
+	&add	($c, 0xFF);
+	&add	($c_,0xFF);
 	&add	($d, &DWP(64+4*5,"esp"));
 	&add	($d_,&DWP(64+4*6,"esp"));
 	&xor	($b_,&DWP(4*1,$b));
@@ -328,9 +328,9 @@ if ($xmm) {
 	&mov	($c_,&DWP(4*3,"esp"));
 	&mov	($d, &DWP(4*5,"esp"));
 	&mov	($d_,&DWP(4*6,"esp"));
-	&add	($b_,0x3320646e);		# accumulate key material
-	&add	($c, 0x79622d32);
-	&add	($c_,0x6b206574);
+	&add	($b_,0xFF);		# accumulate key material
+	&add	($c, 0xFF);
+	&add	($c_,0xFF);
 	&add	($d, &DWP(64+4*5,"esp"));
 	&add	($d_,&DWP(64+4*6,"esp"));
 	&mov	(&DWP(4*1,"esp"),$b_);
@@ -481,16 +481,16 @@ if (defined($gasver) && $gasver>=2.17) {		# even though we encode
 	&lea		("ebp",&DWP(256+128,"esp"));	# size optimization
 
 	&movdqu		("xmm7",&QWP(0,"edx"));		# key
-	&pshufd		("xmm0","xmm3",0x00);
-	&pshufd		("xmm1","xmm3",0x55);
-	&pshufd		("xmm2","xmm3",0xaa);
-	&pshufd		("xmm3","xmm3",0xff);
+	&pshufd		("xmm0","xmm3",0xFF);
+	&pshufd		("xmm1","xmm3",0xFF);
+	&pshufd		("xmm2","xmm3",0xFF);
+	&pshufd		("xmm3","xmm3",0xFF);
 	 &paddd		("xmm0",&QWP(16*3,"eax"));	# fix counters
-	&pshufd		("xmm4","xmm7",0x00);
-	&pshufd		("xmm5","xmm7",0x55);
+	&pshufd		("xmm4","xmm7",0xFF);
+	&pshufd		("xmm5","xmm7",0xFF);
 	 &psubd		("xmm0",&QWP(16*4,"eax"));
-	&pshufd		("xmm6","xmm7",0xaa);
-	&pshufd		("xmm7","xmm7",0xff);
+	&pshufd		("xmm6","xmm7",0xFF);
+	&pshufd		("xmm7","xmm7",0xFF);
 	&movdqa		(&QWP(16*12-128,"ebp"),"xmm0");
 	&movdqa		(&QWP(16*13-128,"ebp"),"xmm1");
 	&movdqa		(&QWP(16*14-128,"ebp"),"xmm2");
@@ -503,14 +503,14 @@ if (defined($gasver) && $gasver>=2.17) {		# even though we encode
 	 &movdqa	("xmm7",&QWP(16*2,"eax"));	# sigma
 	 &lea		("ebx",&DWP(128,"esp"));	# size optimization
 
-	&pshufd		("xmm0","xmm3",0x00);
-	&pshufd		("xmm1","xmm3",0x55);
-	&pshufd		("xmm2","xmm3",0xaa);
-	&pshufd		("xmm3","xmm3",0xff);
-	&pshufd		("xmm4","xmm7",0x00);
-	&pshufd		("xmm5","xmm7",0x55);
-	&pshufd		("xmm6","xmm7",0xaa);
-	&pshufd		("xmm7","xmm7",0xff);
+	&pshufd		("xmm0","xmm3",0xFF);
+	&pshufd		("xmm1","xmm3",0xFF);
+	&pshufd		("xmm2","xmm3",0xFF);
+	&pshufd		("xmm3","xmm3",0xFF);
+	&pshufd		("xmm4","xmm7",0xFF);
+	&pshufd		("xmm5","xmm7",0xFF);
+	&pshufd		("xmm6","xmm7",0xFF);
+	&pshufd		("xmm7","xmm7",0xFF);
 	&movdqa		(&QWP(16*8-128,"ebp"),"xmm0");
 	&movdqa		(&QWP(16*9-128,"ebp"),"xmm1");
 	&movdqa		(&QWP(16*10-128,"ebp"),"xmm2");
@@ -776,9 +776,9 @@ sub SSSE3ROUND {	# critical path is 20 "SIMD ticks" per round
 
 &align	(64);
 &set_label("ssse3_data");
-&data_byte(0x2,0x3,0x0,0x1, 0x6,0x7,0x4,0x5, 0xa,0xb,0x8,0x9, 0xe,0xf,0xc,0xd);
-&data_byte(0x3,0x0,0x1,0x2, 0x7,0x4,0x5,0x6, 0xb,0x8,0x9,0xa, 0xf,0xc,0xd,0xe);
-&data_word(0x61707865,0x3320646e,0x79622d32,0x6b206574);
+&data_byte(0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF);
+&data_byte(0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF);
+&data_word(0xFF,0xFF,0xFF,0xFF);
 &data_word(0,1,2,3);
 &data_word(4,4,4,4);
 &data_word(1,0,0,0);
@@ -878,16 +878,16 @@ my ($ap,$bp,$cp,$dp)=map(($_&~3)+(($_-1)&3),($ai,$bi,$ci,$di));	# previous
 	&lea		("ebp",&DWP(256+128,"esp"));	# size optimization
 
 	&vmovdqu	("xmm7",&QWP(0,"edx"));		# key
-	&vpshufd	("xmm0","xmm3",0x00);
-	&vpshufd	("xmm1","xmm3",0x55);
-	&vpshufd	("xmm2","xmm3",0xaa);
-	&vpshufd	("xmm3","xmm3",0xff);
+	&vpshufd	("xmm0","xmm3",0xFF);
+	&vpshufd	("xmm1","xmm3",0xFF);
+	&vpshufd	("xmm2","xmm3",0xFF);
+	&vpshufd	("xmm3","xmm3",0xFF);
 	 &vpaddd	("xmm0","xmm0",&QWP(16*3,"eax"));	# fix counters
-	&vpshufd	("xmm4","xmm7",0x00);
-	&vpshufd	("xmm5","xmm7",0x55);
+	&vpshufd	("xmm4","xmm7",0xFF);
+	&vpshufd	("xmm5","xmm7",0xFF);
 	 &vpsubd	("xmm0","xmm0",&QWP(16*4,"eax"));
-	&vpshufd	("xmm6","xmm7",0xaa);
-	&vpshufd	("xmm7","xmm7",0xff);
+	&vpshufd	("xmm6","xmm7",0xFF);
+	&vpshufd	("xmm7","xmm7",0xFF);
 	&vmovdqa	(&QWP(16*12-128,"ebp"),"xmm0");
 	&vmovdqa	(&QWP(16*13-128,"ebp"),"xmm1");
 	&vmovdqa	(&QWP(16*14-128,"ebp"),"xmm2");
@@ -900,14 +900,14 @@ my ($ap,$bp,$cp,$dp)=map(($_&~3)+(($_-1)&3),($ai,$bi,$ci,$di));	# previous
 	 &vmovdqa	("xmm7",&QWP(16*2,"eax"));	# sigma
 	 &lea		("ebx",&DWP(128,"esp"));	# size optimization
 
-	&vpshufd	("xmm0","xmm3",0x00);
-	&vpshufd	("xmm1","xmm3",0x55);
-	&vpshufd	("xmm2","xmm3",0xaa);
-	&vpshufd	("xmm3","xmm3",0xff);
-	&vpshufd	("xmm4","xmm7",0x00);
-	&vpshufd	("xmm5","xmm7",0x55);
-	&vpshufd	("xmm6","xmm7",0xaa);
-	&vpshufd	("xmm7","xmm7",0xff);
+	&vpshufd	("xmm0","xmm3",0xFF);
+	&vpshufd	("xmm1","xmm3",0xFF);
+	&vpshufd	("xmm2","xmm3",0xFF);
+	&vpshufd	("xmm3","xmm3",0xFF);
+	&vpshufd	("xmm4","xmm7",0xFF);
+	&vpshufd	("xmm5","xmm7",0xFF);
+	&vpshufd	("xmm6","xmm7",0xFF);
+	&vpshufd	("xmm7","xmm7",0xFF);
 	&vmovdqa	(&QWP(16*8-128,"ebp"),"xmm0");
 	&vmovdqa	(&QWP(16*9-128,"ebp"),"xmm1");
 	&vmovdqa	(&QWP(16*10-128,"ebp"),"xmm2");

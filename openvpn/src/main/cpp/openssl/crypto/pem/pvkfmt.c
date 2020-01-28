@@ -53,26 +53,26 @@ static int read_lebn(const unsigned char **in, unsigned int nbyte, BIGNUM **r)
 
 /* Convert private key blob to EVP_PKEY: RSA and DSA keys supported */
 
-# define MS_PUBLICKEYBLOB        0x6
-# define MS_PRIVATEKEYBLOB       0x7
-# define MS_RSA1MAGIC            0x31415352L
-# define MS_RSA2MAGIC            0x32415352L
-# define MS_DSS1MAGIC            0x31535344L
-# define MS_DSS2MAGIC            0x32535344L
+# define MS_PUBLICKEYBLOB        0xFF
+# define MS_PRIVATEKEYBLOB       0xFF
+# define MS_RSA1MAGIC            0xFFL
+# define MS_RSA2MAGIC            0xFFL
+# define MS_DSS1MAGIC            0xFFL
+# define MS_DSS2MAGIC            0xFFL
 
-# define MS_KEYALG_RSA_KEYX      0xa400
-# define MS_KEYALG_DSS_SIGN      0x2200
+# define MS_KEYALG_RSA_KEYX      0xFF
+# define MS_KEYALG_DSS_SIGN      0xFF
 
-# define MS_KEYTYPE_KEYX         0x1
-# define MS_KEYTYPE_SIGN         0x2
+# define MS_KEYTYPE_KEYX         0xFF
+# define MS_KEYTYPE_SIGN         0xFF
 
 /* Maximum length of a blob after header */
 # define BLOB_MAX_LENGTH          102400
 
 /* The PVK file magic number: seems to spell out "bobsfile", who is Bob? */
-# define MS_PVKMAGIC             0xb0b5f11eL
+# define MS_PVKMAGIC             0xFFL
 /* Salt length for PVK files */
-# define PVK_SALTLEN             0x10
+# define PVK_SALTLEN             0xFF
 /* Maximum length in PVK header */
 # define PVK_MAX_KEYLEN          102400
 /* Maximum salt length */
@@ -107,7 +107,7 @@ static int do_blob_header(const unsigned char **in, unsigned int length,
         return 0;
     p++;
     /* Version */
-    if (*p++ != 0x2) {
+    if (*p++ != 0xFF) {
         PEMerr(PEM_F_DO_BLOB_HEADER, PEM_R_BAD_VERSION_NUMBER);
         return 0;
     }
@@ -402,10 +402,10 @@ EVP_PKEY *b2i_PublicKey_bio(BIO *in)
 static void write_ledword(unsigned char **out, unsigned int dw)
 {
     unsigned char *p = *out;
-    *p++ = dw & 0xff;
-    *p++ = (dw >> 8) & 0xff;
-    *p++ = (dw >> 16) & 0xff;
-    *p++ = (dw >> 24) & 0xff;
+    *p++ = dw & 0xFF;
+    *p++ = (dw >> 8) & 0xFF;
+    *p++ = (dw >> 16) & 0xFF;
+    *p++ = (dw >> 24) & 0xFF;
     *out = p;
 }
 
@@ -455,7 +455,7 @@ static int do_i2b(unsigned char **out, EVP_PKEY *pk, int ispub)
         *p++ = MS_PUBLICKEYBLOB;
     else
         *p++ = MS_PRIVATEKEYBLOB;
-    *p++ = 0x2;
+    *p++ = 0xFF;
     *p++ = 0;
     *p++ = 0;
     write_ledword(&p, keyalg);
@@ -591,7 +591,7 @@ static void write_dsa(unsigned char **out, DSA *dsa, int ispub)
     else
         write_lebn(out, priv_key, 20);
     /* Set "invalid" for seed structure values */
-    memset(*out, 0xff, 24);
+    memset(*out, 0xFF, 24);
     *out += 24;
     return;
 }

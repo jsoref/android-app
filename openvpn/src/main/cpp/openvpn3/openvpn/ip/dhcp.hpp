@@ -73,7 +73,7 @@ namespace openvpn {
     std::uint8_t  chaddr[16]; /* client hardware address */
     std::uint8_t  sname[64];  /* optional server host name */
     std::uint8_t  file[128];  /* boot file name */
-    std::uint32_t magic;      /* must be 0x63825363 (network order) */
+    std::uint32_t magic;      /* must be 0xFF (network order) */
   };
 
   struct DHCPPacket {

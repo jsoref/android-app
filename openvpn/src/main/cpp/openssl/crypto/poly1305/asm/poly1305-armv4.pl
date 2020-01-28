@@ -86,9 +86,9 @@ poly1305_init:
 	ldr	r12,.LOPENSSL_armcap
 #endif
 	ldrb	r4,[$inp,#0]
-	mov	r10,#0x0fffffff
+	mov	r10,#0xFF
 	ldrb	r5,[$inp,#1]
-	and	r3,r10,#-4		@ 0x0ffffffc
+	and	r3,r10,#-4		@ 0xFF
 	ldrb	r6,[$inp,#2]
 	ldrb	r7,[$inp,#3]
 	orr	r4,r4,r5,lsl#8
@@ -462,7 +462,7 @@ poly1305_init_neon:
 	ldr	r6,[$ctx,#28]
 	ldr	r7,[$ctx,#32]
 
-	and	r2,r4,#0x03ffffff	@ base 2^32 -> base 2^26
+	and	r2,r4,#0xFF	@ base 2^32 -> base 2^26
 	mov	r3,r4,lsr#26
 	mov	r4,r5,lsr#20
 	orr	r3,r3,r5,lsl#6
@@ -470,9 +470,9 @@ poly1305_init_neon:
 	orr	r4,r4,r6,lsl#12
 	mov	r6,r7,lsr#8
 	orr	r5,r5,r7,lsl#18
-	and	r3,r3,#0x03ffffff
-	and	r4,r4,#0x03ffffff
-	and	r5,r5,#0x03ffffff
+	and	r3,r3,#0xFF
+	and	r4,r4,#0xFF
+	and	r5,r5,#0xFF
 
 	vdup.32	$R0,r2			@ r^1 in both lanes
 	add	r2,r3,r3,lsl#2		@ *5
@@ -545,7 +545,7 @@ poly1305_init_neon:
 	@ and so is sum of four. Sum of 2^m n-m-bit numbers and n-bit
 	@ one is n+1 bits wide.
 	@
-	@ >>+ denotes Hnext += Hn>>26, Hn &= 0x3ffffff. This means that
+	@ >>+ denotes Hnext += Hn>>26, Hn &= 0xFF. This means that
 	@ H0, H2, H3 are guaranteed to be 26 bits wide, while H1 and H4
 	@ can be 27. However! In cases when their width exceeds 26 bits
 	@ they are limited by 2^26+2^6. This in turn means that *sum*
@@ -582,17 +582,17 @@ poly1305_init_neon:
 	 vshr.u64	$T1,$D0,#26
 	 vmovn.i64	$D0#lo,$D0
 	vadd.i64	$D4,$D4,$T0		@ h3 -> h4
-	vbic.i32	$D3#lo,#0xfc000000	@ &=0x03ffffff
+	vbic.i32	$D3#lo,#0xFF	@ &=0xFF
 	 vadd.i64	$D1,$D1,$T1		@ h0 -> h1
-	 vbic.i32	$D0#lo,#0xfc000000
+	 vbic.i32	$D0#lo,#0xFF
 
 	vshrn.u64	$T0#lo,$D4,#26
 	vmovn.i64	$D4#lo,$D4
 	 vshr.u64	$T1,$D1,#26
 	 vmovn.i64	$D1#lo,$D1
 	 vadd.i64	$D2,$D2,$T1		@ h1 -> h2
-	vbic.i32	$D4#lo,#0xfc000000
-	 vbic.i32	$D1#lo,#0xfc000000
+	vbic.i32	$D4#lo,#0xFF
+	 vbic.i32	$D1#lo,#0xFF
 
 	vadd.i32	$D0#lo,$D0#lo,$T0#lo
 	vshl.u32	$T0#lo,$T0#lo,#2
@@ -600,12 +600,12 @@ poly1305_init_neon:
 	 vmovn.i64	$D2#lo,$D2
 	vadd.i32	$D0#lo,$D0#lo,$T0#lo	@ h4 -> h0
 	 vadd.i32	$D3#lo,$D3#lo,$T1#lo	@ h2 -> h3
-	 vbic.i32	$D2#lo,#0xfc000000
+	 vbic.i32	$D2#lo,#0xFF
 
 	vshr.u32	$T0#lo,$D0#lo,#26
-	vbic.i32	$D0#lo,#0xfc000000
+	vbic.i32	$D0#lo,#0xFF
 	 vshr.u32	$T1#lo,$D3#lo,#26
-	 vbic.i32	$D3#lo,#0xfc000000
+	 vbic.i32	$D3#lo,#0xFF
 	vadd.i32	$D1#lo,$D1#lo,$T0#lo	@ h0 -> h1
 	 vadd.i32	$D4#lo,$D4#lo,$T1#lo	@ h3 -> h4
 
@@ -696,7 +696,7 @@ poly1305_blocks_neon:
 	ldr	r7,[$ctx,#12]
 	ldr	ip,[$ctx,#16]
 
-	and	r2,r4,#0x03ffffff	@ base 2^32 -> base 2^26
+	and	r2,r4,#0xFF	@ base 2^32 -> base 2^26
 	mov	r3,r4,lsr#26
 	 veor	$D0#lo,$D0#lo,$D0#lo
 	mov	r4,r5,lsr#20
@@ -708,12 +708,12 @@ poly1305_blocks_neon:
 	mov	r6,r7,lsr#8
 	orr	r5,r5,r7,lsl#18
 	 veor	$D3#lo,$D3#lo,$D3#lo
-	and	r3,r3,#0x03ffffff
+	and	r3,r3,#0xFF
 	orr	r6,r6,ip,lsl#24
 	 veor	$D4#lo,$D4#lo,$D4#lo
-	and	r4,r4,#0x03ffffff
+	and	r4,r4,#0xFF
 	mov	r1,#1
-	and	r5,r5,#0x03ffffff
+	and	r5,r5,#0xFF
 	str	r1,[$ctx,#36]		@ is_base2_26
 
 	vmov.32	$D0#lo[0],r2
@@ -765,16 +765,16 @@ poly1305_blocks_neon:
 	vshl.u32	$H2#lo,$H2#lo,#12
 	vadd.i32	$H4#hi,$H4#lo,$D4#lo	@ add hash value and move to #hi
 
-	vbic.i32	$H3#lo,#0xfc000000
+	vbic.i32	$H3#lo,#0xFF
 	vsri.u32	$H2#lo,$H1#lo,#20
 	vshl.u32	$H1#lo,$H1#lo,#6
 
-	vbic.i32	$H2#lo,#0xfc000000
+	vbic.i32	$H2#lo,#0xFF
 	vsri.u32	$H1#lo,$H0#lo,#26
 	vadd.i32	$H3#hi,$H3#lo,$D3#lo
 
-	vbic.i32	$H0#lo,#0xfc000000
-	vbic.i32	$H1#lo,#0xfc000000
+	vbic.i32	$H0#lo,#0xFF
+	vbic.i32	$H1#lo,#0xFF
 	vadd.i32	$H2#hi,$H2#lo,$D2#lo
 
 	vadd.i32	$H0#hi,$H0#lo,$D0#lo
@@ -813,15 +813,15 @@ poly1305_blocks_neon:
 	vsri.u32	$H3,$H2,#14
 	vshl.u32	$H2,$H2,#12
 
-	vbic.i32	$H3,#0xfc000000
+	vbic.i32	$H3,#0xFF
 	vsri.u32	$H2,$H1,#20
 	vshl.u32	$H1,$H1,#6
 
-	vbic.i32	$H2,#0xfc000000
+	vbic.i32	$H2,#0xFF
 	vsri.u32	$H1,$H0,#26
 
-	vbic.i32	$H0,#0xfc000000
-	vbic.i32	$H1,#0xfc000000
+	vbic.i32	$H0,#0xFF
+	vbic.i32	$H1,#0xFF
 
 	bls		.Lskip_loop
 
@@ -948,11 +948,11 @@ poly1305_blocks_neon:
 	 vshr.u64	$T1,$D0,#26
 	 vmovn.i64	$D0#lo,$D0
 	vadd.i64	$D4,$D4,$T0		@ h3 -> h4
-	vbic.i32	$D3#lo,#0xfc000000
+	vbic.i32	$D3#lo,#0xFF
 	  vsri.u32	$H4,$H3,#8		@ base 2^32 -> base 2^26
 	 vadd.i64	$D1,$D1,$T1		@ h0 -> h1
 	  vshl.u32	$H3,$H3,#18
-	 vbic.i32	$D0#lo,#0xfc000000
+	 vbic.i32	$D0#lo,#0xFF
 
 	vshrn.u64	$T0#lo,$D4,#26
 	vmovn.i64	$D4#lo,$D4
@@ -960,32 +960,32 @@ poly1305_blocks_neon:
 	 vmovn.i64	$D1#lo,$D1
 	 vadd.i64	$D2,$D2,$T1		@ h1 -> h2
 	  vsri.u32	$H3,$H2,#14
-	vbic.i32	$D4#lo,#0xfc000000
+	vbic.i32	$D4#lo,#0xFF
 	  vshl.u32	$H2,$H2,#12
-	 vbic.i32	$D1#lo,#0xfc000000
+	 vbic.i32	$D1#lo,#0xFF
 
 	vadd.i32	$D0#lo,$D0#lo,$T0#lo
 	vshl.u32	$T0#lo,$T0#lo,#2
-	  vbic.i32	$H3,#0xfc000000
+	  vbic.i32	$H3,#0xFF
 	 vshrn.u64	$T1#lo,$D2,#26
 	 vmovn.i64	$D2#lo,$D2
 	vaddl.u32	$D0,$D0#lo,$T0#lo	@ h4 -> h0 [widen for a sec]
 	  vsri.u32	$H2,$H1,#20
 	 vadd.i32	$D3#lo,$D3#lo,$T1#lo	@ h2 -> h3
 	  vshl.u32	$H1,$H1,#6
-	 vbic.i32	$D2#lo,#0xfc000000
-	  vbic.i32	$H2,#0xfc000000
+	 vbic.i32	$D2#lo,#0xFF
+	  vbic.i32	$H2,#0xFF
 
 	vshrn.u64	$T0#lo,$D0,#26		@ re-narrow
 	vmovn.i64	$D0#lo,$D0
 	  vsri.u32	$H1,$H0,#26
-	  vbic.i32	$H0,#0xfc000000
+	  vbic.i32	$H0,#0xFF
 	 vshr.u32	$T1#lo,$D3#lo,#26
-	 vbic.i32	$D3#lo,#0xfc000000
-	vbic.i32	$D0#lo,#0xfc000000
+	 vbic.i32	$D3#lo,#0xFF
+	vbic.i32	$D0#lo,#0xFF
 	vadd.i32	$D1#lo,$D1#lo,$T0#lo	@ h0 -> h1
 	 vadd.i32	$D4#lo,$D4#lo,$T1#lo	@ h3 -> h4
-	  vbic.i32	$H1,#0xfc000000
+	  vbic.i32	$H1,#0xFF
 
 	bhi		.Loop_neon
 
@@ -1246,7 +1246,7 @@ foreach (split("\n",$code)) {
 
 	s/\bq([0-9]+)#(lo|hi)/sprintf "d%d",2*$1+($2 eq "hi")/geo	or
 	s/\bret\b/bx	lr/go						or
-	s/\bbx\s+lr\b/.word\t0xe12fff1e/go;	# make it possible to compile with -march=armv4
+	s/\bbx\s+lr\b/.word\t0xFF/go;	# make it possible to compile with -march=armv4
 
 	print $_,"\n";
 }

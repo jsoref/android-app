@@ -41,9 +41,9 @@
 ************************************************************************/
 
 #if !defined(LZO_BITOPS_USE_ASM_BITSCAN) && !defined(LZO_BITOPS_USE_GNUC_BITSCAN) && !defined(LZO_BITOPS_USE_MSC_BITSCAN)
-#if 1 && (LZO_ARCH_AMD64) && (LZO_CC_GNUC && (LZO_CC_GNUC < 0x040000ul)) && (LZO_ASM_SYNTAX_GNUC)
+#if 1 && (LZO_ARCH_AMD64) && (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul)) && (LZO_ASM_SYNTAX_GNUC)
 #define LZO_BITOPS_USE_ASM_BITSCAN 1
-#elif (LZO_CC_CLANG || (LZO_CC_GNUC >= 0x030400ul) || (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER >= 1000)) || (LZO_CC_LLVM && (!defined(__llvm_tools_version__) || (__llvm_tools_version__+0 >= 0x010500ul))))
+#elif (LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER >= 1000)) || (LZO_CC_LLVM && (!defined(__llvm_tools_version__) || (__llvm_tools_version__+0 >= 0xFFul))))
 #define LZO_BITOPS_USE_GNUC_BITSCAN 1
 #elif (LZO_OS_WIN32 || LZO_OS_WIN64) && ((LZO_CC_INTELC_MSC && (__INTEL_COMPILER >= 1010)) || (LZO_CC_MSC && (_MSC_VER >= 1400)))
 #define LZO_BITOPS_USE_MSC_BITSCAN 1
@@ -421,8 +421,8 @@ __lzo_static_forceinline void lzo_memops_put_le16(lzo_voidp dd, lzo_uint16_t vv)
     __asm__("sthbrx %2,0,%1" : "=m" (*d) : "r" (d), "r" (v));
 #else
     lzo_memops_TU1p d = (lzo_memops_TU1p) dd;
-    d[0] = LZO_BYTE((vv      ) & 0xff);
-    d[1] = LZO_BYTE((vv >>  8) & 0xff);
+    d[0] = LZO_BYTE((vv      ) & 0xFF);
+    d[1] = LZO_BYTE((vv >>  8) & 0xFF);
 #endif
 }
 #if (LZO_OPT_UNALIGNED16) && (LZO_ABI_LITTLE_ENDIAN)
@@ -441,10 +441,10 @@ __lzo_static_forceinline void lzo_memops_put_le32(lzo_voidp dd, lzo_uint32_t vv)
     __asm__("stwbrx %2,0,%1" : "=m" (*d) : "r" (d), "r" (v));
 #else
     lzo_memops_TU1p d = (lzo_memops_TU1p) dd;
-    d[0] = LZO_BYTE((vv      ) & 0xff);
-    d[1] = LZO_BYTE((vv >>  8) & 0xff);
-    d[2] = LZO_BYTE((vv >> 16) & 0xff);
-    d[3] = LZO_BYTE((vv >> 24) & 0xff);
+    d[0] = LZO_BYTE((vv      ) & 0xFF);
+    d[1] = LZO_BYTE((vv >>  8) & 0xFF);
+    d[2] = LZO_BYTE((vv >> 16) & 0xFF);
+    d[3] = LZO_BYTE((vv >> 24) & 0xFF);
 #endif
 }
 #if (LZO_OPT_UNALIGNED32) && (LZO_ABI_LITTLE_ENDIAN)

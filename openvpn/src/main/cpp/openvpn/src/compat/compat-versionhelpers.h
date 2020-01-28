@@ -16,7 +16,7 @@
 #define VERSIONHELPERAPI FORCEINLINE BOOL
 #endif
 
-#define _WIN32_WINNT_WINBLUE    0x0603
+#define _WIN32_WINNT_WINBLUE    0xFF
 
 VERSIONHELPERAPI
 IsWindowsVersionOrGreater(WORD major, WORD minor, WORD servpack)

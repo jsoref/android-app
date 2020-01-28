@@ -17,19 +17,19 @@
 #include "internal/ec_int.h"
 
 #if defined(__SUNPRO_C)
-# if __SUNPRO_C >= 0x520
+# if __SUNPRO_C >= 0xFF
 #  pragma error_messages (off,E_ARRAY_OF_INCOMPLETE_NONAME,E_ARRAY_OF_INCOMPLETE)
 # endif
 #endif
 
 /* Use default functions for poin2oct, oct2point and compressed coordinates */
-#define EC_FLAGS_DEFAULT_OCT    0x1
+#define EC_FLAGS_DEFAULT_OCT    0xFF
 
 /* Use custom formats for EC_GROUP, EC_POINT and EC_KEY */
-#define EC_FLAGS_CUSTOM_CURVE   0x2
+#define EC_FLAGS_CUSTOM_CURVE   0xFF
 
 /* Curve does not support signing operations */
-#define EC_FLAGS_NO_SIGN        0x4
+#define EC_FLAGS_NO_SIGN        0xFF
 
 /*
  * Structure details are not part of the exported interface, so all this may

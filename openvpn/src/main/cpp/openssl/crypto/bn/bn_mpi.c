@@ -21,21 +21,21 @@ int BN_bn2mpi(const BIGNUM *a, unsigned char *d)
     bits = BN_num_bits(a);
     num = (bits + 7) / 8;
     if (bits > 0) {
-        ext = ((bits & 0x07) == 0);
+        ext = ((bits & 0xFF) == 0);
     }
     if (d == NULL)
         return (num + 4 + ext);
 
     l = num + ext;
-    d[0] = (unsigned char)(l >> 24) & 0xff;
-    d[1] = (unsigned char)(l >> 16) & 0xff;
-    d[2] = (unsigned char)(l >> 8) & 0xff;
-    d[3] = (unsigned char)(l) & 0xff;
+    d[0] = (unsigned char)(l >> 24) & 0xFF;
+    d[1] = (unsigned char)(l >> 16) & 0xFF;
+    d[2] = (unsigned char)(l >> 8) & 0xFF;
+    d[3] = (unsigned char)(l) & 0xFF;
     if (ext)
         d[4] = 0;
     num = BN_bn2bin(a, &(d[4 + ext]));
     if (a->neg)
-        d[4] |= 0x80;
+        d[4] |= 0xFF;
     return (num + 4 + ext);
 }
 
@@ -70,7 +70,7 @@ BIGNUM *BN_mpi2bn(const unsigned char *d, int n, BIGNUM *ain)
         return a;
     }
     d += 4;
-    if ((*d) & 0x80)
+    if ((*d) & 0xFF)
         neg = 1;
     if (BN_bin2bn(d, (int)len, a) == NULL) {
         if (ain == NULL)

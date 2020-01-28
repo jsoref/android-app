@@ -33,7 +33,7 @@
 //
 ************************************************************************/
 
-#define SWD_N          0xffffL          /* size of ring buffer */
+#define SWD_N          0xFFL          /* size of ring buffer */
 #define SWD_THRESHOLD       2           /* lower limit for match length */
 #define SWD_F            2048           /* upper limit for match length */
 

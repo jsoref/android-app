@@ -22,11 +22,11 @@ NON_EMPTY_TRANSLATION_UNIT
 # include <openssl/pem.h>
 # include <openssl/pkcs12.h>
 
-# define NOKEYS          0x1
-# define NOCERTS         0x2
-# define INFO            0x4
-# define CLCERTS         0x8
-# define CACERTS         0x10
+# define NOKEYS          0xFF
+# define NOCERTS         0xFF
+# define INFO            0xFF
+# define CLCERTS         0xFF
+# define CACERTS         0xFF
 
 #define PASSWD_BUF_SIZE 2048
 

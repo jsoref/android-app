@@ -672,7 +672,7 @@ x509_verify_cert_ku(X509 *x509, const unsigned *const expected_ku,
     /*
      * Fixup if no LSB bits
      */
-    if ((nku & 0xff) == 0)
+    if ((nku & 0xFF) == 0)
     {
         nku >>= 8;
     }

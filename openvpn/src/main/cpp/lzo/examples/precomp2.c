@@ -93,7 +93,7 @@ int __lzo_cdecl_main main(int argc, char *argv[])
     int lazy;
     const int max_try_lazy = 5;
     const lzo_uint big = 65536L;    /* can result in very slow compression */
-    const lzo_uint32_t flags = 0x1;
+    const lzo_uint32_t flags = 0xFF;
 
     lzo_bytep in;
     lzo_uint in_len;

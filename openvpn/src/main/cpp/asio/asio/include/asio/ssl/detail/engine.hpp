@@ -115,11 +115,11 @@ private:
   ASIO_DECL static int verify_callback_function(
       int preverified, X509_STORE_CTX* ctx);
 
-#if (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
   // The SSL_accept function may not be thread safe. This mutex is used to
   // protect all calls to the SSL_accept function.
   ASIO_DECL static asio::detail::static_mutex& accept_mutex();
-#endif // (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#endif // (OPENSSL_VERSION_NUMBER < 0xFFL)
 
   // Perform one operation. Returns >= 0 on success or error, want_read if the
   // operation needs more input, or want_write if it needs to write some output

@@ -148,8 +148,8 @@ char *X509_NAME_oneline(const X509_NAME *a, char *buf, int len)
             if ((n < ' ') || (n > '~')) {
                 *(p++) = '\\';
                 *(p++) = 'x';
-                *(p++) = hex[(n >> 4) & 0x0f];
-                *(p++) = hex[n & 0x0f];
+                *(p++) = hex[(n >> 4) & 0xFF];
+                *(p++) = hex[n & 0xFF];
             } else
                 *(p++) = n;
 #else
@@ -157,8 +157,8 @@ char *X509_NAME_oneline(const X509_NAME *a, char *buf, int len)
             if ((n < os_toascii[' ']) || (n > os_toascii['~'])) {
                 *(p++) = '\\';
                 *(p++) = 'x';
-                *(p++) = hex[(n >> 4) & 0x0f];
-                *(p++) = hex[n & 0x0f];
+                *(p++) = hex[(n >> 4) & 0xFF];
+                *(p++) = hex[n & 0xFF];
             } else
                 *(p++) = q[j];
 #endif

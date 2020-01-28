@@ -36,7 +36,7 @@
  */
 # include <openssl/symhacks.h>
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/opensslv.h>
 # endif
 
@@ -44,7 +44,7 @@
 extern "C" {
 #endif
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define SSLeay                  OpenSSL_version_num
 #  define SSLeay_version          OpenSSL_version
 #  define SSLEAY_VERSION_NUMBER   OPENSSL_VERSION_NUMBER
@@ -78,10 +78,10 @@ int CRYPTO_atomic_add(int *val, int amount, int *ret, CRYPTO_RWLOCK *lock);
  * The following can be used to detect memory leaks in the library. If
  * used, it turns on malloc checking
  */
-# define CRYPTO_MEM_CHECK_OFF     0x0   /* Control only */
-# define CRYPTO_MEM_CHECK_ON      0x1   /* Control and mode bit */
-# define CRYPTO_MEM_CHECK_ENABLE  0x2   /* Control and mode bit */
-# define CRYPTO_MEM_CHECK_DISABLE 0x3   /* Control only */
+# define CRYPTO_MEM_CHECK_OFF     0xFF   /* Control only */
+# define CRYPTO_MEM_CHECK_ON      0xFF   /* Control and mode bit */
+# define CRYPTO_MEM_CHECK_ENABLE  0xFF   /* Control and mode bit */
+# define CRYPTO_MEM_CHECK_DISABLE 0xFF   /* Control only */
 
 struct crypto_ex_data_st {
     STACK_OF(void) *sk;
@@ -192,7 +192,7 @@ void CRYPTO_free_ex_data(int class_index, void *obj, CRYPTO_EX_DATA *ad);
 int CRYPTO_set_ex_data(CRYPTO_EX_DATA *ad, int idx, void *val);
 void *CRYPTO_get_ex_data(const CRYPTO_EX_DATA *ad, int idx);
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 /*
  * This function cleans up all "ex_data" state. It mustn't be called under
  * potential race-conditions.
@@ -239,11 +239,11 @@ typedef struct crypto_threadid_st {
 #  define CRYPTO_THREADID_cpy(dest, src)
 #  define CRYPTO_THREADID_hash(id)                      (0UL)
 
-#  if OPENSSL_API_COMPAT < 0x10000000L
+#  if OPENSSL_API_COMPAT < 0xFFL
 #   define CRYPTO_set_id_callback(func)
 #   define CRYPTO_get_id_callback()                     (NULL)
 #   define CRYPTO_thread_id()                           (0UL)
-#  endif /* OPENSSL_API_COMPAT < 0x10000000L */
+#  endif /* OPENSSL_API_COMPAT < 0xFFL */
 
 #  define CRYPTO_set_dynlock_create_callback(dyn_create_function)
 #  define CRYPTO_set_dynlock_lock_callback(dyn_lock_function)
@@ -251,7 +251,7 @@ typedef struct crypto_threadid_st {
 #  define CRYPTO_get_dynlock_create_callback()          (NULL)
 #  define CRYPTO_get_dynlock_lock_callback()            (NULL)
 #  define CRYPTO_get_dynlock_destroy_callback()         (NULL)
-# endif /* OPENSSL_API_COMPAT < 0x10100000L */
+# endif /* OPENSSL_API_COMPAT < 0xFFL */
 
 int CRYPTO_set_mem_functions(
         void *(*m) (size_t, const char *, int),
@@ -320,7 +320,7 @@ int CRYPTO_mem_leaks(BIO *bio);
 
 /* die if we have to */
 ossl_noreturn void OPENSSL_die(const char *assertion, const char *file, int line);
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define OpenSSLDie(f,l,a) OPENSSL_die((a),(f),(l))
 # endif
 # define OPENSSL_assert(e) \
@@ -353,28 +353,28 @@ int OPENSSL_gmtime_diff(int *pday, int *psec,
 int CRYPTO_memcmp(const void * in_a, const void * in_b, size_t len);
 
 /* Standard initialisation options */
-# define OPENSSL_INIT_NO_LOAD_CRYPTO_STRINGS 0x00000001L
-# define OPENSSL_INIT_LOAD_CRYPTO_STRINGS    0x00000002L
-# define OPENSSL_INIT_ADD_ALL_CIPHERS        0x00000004L
-# define OPENSSL_INIT_ADD_ALL_DIGESTS        0x00000008L
-# define OPENSSL_INIT_NO_ADD_ALL_CIPHERS     0x00000010L
-# define OPENSSL_INIT_NO_ADD_ALL_DIGESTS     0x00000020L
-# define OPENSSL_INIT_LOAD_CONFIG            0x00000040L
-# define OPENSSL_INIT_NO_LOAD_CONFIG         0x00000080L
-# define OPENSSL_INIT_ASYNC                  0x00000100L
-# define OPENSSL_INIT_ENGINE_RDRAND          0x00000200L
-# define OPENSSL_INIT_ENGINE_DYNAMIC         0x00000400L
-# define OPENSSL_INIT_ENGINE_OPENSSL         0x00000800L
-# define OPENSSL_INIT_ENGINE_CRYPTODEV       0x00001000L
-# define OPENSSL_INIT_ENGINE_CAPI            0x00002000L
-# define OPENSSL_INIT_ENGINE_PADLOCK         0x00004000L
-# define OPENSSL_INIT_ENGINE_AFALG           0x00008000L
-/* OPENSSL_INIT_ZLIB                         0x00010000L */
-# define OPENSSL_INIT_ATFORK                 0x00020000L
-/* OPENSSL_INIT_BASE_ONLY                    0x00040000L */
-# define OPENSSL_INIT_NO_ATEXIT              0x00080000L
-/* OPENSSL_INIT flag range 0xfff00000 reserved for OPENSSL_init_ssl() */
-/* Max OPENSSL_INIT flag value is 0x80000000 */
+# define OPENSSL_INIT_NO_LOAD_CRYPTO_STRINGS 0xFFL
+# define OPENSSL_INIT_LOAD_CRYPTO_STRINGS    0xFFL
+# define OPENSSL_INIT_ADD_ALL_CIPHERS        0xFFL
+# define OPENSSL_INIT_ADD_ALL_DIGESTS        0xFFL
+# define OPENSSL_INIT_NO_ADD_ALL_CIPHERS     0xFFL
+# define OPENSSL_INIT_NO_ADD_ALL_DIGESTS     0xFFL
+# define OPENSSL_INIT_LOAD_CONFIG            0xFFL
+# define OPENSSL_INIT_NO_LOAD_CONFIG         0xFFL
+# define OPENSSL_INIT_ASYNC                  0xFFL
+# define OPENSSL_INIT_ENGINE_RDRAND          0xFFL
+# define OPENSSL_INIT_ENGINE_DYNAMIC         0xFFL
+# define OPENSSL_INIT_ENGINE_OPENSSL         0xFFL
+# define OPENSSL_INIT_ENGINE_CRYPTODEV       0xFFL
+# define OPENSSL_INIT_ENGINE_CAPI            0xFFL
+# define OPENSSL_INIT_ENGINE_PADLOCK         0xFFL
+# define OPENSSL_INIT_ENGINE_AFALG           0xFFL
+/* OPENSSL_INIT_ZLIB                         0xFFL */
+# define OPENSSL_INIT_ATFORK                 0xFFL
+/* OPENSSL_INIT_BASE_ONLY                    0xFFL */
+# define OPENSSL_INIT_NO_ATEXIT              0xFFL
+/* OPENSSL_INIT flag range 0xFF reserved for OPENSSL_init_ssl() */
+/* Max OPENSSL_INIT flag value is 0xFF */
 
 /* openssl and dasync not counted as builtin */
 # define OPENSSL_INIT_ENGINE_ALL_BUILTIN \

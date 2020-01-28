@@ -186,7 +186,7 @@ static int FUZ_AddressOverflow(void)
         buffers[nbBuff] = (char*)malloc(BLOCKSIZE_I134);
         if (buffers[nbBuff]==NULL) goto _endOfTests;
 
-        if (((uintptr_t)buffers[nbBuff] > (uintptr_t)0x80000000) && (!highAddress)) {
+        if (((uintptr_t)buffers[nbBuff] > (uintptr_t)0xFF) && (!highAddress)) {
             DISPLAY("high address detected : ");
             fflush(stdout);
             highAddress=1;
@@ -197,31 +197,31 @@ static int FUZ_AddressOverflow(void)
             char* const input = buffers[nbBuff-1];
             char* output = buffers[nbBuff];
             int r;
-            input[0] = (char)0xF0;   /* Literal length overflow */
+            input[0] = (char)0xFF;   /* Literal length overflow */
             input[1] = (char)0xFF;
             input[2] = (char)0xFF;
             input[3] = (char)0xFF;
-            { unsigned u; for(u = 4; u <= nbOf255+4; u++) input[u] = (char)0xff; }
+            { unsigned u; for(u = 4; u <= nbOf255+4; u++) input[u] = (char)0xFF; }
             r = LZ4_decompress_safe(input, output, nbOf255+64, BLOCKSIZE_I134);
             if (r>0) { DISPLAY("LZ4_decompress_safe = %i \n", r); goto _overflowError; }
-            input[0] = (char)0x1F;   /* Match length overflow */
-            input[1] = (char)0x01;
-            input[2] = (char)0x01;
-            input[3] = (char)0x00;
+            input[0] = (char)0xFF;   /* Match length overflow */
+            input[1] = (char)0xFF;
+            input[2] = (char)0xFF;
+            input[3] = (char)0xFF;
             r = LZ4_decompress_safe(input, output, nbOf255+64, BLOCKSIZE_I134);
             if (r>0) { DISPLAY("LZ4_decompress_safe = %i \n", r); goto _overflowError; }
 
             output = buffers[nbBuff-2];   /* Reverse in/out pointer order */
-            input[0] = (char)0xF0;   /* Literal length overflow */
+            input[0] = (char)0xFF;   /* Literal length overflow */
             input[1] = (char)0xFF;
             input[2] = (char)0xFF;
             input[3] = (char)0xFF;
             r = LZ4_decompress_safe(input, output, nbOf255+64, BLOCKSIZE_I134);
             if (r>0) goto _overflowError;
-            input[0] = (char)0x1F;   /* Match length overflow */
-            input[1] = (char)0x01;
-            input[2] = (char)0x01;
-            input[3] = (char)0x00;
+            input[0] = (char)0xFF;   /* Match length overflow */
+            input[1] = (char)0xFF;
+            input[2] = (char)0xFF;
+            input[3] = (char)0xFF;
             r = LZ4_decompress_safe(input, output, nbOf255+64, BLOCKSIZE_I134);
             if (r>0) goto _overflowError;
         }
@@ -514,7 +514,7 @@ static int FUZ_test(U32 seed, U32 nbCycles, const U32 startCycle, const double c
 
         /* Test compression with missing bytes into output buffer => must fail */
         FUZ_DISPLAYTEST;
-        {   int missingBytes = (FUZ_rand(&randState) % 0x3F) + 1;
+        {   int missingBytes = (FUZ_rand(&randState) % 0xFF) + 1;
             if (missingBytes >= compressedSize) missingBytes = compressedSize-1;
             missingBytes += !missingBytes;   /* avoid special case missingBytes==0 */
             compressedBuffer[compressedSize-missingBytes] = 0;
@@ -525,7 +525,7 @@ static int FUZ_test(U32 seed, U32 nbCycles, const U32 startCycle, const double c
 
         /* Test HC compression with missing bytes into output buffer => must fail */
         FUZ_DISPLAYTEST;
-        {   int missingBytes = (FUZ_rand(&randState) % 0x3F) + 1;
+        {   int missingBytes = (FUZ_rand(&randState) % 0xFF) + 1;
             if (missingBytes >= HCcompressedSize) missingBytes = HCcompressedSize-1;
             missingBytes += !missingBytes;   /* avoid special case missingBytes==0 */
             compressedBuffer[HCcompressedSize-missingBytes] = 0;
@@ -570,7 +570,7 @@ static int FUZ_test(U32 seed, U32 nbCycles, const U32 startCycle, const double c
 
         /* Compress using External dictionary */
         FUZ_DISPLAYTEST;
-        dict -= (FUZ_rand(&randState) & 0xF) + 1;   /* Separation, so it is an ExtDict */
+        dict -= (FUZ_rand(&randState) & 0xFF) + 1;   /* Separation, so it is an ExtDict */
         if (dict < (char*)CNBuffer) dict = (char*)CNBuffer;
         LZ4_loadDict(&LZ4dict, dict, dictSize);
         blockContinueCompressedSize = LZ4_compress_fast_continue(&LZ4dict, block, compressedBuffer, blockSize, (int)compressedBufferSize, 1);
@@ -618,7 +618,7 @@ static int FUZ_test(U32 seed, U32 nbCycles, const U32 startCycle, const double c
         FUZ_CHECKTEST(decodedBuffer[blockSize-1], "LZ4_decompress_safe_usingDict overrun specified output buffer size");
 
         FUZ_DISPLAYTEST;
-        {   U32 const missingBytes = (FUZ_rand(&randState) & 0xF) + 2;
+        {   U32 const missingBytes = (FUZ_rand(&randState) & 0xFF) + 2;
             if ((U32)blockSize > missingBytes) {
                 decodedBuffer[blockSize-missingBytes] = 0;
                 ret = LZ4_decompress_safe_usingDict(compressedBuffer, decodedBuffer, blockContinueCompressedSize, blockSize-missingBytes, dict, dictSize);
@@ -904,7 +904,7 @@ static void FUZ_unitTests(int compressionLevel)
                 dst += segSize + 1;
                 segNb ++;
 
-                segStart += segSize + (FUZ_rand(&randState) & 0xF) + 1;
+                segStart += segSize + (FUZ_rand(&randState) & 0xFF) + 1;
                 segSize = (FUZ_rand(&randState) & 8191);
             }
         }

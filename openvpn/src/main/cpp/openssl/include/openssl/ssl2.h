@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-# define SSL2_VERSION            0x0002
+# define SSL2_VERSION            0xFF
 
 # define SSL2_MT_CLIENT_HELLO            1
 

@@ -168,14 +168,14 @@ static int des_ede3_cfb1_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
     if (!EVP_CIPHER_CTX_test_flags(ctx, EVP_CIPH_FLAG_LENGTH_BITS))
             inl *= 8;
     for (n = 0; n < inl; ++n) {
-        c[0] = (in[n / 8] & (1 << (7 - n % 8))) ? 0x80 : 0;
+        c[0] = (in[n / 8] & (1 << (7 - n % 8))) ? 0xFF : 0;
         DES_ede3_cfb_encrypt(c, d, 1, 1,
                              &data(ctx)->ks1, &data(ctx)->ks2,
                              &data(ctx)->ks3,
                              (DES_cblock *)EVP_CIPHER_CTX_iv_noconst(ctx),
                              EVP_CIPHER_CTX_encrypting(ctx));
-        out[n / 8] = (out[n / 8] & ~(0x80 >> (unsigned int)(n % 8)))
-            | ((d[0] & 0x80) >> (unsigned int)(n % 8));
+        out[n / 8] = (out[n / 8] & ~(0xFF >> (unsigned int)(n % 8)))
+            | ((d[0] & 0xFF) >> (unsigned int)(n % 8));
     }
 
     return 1;
@@ -311,7 +311,7 @@ const EVP_CIPHER *EVP_des_ede3(void)
 # include <openssl/sha.h>
 
 static const unsigned char wrap_iv[8] =
-    { 0x4a, 0xdd, 0xa2, 0x2c, 0x79, 0xe8, 0x21, 0x05 };
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 static int des_ede3_unwrap(EVP_CIPHER_CTX *ctx, unsigned char *out,
                            const unsigned char *in, size_t inl)

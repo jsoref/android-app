@@ -62,7 +62,7 @@ bn_mul_mont_gather5:
 
 	leaq	.Linc(%rip),%r10
 	movq	%rax,8(%rsp,%r9,8)
-.cfi_escape	0x0f,0x0a,0x77,0x08,0x79,0x00,0x38,0x1e,0x22,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lmul_body:
 
 	leaq	128(%rdx),%r12
@@ -76,7 +76,7 @@ bn_mul_mont_gather5:
 	movdqa	%xmm1,%xmm2
 	paddd	%xmm0,%xmm1
 	pcmpeqd	%xmm5,%xmm0
-.byte	0x67
+.byte	0xFF
 	movdqa	%xmm4,%xmm3
 	paddd	%xmm1,%xmm2
 	pcmpeqd	%xmm5,%xmm1
@@ -140,7 +140,7 @@ bn_mul_mont_gather5:
 	movdqa	%xmm0,304(%r10)
 
 	paddd	%xmm2,%xmm3
-.byte	0x67
+.byte	0xFF
 	pcmpeqd	%xmm5,%xmm2
 	movdqa	%xmm1,320(%r10)
 
@@ -191,7 +191,7 @@ bn_mul_mont_gather5:
 	por	%xmm2,%xmm0
 	por	%xmm3,%xmm1
 	por	%xmm1,%xmm0
-	pshufd	$0x4e,%xmm0,%xmm1
+	pshufd	$0xFF,%xmm0,%xmm1
 	por	%xmm1,%xmm0
 	leaq	256(%r12),%r12
 .byte	102,72,15,126,195
@@ -314,7 +314,7 @@ bn_mul_mont_gather5:
 	por	%xmm2,%xmm4
 	por	%xmm3,%xmm5
 	por	%xmm5,%xmm4
-	pshufd	$0x4e,%xmm4,%xmm0
+	pshufd	$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	leaq	256(%r12),%r12
 
@@ -438,19 +438,19 @@ bn_mul_mont_gather5:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmul_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_mul_mont_gather5,.-bn_mul_mont_gather5
 .type	bn_mul4x_mont_gather5,@function
 .align	32
 bn_mul4x_mont_gather5:
 .cfi_startproc	
-.byte	0x67
+.byte	0xFF
 	movq	%rsp,%rax
 .cfi_def_cfa_register	%rax
 .Lmul4x_enter:
-	andl	$0x80108,%r11d
-	cmpl	$0x80108,%r11d
+	andl	$0xFF,%r11d
+	cmpl	$0xFF,%r11d
 	je	.Lmulx4x_enter
 	pushq	%rbx
 .cfi_offset	%rbx,-16
@@ -466,7 +466,7 @@ bn_mul4x_mont_gather5:
 .cfi_offset	%r15,-56
 .Lmul4x_prologue:
 
-.byte	0x67
+.byte	0xFF
 	shll	$3,%r9d
 	leaq	(%r9,%r9,2),%r10
 	negq	%r9
@@ -519,7 +519,7 @@ bn_mul4x_mont_gather5:
 	negq	%r9
 
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lmul4x_body:
 
 	call	mul4x_internal
@@ -543,7 +543,7 @@ bn_mul4x_mont_gather5:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmul4x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_mul4x_mont_gather5,.-bn_mul4x_mont_gather5
 
@@ -562,11 +562,11 @@ mul4x_internal:
 
 	pshufd	$0,%xmm5,%xmm5
 	movdqa	%xmm1,%xmm4
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	movdqa	%xmm1,%xmm2
 	paddd	%xmm0,%xmm1
 	pcmpeqd	%xmm5,%xmm0
-.byte	0x67
+.byte	0xFF
 	movdqa	%xmm4,%xmm3
 	paddd	%xmm1,%xmm2
 	pcmpeqd	%xmm5,%xmm1
@@ -630,7 +630,7 @@ mul4x_internal:
 	movdqa	%xmm0,304(%r10)
 
 	paddd	%xmm2,%xmm3
-.byte	0x67
+.byte	0xFF
 	pcmpeqd	%xmm5,%xmm2
 	movdqa	%xmm1,320(%r10)
 
@@ -681,7 +681,7 @@ mul4x_internal:
 	por	%xmm2,%xmm0
 	por	%xmm3,%xmm1
 	por	%xmm1,%xmm0
-	pshufd	$0x4e,%xmm0,%xmm1
+	pshufd	$0xFF,%xmm0,%xmm1
 	por	%xmm1,%xmm0
 	leaq	256(%r12),%r12
 .byte	102,72,15,126,195
@@ -888,7 +888,7 @@ mul4x_internal:
 	por	%xmm2,%xmm4
 	por	%xmm3,%xmm5
 	por	%xmm5,%xmm4
-	pshufd	$0x4e,%xmm4,%xmm0
+	pshufd	$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	leaq	256(%r12),%r12
 .byte	102,72,15,126,195
@@ -1080,8 +1080,8 @@ bn_power5:
 	movq	%rsp,%rax
 .cfi_def_cfa_register	%rax
 	movl	OPENSSL_ia32cap_P+8(%rip),%r11d
-	andl	$0x80108,%r11d
-	cmpl	$0x80108,%r11d
+	andl	$0xFF,%r11d
+	cmpl	$0xFF,%r11d
 	je	.Lpowerx5_enter
 	pushq	%rbx
 .cfi_offset	%rbx,-16
@@ -1159,7 +1159,7 @@ bn_power5:
 
 	movq	%r8,32(%rsp)
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lpower5_body:
 .byte	102,72,15,110,207
 .byte	102,72,15,110,209
@@ -1203,7 +1203,7 @@ bn_power5:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lpower5_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_power5,.-bn_power5
 
@@ -1474,7 +1474,7 @@ __bn_sqr8x_internal:
 	addq	(%rdi,%rcx,1),%r13
 	adcq	$0,%r12
 
-.byte	0x67
+.byte	0xFF
 	mulq	%r14
 	addq	%rax,%r11
 	movq	%rbx,%rax
@@ -1506,7 +1506,7 @@ __bn_sqr8x_internal:
 	cmpq	$0,%rcx
 	jne	.Lsqr4x_inner
 
-.byte	0x67
+.byte	0xFF
 	mulq	%r15
 	addq	%rax,%r13
 	adcq	$0,%rdx
@@ -1699,7 +1699,7 @@ __bn_sqr8x_internal:
 	jnz	.Lsqr4x_shift_n_add
 
 	leaq	(%r14,%r10,2),%r12
-.byte	0x67
+.byte	0xFF
 	shrq	$63,%r10
 	leaq	(%rcx,%r11,2),%r13
 	shrq	$63,%r11
@@ -1741,7 +1741,7 @@ __bn_sqr8x_reduction:
 .align	32
 .L8x_reduction_loop:
 	leaq	(%rdi,%r9,1),%rdi
-.byte	0x66
+.byte	0xFF
 	movq	0(%rdi),%rbx
 	movq	8(%rdi),%r9
 	movq	16(%rdi),%r10
@@ -1753,7 +1753,7 @@ __bn_sqr8x_reduction:
 	movq	%rax,(%rdx)
 	leaq	64(%rdi),%rdi
 
-.byte	0x67
+.byte	0xFF
 	movq	%rbx,%r8
 	imulq	32+8(%rsp),%rbx
 	movq	0(%rbp),%rax
@@ -1837,7 +1837,7 @@ __bn_sqr8x_reduction:
 	cmpq	0+8(%rsp),%rbp
 	jae	.L8x_no_tail
 
-.byte	0x66
+.byte	0xFF
 	addq	0(%rdi),%r8
 	adcq	8(%rdi),%r9
 	adcq	16(%rdi),%r10
@@ -1986,7 +1986,7 @@ __bn_sqr8x_reduction:
 
 	cmpq	%rdx,%rdi
 	jb	.L8x_reduction_loop
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	bn_sqr8x_internal,.-bn_sqr8x_internal
 .type	__bn_post4x_internal,@function
 .align	32
@@ -2040,7 +2040,7 @@ __bn_post4x_internal:
 
 	movq	%r9,%r10
 	negq	%r9
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	__bn_post4x_internal,.-__bn_post4x_internal
 .globl	bn_from_montgomery
 .type	bn_from_montgomery,@function
@@ -2049,14 +2049,14 @@ bn_from_montgomery:
 	testl	$7,%r9d
 	jz	bn_from_mont8x
 	xorl	%eax,%eax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	bn_from_montgomery,.-bn_from_montgomery
 
 .type	bn_from_mont8x,@function
 .align	32
 bn_from_mont8x:
 .cfi_startproc	
-.byte	0x67
+.byte	0xFF
 	movq	%rsp,%rax
 .cfi_def_cfa_register	%rax
 	pushq	%rbx
@@ -2135,7 +2135,7 @@ bn_from_mont8x:
 
 	movq	%r8,32(%rsp)
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lfrom_body:
 	movq	%r9,%r11
 	leaq	48(%rsp),%rax
@@ -2150,7 +2150,7 @@ bn_from_mont8x:
 	movdqa	%xmm0,(%rax,%r9,1)
 	movdqu	48(%rsi),%xmm4
 	movdqa	%xmm0,16(%rax,%r9,1)
-.byte	0x48,0x8d,0xb6,0x40,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	movdqa	%xmm1,(%rax)
 	movdqa	%xmm0,32(%rax,%r9,1)
 	movdqa	%xmm2,16(%rax)
@@ -2163,12 +2163,12 @@ bn_from_mont8x:
 
 .byte	102,72,15,110,207
 .byte	102,72,15,110,209
-.byte	0x67
+.byte	0xFF
 	movq	%rcx,%rbp
 .byte	102,73,15,110,218
 	movl	OPENSSL_ia32cap_P+8(%rip),%r11d
-	andl	$0x80108,%r11d
-	cmpl	$0x80108,%r11d
+	andl	$0xFF,%r11d
+	cmpl	$0xFF,%r11d
 	jne	.Lfrom_mont_nox
 
 	leaq	(%rax,%r9,1),%rdi
@@ -2216,7 +2216,7 @@ bn_from_mont8x:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lfrom_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_from_mont8x,.-bn_from_mont8x
 .type	bn_mulx4x_mont_gather5,@function
@@ -2303,7 +2303,7 @@ bn_mulx4x_mont_gather5:
 
 	movq	%r8,32(%rsp)
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lmulx4x_body:
 	call	mulx4x_internal
 
@@ -2326,7 +2326,7 @@ bn_mulx4x_mont_gather5:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmulx4x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_mulx4x_mont_gather5,.-bn_mulx4x_mont_gather5
 
@@ -2353,9 +2353,9 @@ mulx4x_internal:
 
 	pshufd	$0,%xmm5,%xmm5
 	movdqa	%xmm1,%xmm4
-.byte	0x67
+.byte	0xFF
 	movdqa	%xmm1,%xmm2
-.byte	0x67
+.byte	0xFF
 	paddd	%xmm0,%xmm1
 	pcmpeqd	%xmm5,%xmm0
 	movdqa	%xmm4,%xmm3
@@ -2416,7 +2416,7 @@ mulx4x_internal:
 	pcmpeqd	%xmm5,%xmm0
 	movdqa	%xmm3,288(%r10)
 	movdqa	%xmm4,%xmm3
-.byte	0x67
+.byte	0xFF
 	paddd	%xmm1,%xmm2
 	pcmpeqd	%xmm5,%xmm1
 	movdqa	%xmm0,304(%r10)
@@ -2472,7 +2472,7 @@ mulx4x_internal:
 	por	%xmm2,%xmm0
 	por	%xmm3,%xmm1
 	pxor	%xmm1,%xmm0
-	pshufd	$0x4e,%xmm0,%xmm1
+	pshufd	$0xFF,%xmm0,%xmm1
 	por	%xmm1,%xmm0
 	leaq	256(%rdi),%rdi
 .byte	102,72,15,126,194
@@ -2528,7 +2528,7 @@ mulx4x_internal:
 	mulxq	16(%rsi),%r12,%rax
 	adcxq	%r14,%r12
 	mulxq	24(%rsi),%r13,%r14
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	movq	%r8,%rdx
 	adcxq	%rax,%r13
 	adcxq	%rbp,%r14
@@ -2571,7 +2571,7 @@ mulx4x_internal:
 .Lmulx4x_outer:
 	leaq	16-256(%rbx),%r10
 	pxor	%xmm4,%xmm4
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	pxor	%xmm5,%xmm5
 	movdqa	-128(%rdi),%xmm0
 	movdqa	-112(%rdi),%xmm1
@@ -2622,7 +2622,7 @@ mulx4x_internal:
 	por	%xmm2,%xmm4
 	por	%xmm3,%xmm5
 	por	%xmm5,%xmm4
-	pshufd	$0x4e,%xmm4,%xmm0
+	pshufd	$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	leaq	256(%rdi),%rdi
 .byte	102,72,15,126,194
@@ -2842,7 +2842,7 @@ bn_powerx5:
 .byte	102,72,15,110,226
 	movq	%r8,32(%rsp)
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lpowerx5_body:
 
 	call	__bn_sqrx8x_internal
@@ -2883,7 +2883,7 @@ bn_powerx5:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lpowerx5_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_powerx5,.-bn_powerx5
 
@@ -2941,9 +2941,9 @@ __bn_sqrx8x_internal:
 	jmp	.Lsqr8x_zero_start
 
 .align	32
-.byte	0x66,0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lsqrx8x_zero:
-.byte	0x3e
+.byte	0xFF
 	movdqa	%xmm0,0(%rdi)
 	movdqa	%xmm0,16(%rdi)
 	movdqa	%xmm0,32(%rdi)
@@ -2977,10 +2977,10 @@ __bn_sqrx8x_internal:
 	mulxq	16(%rsi),%r9,%rax
 	adcxq	%r10,%r9
 	adoxq	%rax,%r11
-.byte	0xc4,0xe2,0xab,0xf6,0x86,0x18,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%r11,%r10
 	adoxq	%rax,%r12
-.byte	0xc4,0xe2,0xa3,0xf6,0x86,0x20,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%r12,%r11
 	adoxq	%rax,%r13
 	mulxq	40(%rsi),%r12,%rax
@@ -3007,13 +3007,13 @@ __bn_sqrx8x_internal:
 	mulxq	32(%rsi),%r10,%rbx
 	adcxq	%r11,%r9
 	adoxq	%rax,%r10
-.byte	0xc4,0xe2,0xa3,0xf6,0x86,0x28,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%r12,%r10
 	adoxq	%rbx,%r11
-.byte	0xc4,0xe2,0x9b,0xf6,0x9e,0x30,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%r13,%r11
 	adoxq	%r14,%r12
-.byte	0xc4,0x62,0x93,0xf6,0xb6,0x38,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	movq	16(%rsi),%rdx
 	adcxq	%rax,%r12
 	adoxq	%rbx,%r13
@@ -3031,11 +3031,11 @@ __bn_sqrx8x_internal:
 	mulxq	40(%rsi),%r10,%rbx
 	adcxq	%r11,%r9
 	adoxq	%rax,%r10
-.byte	0xc4,0xe2,0xa3,0xf6,0x86,0x30,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%r12,%r10
 	adoxq	%r13,%r11
-.byte	0xc4,0x62,0x9b,0xf6,0xae,0x38,0x00,0x00,0x00
-.byte	0x3e
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
+.byte	0xFF
 	movq	24(%rsi),%rdx
 	adcxq	%rbx,%r11
 	adoxq	%rax,%r12
@@ -3087,7 +3087,7 @@ __bn_sqrx8x_internal:
 	adcxq	%rax,%r12
 	adoxq	%rbp,%r13
 
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	mulxq	%r8,%r8,%r14
 	adcxq	%r8,%r13
 	adcxq	%rbp,%r14
@@ -3137,7 +3137,7 @@ __bn_sqrx8x_internal:
 	adcxq	%rax,%r10
 	adoxq	%r12,%r11
 
-.byte	0xc4,0x62,0xfb,0xf6,0xa5,0x20,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%rax,%r11
 	adoxq	%r13,%r12
 
@@ -3151,13 +3151,13 @@ __bn_sqrx8x_internal:
 	adcxq	%rax,%r13
 	adoxq	%r15,%r14
 
-.byte	0xc4,0x62,0xfb,0xf6,0xbd,0x38,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	movq	8(%rsi,%rcx,8),%rdx
 	adcxq	%rax,%r14
 	adoxq	%rbx,%r15
 	adcxq	%rbx,%r15
 
-.byte	0x67
+.byte	0xFF
 	incq	%rcx
 	jnz	.Lsqrx8x_loop
 
@@ -3167,7 +3167,7 @@ __bn_sqrx8x_internal:
 	je	.Lsqrx8x_break
 
 	subq	16+8(%rsp),%rbx
-.byte	0x66
+.byte	0xFF
 	movq	-64(%rsi),%rdx
 	adcxq	0(%rdi),%r8
 	adcxq	8(%rdi),%r9
@@ -3178,7 +3178,7 @@ __bn_sqrx8x_internal:
 	adcq	48(%rdi),%r14
 	adcq	56(%rdi),%r15
 	leaq	64(%rdi),%rdi
-.byte	0x67
+.byte	0xFF
 	sbbq	%rax,%rax
 	xorl	%ebx,%ebx
 	movq	%rax,16+8(%rsp)
@@ -3244,8 +3244,8 @@ __bn_sqrx8x_internal:
 	mulxq	%rdx,%rax,%rbx
 	adoxq	%r12,%r12
 	adcxq	%r10,%rax
-.byte	0x48,0x8b,0x94,0x0e,0x08,0x00,0x00,0x00
-.byte	0x4c,0x8b,0x97,0x20,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adoxq	%r13,%r13
 	adcxq	%r11,%rbx
 	movq	40(%rdi),%r11
@@ -3279,7 +3279,7 @@ __bn_sqrx8x_internal:
 	adoxq	%r10,%r10
 	adcxq	%r12,%rax
 	jrcxz	.Lsqrx4x_shift_n_add_break
-.byte	0x48,0x8b,0x94,0x0e,0x00,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adoxq	%r11,%r11
 	adcxq	%r13,%rbx
 	movq	80(%rdi),%r12
@@ -3346,7 +3346,7 @@ __bn_sqrx8x_reduction:
 	adcxq	%rbx,%r10
 	adoxq	%r12,%r11
 
-.byte	0xc4,0x62,0xe3,0xf6,0xa5,0x20,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	movq	%rdx,%rax
 	movq	%r8,%rdx
 	adcxq	%rbx,%r11
@@ -3370,7 +3370,7 @@ __bn_sqrx8x_reduction:
 	adoxq	%rsi,%r15
 	adcxq	%rsi,%r15
 
-.byte	0x67,0x67,0x67
+.byte	0xFF,0xFF,0xFF
 	incq	%rcx
 	jnz	.Lsqrx8x_reduce
 
@@ -3415,7 +3415,7 @@ __bn_sqrx8x_reduction:
 	adcxq	%rax,%r10
 	adoxq	%r12,%r11
 
-.byte	0xc4,0x62,0xfb,0xf6,0xa5,0x20,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	adcxq	%rax,%r11
 	adoxq	%r13,%r12
 
@@ -3504,7 +3504,7 @@ __bn_sqrx8x_reduction:
 	leaq	64(%rdi,%rcx,1),%rdi
 	cmpq	8+8(%rsp),%r8
 	jb	.Lsqrx8x_reduction_loop
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_sqrx8x_internal,.-bn_sqrx8x_internal
 .align	32
@@ -3555,7 +3555,7 @@ __bn_postx4x_internal:
 
 	negq	%r9
 
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	__bn_postx4x_internal,.-__bn_postx4x_internal
 .globl	bn_get_bits5
 .type	bn_get_bits5,@function
@@ -3573,7 +3573,7 @@ bn_get_bits5:
 	movzwl	(%r10,%rsi,2),%eax
 	shrl	%cl,%eax
 	andl	$31,%eax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	bn_get_bits5,.-bn_get_bits5
 
 .globl	bn_scatter5
@@ -3591,7 +3591,7 @@ bn_scatter5:
 	subl	$1,%esi
 	jnz	.Lscatter
 .Lscatter_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	bn_scatter5,.-bn_scatter5
 
 .globl	bn_gather5
@@ -3600,8 +3600,8 @@ bn_scatter5:
 bn_gather5:
 .LSEH_begin_bn_gather5:
 
-.byte	0x4c,0x8d,0x14,0x24
-.byte	0x48,0x81,0xec,0x08,0x01,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	leaq	.Linc(%rip),%rax
 	andq	$-16,%rsp
 
@@ -3746,7 +3746,7 @@ bn_gather5:
 	por	%xmm3,%xmm5
 	por	%xmm5,%xmm4
 	leaq	256(%r11),%r11
-	pshufd	$0x4e,%xmm4,%xmm0
+	pshufd	$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	movq	%xmm0,(%rdi)
 	leaq	8(%rdi),%rdi
@@ -3754,7 +3754,7 @@ bn_gather5:
 	jnz	.Lgather
 
 	leaq	(%r10),%rsp
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .LSEH_end_bn_gather5:
 .size	bn_gather5,.-bn_gather5
 .align	64

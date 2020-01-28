@@ -259,7 +259,7 @@ ___
 }
 # magic ################################################################
 $code.=<<___;
-	.word	0x81b02920+$NUM-1	! montmul	$NUM-1
+	.word	0xFF+$NUM-1	! montmul	$NUM-1
 .Lmresume_$NUM:
 	fbu,pn	%fcc3,.Lmabort_$NUM
 #ifndef	__arch64__
@@ -342,7 +342,7 @@ $code.=<<___;
 .Lmsquare_$NUM:
 	save	%sp,-128,%sp;		or	$sentinel,%fp,%fp
 	save	%sp,-128,%sp;		or	$sentinel,%fp,%fp
-	.word   0x81b02940+$NUM-1	! montsqr	$NUM-1
+	.word   0xFF+$NUM-1	! montsqr	$NUM-1
 	ba	.Lmresume_$NUM
 	nop
 .type	bn_mul_mont_t4_$NUM, #function
@@ -571,7 +571,7 @@ ___
 # magic ################################################################
 for($i=0; $i<5; $i++) {
 $code.=<<___;
-	.word	0x81b02940+$NUM-1	! montsqr	$NUM-1
+	.word	0xFF+$NUM-1	! montsqr	$NUM-1
 	fbu,pn	%fcc3,.Labort_$NUM
 #ifndef	__arch64__
 	and	%fp,$sentinel,$sentinel
@@ -582,7 +582,7 @@ ___
 }
 $code.=<<___;
 	wr	%o4,	%g0,	%ccr
-	.word	0x81b02920+$NUM-1	! montmul	$NUM-1
+	.word	0xFF+$NUM-1	! montmul	$NUM-1
 	fbu,pn	%fcc3,.Labort_$NUM
 #ifndef	__arch64__
 	and	%fp,$sentinel,$sentinel
@@ -760,7 +760,7 @@ $code.=<<___;
 	addcc	$lo0,	$lo1,	$lo1	! np[j]*m1+ap[j]*bp[0]
 	umulxhi	$nj,	$m1,	$nj	! nhi=nj
 	addxc	%g0,	$hi1,	$hi1
-	stxa	$lo1,	[$tp]0xe2	! tp[j-1]
+	stxa	$lo1,	[$tp]0xFF	! tp[j-1]
 	add	$tp,	8,	$tp	! tp++
 
 	brnz,pt	$cnt,	.L1st
@@ -773,12 +773,12 @@ $code.=<<___;
 	addxc	$nj,	%g0,	$hi1
 	addcc	$lo0,	$lo1,	$lo1	! np[j]*m1+ap[j]*bp[0]
 	addxc	%g0,	$hi1,	$hi1
-	stxa	$lo1,	[$tp]0xe2	! tp[j-1]
+	stxa	$lo1,	[$tp]0xFF	! tp[j-1]
 	add	$tp,	8,	$tp
 
 	addcc	$hi0,	$hi1,	$hi1
 	addxc	%g0,	%g0,	$ovf	! upmost overflow bit
-	stxa	$hi1,	[$tp]0xe2
+	stxa	$hi1,	[$tp]0xFF
 	add	$tp,	8,	$tp
 
 	ba	.Louter
@@ -1005,7 +1005,7 @@ $code.=<<___;
 	addcc	$lo0,	$lo1,	$lo1	! np[j]*m1+ap[j]*bp[0]
 	umulxhi	$nj,	$m1,	$nj	! nhi=nj
 	addxc	%g0,	$hi1,	$hi1
-	stxa	$lo1,	[$tp]0xe2	! tp[j-1]
+	stxa	$lo1,	[$tp]0xFF	! tp[j-1]
 	add	$tp,	8,	$tp	! tp++
 
 	brnz,pt	$cnt,	.L1st_g5
@@ -1018,12 +1018,12 @@ $code.=<<___;
 	addxc	$nj,	%g0,	$hi1
 	addcc	$lo0,	$lo1,	$lo1	! np[j]*m1+ap[j]*bp[0]
 	addxc	%g0,	$hi1,	$hi1
-	stxa	$lo1,	[$tp]0xe2	! tp[j-1]
+	stxa	$lo1,	[$tp]0xFF	! tp[j-1]
 	add	$tp,	8,	$tp
 
 	addcc	$hi0,	$hi1,	$hi1
 	addxc	%g0,	%g0,	$ovf	! upmost overflow bit
-	stxa	$hi1,	[$tp]0xe2
+	stxa	$hi1,	[$tp]0xFF
 	add	$tp,	8,	$tp
 
 	ba	.Louter_g5

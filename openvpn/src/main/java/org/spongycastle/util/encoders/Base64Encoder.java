@@ -65,14 +65,14 @@ public class Base64Encoder
         
         for (int i = off; i < off + dataLength; i += 3)
         {
-            a1 = data[i] & 0xff;
-            a2 = data[i + 1] & 0xff;
-            a3 = data[i + 2] & 0xff;
+            a1 = data[i] & 0xFF;
+            a2 = data[i + 1] & 0xFF;
+            a3 = data[i + 2] & 0xFF;
 
-            out.write(encodingTable[(a1 >>> 2) & 0x3f]);
-            out.write(encodingTable[((a1 << 4) | (a2 >>> 4)) & 0x3f]);
-            out.write(encodingTable[((a2 << 2) | (a3 >>> 6)) & 0x3f]);
-            out.write(encodingTable[a3 & 0x3f]);
+            out.write(encodingTable[(a1 >>> 2) & 0xFF]);
+            out.write(encodingTable[((a1 << 4) | (a2 >>> 4)) & 0xFF]);
+            out.write(encodingTable[((a2 << 2) | (a3 >>> 6)) & 0xFF]);
+            out.write(encodingTable[a3 & 0xFF]);
         }
 
         /*
@@ -86,9 +86,9 @@ public class Base64Encoder
         case 0:        /* nothing left to do */
             break;
         case 1:
-            d1 = data[off + dataLength] & 0xff;
-            b1 = (d1 >>> 2) & 0x3f;
-            b2 = (d1 << 4) & 0x3f;
+            d1 = data[off + dataLength] & 0xFF;
+            b1 = (d1 >>> 2) & 0xFF;
+            b2 = (d1 << 4) & 0xFF;
 
             out.write(encodingTable[b1]);
             out.write(encodingTable[b2]);
@@ -96,12 +96,12 @@ public class Base64Encoder
             out.write(padding);
             break;
         case 2:
-            d1 = data[off + dataLength] & 0xff;
-            d2 = data[off + dataLength + 1] & 0xff;
+            d1 = data[off + dataLength] & 0xFF;
+            d2 = data[off + dataLength + 1] & 0xFF;
 
-            b1 = (d1 >>> 2) & 0x3f;
-            b2 = ((d1 << 4) | (d2 >>> 4)) & 0x3f;
-            b3 = (d2 << 2) & 0x3f;
+            b1 = (d1 >>> 2) & 0xFF;
+            b2 = ((d1 << 4) | (d2 >>> 4)) & 0xFF;
+            b3 = (d2 << 2) & 0xFF;
 
             out.write(encodingTable[b1]);
             out.write(encodingTable[b2]);

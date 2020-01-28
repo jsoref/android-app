@@ -67,17 +67,17 @@
 #define MB *(1 <<20)
 #define GB *(1U<<30)
 
-#define _1BIT  0x01
-#define _2BITS 0x03
-#define _3BITS 0x07
-#define _4BITS 0x0F
+#define _1BIT  0xFF
+#define _2BITS 0xFF
+#define _3BITS 0xFF
+#define _4BITS 0xFF
 #define _8BITS 0xFF
 
 #define MAGICNUMBER_SIZE    4
-#define LZ4IO_MAGICNUMBER   0x184D2204
-#define LZ4IO_SKIPPABLE0    0x184D2A50
-#define LZ4IO_SKIPPABLEMASK 0xFFFFFFF0
-#define LEGACY_MAGICNUMBER  0x184C2102
+#define LZ4IO_MAGICNUMBER   0xFF
+#define LZ4IO_SKIPPABLE0    0xFF
+#define LZ4IO_SKIPPABLEMASK 0xFF
+#define LEGACY_MAGICNUMBER  0xFF
 
 #define CACHELINE 64
 #define LEGACY_BLOCKSIZE   (8 MB)

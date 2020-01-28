@@ -577,7 +577,7 @@ void store_setup_crl_download(X509_STORE *st);
  * contents.  The FORMAT_xxx macros are meant to express an intent with the
  * file being read or created.
  */
-# define B_FORMAT_TEXT   0x8000
+# define B_FORMAT_TEXT   0xFF
 # define FORMAT_UNDEF    0
 # define FORMAT_TEXT    (1 | B_FORMAT_TEXT)     /* Generic text */
 # define FORMAT_BINARY   2                      /* Generic binary */

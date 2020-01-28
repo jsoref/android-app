@@ -976,7 +976,7 @@ int load_crls(const char *file, STACK_OF(X509_CRL) **crls, int format,
     return load_certs_crls(file, format, pass, desc, NULL, crls);
 }
 
-#define X509V3_EXT_UNKNOWN_MASK         (0xfL << 16)
+#define X509V3_EXT_UNKNOWN_MASK         (0xFFL << 16)
 /* Return error for unknown extensions */
 #define X509V3_EXT_DEFAULT              0
 /* Print error for unknown extensions */
@@ -992,8 +992,8 @@ int load_crls(const char *file, STACK_OF(X509_CRL) **crls, int format,
 int set_cert_ex(unsigned long *flags, const char *arg)
 {
     static const NAME_EX_TBL cert_tbl[] = {
-        {"compatible", X509_FLAG_COMPAT, 0xffffffffl},
-        {"ca_default", X509_FLAG_CA, 0xffffffffl},
+        {"compatible", X509_FLAG_COMPAT, 0xFFl},
+        {"ca_default", X509_FLAG_CA, 0xFFl},
         {"no_header", X509_FLAG_NO_HEADER, 0},
         {"no_version", X509_FLAG_NO_VERSION, 0},
         {"no_serial", X509_FLAG_NO_SERIAL, 0},
@@ -1029,7 +1029,7 @@ int set_name_ex(unsigned long *flags, const char *arg)
         {"dump_all", ASN1_STRFLGS_DUMP_ALL, 0},
         {"dump_nostr", ASN1_STRFLGS_DUMP_UNKNOWN, 0},
         {"dump_der", ASN1_STRFLGS_DUMP_DER, 0},
-        {"compat", XN_FLAG_COMPAT, 0xffffffffL},
+        {"compat", XN_FLAG_COMPAT, 0xFFL},
         {"sep_comma_plus", XN_FLAG_SEP_COMMA_PLUS, XN_FLAG_SEP_MASK},
         {"sep_comma_plus_space", XN_FLAG_SEP_CPLUS_SPC, XN_FLAG_SEP_MASK},
         {"sep_semi_plus_space", XN_FLAG_SEP_SPLUS_SPC, XN_FLAG_SEP_MASK},
@@ -1042,10 +1042,10 @@ int set_name_ex(unsigned long *flags, const char *arg)
         {"oid", XN_FLAG_FN_OID, XN_FLAG_FN_MASK},
         {"space_eq", XN_FLAG_SPC_EQ, 0},
         {"dump_unknown", XN_FLAG_DUMP_UNKNOWN_FIELDS, 0},
-        {"RFC2253", XN_FLAG_RFC2253, 0xffffffffL},
-        {"oneline", XN_FLAG_ONELINE, 0xffffffffL},
-        {"multiline", XN_FLAG_MULTILINE, 0xffffffffL},
-        {"ca_default", XN_FLAG_MULTILINE, 0xffffffffL},
+        {"RFC2253", XN_FLAG_RFC2253, 0xFFL},
+        {"oneline", XN_FLAG_ONELINE, 0xFFL},
+        {"multiline", XN_FLAG_MULTILINE, 0xFFL},
+        {"ca_default", XN_FLAG_MULTILINE, 0xFFL},
         {NULL, 0, 0}
     };
     if (set_multi_opts(flags, arg, ex_tbl) == 0)
@@ -1188,7 +1188,7 @@ void print_bignum_var(BIO *out, const BIGNUM *in, const char *var,
 {
     BIO_printf(out, "    static unsigned char %s_%d[] = {", var, len);
     if (BN_is_zero(in)) {
-        BIO_printf(out, "\n        0x00");
+        BIO_printf(out, "\n        0xFF");
     } else {
         int i, l;
 
@@ -2720,7 +2720,7 @@ int has_stdin_waiting(void)
 void corrupt_signature(const ASN1_STRING *signature)
 {
         unsigned char *s = signature->data;
-        s[signature->length - 1] ^= 0x1;
+        s[signature->length - 1] ^= 0xFF;
 }
 
 int set_cert_times(X509 *x, const char *startdate, const char *enddate,

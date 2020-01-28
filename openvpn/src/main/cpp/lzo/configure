@@ -4179,7 +4179,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #include <limits.h>
 #if (32767 >= 4294967295ul) || (65535u >= 4294967295ul)
 #  include "your C preprocessor is broken 1"
-#elif (0xffffu == 0xfffffffful)
+#elif (0xFFu == 0xFFul)
 #  include "your C preprocessor is broken 2"
 #elif (32767 >= ULONG_MAX) || (65535u >= ULONG_MAX)
 #  include "your C preprocessor is broken 3"
@@ -4506,7 +4506,7 @@ else
 /* end confdefs.h.  */
 #include <ctype.h>
 #include <stdlib.h>
-#if ((' ' & 0x0FF) == 0x020)
+#if ((' ' & 0xFF) == 0xFF)
 # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
 # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
 #else
@@ -4514,7 +4514,7 @@ else
 		   (('a' <= (c) && (c) <= 'i') \
 		     || ('j' <= (c) && (c) <= 'r') \
 		     || ('s' <= (c) && (c) <= 'z'))
-# define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
+# define TOUPPER(c) (ISLOWER(c) ? ((c) | 0xFF) : (c))
 #endif
 
 #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
@@ -4703,16 +4703,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 short int ascii_mm[] =
-		  { 0x4249, 0x4765, 0x6E44, 0x6961, 0x6E53, 0x7953, 0 };
+		  { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 };
 		short int ascii_ii[] =
-		  { 0x694C, 0x5454, 0x656C, 0x6E45, 0x6944, 0x6E61, 0 };
+		  { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 };
 		int use_ascii (int i) {
 		  return ascii_mm[i] + ascii_ii[i];
 		}
 		short int ebcdic_ii[] =
-		  { 0x89D3, 0xE3E3, 0x8593, 0x95C5, 0x89C4, 0x9581, 0 };
+		  { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 };
 		short int ebcdic_mm[] =
-		  { 0xC2C9, 0xC785, 0x95C4, 0x8981, 0x95E2, 0xA8E2, 0 };
+		  { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 };
 		int use_ebcdic (int i) {
 		  return ebcdic_mm[i] + ebcdic_ii[i];
 		}
@@ -10225,11 +10225,11 @@ _LT_EOF
       hardcode_libdir_flag_spec='$wl-rpath,$libdir'
       export_dynamic_flag_spec='$wl-E'
       # Hack: On Interix 3.x, we cannot compile PIC because of a broken gcc.
-      # Instead, shared libraries are loaded at an image base (0x10000000 by
+      # Instead, shared libraries are loaded at an image base (0xFF by
       # default) and relocated if they conflict, which is a slow very memory
       # consuming and fragmenting process.  To avoid this, we pick a random,
-      # 256 KiB-aligned image base between 0x50000000 and 0x6FFC0000 at link
-      # time.  Moving up from 0x10000000 also allows more sbrk(2) space.
+      # 256 KiB-aligned image base between 0xFF and 0xFF at link
+      # time.  Moving up from 0xFF also allows more sbrk(2) space.
       archive_cmds='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-h,$soname $wl--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
       archive_expsym_cmds='sed "s|^|_|" $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-h,$soname $wl--retain-symbols-file,$output_objdir/$soname.expsym $wl--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
       ;;
@@ -13038,8 +13038,8 @@ else
 #    include "your preprocessor is broken"
 #  endif
 #endif
-#define MFX_0xffff          0xffff
-#define MFX_0xffffffffL     4294967295ul
+#define MFX_0xFF          0xFF
+#define MFX_0xFFL     4294967295ul
 #if !defined(CHAR_BIT) || (CHAR_BIT != 8)
 #  include "error CHAR_BIT"
 #endif
@@ -13076,16 +13076,16 @@ else
 #if (ULONG_MAX < 1)
 #  include "error ULONG_MAX 2"
 #endif
-#if (UCHAR_MAX < 0xff)
+#if (UCHAR_MAX < 0xFF)
 #  include "error UCHAR_MAX 3"
 #endif
-#if (USHRT_MAX < MFX_0xffff)
+#if (USHRT_MAX < MFX_0xFF)
 #  include "error USHRT_MAX 3"
 #endif
-#if (UINT_MAX < MFX_0xffff)
+#if (UINT_MAX < MFX_0xFF)
 #  include "error UINT_MAX 3"
 #endif
-#if (ULONG_MAX < MFX_0xffffffffL)
+#if (ULONG_MAX < MFX_0xFFL)
 #  include "error ULONG_MAX 3"
 #endif
 #if (USHRT_MAX > UINT_MAX)
@@ -13099,36 +13099,36 @@ int
 main ()
 {
 
-#if (USHRT_MAX == MFX_0xffff)
+#if (USHRT_MAX == MFX_0xFF)
 { typedef char a_short2a[1 - 2 * !(sizeof(short) == 2)]; }
-#elif (USHRT_MAX >= MFX_0xffff)
+#elif (USHRT_MAX >= MFX_0xFF)
 { typedef char a_short2b[1 - 2 * !(sizeof(short) > 2)]; }
 #endif
-#if (UINT_MAX == MFX_0xffff)
+#if (UINT_MAX == MFX_0xFF)
 { typedef char a_int2a[1 - 2 * !(sizeof(int) == 2)]; }
-#elif (UINT_MAX >= MFX_0xffff)
+#elif (UINT_MAX >= MFX_0xFF)
 { typedef char a_int2b[1 - 2 * !(sizeof(int) > 2)]; }
 #endif
-#if (ULONG_MAX == MFX_0xffff)
+#if (ULONG_MAX == MFX_0xFF)
 { typedef char a_long2a[1 - 2 * !(sizeof(long) == 2)]; }
-#elif (ULONG_MAX >= MFX_0xffff)
+#elif (ULONG_MAX >= MFX_0xFF)
 { typedef char a_long2b[1 - 2 * !(sizeof(long) > 2)]; }
 #endif
 #if !defined(_CRAY1) /* CRAY PVP systems */
-#if (USHRT_MAX == MFX_0xffffffffL)
+#if (USHRT_MAX == MFX_0xFFL)
 { typedef char a_short4a[1 - 2 * !(sizeof(short) == 4)]; }
-#elif (USHRT_MAX >= MFX_0xffffffffL)
+#elif (USHRT_MAX >= MFX_0xFFL)
 { typedef char a_short4b[1 - 2 * !(sizeof(short) > 4)]; }
 #endif
 #endif /* _CRAY1 */
-#if (UINT_MAX == MFX_0xffffffffL)
+#if (UINT_MAX == MFX_0xFFL)
 { typedef char a_int4a[1 - 2 * !(sizeof(int) == 4)]; }
-#elif (UINT_MAX >= MFX_0xffffffffL)
+#elif (UINT_MAX >= MFX_0xFFL)
 { typedef char a_int4b[1 - 2 * !(sizeof(int) > 4)]; }
 #endif
-#if (ULONG_MAX == MFX_0xffffffffL)
+#if (ULONG_MAX == MFX_0xFFL)
 { typedef char a_long4a[1 - 2 * !(sizeof(long) == 4)]; }
-#elif (ULONG_MAX >= MFX_0xffffffffL)
+#elif (ULONG_MAX >= MFX_0xFFL)
 { typedef char a_long4b[1 - 2 * !(sizeof(long) > 4)]; }
 #endif
 

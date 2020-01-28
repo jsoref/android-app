@@ -77,8 +77,8 @@ typedef struct X509V3_CONF_METHOD_st {
 
 /* Context specific info */
 struct v3_ext_ctx {
-# define CTX_TEST 0x1
-# define X509V3_CTX_REPLACE 0x2
+# define CTX_TEST 0xFF
+# define X509V3_CTX_REPLACE 0xFF
     int flags;
     X509 *issuer_cert;
     X509 *subject_cert;
@@ -94,9 +94,9 @@ typedef struct v3_ext_method X509V3_EXT_METHOD;
 DEFINE_STACK_OF(X509V3_EXT_METHOD)
 
 /* ext_flags values */
-# define X509V3_EXT_DYNAMIC      0x1
-# define X509V3_EXT_CTX_DEP      0x2
-# define X509V3_EXT_MULTILINE    0x4
+# define X509V3_EXT_DYNAMIC      0xFF
+# define X509V3_EXT_CTX_DEP      0xFF
+# define X509V3_EXT_MULTILINE    0xFF
 
 typedef BIT_STRING_BITNAME ENUMERATED_NAMES;
 
@@ -179,7 +179,7 @@ typedef struct DIST_POINT_NAME_st {
     X509_NAME *dpname;
 } DIST_POINT_NAME;
 /* All existing reasons */
-# define CRLDP_ALL_REASONS       0x807f
+# define CRLDP_ALL_REASONS       0xFF
 
 # define CRL_REASON_NONE                         -1
 # define CRL_REASON_UNSPECIFIED                  0
@@ -306,19 +306,19 @@ struct ISSUING_DIST_POINT_st {
 
 /* Values in idp_flags field */
 /* IDP present */
-# define IDP_PRESENT     0x1
+# define IDP_PRESENT     0xFF
 /* IDP values inconsistent */
-# define IDP_INVALID     0x2
+# define IDP_INVALID     0xFF
 /* onlyuser true */
-# define IDP_ONLYUSER    0x4
+# define IDP_ONLYUSER    0xFF
 /* onlyCA true */
-# define IDP_ONLYCA      0x8
+# define IDP_ONLYCA      0xFF
 /* onlyattr true */
-# define IDP_ONLYATTR    0x10
+# define IDP_ONLYATTR    0xFF
 /* indirectCRL true */
-# define IDP_INDIRECT    0x20
+# define IDP_INDIRECT    0xFF
 /* onlysomereasons present */
-# define IDP_REASONS     0x40
+# define IDP_REASONS     0xFF
 
 # define X509V3_conf_err(val) ERR_add_error_data(6, \
                         "section:", (val)->section, \
@@ -347,57 +347,57 @@ struct ISSUING_DIST_POINT_st {
 
 /* X509_PURPOSE stuff */
 
-# define EXFLAG_BCONS            0x1
-# define EXFLAG_KUSAGE           0x2
-# define EXFLAG_XKUSAGE          0x4
-# define EXFLAG_NSCERT           0x8
+# define EXFLAG_BCONS            0xFF
+# define EXFLAG_KUSAGE           0xFF
+# define EXFLAG_XKUSAGE          0xFF
+# define EXFLAG_NSCERT           0xFF
 
-# define EXFLAG_CA               0x10
+# define EXFLAG_CA               0xFF
 /* Really self issued not necessarily self signed */
-# define EXFLAG_SI               0x20
-# define EXFLAG_V1               0x40
-# define EXFLAG_INVALID          0x80
+# define EXFLAG_SI               0xFF
+# define EXFLAG_V1               0xFF
+# define EXFLAG_INVALID          0xFF
 /* EXFLAG_SET is set to indicate that some values have been precomputed */
-# define EXFLAG_SET              0x100
-# define EXFLAG_CRITICAL         0x200
-# define EXFLAG_PROXY            0x400
+# define EXFLAG_SET              0xFF
+# define EXFLAG_CRITICAL         0xFF
+# define EXFLAG_PROXY            0xFF
 
-# define EXFLAG_INVALID_POLICY   0x800
-# define EXFLAG_FRESHEST         0x1000
+# define EXFLAG_INVALID_POLICY   0xFF
+# define EXFLAG_FRESHEST         0xFF
 /* Self signed */
-# define EXFLAG_SS               0x2000
+# define EXFLAG_SS               0xFF
 
-# define KU_DIGITAL_SIGNATURE    0x0080
-# define KU_NON_REPUDIATION      0x0040
-# define KU_KEY_ENCIPHERMENT     0x0020
-# define KU_DATA_ENCIPHERMENT    0x0010
-# define KU_KEY_AGREEMENT        0x0008
-# define KU_KEY_CERT_SIGN        0x0004
-# define KU_CRL_SIGN             0x0002
-# define KU_ENCIPHER_ONLY        0x0001
-# define KU_DECIPHER_ONLY        0x8000
+# define KU_DIGITAL_SIGNATURE    0xFF
+# define KU_NON_REPUDIATION      0xFF
+# define KU_KEY_ENCIPHERMENT     0xFF
+# define KU_DATA_ENCIPHERMENT    0xFF
+# define KU_KEY_AGREEMENT        0xFF
+# define KU_KEY_CERT_SIGN        0xFF
+# define KU_CRL_SIGN             0xFF
+# define KU_ENCIPHER_ONLY        0xFF
+# define KU_DECIPHER_ONLY        0xFF
 
-# define NS_SSL_CLIENT           0x80
-# define NS_SSL_SERVER           0x40
-# define NS_SMIME                0x20
-# define NS_OBJSIGN              0x10
-# define NS_SSL_CA               0x04
-# define NS_SMIME_CA             0x02
-# define NS_OBJSIGN_CA           0x01
+# define NS_SSL_CLIENT           0xFF
+# define NS_SSL_SERVER           0xFF
+# define NS_SMIME                0xFF
+# define NS_OBJSIGN              0xFF
+# define NS_SSL_CA               0xFF
+# define NS_SMIME_CA             0xFF
+# define NS_OBJSIGN_CA           0xFF
 # define NS_ANY_CA               (NS_SSL_CA|NS_SMIME_CA|NS_OBJSIGN_CA)
 
-# define XKU_SSL_SERVER          0x1
-# define XKU_SSL_CLIENT          0x2
-# define XKU_SMIME               0x4
-# define XKU_CODE_SIGN           0x8
-# define XKU_SGC                 0x10
-# define XKU_OCSP_SIGN           0x20
-# define XKU_TIMESTAMP           0x40
-# define XKU_DVCS                0x80
-# define XKU_ANYEKU              0x100
+# define XKU_SSL_SERVER          0xFF
+# define XKU_SSL_CLIENT          0xFF
+# define XKU_SMIME               0xFF
+# define XKU_CODE_SIGN           0xFF
+# define XKU_SGC                 0xFF
+# define XKU_OCSP_SIGN           0xFF
+# define XKU_TIMESTAMP           0xFF
+# define XKU_DVCS                0xFF
+# define XKU_ANYEKU              0xFF
 
-# define X509_PURPOSE_DYNAMIC    0x1
-# define X509_PURPOSE_DYNAMIC_NAME       0x2
+# define X509_PURPOSE_DYNAMIC    0xFF
+# define X509_PURPOSE_DYNAMIC_NAME       0xFF
 
 typedef struct x509_purpose_st {
     int purpose;
@@ -424,7 +424,7 @@ typedef struct x509_purpose_st {
 
 /* Flags for X509V3_EXT_print() */
 
-# define X509V3_EXT_UNKNOWN_MASK         (0xfL << 16)
+# define X509V3_EXT_UNKNOWN_MASK         (0xFFL << 16)
 /* Return error for unknown extensions */
 # define X509V3_EXT_DEFAULT              0
 /* Print error for unknown extensions */
@@ -436,14 +436,14 @@ typedef struct x509_purpose_st {
 
 /* Flags for X509V3_add1_i2d */
 
-# define X509V3_ADD_OP_MASK              0xfL
+# define X509V3_ADD_OP_MASK              0xFFL
 # define X509V3_ADD_DEFAULT              0L
 # define X509V3_ADD_APPEND               1L
 # define X509V3_ADD_REPLACE              2L
 # define X509V3_ADD_REPLACE_EXISTING     3L
 # define X509V3_ADD_KEEP_EXISTING        4L
 # define X509V3_ADD_DELETE               5L
-# define X509V3_ADD_SILENT               0x10
+# define X509V3_ADD_SILENT               0xFF
 
 DEFINE_STACK_OF(X509_PURPOSE)
 
@@ -629,7 +629,7 @@ X509_EXTENSION *X509V3_EXT_i2d(int ext_nid, int crit, void *ext_struc);
 int X509V3_add1_i2d(STACK_OF(X509_EXTENSION) **x, int nid, void *value,
                     int crit, unsigned long flags);
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 /* The new declarations are in crypto.h, but the old ones were here. */
 # define hex_to_string OPENSSL_buf2hexstr
 # define string_to_hex OPENSSL_hexstr2buf
@@ -684,23 +684,23 @@ STACK_OF(OPENSSL_STRING) *X509_get1_ocsp(X509 *x);
 /*
  * Always check subject name for host match even if subject alt names present
  */
-# define X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT    0x1
+# define X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT    0xFF
 /* Disable wildcard matching for dnsName fields and common name. */
-# define X509_CHECK_FLAG_NO_WILDCARDS    0x2
+# define X509_CHECK_FLAG_NO_WILDCARDS    0xFF
 /* Wildcards must not match a partial label. */
-# define X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS 0x4
+# define X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS 0xFF
 /* Allow (non-partial) wildcards to match multiple labels. */
-# define X509_CHECK_FLAG_MULTI_LABEL_WILDCARDS 0x8
+# define X509_CHECK_FLAG_MULTI_LABEL_WILDCARDS 0xFF
 /* Constraint verifier subdomain patterns to match a single labels. */
-# define X509_CHECK_FLAG_SINGLE_LABEL_SUBDOMAINS 0x10
+# define X509_CHECK_FLAG_SINGLE_LABEL_SUBDOMAINS 0xFF
 /* Never check the subject CN */
-# define X509_CHECK_FLAG_NEVER_CHECK_SUBJECT    0x20
+# define X509_CHECK_FLAG_NEVER_CHECK_SUBJECT    0xFF
 /*
  * Match reference identifiers starting with "." to any sub-domain.
  * This is a non-public flag, turned on implicitly when the subject
  * reference identity is a DNS name.
  */
-# define _X509_CHECK_FLAG_DOT_SUBDOMAINS 0x8000
+# define _X509_CHECK_FLAG_DOT_SUBDOMAINS 0xFF
 
 int X509_check_host(X509 *x, const char *chk, size_t chklen,
                     unsigned int flags, char **peername);

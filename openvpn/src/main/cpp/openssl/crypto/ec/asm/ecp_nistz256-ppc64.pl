@@ -85,7 +85,7 @@ for(1..37) {
 	for($i=0;$i<64;$i++) {
 		undef @line;
 		for($j=0;$j<64;$j++) {
-			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xff;
+			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xFF;
 		}
 		$code.=".byte\t";
 		$code.=join(',',map { sprintf "0x%02x",$_} @line);
@@ -122,9 +122,9 @@ ecp_nistz256_mul_mont:
 	ld	$a3,24($ap)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_mul_mont
 
@@ -142,7 +142,7 @@ ecp_nistz256_mul_mont:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,10,3,0
+	.byte	0,12,4,0,0xFF,10,3,0
 	.long	0
 .size	ecp_nistz256_mul_mont,.-ecp_nistz256_mul_mont
 
@@ -169,9 +169,9 @@ ecp_nistz256_sqr_mont:
 	ld	$a3,24($ap)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_sqr_mont
 
@@ -189,7 +189,7 @@ ecp_nistz256_sqr_mont:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,10,2,0
+	.byte	0,12,4,0,0xFF,10,2,0
 	.long	0
 .size	ecp_nistz256_sqr_mont,.-ecp_nistz256_sqr_mont
 
@@ -215,9 +215,9 @@ ecp_nistz256_add:
 	ld	$t3,  24($bp)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_add
 
@@ -229,7 +229,7 @@ ecp_nistz256_add:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,4,3,0
+	.byte	0,12,4,0,0xFF,4,3,0
 	.long	0
 .size	ecp_nistz256_add,.-ecp_nistz256_add
 
@@ -250,9 +250,9 @@ ecp_nistz256_div_by_2:
 	ld	$acc3,24($ap)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_div_by_2
 
@@ -264,7 +264,7 @@ ecp_nistz256_div_by_2:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,4,2,0
+	.byte	0,12,4,0,0xFF,4,2,0
 	.long	0
 .size	ecp_nistz256_div_by_2,.-ecp_nistz256_div_by_2
 
@@ -290,9 +290,9 @@ ecp_nistz256_mul_by_2:
 	mr	$t3,$acc3
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_add	# ret = a+a	// 2*a
 
@@ -304,7 +304,7 @@ ecp_nistz256_mul_by_2:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,4,3,0
+	.byte	0,12,4,0,0xFF,4,3,0
 	.long	0
 .size	ecp_nistz256_mul_by_2,.-ecp_nistz256_mul_by_2
 
@@ -334,9 +334,9 @@ ecp_nistz256_mul_by_3:
 	std	$acc3,88($sp)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_add	# ret = a+a	// 2*a
 
@@ -355,7 +355,7 @@ ecp_nistz256_mul_by_3:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,4,2,0
+	.byte	0,12,4,0,0xFF,4,2,0
 	.long	0
 .size	ecp_nistz256_mul_by_3,.-ecp_nistz256_mul_by_3
 
@@ -377,9 +377,9 @@ ecp_nistz256_sub:
 	ld	$acc3,24($ap)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_sub_from
 
@@ -391,7 +391,7 @@ ecp_nistz256_sub:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,4,3,0
+	.byte	0,12,4,0,0xFF,4,3,0
 	.long	0
 .size	ecp_nistz256_sub,.-ecp_nistz256_sub
 
@@ -413,9 +413,9 @@ ecp_nistz256_neg:
 	li	$acc3,0
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	bl	__ecp_nistz256_sub_from
 
@@ -427,7 +427,7 @@ ecp_nistz256_neg:
 	addi	$sp,$sp,128
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,4,2,0
+	.byte	0,12,4,0,0xFF,4,2,0
 	.long	0
 .size	ecp_nistz256_neg,.-ecp_nistz256_neg
 
@@ -484,11 +484,11 @@ for($i=1;$i<4;$i++) {
 	# - 0000abcd.efgh0000.--------.--------.--------
 
 $code.=<<___;
-	subfc	$t2,$t0,$acc0		# "*0xffff0001"
+	subfc	$t2,$t0,$acc0		# "*0xFF"
 	subfe	$t3,$t1,$acc0
 	addc	$acc0,$acc1,$t0		# +=acc[0]<<96 and omit acc[0]
 	adde	$acc1,$acc2,$t1
-	adde	$acc2,$acc3,$t2		# +=acc[0]*0xffff0001
+	adde	$acc2,$acc3,$t2		# +=acc[0]*0xFF
 	adde	$acc3,$acc4,$t3
 	addze	$acc4,$acc5
 
@@ -522,11 +522,11 @@ ___
 }
 $code.=<<___;
 	# last reduction
-	subfc	$t2,$t0,$acc0		# "*0xffff0001"
+	subfc	$t2,$t0,$acc0		# "*0xFF"
 	subfe	$t3,$t1,$acc0
 	addc	$acc0,$acc1,$t0		# +=acc[0]<<96 and omit acc[0]
 	adde	$acc1,$acc2,$t1
-	adde	$acc2,$acc3,$t2		# +=acc[0]*0xffff0001
+	adde	$acc2,$acc3,$t2		# +=acc[0]*0xFF
 	adde	$acc3,$acc4,$t3
 	addze	$acc4,$acc5
 
@@ -551,7 +551,7 @@ $code.=<<___;
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,1,0
+	.byte	0,12,0xFF,0,0,0,1,0
 	.long	0
 .size	__ecp_nistz256_mul_mont,.-__ecp_nistz256_mul_mont
 
@@ -631,22 +631,22 @@ ___
 for($i=0;$i<3;$i++) {			# reductions, see commentary in
 					# multiplication for details
 $code.=<<___;
-	subfc	$t2,$t0,$acc0		# "*0xffff0001"
+	subfc	$t2,$t0,$acc0		# "*0xFF"
 	subfe	$t3,$t1,$acc0
 	addc	$acc0,$acc1,$t0		# +=acc[0]<<96 and omit acc[0]
 	 sldi	$t0,$acc0,32
 	adde	$acc1,$acc2,$t1
 	 srdi	$t1,$acc0,32
-	adde	$acc2,$acc3,$t2		# +=acc[0]*0xffff0001
+	adde	$acc2,$acc3,$t2		# +=acc[0]*0xFF
 	addze	$acc3,$t3		# can't overflow
 ___
 }
 $code.=<<___;
-	subfc	$t2,$t0,$acc0		# "*0xffff0001"
+	subfc	$t2,$t0,$acc0		# "*0xFF"
 	subfe	$t3,$t1,$acc0
 	addc	$acc0,$acc1,$t0		# +=acc[0]<<96 and omit acc[0]
 	adde	$acc1,$acc2,$t1
-	adde	$acc2,$acc3,$t2		# +=acc[0]*0xffff0001
+	adde	$acc2,$acc3,$t2		# +=acc[0]*0xFF
 	addze	$acc3,$t3		# can't overflow
 
 	addc	$acc0,$acc0,$acc4	# accumulate upper half
@@ -676,7 +676,7 @@ $code.=<<___;
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,1,0
+	.byte	0,12,0xFF,0,0,0,1,0
 	.long	0
 .size	__ecp_nistz256_sqr_mont,.-__ecp_nistz256_sqr_mont
 
@@ -718,7 +718,7 @@ __ecp_nistz256_add:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	__ecp_nistz256_add,.-__ecp_nistz256_add
 
@@ -751,7 +751,7 @@ __ecp_nistz256_sub_from:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	__ecp_nistz256_sub_from,.-__ecp_nistz256_sub_from
 
@@ -784,7 +784,7 @@ __ecp_nistz256_sub_morf:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	__ecp_nistz256_sub_morf,.-__ecp_nistz256_sub_morf
 
@@ -829,7 +829,7 @@ __ecp_nistz256_div_by_2:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,1,0
+	.byte	0,12,0xFF,0,0,0,1,0
 	.long	0
 .size	__ecp_nistz256_div_by_2,.-__ecp_nistz256_div_by_2
 ___
@@ -867,9 +867,9 @@ ecp_nistz256_point_double:
 	std	r31,$FRAME-8*1($sp)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 .Ldouble_shortcut:
 	ld	$acc0,32($ap)
 	ld	$acc1,40($ap)
@@ -1026,7 +1026,7 @@ ecp_nistz256_point_double:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,12,2,0
+	.byte	0,12,4,0,0xFF,12,2,0
 	.long	0
 .size	ecp_nistz256_point_double,.-ecp_nistz256_point_double
 ___
@@ -1069,9 +1069,9 @@ ecp_nistz256_point_add:
 	std	r31,$FRAME-8*1($sp)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	ld	$a0,64($bp)		# in2_z
 	ld	$a1,72($bp)
@@ -1406,7 +1406,7 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,16,3,0
+	.byte	0,12,4,0,0xFF,16,3,0
 	.long	0
 .size	ecp_nistz256_point_add,.-ecp_nistz256_point_add
 ___
@@ -1448,9 +1448,9 @@ ecp_nistz256_point_add_affine:
 	std	r31,$FRAME-8*1($sp)
 
 	li	$poly1,-1
-	srdi	$poly1,$poly1,32	# 0x00000000ffffffff
+	srdi	$poly1,$poly1,32	# 0xFF
 	li	$poly3,1
-	orc	$poly3,$poly3,$poly1	# 0xffffffff00000001
+	orc	$poly3,$poly3,$poly1	# 0xFF
 
 	mr	$rp_real,$rp
 	mr	$ap_real,$ap
@@ -1721,7 +1721,7 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,16,3,0
+	.byte	0,12,4,0,0xFF,16,3,0
 	.long	0
 .size	ecp_nistz256_point_add_affine,.-ecp_nistz256_point_add_affine
 ___
@@ -1759,23 +1759,23 @@ ecp_nistz256_ord_mul_mont:
 	ld	$a2,16($ap)
 	ld	$a3,24($ap)
 
-	lis	$ordk,0xccd1
-	lis	$ord0,0xf3b9
-	lis	$ord1,0xbce6
-	ori	$ordk,$ordk,0xc8aa
-	ori	$ord0,$ord0,0xcac2
-	ori	$ord1,$ord1,0xfaad
+	lis	$ordk,0xFF
+	lis	$ord0,0xFF
+	lis	$ord1,0xFF
+	ori	$ordk,$ordk,0xFF
+	ori	$ord0,$ord0,0xFF
+	ori	$ord1,$ord1,0xFF
 	sldi	$ordk,$ordk,32
 	sldi	$ord0,$ord0,32
 	sldi	$ord1,$ord1,32
-	oris	$ordk,$ordk,0xee00
-	oris	$ord0,$ord0,0xfc63
-	oris	$ord1,$ord1,0xa717
-	ori	$ordk,$ordk,0xbc4f	# 0xccd1c8aaee00bc4f
-	ori	$ord0,$ord0,0x2551	# 0xf3b9cac2fc632551
-	ori	$ord1,$ord1,0x9e84	# 0xbce6faada7179e84
-	li	$ord2,-1		# 0xffffffffffffffff
-	sldi	$ord3,$ord2,32		# 0xffffffff00000000
+	oris	$ordk,$ordk,0xFF
+	oris	$ord0,$ord0,0xFF
+	oris	$ord1,$ord1,0xFF
+	ori	$ordk,$ordk,0xFF	# 0xFF
+	ori	$ord0,$ord0,0xFF	# 0xFF
+	ori	$ord1,$ord1,0xFF	# 0xFF
+	li	$ord2,-1		# 0xFF
+	sldi	$ord3,$ord2,32		# 0xFF
 	li	$zr,0
 
 	mulld	$acc0,$a0,$bi		# a[0]*b[0]
@@ -1913,7 +1913,7 @@ $code.=<<___;
 	addi	$sp,$sp,160
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,14,3,0
+	.byte	0,12,4,0,0xFF,14,3,0
 	.long	0
 .size	ecp_nistz256_ord_mul_mont,.-ecp_nistz256_ord_mul_mont
 
@@ -1946,23 +1946,23 @@ ecp_nistz256_ord_sqr_mont:
 	ld	$a2,16($ap)
 	ld	$a3,24($ap)
 
-	lis	$ordk,0xccd1
-	lis	$ord0,0xf3b9
-	lis	$ord1,0xbce6
-	ori	$ordk,$ordk,0xc8aa
-	ori	$ord0,$ord0,0xcac2
-	ori	$ord1,$ord1,0xfaad
+	lis	$ordk,0xFF
+	lis	$ord0,0xFF
+	lis	$ord1,0xFF
+	ori	$ordk,$ordk,0xFF
+	ori	$ord0,$ord0,0xFF
+	ori	$ord1,$ord1,0xFF
 	sldi	$ordk,$ordk,32
 	sldi	$ord0,$ord0,32
 	sldi	$ord1,$ord1,32
-	oris	$ordk,$ordk,0xee00
-	oris	$ord0,$ord0,0xfc63
-	oris	$ord1,$ord1,0xa717
-	ori	$ordk,$ordk,0xbc4f	# 0xccd1c8aaee00bc4f
-	ori	$ord0,$ord0,0x2551	# 0xf3b9cac2fc632551
-	ori	$ord1,$ord1,0x9e84	# 0xbce6faada7179e84
-	li	$ord2,-1		# 0xffffffffffffffff
-	sldi	$ord3,$ord2,32		# 0xffffffff00000000
+	oris	$ordk,$ordk,0xFF
+	oris	$ord0,$ord0,0xFF
+	oris	$ord1,$ord1,0xFF
+	ori	$ordk,$ordk,0xFF	# 0xFF
+	ori	$ord0,$ord0,0xFF	# 0xFF
+	ori	$ord1,$ord1,0xFF	# 0xFF
+	li	$ord2,-1		# 0xFF
+	sldi	$ord3,$ord2,32		# 0xFF
 	li	$zr,0
 	b	.Loop_ord_sqr
 
@@ -2106,7 +2106,7 @@ $code.=<<___;
 	addi	$sp,$sp,160
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,14,3,0
+	.byte	0,12,4,0,0xFF,14,3,0
 	.long	0
 .size	ecp_nistz256_ord_sqr_mont,.-ecp_nistz256_ord_sqr_mont
 ___
@@ -2184,7 +2184,7 @@ ecp_nistz256_scatter_w5:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	ecp_nistz256_scatter_w5,.-ecp_nistz256_scatter_w5
 
@@ -2280,7 +2280,7 @@ ecp_nistz256_gather_w5:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	ecp_nistz256_gather_w5,.-ecp_nistz256_gather_w5
 
@@ -2317,7 +2317,7 @@ ecp_nistz256_scatter_w7:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	ecp_nistz256_scatter_w7,.-ecp_nistz256_scatter_w7
 
@@ -2368,7 +2368,7 @@ ecp_nistz256_gather_w7:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	ecp_nistz256_gather_w7,.-ecp_nistz256_gather_w7
 ___

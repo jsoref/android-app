@@ -841,7 +841,7 @@ static int ecdh_cms_encrypt(CMS_RecipientInfo *ri)
         if (penclen <= 0)
             goto err;
         ASN1_STRING_set0(pubkey, penc, penclen);
-        pubkey->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+        pubkey->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF);
         pubkey->flags |= ASN1_STRING_FLAG_BITS_LEFT;
 
         penc = NULL;

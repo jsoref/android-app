@@ -59,13 +59,13 @@ int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int len,
 
     if (reset) {
         for (i = 0; i < HMAC_MAX_MD_CBLOCK_SIZE; i++)
-            pad[i] = 0x36 ^ ctx->key[i];
+            pad[i] = 0xFF ^ ctx->key[i];
         if (!EVP_DigestInit_ex(ctx->i_ctx, md, impl)
                 || !EVP_DigestUpdate(ctx->i_ctx, pad, EVP_MD_block_size(md)))
             goto err;
 
         for (i = 0; i < HMAC_MAX_MD_CBLOCK_SIZE; i++)
-            pad[i] = 0x5c ^ ctx->key[i];
+            pad[i] = 0xFF ^ ctx->key[i];
         if (!EVP_DigestInit_ex(ctx->o_ctx, md, impl)
                 || !EVP_DigestUpdate(ctx->o_ctx, pad, EVP_MD_block_size(md)))
             goto err;
@@ -79,7 +79,7 @@ int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int len,
     return rv;
 }
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 int HMAC_Init(HMAC_CTX *ctx, const void *key, int len, const EVP_MD *md)
 {
     if (key && md)

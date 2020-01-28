@@ -39,8 +39,8 @@ int i2a_ASN1_INTEGER(BIO *bp, const ASN1_INTEGER *a)
                     goto err;
                 n += 2;
             }
-            buf[0] = h[((unsigned char)a->data[i] >> 4) & 0x0f];
-            buf[1] = h[((unsigned char)a->data[i]) & 0x0f];
+            buf[0] = h[((unsigned char)a->data[i] >> 4) & 0xFF];
+            buf[1] = h[((unsigned char)a->data[i]) & 0xFF];
             if (BIO_write(bp, buf, 2) != 2)
                 goto err;
             n += 2;

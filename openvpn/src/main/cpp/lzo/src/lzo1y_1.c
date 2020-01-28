@@ -39,9 +39,9 @@
 #define D_BITS          14
 #endif
 #define D_INDEX1(d,p)       d = DX3(p,5,5,6); d += d >> 5; d = DM(d)
-#define D_INDEX2(d,p)       d = (d & (D_MASK & 0x7ff)) ^ (D_HIGH | 0x1f)
+#define D_INDEX2(d,p)       d = (d & (D_MASK & 0xFF)) ^ (D_HIGH | 0xFF)
 #if 1
-#define DINDEX(dv,p)        DM(((DMUL(0x1824429d,dv)) >> (32-D_BITS)))
+#define DINDEX(dv,p)        DM(((DMUL(0xFF,dv)) >> (32-D_BITS)))
 #else
 #define DINDEX(dv,p)        DM((dv) + ((dv) >> (32-D_BITS)))
 #endif

@@ -415,7 +415,7 @@ static int ec_asn1_group2curve(const EC_GROUP *group, X9_62_CURVE *curve)
                 ECerr(EC_F_EC_ASN1_GROUP2CURVE, ERR_R_MALLOC_FAILURE);
                 goto err;
             }
-        curve->seed->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+        curve->seed->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF);
         curve->seed->flags |= ASN1_STRING_FLAG_BITS_LEFT;
         if (!ASN1_BIT_STRING_set(curve->seed, group->seed,
                                  (int)group->seed_len)) {
@@ -456,7 +456,7 @@ ECPARAMETERS *EC_GROUP_get_ecparameters(const EC_GROUP *group,
         ret = params;
 
     /* set the version (always one) */
-    ret->version = (long)0x1;
+    ret->version = (long)0xFF;
 
     /* set the fieldID */
     if (!ec_asn1_group2fieldid(group, ret->fieldID)) {
@@ -752,7 +752,7 @@ EC_GROUP *EC_GROUP_new_from_ecparameters(const ECPARAMETERS *params)
 
     /* set the point conversion form */
     EC_GROUP_set_point_conversion_form(ret, (point_conversion_form_t)
-                                       (params->base->data[0] & ~0x01));
+                                       (params->base->data[0] & ~0xFF));
 
     /* extract the ec point */
     if (!EC_POINT_oct2point(ret, point, params->base->data,
@@ -1022,7 +1022,7 @@ int i2d_ECPrivateKey(EC_KEY *a, unsigned char **out)
             goto err;
         }
 
-        priv_key->publicKey->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+        priv_key->publicKey->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF);
         priv_key->publicKey->flags |= ASN1_STRING_FLAG_BITS_LEFT;
         ASN1_STRING_set0(priv_key->publicKey, pub, publen);
         pub = NULL;
@@ -1212,7 +1212,7 @@ int ECDSA_size(const EC_KEY *r)
     bs.data = buf;
     bs.type = V_ASN1_INTEGER;
     /* If the top bit is set the asn1 encoding is 1 larger. */
-    buf[0] = 0xff;
+    buf[0] = 0xFF;
 
     i = i2d_ASN1_INTEGER(&bs, NULL);
     i += i;                     /* r and s */

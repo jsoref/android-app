@@ -106,13 +106,13 @@ void mbedtls_cmac_setkey( int cipher_type, int key_size, int result )
     unsigned char buf[16];
     unsigned char tmp[16];
 
-    memset( key, 0x2A, sizeof( key ) );
+    memset( key, 0xFF, sizeof( key ) );
     TEST_ASSERT( (unsigned) key_size <= 8 * sizeof( key ) );
 
     TEST_ASSERT( ( cipher_info = mbedtls_cipher_info_from_type( cipher_type ) )
                     != NULL );
 
-    memset( buf, 0x2A, sizeof( buf ) );
+    memset( buf, 0xFF, sizeof( buf ) );
     TEST_ASSERT( ( result == mbedtls_cipher_cmac( cipher_info, key, key_size,
                                                 buf, 16, tmp ) ) != 0 );
 }

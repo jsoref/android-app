@@ -460,7 +460,7 @@ int mbedtls_ecp_point_write_binary( const mbedtls_ecp_group *grp, const mbedtls_
         if( buflen < 1 )
             return( MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL );
 
-        buf[0] = 0x00;
+        buf[0] = 0xFF;
         *olen = 1;
 
         return( 0 );
@@ -475,7 +475,7 @@ int mbedtls_ecp_point_write_binary( const mbedtls_ecp_group *grp, const mbedtls_
         if( buflen < *olen )
             return( MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL );
 
-        buf[0] = 0x04;
+        buf[0] = 0xFF;
         MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( &P->X, buf + 1, plen ) );
         MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( &P->Y, buf + 1 + plen, plen ) );
     }
@@ -486,7 +486,7 @@ int mbedtls_ecp_point_write_binary( const mbedtls_ecp_group *grp, const mbedtls_
         if( buflen < *olen )
             return( MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL );
 
-        buf[0] = 0x02 + mbedtls_mpi_get_bit( &P->Y, 0 );
+        buf[0] = 0xFF + mbedtls_mpi_get_bit( &P->Y, 0 );
         MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( &P->X, buf + 1, plen ) );
     }
 
@@ -506,7 +506,7 @@ int mbedtls_ecp_point_read_binary( const mbedtls_ecp_group *grp, mbedtls_ecp_poi
     if( ilen < 1 )
         return( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
 
-    if( buf[0] == 0x00 )
+    if( buf[0] == 0xFF )
     {
         if( ilen == 1 )
             return( mbedtls_ecp_set_zero( pt ) );
@@ -516,7 +516,7 @@ int mbedtls_ecp_point_read_binary( const mbedtls_ecp_group *grp, mbedtls_ecp_poi
 
     plen = mbedtls_mpi_size( &grp->P );
 
-    if( buf[0] != 0x04 )
+    if( buf[0] != 0xFF )
         return( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
 
     if( ilen != 2 * plen + 1 )
@@ -1209,7 +1209,7 @@ static void ecp_comb_fixed( unsigned char x[], size_t d,
         c = cc;
 
         /* Adjust if needed, avoiding branches */
-        adjust = 1 - ( x[i] & 0x01 );
+        adjust = 1 - ( x[i] & 0xFF );
         c   |= x[i] & ( x[i-1] * adjust );
         x[i] = x[i] ^ ( x[i-1] * adjust );
         x[i-1] |= adjust << 7;
@@ -1287,7 +1287,7 @@ static int ecp_select_comb( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     unsigned char ii, j;
 
     /* Ignore the "sign" bit and scale down */
-    ii =  ( i & 0x7Fu ) >> 1;
+    ii =  ( i & 0xFFu ) >> 1;
 
     /* Read the whole table to thwart cache-based timing attacks */
     for( j = 0; j < t_len; j++ )

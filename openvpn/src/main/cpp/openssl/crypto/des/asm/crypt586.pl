@@ -108,9 +108,9 @@ sub D_ENCRYPT
 	&xor(	$t,		$R);
 	&xor(	$t,		$tmp2);
 
-	&and(	$u,		"0xfcfcfcfc"	);		# 2
+	&and(	$u,		"0xFF"	);		# 2
 	&xor(	$tmp1,		$tmp1);				# 1
-	&and(	$t,		"0xcfcfcfcf"	);		# 2
+	&and(	$t,		"0xFF"	);		# 2
 	&xor(	$tmp2,		$tmp2);
 	&movb(	&LB($tmp1),	&LB($u)	);
 	&movb(	&LB($tmp2),	&HB($u)	);
@@ -118,23 +118,23 @@ sub D_ENCRYPT
 	&mov(	$trans,		&swtmp(1));
 	&xor(	$L,		&DWP("     ",$trans,$tmp1,0));
 	&movb(	&LB($tmp1),	&LB($t)	);
-	&xor(	$L,		&DWP("0x200",$trans,$tmp2,0));
+	&xor(	$L,		&DWP("0xFF",$trans,$tmp2,0));
 	&movb(	&LB($tmp2),	&HB($t)	);
 	&shr(	$u,		16);
-	&xor(	$L,		&DWP("0x100",$trans,$tmp1,0));
+	&xor(	$L,		&DWP("0xFF",$trans,$tmp1,0));
 	&movb(	&LB($tmp1),	&HB($u)	);
 	&shr(	$t,		16);
-	&xor(	$L,		&DWP("0x300",$trans,$tmp2,0));
+	&xor(	$L,		&DWP("0xFF",$trans,$tmp2,0));
 	&movb(	&LB($tmp2),	&HB($t)	);
-	&and(	$u,		"0xff"	);
-	&and(	$t,		"0xff"	);
-	&mov(	$tmp1,		&DWP("0x600",$trans,$tmp1,0));
+	&and(	$u,		"0xFF"	);
+	&and(	$t,		"0xFF"	);
+	&mov(	$tmp1,		&DWP("0xFF",$trans,$tmp1,0));
 	&xor(	$L,		$tmp1);
-	&mov(	$tmp1,		&DWP("0x700",$trans,$tmp2,0));
+	&mov(	$tmp1,		&DWP("0xFF",$trans,$tmp2,0));
 	&xor(	$L,		$tmp1);
-	&mov(	$tmp1,		&DWP("0x400",$trans,$u,0));
+	&mov(	$tmp1,		&DWP("0xFF",$trans,$u,0));
 	&xor(	$L,		$tmp1);
-	&mov(	$tmp1,		&DWP("0x500",$trans,$t,0));
+	&mov(	$tmp1,		&DWP("0xFF",$trans,$t,0));
 	&xor(	$L,		$tmp1);
 	&mov(	$trans,		&wparam(1));
 	}
@@ -170,11 +170,11 @@ sub IP_new
 	{
 	local($l,$r,$tt,$lr)=@_;
 
-	&R_PERM_OP($l,$r,$tt, 4,"0xf0f0f0f0",$l);
-	&R_PERM_OP($r,$tt,$l,20,"0xfff0000f",$l);
-	&R_PERM_OP($l,$tt,$r,14,"0x33333333",$r);
-	&R_PERM_OP($tt,$r,$l,22,"0x03fc03fc",$r);
-	&R_PERM_OP($l,$r,$tt, 9,"0xaaaaaaaa",$r);
+	&R_PERM_OP($l,$r,$tt, 4,"0xFF",$l);
+	&R_PERM_OP($r,$tt,$l,20,"0xFF",$l);
+	&R_PERM_OP($l,$tt,$r,14,"0xFF",$r);
+	&R_PERM_OP($tt,$r,$l,22,"0xFF",$r);
+	&R_PERM_OP($l,$r,$tt, 9,"0xFF",$r);
 
 	if ($lr != 3)
 		{
@@ -207,11 +207,11 @@ sub FP_new
 		else	{ &rotr($l,	$lr-3); }
 		}
 
-	&R_PERM_OP($l,$r,$tt, 0,"0xaaaaaaaa",$r);
-	&R_PERM_OP($tt,$r,$l,23,"0x03fc03fc",$r);
-	&R_PERM_OP($l,$r,$tt,10,"0x33333333",$l);
-	&R_PERM_OP($r,$tt,$l,18,"0xfff0000f",$l);
-	&R_PERM_OP($l,$tt,$r,12,"0xf0f0f0f0",$r);
+	&R_PERM_OP($l,$r,$tt, 0,"0xFF",$r);
+	&R_PERM_OP($tt,$r,$l,23,"0xFF",$r);
+	&R_PERM_OP($l,$r,$tt,10,"0xFF",$l);
+	&R_PERM_OP($r,$tt,$l,18,"0xFF",$l);
+	&R_PERM_OP($l,$tt,$r,12,"0xFF",$r);
 	&rotr($tt	, 4);
 	}
 

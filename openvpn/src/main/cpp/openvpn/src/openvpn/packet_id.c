@@ -685,7 +685,7 @@ packet_id_interactive_test(void)
                    long_form);
             if (pid.send.id == 10)
             {
-                pid.send.id = 0xFFFFFFF8;
+                pid.send.id = 0xFF;
             }
             ++count;
         }

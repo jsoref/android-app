@@ -11,7 +11,7 @@
 
 #pragma once
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
 
 #include <openssl/bio.h>
 #include <openssl/crypto.h>

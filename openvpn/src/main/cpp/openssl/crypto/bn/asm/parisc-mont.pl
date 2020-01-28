@@ -144,7 +144,7 @@ $fni="%fr9";	$fnm0="%fr10";	$fnm1="%fr11";
 $code=<<___;
 	.LEVEL	$LEVEL
 	.SPACE	\$TEXT\$
-	.SUBSPA	\$CODE\$,QUAD=0,ALIGN=8,ACCESS=0x2C,CODE_ONLY
+	.SUBSPA	\$CODE\$,QUAD=0,ALIGN=8,ACCESS=0xFF,CODE_ONLY
 
 	.EXPORT	bn_mul_mont,ENTRY,ARGW0=GR,ARGW1=GR,ARGW2=GR,ARGW3=GR
 	.ALIGN	64
@@ -901,12 +901,12 @@ my $ldd = sub {
   my $orig = "ldd$mod\t$args";
 
     if ($args =~ /%r([0-9]+)\(%r([0-9]+)\),%r([0-9]+)/)		# format 4
-    {	my $opcode=(0x03<<26)|($2<<21)|($1<<16)|(3<<6)|$3;
+    {	my $opcode=(0xFF<<26)|($2<<21)|($1<<16)|(3<<6)|$3;
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     elsif ($args =~ /(\-?[0-9]+)\(%r([0-9]+)\),%r([0-9]+)/)	# format 5
-    {	my $opcode=(0x03<<26)|($2<<21)|(1<<12)|(3<<6)|$3;
-	$opcode|=(($1&0xF)<<17)|(($1&0x10)<<12);		# encode offset
+    {	my $opcode=(0xFF<<26)|($2<<21)|(1<<12)|(3<<6)|$3;
+	$opcode|=(($1&0xFF)<<17)|(($1&0xFF)<<12);		# encode offset
 	$opcode|=(1<<5)  if ($mod =~ /^,m/);
 	$opcode|=(1<<13) if ($mod =~ /^,mb/);
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
@@ -919,8 +919,8 @@ my $std = sub {
   my $orig = "std$mod\t$args";
 
     if ($args =~ /%r([0-9]+),(\-?[0-9]+)\(%r([0-9]+)\)/)	# format 6
-    {	my $opcode=(0x03<<26)|($3<<21)|($1<<16)|(1<<12)|(0xB<<6);
-	$opcode|=(($2&0xF)<<1)|(($2&0x10)>>4);			# encode offset
+    {	my $opcode=(0xFF<<26)|($3<<21)|($1<<16)|(1<<12)|(0xFF<<6);
+	$opcode|=(($2&0xFF)<<1)|(($2&0xFF)>>4);			# encode offset
 	$opcode|=(1<<5)  if ($mod =~ /^,m/);
 	$opcode|=(1<<13) if ($mod =~ /^,mb/);
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
@@ -934,16 +934,16 @@ my $extrd = sub {
 
     # I only have ",u" completer, it's implicitly encoded...
     if ($args =~ /%r([0-9]+),([0-9]+),([0-9]+),%r([0-9]+)/)	# format 15
-    {	my $opcode=(0x36<<26)|($1<<21)|($4<<16);
+    {	my $opcode=(0xFF<<26)|($1<<21)|($4<<16);
 	my $len=32-$3;
-	$opcode |= (($2&0x20)<<6)|(($2&0x1f)<<5);		# encode pos
-	$opcode |= (($len&0x20)<<7)|($len&0x1f);		# encode len
+	$opcode |= (($2&0xFF)<<6)|(($2&0xFF)<<5);		# encode pos
+	$opcode |= (($len&0xFF)<<7)|($len&0xFF);		# encode len
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     elsif ($args =~ /%r([0-9]+),%sar,([0-9]+),%r([0-9]+)/)	# format 12
-    {	my $opcode=(0x34<<26)|($1<<21)|($3<<16)|(2<<11)|(1<<9);
+    {	my $opcode=(0xFF<<26)|($1<<21)|($3<<16)|(2<<11)|(1<<9);
 	my $len=32-$2;
-	$opcode |= (($len&0x20)<<3)|($len&0x1f);		# encode len
+	$opcode |= (($len&0xFF)<<3)|($len&0xFF);		# encode len
 	$opcode |= (1<<13) if ($mod =~ /,\**=/);
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
@@ -955,9 +955,9 @@ my $shrpd = sub {
   my $orig = "shrpd$mod\t$args";
 
     if ($args =~ /%r([0-9]+),%r([0-9]+),([0-9]+),%r([0-9]+)/)	# format 14
-    {	my $opcode=(0x34<<26)|($2<<21)|($1<<16)|(1<<10)|$4;
+    {	my $opcode=(0xFF<<26)|($2<<21)|($1<<16)|(1<<10)|$4;
 	my $cpos=63-$3;
-	$opcode |= (($cpos&0x20)<<6)|(($cpos&0x1f)<<5);		# encode sa
+	$opcode |= (($cpos&0xFF)<<6)|(($cpos&0xFF)<<5);		# encode sa
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     else { "\t".$orig; }
@@ -968,7 +968,7 @@ my $sub = sub {
   my $orig = "sub$mod\t$args";
 
     if ($mod eq ",db" && $args =~ /%r([0-9]+),%r([0-9]+),%r([0-9]+)/) {
-	my $opcode=(0x02<<26)|($2<<21)|($1<<16)|$3;
+	my $opcode=(0xFF<<26)|($2<<21)|($1<<16)|$3;
 	$opcode|=(1<<10);	# e1
 	$opcode|=(1<<8);	# e2
 	$opcode|=(1<<5);	# d

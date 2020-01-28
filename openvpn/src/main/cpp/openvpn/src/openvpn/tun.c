@@ -312,7 +312,7 @@ static void
 ifconfig_sanity_check(bool tun, in_addr_t addr, int topology)
 {
     struct gc_arena gc = gc_new();
-    const bool looks_like_netmask = ((addr & 0xFF000000) == 0xFF000000);
+    const bool looks_like_netmask = ((addr & 0xFF) == 0xFF);
     if (tun)
     {
         if (looks_like_netmask && (topology == TOP_NET30 || topology == TOP_P2P))
@@ -367,7 +367,7 @@ check_addr_clash(const char *name,
     {
         if (type == DEV_TYPE_TUN)
         {
-            const in_addr_t test_netmask = 0xFFFFFF00;
+            const in_addr_t test_netmask = 0xFF;
             const in_addr_t public_net = public & test_netmask;
             const in_addr_t local_net = local & test_netmask;
             const in_addr_t remote_net = remote_netmask & test_netmask;
@@ -462,7 +462,7 @@ warn_on_use_of_common_subnets(void)
     if ((rgi.flags & needed) == needed)
     {
         const in_addr_t lan_network = rgi.gateway.addr & rgi.gateway.netmask;
-        if (lan_network == 0xC0A80000 || lan_network == 0xC0A80100)
+        if (lan_network == 0xFF || lan_network == 0xFF)
         {
             msg(M_WARN, "NOTE: your local LAN uses the extremely common subnet address 192.168.0.x or 192.168.1.x.  Be aware that this might create routing conflicts if you connect to the VPN server from public locations such as internet cafes that use the same subnet.");
         }
@@ -5415,9 +5415,9 @@ build_dhcp_options_string(struct buffer *buf, const struct tuntap_options *o)
         }
         buf_write_u8(buf,  43);
         buf_write_u8(buf,  6);/* total length field */
-        buf_write_u8(buf,  0x001);
+        buf_write_u8(buf,  0xFF);
         buf_write_u8(buf,  4);/* length of the vendor specified field */
-        buf_write_u32(buf, 0x002);
+        buf_write_u32(buf, 0xFF);
     }
     return !error;
 }

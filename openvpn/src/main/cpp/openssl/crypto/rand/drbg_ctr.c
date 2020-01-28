@@ -167,7 +167,7 @@ __owur static int ctr_df(RAND_DRBG_CTR *ctr,
                          const unsigned char *in2, size_t in2len,
                          const unsigned char *in3, size_t in3len)
 {
-    static unsigned char c80 = 0x80;
+    static unsigned char c80 = 0xFF;
     size_t inlen;
     unsigned char *p = ctr->bltmp;
     int outlen = AES_BLOCK_SIZE;
@@ -182,16 +182,16 @@ __owur static int ctr_df(RAND_DRBG_CTR *ctr,
         in3len = 0;
     inlen = in1len + in2len + in3len;
     /* Initialise L||N in temporary block */
-    *p++ = (inlen >> 24) & 0xff;
-    *p++ = (inlen >> 16) & 0xff;
-    *p++ = (inlen >> 8) & 0xff;
-    *p++ = inlen & 0xff;
+    *p++ = (inlen >> 24) & 0xFF;
+    *p++ = (inlen >> 16) & 0xFF;
+    *p++ = (inlen >> 8) & 0xFF;
+    *p++ = inlen & 0xFF;
 
     /* NB keylen is at most 32 bytes */
     *p++ = 0;
     *p++ = 0;
     *p++ = 0;
-    *p = (unsigned char)((ctr->keylen + 16) & 0xff);
+    *p = (unsigned char)((ctr->keylen + 16) & 0xFF);
     ctr->bltmp_pos = 8;
     if (!ctr_BCC_update(ctr, in1, in1len)
         || !ctr_BCC_update(ctr, in2, in2len)
@@ -402,10 +402,10 @@ int drbg_ctr_init(RAND_DRBG *drbg)
     if ((drbg->flags & RAND_DRBG_FLAG_CTR_NO_DF) == 0) {
         /* df initialisation */
         static const unsigned char df_key[32] = {
-            0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-            0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-            0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-            0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
         };
 
         if (ctr->ctx_df == NULL)

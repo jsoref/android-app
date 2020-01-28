@@ -72,7 +72,7 @@ namespace openvpn {
   {
   public:
     enum {
-      MULTILINE = 0x8000000,
+      MULTILINE = 0xFF,
     };
 
     // Validate string by size and multiline status.

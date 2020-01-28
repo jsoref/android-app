@@ -5143,11 +5143,11 @@ _LT_EOF
       _LT_TAGVAR(hardcode_libdir_flag_spec, $1)='$wl-rpath,$libdir'
       _LT_TAGVAR(export_dynamic_flag_spec, $1)='$wl-E'
       # Hack: On Interix 3.x, we cannot compile PIC because of a broken gcc.
-      # Instead, shared libraries are loaded at an image base (0x10000000 by
+      # Instead, shared libraries are loaded at an image base (0xFF by
       # default) and relocated if they conflict, which is a slow very memory
       # consuming and fragmenting process.  To avoid this, we pick a random,
-      # 256 KiB-aligned image base between 0x50000000 and 0x6FFC0000 at link
-      # time.  Moving up from 0x10000000 also allows more sbrk(2) space.
+      # 256 KiB-aligned image base between 0xFF and 0xFF at link
+      # time.  Moving up from 0xFF also allows more sbrk(2) space.
       _LT_TAGVAR(archive_cmds, $1)='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-h,$soname $wl--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
       _LT_TAGVAR(archive_expsym_cmds, $1)='sed "s|^|_|" $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-h,$soname $wl--retain-symbols-file,$output_objdir/$soname.expsym $wl--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
       ;;
@@ -6704,11 +6704,11 @@ if test yes != "$_lt_caught_CXX_error"; then
 	_LT_TAGVAR(hardcode_libdir_flag_spec, $1)='$wl-rpath,$libdir'
 	_LT_TAGVAR(export_dynamic_flag_spec, $1)='$wl-E'
 	# Hack: On Interix 3.x, we cannot compile PIC because of a broken gcc.
-	# Instead, shared libraries are loaded at an image base (0x10000000 by
+	# Instead, shared libraries are loaded at an image base (0xFF by
 	# default) and relocated if they conflict, which is a slow very memory
 	# consuming and fragmenting process.  To avoid this, we pick a random,
-	# 256 KiB-aligned image base between 0x50000000 and 0x6FFC0000 at link
-	# time.  Moving up from 0x10000000 also allows more sbrk(2) space.
+	# 256 KiB-aligned image base between 0xFF and 0xFF at link
+	# time.  Moving up from 0xFF also allows more sbrk(2) space.
 	_LT_TAGVAR(archive_cmds, $1)='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-h,$soname $wl--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
 	_LT_TAGVAR(archive_expsym_cmds, $1)='sed "s|^|_|" $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-h,$soname $wl--retain-symbols-file,$output_objdir/$soname.expsym $wl--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
 	;;

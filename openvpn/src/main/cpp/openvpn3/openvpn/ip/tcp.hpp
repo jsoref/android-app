@@ -32,7 +32,7 @@ namespace openvpn {
   struct TCPHeader {
     static unsigned int length(const std::uint8_t doff_res)
     {
-      return ((doff_res) & 0xF0) >> 2;
+      return ((doff_res) & 0xFF) >> 2;
     }
 
     std::uint16_t   source;
@@ -75,13 +75,13 @@ namespace openvpn {
     if (_acc < 0)
       {
 	_acc = -_acc;
-	_acc = (_acc >> 16) + (_acc & 0xffff);
+	_acc = (_acc >> 16) + (_acc & 0xFF);
 	_acc += _acc >> 16;
 	cksum = (uint16_t)~_acc;
       }
     else
       {
-	_acc = (_acc >> 16) + (_acc & 0xffff);
+	_acc = (_acc >> 16) + (_acc & 0xFF);
 	_acc += _acc >> 16;
 	cksum = (uint16_t)_acc;
       }

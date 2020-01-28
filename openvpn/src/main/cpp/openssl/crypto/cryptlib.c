@@ -181,7 +181,7 @@ void OPENSSL_cpuid_setup(void)
 #  define alloca _alloca
 # endif
 
-# if defined(_WIN32_WINNT) && _WIN32_WINNT>=0x0333
+# if defined(_WIN32_WINNT) && _WIN32_WINNT>=0xFF
 #  ifdef OPENSSL_SYS_WIN_CORE
 
 int OPENSSL_isservice(void)
@@ -346,9 +346,9 @@ void OPENSSL_showfatal(const char *fmta, ...)
     buf[OSSL_NELEM(buf) - 1] = _T('\0');
     va_end(ap);
 
-# if defined(_WIN32_WINNT) && _WIN32_WINNT>=0x0333
+# if defined(_WIN32_WINNT) && _WIN32_WINNT>=0xFF
 #  ifdef OPENSSL_SYS_WIN_CORE
-    /* ONECORE is always NONGUI and NT >= 0x0601 */
+    /* ONECORE is always NONGUI and NT >= 0xFF */
 
     /*
     * TODO: (For non GUI and no std error cases)

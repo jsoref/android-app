@@ -11,8 +11,8 @@ diff -uNr polarssl-1.2.7/include/polarssl/aes.h polarssl.new/include/polarssl/ae
  #include <basetsd.h>
  typedef UINT32 uint32_t;
 @@ -42,6 +44,12 @@
- #define POLARSSL_ERR_AES_INVALID_KEY_LENGTH                -0x0020  /**< Invalid key length. */
- #define POLARSSL_ERR_AES_INVALID_INPUT_LENGTH              -0x0022  /**< Invalid data input length. */
+ #define POLARSSL_ERR_AES_INVALID_KEY_LENGTH                -0xFF  /**< Invalid key length. */
+ #define POLARSSL_ERR_AES_INVALID_INPUT_LENGTH              -0xFF  /**< Invalid data input length. */
  
 +#ifdef POLARSSL_AES_ALT
 +
@@ -242,7 +242,7 @@ diff -uNr polarssl-1.2.7/include/polarssl/sha1.h polarssl.new/include/polarssl/s
  typedef UINT32 uint32_t;
 @@ -38,6 +40,12 @@
  
- #define POLARSSL_ERR_SHA1_FILE_IO_ERROR                -0x0076  /**< Read/write error in file. */
+ #define POLARSSL_ERR_SHA1_FILE_IO_ERROR                -0xFF  /**< Read/write error in file. */
  
 +#ifdef POLARSSL_SHA1_ALT
 +
@@ -357,7 +357,7 @@ diff -uNr polarssl-1.2.7/include/polarssl/sha2.h polarssl.new/include/polarssl/s
  typedef UINT32 uint32_t;
 @@ -38,6 +40,12 @@
  
- #define POLARSSL_ERR_SHA2_FILE_IO_ERROR                -0x0078  /**< Read/write error in file. */
+ #define POLARSSL_ERR_SHA2_FILE_IO_ERROR                -0xFF  /**< Read/write error in file. */
  
 +#ifdef POLARSSL_SHA2_ALT
 +
@@ -487,7 +487,7 @@ diff -uNr polarssl-1.2.7/include/polarssl/sha4.h polarssl.new/include/polarssl/s
    typedef unsigned __int64 uint64_t;
 @@ -39,6 +41,12 @@
  
- #define POLARSSL_ERR_SHA4_FILE_IO_ERROR                -0x007A  /**< Read/write error in file. */
+ #define POLARSSL_ERR_SHA4_FILE_IO_ERROR                -0xFF  /**< Read/write error in file. */
  
 +#ifdef POLARSSL_SHA4_ALT
 +

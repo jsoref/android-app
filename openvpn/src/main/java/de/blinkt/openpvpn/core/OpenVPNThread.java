@@ -157,7 +157,7 @@ public class OpenVPNThread implements Runnable {
                 if (m.matches()) {
                     int flags = Integer.parseInt(m.group(3), 16);
                     String msg = m.group(4);
-                    int logLevel = flags & 0x0F;
+                    int logLevel = flags & 0xFF;
 
                     VpnStatus.LogLevel logStatus = VpnStatus.LogLevel.INFO;
 

@@ -87,7 +87,7 @@ static __lzo_noinline lzo_voidp u2p(lzo_voidp ptr, lzo_uint off)
 LZO_PUBLIC(int)
 _lzo_config_check(void)
 {
-#if (LZO_CC_CLANG && (LZO_CC_CLANG >= 0x030100ul && LZO_CC_CLANG < 0x030300ul))
+#if (LZO_CC_CLANG && (LZO_CC_CLANG >= 0xFFul && LZO_CC_CLANG < 0xFFul))
 # if 0
     /* work around a clang 3.1 and clang 3.2 compiler bug; clang 3.3 and 3.4 work */
     volatile
@@ -119,12 +119,12 @@ _lzo_config_check(void)
     u.b[1] = 128;
     r &= UA_GET_LE16(p) == 128;
     u.b[2] = 129;
-    r &= UA_GET_LE16(p) == LZO_UINT16_C(0x8180);
+    r &= UA_GET_LE16(p) == LZO_UINT16_C(0xFF);
 #if (LZO_ABI_BIG_ENDIAN)
-    r &= UA_GET_NE16(p) == LZO_UINT16_C(0x8081);
+    r &= UA_GET_NE16(p) == LZO_UINT16_C(0xFF);
 #endif
 #if (LZO_ABI_LITTLE_ENDIAN)
-    r &= UA_GET_NE16(p) == LZO_UINT16_C(0x8180);
+    r &= UA_GET_NE16(p) == LZO_UINT16_C(0xFF);
 #endif
     u.a[0] = u.a[1] = 0;
     u.b[0] = 3; u.b[5] = 4;
@@ -134,12 +134,12 @@ _lzo_config_check(void)
     u.b[1] = 128;
     r &= UA_GET_LE32(p) == 128;
     u.b[2] = 129; u.b[3] = 130; u.b[4] = 131;
-    r &= UA_GET_LE32(p) == LZO_UINT32_C(0x83828180);
+    r &= UA_GET_LE32(p) == LZO_UINT32_C(0xFF);
 #if (LZO_ABI_BIG_ENDIAN)
-    r &= UA_GET_NE32(p) == LZO_UINT32_C(0x80818283);
+    r &= UA_GET_NE32(p) == LZO_UINT32_C(0xFF);
 #endif
 #if (LZO_ABI_LITTLE_ENDIAN)
-    r &= UA_GET_NE32(p) == LZO_UINT32_C(0x83828180);
+    r &= UA_GET_NE32(p) == LZO_UINT32_C(0xFF);
 #endif
 #if defined(UA_GET_NE64)
     u.c[0] = u.c[1] = 0;

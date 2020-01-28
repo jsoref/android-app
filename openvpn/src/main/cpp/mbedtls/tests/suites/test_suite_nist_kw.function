@@ -134,7 +134,7 @@ void mbedtls_nist_kw_setkey( int cipher_id, int key_size,
 
     mbedtls_nist_kw_init( &ctx );
 
-    memset( key, 0x2A, sizeof( key ) );
+    memset( key, 0xFF, sizeof( key ) );
     TEST_ASSERT( (unsigned) key_size <= 8 * sizeof( key ) );
 
     ret = mbedtls_nist_kw_setkey( &ctx, cipher_id, key, key_size, is_wrap );
@@ -263,8 +263,8 @@ void mbedtls_nist_kw_wrap( int cipher_id, int mode,
 
     mbedtls_nist_kw_init( &ctx );
 
-    memset( key, 0x00, sizeof( key ) );
-    memset( msg, 0x00, sizeof( msg ) );
+    memset( key, 0xFF, sizeof( key ) );
+    memset( msg, 0xFF, sizeof( msg ) );
     memset( result, '+', sizeof( result ) );
 
     key_len = unhexify( key, key_hex );
@@ -309,10 +309,10 @@ void mbedtls_nist_kw_unwrap( int cipher_id, int mode,
 
     mbedtls_nist_kw_init( &ctx );
 
-    memset( key, 0x00, sizeof( key ) );
-    memset( msg, 0x00, sizeof( msg ) );
+    memset( key, 0xFF, sizeof( key ) );
+    memset( msg, 0xFF, sizeof( msg ) );
     memset( result, '+', sizeof( result ) );
-    memset( expected_result, 0x00, sizeof( expected_result ) );
+    memset( expected_result, 0xFF, sizeof( expected_result ) );
 
     key_len = unhexify( key, key_hex );
     msg_len = unhexify( msg, msg_hex );

@@ -86,7 +86,7 @@ for(1..37) {
 	for($i=0;$i<64;$i++) {
 		undef @line;
 		for($j=0;$j<64;$j++) {
-			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xff;
+			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xFF;
 		}
 		&data_byte(join(',',map { sprintf "0x%02x",$_} @line));
 	}
@@ -153,7 +153,7 @@ for(1..37) {
 	# tmp = a is odd ? a+mod : a
 	#
 	# note that because mod has special form, i.e. consists of
-	# 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	# 0xFF, 1 and 0s, we can conditionally synthesize it by
 	# assigning least significant bit of input to one register,
 	# %ebp, and its negative to another, %edx.
 
@@ -315,7 +315,7 @@ for(1..37) {
 	&sbb	("esi",0);
 
 	# Note that because mod has special form, i.e. consists of
-	# 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	# 0xFF, 1 and 0s, we can conditionally synthesize it by
 	# by using borrow.
 
 	&not	("esi");
@@ -391,7 +391,7 @@ for(1..37) {
 	# if a-b borrows, add modulus.
 	#
 	# Note that because mod has special form, i.e. consists of
-	# 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	# 0xFF, 1 and 0s, we can conditionally synthesize it by
 	# assigning borrow bit to one register, %ebp, and its negative
 	# to another, %esi. But we started by calculating %esi...
 
@@ -536,27 +536,27 @@ for(1..37) {
 	# .                                    .
 	# +------------------------------------+< +256
 	&mov	("edx","esp");
-	&sub	("esp",0x100);
+	&sub	("esp",0xFF);
 
 	&movd	("xmm7",&DWP(0,"ebp"));		# b[0] -> 0000.00xy
 	&lea	("ebp",&DWP(4,"ebp"));
 	&pcmpeqd("xmm6","xmm6");
-	&psrlq	("xmm6",48);			# compose 0xffff<<64|0xffff
+	&psrlq	("xmm6",48);			# compose 0xFF<<64|0xFF
 
-	&pshuflw("xmm7","xmm7",0b11011100);	# 0000.00xy -> 0000.0x0y
+	&pshuflw("xmm7","xmm7",0b11011100);	# 0000.00xy -> 0000.0xFFy
 	&and	("esp",-64);
-	&pshufd	("xmm7","xmm7",0b11011100);	# 0000.0x0y -> 000x.000y
-	&lea	("ebx",&DWP(0x80,"esp"));
+	&pshufd	("xmm7","xmm7",0b11011100);	# 0000.0xFFy -> 000x.000y
+	&lea	("ebx",&DWP(0xFF,"esp"));
 
 	&movd	("xmm0",&DWP(4*0,"esi"));	# a[0] -> 0000.00xy
 	&pshufd	("xmm0","xmm0",0b11001100);	# 0000.00xy -> 00xy.00xy
 	&movd	("xmm1",&DWP(4*1,"esi"));	# a[1] -> ...
-	&movdqa	(&QWP(0x00,"ebx"),"xmm0");	# offload converted a[0]
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm0");	# offload converted a[0]
 	&pmuludq("xmm0","xmm7");		# a[0]*b[0]
 
 	&movd	("xmm2",&DWP(4*2,"esi"));
 	&pshufd	("xmm1","xmm1",0b11001100);
-	&movdqa	(&QWP(0x10,"ebx"),"xmm1");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm1");
 	&pmuludq("xmm1","xmm7");		# a[1]*b[0]
 
 	 &movq	("xmm4","xmm0");		# clear upper 64 bits
@@ -577,46 +577,46 @@ for(1..37) {
 
 	&movd	("xmm3",&DWP(4*3,"esi"));
 	&pshufd	("xmm2","xmm2",0b11001100);
-	&movdqa	(&QWP(0x20,"ebx"),"xmm2");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm2");
 	&pmuludq("xmm2","xmm7");		# a[2]*b[0]
 	 &paddq	("xmm1","xmm4");		# a[1]*b[0]+hw(a[0]*b[0]), carry
-	&movdqa	(&QWP(0x00,"esp"),"xmm1");	# t[0]
+	&movdqa	(&QWP(0xFF,"esp"),"xmm1");	# t[0]
 
 	&movd	("xmm0",&DWP(4*4,"esi"));
 	&pshufd	("xmm3","xmm3",0b11001100);
-	&movdqa	(&QWP(0x30,"ebx"),"xmm3");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm3");
 	&pmuludq("xmm3","xmm7");		# a[3]*b[0]
-	&movdqa	(&QWP(0x10,"esp"),"xmm2");
+	&movdqa	(&QWP(0xFF,"esp"),"xmm2");
 
 	&movd	("xmm1",&DWP(4*5,"esi"));
 	&pshufd	("xmm0","xmm0",0b11001100);
-	&movdqa	(&QWP(0x40,"ebx"),"xmm0");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm0");
 	&pmuludq("xmm0","xmm7");		# a[4]*b[0]
 	 &paddq	("xmm3","xmm5");		# a[3]*b[0]+lw(a[0]*b[0]), reduction step
-	&movdqa	(&QWP(0x20,"esp"),"xmm3");
+	&movdqa	(&QWP(0xFF,"esp"),"xmm3");
 
 	&movd	("xmm2",&DWP(4*6,"esi"));
 	&pshufd	("xmm1","xmm1",0b11001100);
-	&movdqa	(&QWP(0x50,"ebx"),"xmm1");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm1");
 	&pmuludq("xmm1","xmm7");		# a[5]*b[0]
-	&movdqa	(&QWP(0x30,"esp"),"xmm0");
+	&movdqa	(&QWP(0xFF,"esp"),"xmm0");
 	 &pshufd("xmm4","xmm5",0b10110001);	# xmm4 = xmm5<<32, reduction step
 
 	&movd	("xmm3",&DWP(4*7,"esi"));
 	&pshufd	("xmm2","xmm2",0b11001100);
-	&movdqa	(&QWP(0x60,"ebx"),"xmm2");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm2");
 	&pmuludq("xmm2","xmm7");		# a[6]*b[0]
-	&movdqa	(&QWP(0x40,"esp"),"xmm1");
-	 &psubq	("xmm4","xmm5");		# xmm4 = xmm5*0xffffffff, reduction step
+	&movdqa	(&QWP(0xFF,"esp"),"xmm1");
+	 &psubq	("xmm4","xmm5");		# xmm4 = xmm5*0xFF, reduction step
 
 	&movd	("xmm0",&DWP(0,"ebp"));		# b[1] -> 0000.00xy
 	&pshufd	("xmm3","xmm3",0b11001100);
-	&movdqa	(&QWP(0x70,"ebx"),"xmm3");
+	&movdqa	(&QWP(0xFF,"ebx"),"xmm3");
 	&pmuludq("xmm3","xmm7");		# a[7]*b[0]
 
-	&pshuflw("xmm7","xmm0",0b11011100);	# 0000.00xy -> 0000.0x0y
-	&movdqa	("xmm0",&QWP(0x00,"ebx"));	# pre-load converted a[0]
-	&pshufd	("xmm7","xmm7",0b11011100);	# 0000.0x0y -> 000x.000y
+	&pshuflw("xmm7","xmm0",0b11011100);	# 0000.00xy -> 0000.0xFFy
+	&movdqa	("xmm0",&QWP(0xFF,"ebx"));	# pre-load converted a[0]
+	&pshufd	("xmm7","xmm7",0b11011100);	# 0000.0xFFy -> 000x.000y
 
 	&mov	("ecx",6);
 	&lea	("ebp",&DWP(4,"ebp"));
@@ -624,122 +624,122 @@ for(1..37) {
 
 &set_label("madd_sse2",16);
 	 &paddq	("xmm2","xmm5");		# a[6]*b[i-1]+lw(a[0]*b[i-1]), reduction step [modulo-scheduled]
-	 &paddq	("xmm3","xmm4");		# a[7]*b[i-1]+lw(a[0]*b[i-1])*0xffffffff, reduction step [modulo-scheduled]
-	&movdqa	("xmm1",&QWP(0x10,"ebx"));
+	 &paddq	("xmm3","xmm4");		# a[7]*b[i-1]+lw(a[0]*b[i-1])*0xFF, reduction step [modulo-scheduled]
+	&movdqa	("xmm1",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm0","xmm7");		# a[0]*b[i]
-	 &movdqa(&QWP(0x50,"esp"),"xmm2");
+	 &movdqa(&QWP(0xFF,"esp"),"xmm2");
 
-	&movdqa	("xmm2",&QWP(0x20,"ebx"));
+	&movdqa	("xmm2",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm1","xmm7");		# a[1]*b[i]
-	 &movdqa(&QWP(0x60,"esp"),"xmm3");
-	&paddq	("xmm0",&QWP(0x00,"esp"));
+	 &movdqa(&QWP(0xFF,"esp"),"xmm3");
+	&paddq	("xmm0",&QWP(0xFF,"esp"));
 
-	&movdqa	("xmm3",&QWP(0x30,"ebx"));
+	&movdqa	("xmm3",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm2","xmm7");		# a[2]*b[i]
 	 &movq	("xmm4","xmm0");		# clear upper 64 bits
 	 &pslldq("xmm4",6);
-	&paddq	("xmm1",&QWP(0x10,"esp"));
+	&paddq	("xmm1",&QWP(0xFF,"esp"));
 	 &paddq	("xmm4","xmm0");
 	 &movdqa("xmm5","xmm4");
 	 &psrldq("xmm4",10);			# upper 33 bits of a[0]*b[i]+t[0]
 
-	&movdqa	("xmm0",&QWP(0x40,"ebx"));
+	&movdqa	("xmm0",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm3","xmm7");		# a[3]*b[i]
 	 &paddq	("xmm1","xmm4");		# a[1]*b[i]+hw(a[0]*b[i]), carry
-	&paddq	("xmm2",&QWP(0x20,"esp"));
-	&movdqa	(&QWP(0x00,"esp"),"xmm1");
+	&paddq	("xmm2",&QWP(0xFF,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm1");
 
-	&movdqa	("xmm1",&QWP(0x50,"ebx"));
+	&movdqa	("xmm1",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm0","xmm7");		# a[4]*b[i]
-	&paddq	("xmm3",&QWP(0x30,"esp"));
-	&movdqa	(&QWP(0x10,"esp"),"xmm2");
+	&paddq	("xmm3",&QWP(0xFF,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm2");
 	 &pand	("xmm5","xmm6");		# lower 32 bits of a[0]*b[i]
 
-	&movdqa	("xmm2",&QWP(0x60,"ebx"));
+	&movdqa	("xmm2",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm1","xmm7");		# a[5]*b[i]
 	 &paddq	("xmm3","xmm5");		# a[3]*b[i]+lw(a[0]*b[i]), reduction step
-	&paddq	("xmm0",&QWP(0x40,"esp"));
-	&movdqa	(&QWP(0x20,"esp"),"xmm3");
+	&paddq	("xmm0",&QWP(0xFF,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm3");
 	 &pshufd("xmm4","xmm5",0b10110001);	# xmm4 = xmm5<<32, reduction step
 
 	&movdqa	("xmm3","xmm7");
 	&pmuludq("xmm2","xmm7");		# a[6]*b[i]
 	 &movd	("xmm7",&DWP(0,"ebp"));		# b[i++] -> 0000.00xy
 	 &lea	("ebp",&DWP(4,"ebp"));
-	&paddq	("xmm1",&QWP(0x50,"esp"));
-	 &psubq	("xmm4","xmm5");		# xmm4 = xmm5*0xffffffff, reduction step
-	&movdqa	(&QWP(0x30,"esp"),"xmm0");
-	 &pshuflw("xmm7","xmm7",0b11011100);	# 0000.00xy -> 0000.0x0y
+	&paddq	("xmm1",&QWP(0xFF,"esp"));
+	 &psubq	("xmm4","xmm5");		# xmm4 = xmm5*0xFF, reduction step
+	&movdqa	(&QWP(0xFF,"esp"),"xmm0");
+	 &pshuflw("xmm7","xmm7",0b11011100);	# 0000.00xy -> 0000.0xFFy
 
-	&pmuludq("xmm3",&QWP(0x70,"ebx"));	# a[7]*b[i]
-	 &pshufd("xmm7","xmm7",0b11011100);	# 0000.0x0y -> 000x.000y
-	 &movdqa("xmm0",&QWP(0x00,"ebx"));	# pre-load converted a[0]
-	&movdqa	(&QWP(0x40,"esp"),"xmm1");
-	&paddq	("xmm2",&QWP(0x60,"esp"));
+	&pmuludq("xmm3",&QWP(0xFF,"ebx"));	# a[7]*b[i]
+	 &pshufd("xmm7","xmm7",0b11011100);	# 0000.0xFFy -> 000x.000y
+	 &movdqa("xmm0",&QWP(0xFF,"ebx"));	# pre-load converted a[0]
+	&movdqa	(&QWP(0xFF,"esp"),"xmm1");
+	&paddq	("xmm2",&QWP(0xFF,"esp"));
 
 	&dec	("ecx");
 	&jnz	(&label("madd_sse2"));
 
 	 &paddq	("xmm2","xmm5");		# a[6]*b[6]+lw(a[0]*b[6]), reduction step [modulo-scheduled]
-	 &paddq	("xmm3","xmm4");		# a[7]*b[6]+lw(a[0]*b[6])*0xffffffff, reduction step [modulo-scheduled]
-	&movdqa	("xmm1",&QWP(0x10,"ebx"));
+	 &paddq	("xmm3","xmm4");		# a[7]*b[6]+lw(a[0]*b[6])*0xFF, reduction step [modulo-scheduled]
+	&movdqa	("xmm1",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm0","xmm7");		# a[0]*b[7]
-	 &movdqa(&QWP(0x50,"esp"),"xmm2");
+	 &movdqa(&QWP(0xFF,"esp"),"xmm2");
 
-	&movdqa	("xmm2",&QWP(0x20,"ebx"));
+	&movdqa	("xmm2",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm1","xmm7");		# a[1]*b[7]
-	 &movdqa(&QWP(0x60,"esp"),"xmm3");
-	&paddq	("xmm0",&QWP(0x00,"esp"));
+	 &movdqa(&QWP(0xFF,"esp"),"xmm3");
+	&paddq	("xmm0",&QWP(0xFF,"esp"));
 
-	&movdqa	("xmm3",&QWP(0x30,"ebx"));
+	&movdqa	("xmm3",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm2","xmm7");		# a[2]*b[7]
 	 &movq	("xmm4","xmm0");		# clear upper 64 bits
 	 &pslldq("xmm4",6);
-	&paddq	("xmm1",&QWP(0x10,"esp"));
+	&paddq	("xmm1",&QWP(0xFF,"esp"));
 	 &paddq	("xmm4","xmm0");
 	 &movdqa("xmm5","xmm4");
 	 &psrldq("xmm4",10);			# upper 33 bits of a[0]*b[i]+t[0]
 
-	&movdqa	("xmm0",&QWP(0x40,"ebx"));
+	&movdqa	("xmm0",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm3","xmm7");		# a[3]*b[7]
 	 &paddq	("xmm1","xmm4");		# a[1]*b[7]+hw(a[0]*b[7]), carry
-	&paddq	("xmm2",&QWP(0x20,"esp"));
-	&movdqa	(&QWP(0x00,"esp"),"xmm1");
+	&paddq	("xmm2",&QWP(0xFF,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm1");
 
-	&movdqa	("xmm1",&QWP(0x50,"ebx"));
+	&movdqa	("xmm1",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm0","xmm7");		# a[4]*b[7]
-	&paddq	("xmm3",&QWP(0x30,"esp"));
-	&movdqa	(&QWP(0x10,"esp"),"xmm2");
+	&paddq	("xmm3",&QWP(0xFF,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm2");
 	 &pand	("xmm5","xmm6");		# lower 32 bits of a[0]*b[i]
 
-	&movdqa	("xmm2",&QWP(0x60,"ebx"));
+	&movdqa	("xmm2",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm1","xmm7");		# a[5]*b[7]
 	 &paddq	("xmm3","xmm5");		# reduction step
-	&paddq	("xmm0",&QWP(0x40,"esp"));
-	&movdqa	(&QWP(0x20,"esp"),"xmm3");
+	&paddq	("xmm0",&QWP(0xFF,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm3");
 	 &pshufd("xmm4","xmm5",0b10110001);	# xmm4 = xmm5<<32, reduction step
 
-	&movdqa	("xmm3",&QWP(0x70,"ebx"));
+	&movdqa	("xmm3",&QWP(0xFF,"ebx"));
 	&pmuludq("xmm2","xmm7");		# a[6]*b[7]
-	&paddq	("xmm1",&QWP(0x50,"esp"));
-	 &psubq	("xmm4","xmm5");		# xmm4 = xmm5*0xffffffff, reduction step
-	&movdqa	(&QWP(0x30,"esp"),"xmm0");
+	&paddq	("xmm1",&QWP(0xFF,"esp"));
+	 &psubq	("xmm4","xmm5");		# xmm4 = xmm5*0xFF, reduction step
+	&movdqa	(&QWP(0xFF,"esp"),"xmm0");
 
 	&pmuludq("xmm3","xmm7");		# a[7]*b[7]
 	&pcmpeqd("xmm7","xmm7");
-	&movdqa	("xmm0",&QWP(0x00,"esp"));
+	&movdqa	("xmm0",&QWP(0xFF,"esp"));
 	&pslldq	("xmm7",8);
-	&movdqa	(&QWP(0x40,"esp"),"xmm1");
-	&paddq	("xmm2",&QWP(0x60,"esp"));
+	&movdqa	(&QWP(0xFF,"esp"),"xmm1");
+	&paddq	("xmm2",&QWP(0xFF,"esp"));
 
 	 &paddq	("xmm2","xmm5");		# a[6]*b[7]+lw(a[0]*b[7]), reduction step
-	 &paddq	("xmm3","xmm4");		# a[6]*b[7]+lw(a[0]*b[7])*0xffffffff, reduction step
-	 &movdqa(&QWP(0x50,"esp"),"xmm2");
-	 &movdqa(&QWP(0x60,"esp"),"xmm3");
+	 &paddq	("xmm3","xmm4");		# a[6]*b[7]+lw(a[0]*b[7])*0xFF, reduction step
+	 &movdqa(&QWP(0xFF,"esp"),"xmm2");
+	 &movdqa(&QWP(0xFF,"esp"),"xmm3");
 
-	&movdqa	("xmm1",&QWP(0x10,"esp"));
-	&movdqa	("xmm2",&QWP(0x20,"esp"));
-	&movdqa	("xmm3",&QWP(0x30,"esp"));
+	&movdqa	("xmm1",&QWP(0xFF,"esp"));
+	&movdqa	("xmm2",&QWP(0xFF,"esp"));
+	&movdqa	("xmm3",&QWP(0xFF,"esp"));
 
 	&movq	("xmm4","xmm0");		# "flatten"
 	&pand	("xmm0","xmm7");
@@ -753,7 +753,7 @@ for(1..37) {
 	&psrldq	("xmm0",4);
 
 	&paddq	("xmm5","xmm0");
-	&movdqa	("xmm0",&QWP(0x40,"esp"));
+	&movdqa	("xmm0",&QWP(0xFF,"esp"));
 	&sub	("eax",-1);			# start subtracting modulus,
 						# this is used to determine
 						# if result is larger/smaller
@@ -768,7 +768,7 @@ for(1..37) {
 	&psrldq	("xmm1",4);
 
 	&paddq	("xmm4","xmm1");
-	&movdqa	("xmm1",&QWP(0x50,"esp"));
+	&movdqa	("xmm1",&QWP(0xFF,"esp"));
 	&sbb	("eax",-1);
 	&pslldq	("xmm4",6);
 	 &movq	("xmm5","xmm3");
@@ -780,7 +780,7 @@ for(1..37) {
 	&psrldq	("xmm2",4);
 
 	&paddq	("xmm5","xmm2");
-	&movdqa	("xmm2",&QWP(0x60,"esp"));
+	&movdqa	("xmm2",&QWP(0xFF,"esp"));
 	&sbb	("eax",-1);
 	&pslldq	("xmm5",6);
 	 &movq	("xmm4","xmm0");
@@ -832,7 +832,7 @@ for(1..37) {
 	# modulus back.
 	#
 	# Note that because mod has special form, i.e. consists of
-	# 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	# 0xFF, 1 and 0s, we can conditionally synthesize it by
 	# assigning borrow bit to one register, %ebp, and its negative
 	# to another, %esi. But we started by calculating %esi...
 
@@ -1094,7 +1094,7 @@ for ($i=0;$i<7;$i++) {
 	&sbb	("edi",0);
 
 	# Note that because mod has special form, i.e. consists of
-	# 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	# 0xFF, 1 and 0s, we can conditionally synthesize it by
 	# assigning borrow bit to one register, %ebp, and its negative
 	# to another, %esi. But we started by calculating %esi...
 
@@ -1518,7 +1518,7 @@ for ($i=0;$i<7;$i++) {
 	&or	("eax",&DWP(8,"edi"));
 	&or	("eax",&DWP(12,"edi"));
 
-	&data_byte(0x3e);			# predict taken
+	&data_byte(0xFF);			# predict taken
 	&jnz	(&label("add_proceed"));	# is_equal(U1,U2)?
 
 	&mov	("eax",&DWP(32*18+0,"esp"));
@@ -1531,7 +1531,7 @@ for ($i=0;$i<7;$i++) {
 	&mov	("edi",&wparam(0));
 	&xor	("eax","eax");
 	&mov	("ecx",96/4);
-	&data_byte(0xfc,0xf3,0xab);		# cld; stosd
+	&data_byte(0xFF,0xFF,0xFF);		# cld; stosd
 	&jmp	(&label("add_done"));
 
 &set_label("add_double",16);

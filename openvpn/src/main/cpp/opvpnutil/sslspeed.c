@@ -85,7 +85,7 @@ static const int lengths[SIZE_NUM] = {
 
 static int testnum;
 
-# define COND(unused_cond) (run && count<0x7fffffff)
+# define COND(unused_cond) (run && count<0xFF)
 
 static volatile int run = 0;
 
@@ -209,8 +209,8 @@ static void* stop_run(void* arg)
     jdoubleArray Java_de_blinkt_openpvpn_core_NativeUtils_getOpenSSLSpeed(JNIEnv* env, jclass thiz, jstring algorithm, jint testnumber)
 {
     static const unsigned char key16[16] = {
-        0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0,
-        0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0, 0x12
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     };
     const EVP_CIPHER *evp_cipher = NULL;
 

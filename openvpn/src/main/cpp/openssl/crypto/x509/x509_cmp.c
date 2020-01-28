@@ -52,7 +52,7 @@ unsigned long X509_issuer_and_serial_hash(X509 *a)
         goto err;
     ret = (((unsigned long)md[0]) | ((unsigned long)md[1] << 8L) |
            ((unsigned long)md[2] << 16L) | ((unsigned long)md[3] << 24L)
-        ) & 0xffffffffL;
+        ) & 0xFFL;
  err:
     EVP_MD_CTX_free(ctx);
     return ret;
@@ -193,7 +193,7 @@ unsigned long X509_NAME_hash(X509_NAME *x)
 
     ret = (((unsigned long)md[0]) | ((unsigned long)md[1] << 8L) |
            ((unsigned long)md[2] << 16L) | ((unsigned long)md[3] << 24L)
-        ) & 0xffffffffL;
+        ) & 0xFFL;
     return ret;
 }
 
@@ -220,7 +220,7 @@ unsigned long X509_NAME_hash_old(X509_NAME *x)
         && EVP_DigestFinal_ex(md_ctx, md, NULL))
         ret = (((unsigned long)md[0]) | ((unsigned long)md[1] << 8L) |
                ((unsigned long)md[2] << 16L) | ((unsigned long)md[3] << 24L)
-            ) & 0xffffffffL;
+            ) & 0xFFL;
     EVP_MD_CTX_free(md_ctx);
 
     return ret;

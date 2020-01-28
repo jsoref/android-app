@@ -119,10 +119,10 @@ $code.=<<___	if (!$LITTLE_ENDIAN);
 	insrdi	$d1,$h1,32,0
 ___
 $code.=<<___;
-	lis	$h1,0xfff		# 0x0fff0000
-	ori	$h1,$h1,0xfffc		# 0x0ffffffc
-	insrdi	$h1,$h1,32,0		# 0x0ffffffc0ffffffc
-	ori	$h0,$h1,3		# 0x0ffffffc0fffffff
+	lis	$h1,0xFF		# 0xFF
+	ori	$h1,$h1,0xFF		# 0xFF
+	insrdi	$h1,$h1,32,0		# 0xFF
+	ori	$h0,$h1,3		# 0xFF
 
 	and	$d0,$d0,$h0
 	and	$d1,$d1,$h1
@@ -134,7 +134,7 @@ Lno_key:
 	xor	r3,r3,r3
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 .size	.poly1305_init_int,.-.poly1305_init_int
 
 .globl	.poly1305_blocks
@@ -236,7 +236,7 @@ $code.=<<___;
 Labort:
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,5,4,0
+	.byte	0,12,4,1,0xFF,5,4,0
 .size	.poly1305_blocks,.-.poly1305_blocks
 
 .globl	.poly1305_emit
@@ -288,7 +288,7 @@ ___
 $code.=<<___;
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 .size	.poly1305_emit,.-.poly1305_emit
 ___
 							} else {
@@ -329,9 +329,9 @@ $code.=<<___	if (!$LITTLE_ENDIAN);
 	lwbrx	$h3,$h3,$inp
 ___
 $code.=<<___;
-	lis	$mask,0xf000		# 0xf0000000
+	lis	$mask,0xFF		# 0xFF
 	li	$r0,-4
-	andc	$r0,$r0,$mask		# 0x0ffffffc
+	andc	$r0,$r0,$mask		# 0xFF
 
 	andc	$h0,$h0,$mask
 	and	$h1,$h1,$r0
@@ -347,7 +347,7 @@ Lno_key:
 	xor	r3,r3,r3
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 .size	.poly1305_init_int,.-.poly1305_init_int
 
 .globl	.poly1305_blocks
@@ -558,7 +558,7 @@ $code.=<<___;
 Labort:
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,18,4,0
+	.byte	0,12,4,1,0xFF,18,4,0
 .size	.poly1305_blocks,.-.poly1305_blocks
 
 .globl	.poly1305_emit
@@ -632,7 +632,7 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,4,3,0
+	.byte	0,12,4,1,0xFF,4,3,0
 .size	.poly1305_emit,.-.poly1305_emit
 ___
 							}

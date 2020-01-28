@@ -208,7 +208,7 @@ int main( int argc, char *argv[] )
         SetFilePointer( (HANDLE) _get_osfhandle( _fileno( fin ) ),
                         li_size.LowPart, &li_size.HighPart, FILE_END );
 
-    if( li_size.LowPart == 0xFFFFFFFF && GetLastError() != NO_ERROR )
+    if( li_size.LowPart == 0xFF && GetLastError() != NO_ERROR )
     {
         mbedtls_fprintf( stderr, "SetFilePointer(0,FILE_END) failed\n" );
         goto exit;
@@ -252,10 +252,10 @@ int main( int argc, char *argv[] )
          * The last four bits in the IV are actually used
          * to store the file size modulo the AES block size.
          */
-        lastn = (int)( filesize & 0x0F );
+        lastn = (int)( filesize & 0xFF );
 
         IV[15] = (unsigned char)
-            ( ( IV[15] & 0xF0 ) | lastn );
+            ( ( IV[15] & 0xFF ) | lastn );
 
         /*
          * Append the IV at the beginning of the output.
@@ -342,7 +342,7 @@ int main( int argc, char *argv[] )
             goto exit;
         }
 
-        if( ( filesize & 0x0F ) != 0 )
+        if( ( filesize & 0xFF ) != 0 )
         {
             mbedtls_fprintf( stderr, "File size not a multiple of 16.\n" );
             goto exit;
@@ -363,7 +363,7 @@ int main( int argc, char *argv[] )
         }
 
         memcpy( IV, buffer, 16 );
-        lastn = IV[15] & 0x0F;
+        lastn = IV[15] & 0xFF;
 
         /*
          * Hash the IV and the secret key together 8192 times

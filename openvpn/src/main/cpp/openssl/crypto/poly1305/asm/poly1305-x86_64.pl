@@ -200,8 +200,8 @@ $code.=<<___	if ($avx>3);
 	je	.Linit_base2_44
 ___
 $code.=<<___;
-	mov	\$0x0ffffffc0fffffff,%rax
-	mov	\$0x0ffffffc0ffffffc,%rcx
+	mov	\$0xFF,%rax
+	mov	\$0xFF,%rcx
 	and	0($inp),%rax
 	and	8($inp),%rcx
 	mov	%rax,24($ctx)
@@ -360,8 +360,8 @@ __poly1305_init_avx:
 	mov	$r1,%rax
 	call	__poly1305_block	# r^2
 
-	mov	\$0x3ffffff,%eax	# save interleaved r^2 and r base 2^26
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%eax	# save interleaved r^2 and r base 2^26
+	mov	\$0xFF,%edx
 	mov	$h0,$d1
 	and	$h0#d,%eax
 	mov	$r0,$d2
@@ -371,8 +371,8 @@ __poly1305_init_avx:
 	mov	%edx,`16*0+4-64`($ctx)
 	shr	\$26,$d2
 
-	mov	\$0x3ffffff,%eax
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%eax
+	mov	\$0xFF,%edx
 	and	$d1#d,%eax
 	and	$d2#d,%edx
 	mov	%eax,`16*1+0-64`($ctx)
@@ -390,8 +390,8 @@ __poly1305_init_avx:
 	shl	\$12,%rdx
 	or	$d1,%rax
 	or	$d2,%rdx
-	and	\$0x3ffffff,%eax
-	and	\$0x3ffffff,%edx
+	and	\$0xFF,%eax
+	and	\$0xFF,%edx
 	mov	%eax,`16*3+0-64`($ctx)
 	lea	(%rax,%rax,4),%eax	# *5
 	mov	%edx,`16*3+4-64`($ctx)
@@ -401,8 +401,8 @@ __poly1305_init_avx:
 	mov	%edx,`16*4+4-64`($ctx)
 	mov	$r1,$d2
 
-	mov	\$0x3ffffff,%eax
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%eax
+	mov	\$0xFF,%edx
 	shr	\$14,$d1
 	shr	\$14,$d2
 	and	$d1#d,%eax
@@ -429,13 +429,13 @@ __poly1305_init_avx:
 	mov	$r1,%rax
 	call	__poly1305_block	# r^3
 
-	mov	\$0x3ffffff,%eax	# save r^3 base 2^26
+	mov	\$0xFF,%eax	# save r^3 base 2^26
 	mov	$h0,$d1
 	and	$h0#d,%eax
 	shr	\$26,$d1
 	mov	%eax,`16*0+12-64`($ctx)
 
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%edx
 	and	$d1#d,%edx
 	mov	%edx,`16*1+12-64`($ctx)
 	lea	(%rdx,%rdx,4),%edx	# *5
@@ -445,13 +445,13 @@ __poly1305_init_avx:
 	mov	$h1,%rax
 	shl	\$12,%rax
 	or	$d1,%rax
-	and	\$0x3ffffff,%eax
+	and	\$0xFF,%eax
 	mov	%eax,`16*3+12-64`($ctx)
 	lea	(%rax,%rax,4),%eax	# *5
 	mov	$h1,$d1
 	mov	%eax,`16*4+12-64`($ctx)
 
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%edx
 	shr	\$14,$d1
 	and	$d1#d,%edx
 	mov	%edx,`16*5+12-64`($ctx)
@@ -469,13 +469,13 @@ __poly1305_init_avx:
 	mov	$r1,%rax
 	call	__poly1305_block	# r^4
 
-	mov	\$0x3ffffff,%eax	# save r^4 base 2^26
+	mov	\$0xFF,%eax	# save r^4 base 2^26
 	mov	$h0,$d1
 	and	$h0#d,%eax
 	shr	\$26,$d1
 	mov	%eax,`16*0+8-64`($ctx)
 
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%edx
 	and	$d1#d,%edx
 	mov	%edx,`16*1+8-64`($ctx)
 	lea	(%rdx,%rdx,4),%edx	# *5
@@ -485,13 +485,13 @@ __poly1305_init_avx:
 	mov	$h1,%rax
 	shl	\$12,%rax
 	or	$d1,%rax
-	and	\$0x3ffffff,%eax
+	and	\$0xFF,%eax
 	mov	%eax,`16*3+8-64`($ctx)
 	lea	(%rax,%rax,4),%eax	# *5
 	mov	$h1,$d1
 	mov	%eax,`16*4+8-64`($ctx)
 
-	mov	\$0x3ffffff,%edx
+	mov	\$0xFF,%edx
 	shr	\$14,$d1
 	and	$d1#d,%edx
 	mov	%edx,`16*5+8-64`($ctx)
@@ -608,15 +608,15 @@ poly1305_blocks_avx:
 	mov	$h1,$r0
 	mov	$h1,$r1
 	shr	\$26,%rdx
-	and	\$0x3ffffff,%rax	# h[0]
+	and	\$0xFF,%rax	# h[0]
 	shl	\$12,$r0
-	and	\$0x3ffffff,%rdx	# h[1]
+	and	\$0xFF,%rdx	# h[1]
 	shr	\$14,$h1
 	or	$r0,$h0
 	shl	\$24,$h2
-	and	\$0x3ffffff,$h0		# h[2]
+	and	\$0xFF,$h0		# h[2]
 	shr	\$40,$r1
-	and	\$0x3ffffff,$h1		# h[3]
+	and	\$0xFF,$h1		# h[3]
 	or	$r1,$h2			# h[4]
 
 	sub	\$16,%r15
@@ -714,15 +714,15 @@ poly1305_blocks_avx:
 	mov	$h1,$d1
 	mov	$h1,$d2
 	shr	\$26,%rdx
-	and	\$0x3ffffff,%rax	# h[0]
+	and	\$0xFF,%rax	# h[0]
 	shl	\$12,$d1
-	and	\$0x3ffffff,%rdx	# h[1]
+	and	\$0xFF,%rdx	# h[1]
 	shr	\$14,$h1
 	or	$d1,$h0
 	shl	\$24,$h2
-	and	\$0x3ffffff,$h0		# h[2]
+	and	\$0xFF,$h0		# h[2]
 	shr	\$40,$d2
-	and	\$0x3ffffff,$h1		# h[3]
+	and	\$0xFF,$h1		# h[3]
 	or	$d2,$h2			# h[4]
 
 	vmovd	%rax#d,$H0
@@ -768,23 +768,23 @@ poly1305_blocks_avx:
 .Ldo_avx:
 ___
 $code.=<<___	if (!$win64);
-	lea		-0x58(%rsp),%r11
-.cfi_def_cfa		%r11,0x60
-	sub		\$0x178,%rsp
+	lea		-0xFF(%rsp),%r11
+.cfi_def_cfa		%r11,0xFF
+	sub		\$0xFF,%rsp
 ___
 $code.=<<___	if ($win64);
-	lea		-0xf8(%rsp),%r11
-	sub		\$0x218,%rsp
-	vmovdqa		%xmm6,0x50(%r11)
-	vmovdqa		%xmm7,0x60(%r11)
-	vmovdqa		%xmm8,0x70(%r11)
-	vmovdqa		%xmm9,0x80(%r11)
-	vmovdqa		%xmm10,0x90(%r11)
-	vmovdqa		%xmm11,0xa0(%r11)
-	vmovdqa		%xmm12,0xb0(%r11)
-	vmovdqa		%xmm13,0xc0(%r11)
-	vmovdqa		%xmm14,0xd0(%r11)
-	vmovdqa		%xmm15,0xe0(%r11)
+	lea		-0xFF(%rsp),%r11
+	sub		\$0xFF,%rsp
+	vmovdqa		%xmm6,0xFF(%r11)
+	vmovdqa		%xmm7,0xFF(%r11)
+	vmovdqa		%xmm8,0xFF(%r11)
+	vmovdqa		%xmm9,0xFF(%r11)
+	vmovdqa		%xmm10,0xFF(%r11)
+	vmovdqa		%xmm11,0xFF(%r11)
+	vmovdqa		%xmm12,0xFF(%r11)
+	vmovdqa		%xmm13,0xFF(%r11)
+	vmovdqa		%xmm14,0xFF(%r11)
+	vmovdqa		%xmm15,0xFF(%r11)
 .Ldo_avx_body:
 ___
 $code.=<<___;
@@ -823,49 +823,49 @@ $code.=<<___;
 	# expand and copy pre-calculated table to stack
 	vmovdqu		`16*1-64`($ctx),$D1
 	vmovdqu		`16*2-64`($ctx),$D2
-	vpshufd		\$0xEE,$D4,$D3		# 34xx -> 3434
-	vpshufd		\$0x44,$D4,$D0		# xx12 -> 1212
-	vmovdqa		$D3,-0x90(%r11)
-	vmovdqa		$D0,0x00(%rsp)
-	vpshufd		\$0xEE,$D1,$D4
+	vpshufd		\$0xFF,$D4,$D3		# 34xx -> 3434
+	vpshufd		\$0xFF,$D4,$D0		# xx12 -> 1212
+	vmovdqa		$D3,-0xFF(%r11)
+	vmovdqa		$D0,0xFF(%rsp)
+	vpshufd		\$0xFF,$D1,$D4
 	vmovdqu		`16*3-64`($ctx),$D0
-	vpshufd		\$0x44,$D1,$D1
-	vmovdqa		$D4,-0x80(%r11)
-	vmovdqa		$D1,0x10(%rsp)
-	vpshufd		\$0xEE,$D2,$D3
+	vpshufd		\$0xFF,$D1,$D1
+	vmovdqa		$D4,-0xFF(%r11)
+	vmovdqa		$D1,0xFF(%rsp)
+	vpshufd		\$0xFF,$D2,$D3
 	vmovdqu		`16*4-64`($ctx),$D1
-	vpshufd		\$0x44,$D2,$D2
-	vmovdqa		$D3,-0x70(%r11)
-	vmovdqa		$D2,0x20(%rsp)
-	vpshufd		\$0xEE,$D0,$D4
+	vpshufd		\$0xFF,$D2,$D2
+	vmovdqa		$D3,-0xFF(%r11)
+	vmovdqa		$D2,0xFF(%rsp)
+	vpshufd		\$0xFF,$D0,$D4
 	vmovdqu		`16*5-64`($ctx),$D2
-	vpshufd		\$0x44,$D0,$D0
-	vmovdqa		$D4,-0x60(%r11)
-	vmovdqa		$D0,0x30(%rsp)
-	vpshufd		\$0xEE,$D1,$D3
+	vpshufd		\$0xFF,$D0,$D0
+	vmovdqa		$D4,-0xFF(%r11)
+	vmovdqa		$D0,0xFF(%rsp)
+	vpshufd		\$0xFF,$D1,$D3
 	vmovdqu		`16*6-64`($ctx),$D0
-	vpshufd		\$0x44,$D1,$D1
-	vmovdqa		$D3,-0x50(%r11)
-	vmovdqa		$D1,0x40(%rsp)
-	vpshufd		\$0xEE,$D2,$D4
+	vpshufd		\$0xFF,$D1,$D1
+	vmovdqa		$D3,-0xFF(%r11)
+	vmovdqa		$D1,0xFF(%rsp)
+	vpshufd		\$0xFF,$D2,$D4
 	vmovdqu		`16*7-64`($ctx),$D1
-	vpshufd		\$0x44,$D2,$D2
-	vmovdqa		$D4,-0x40(%r11)
-	vmovdqa		$D2,0x50(%rsp)
-	vpshufd		\$0xEE,$D0,$D3
+	vpshufd		\$0xFF,$D2,$D2
+	vmovdqa		$D4,-0xFF(%r11)
+	vmovdqa		$D2,0xFF(%rsp)
+	vpshufd		\$0xFF,$D0,$D3
 	vmovdqu		`16*8-64`($ctx),$D2
-	vpshufd		\$0x44,$D0,$D0
-	vmovdqa		$D3,-0x30(%r11)
-	vmovdqa		$D0,0x60(%rsp)
-	vpshufd		\$0xEE,$D1,$D4
-	vpshufd		\$0x44,$D1,$D1
-	vmovdqa		$D4,-0x20(%r11)
-	vmovdqa		$D1,0x70(%rsp)
-	vpshufd		\$0xEE,$D2,$D3
-	 vmovdqa	0x00(%rsp),$D4		# preload r0^2
-	vpshufd		\$0x44,$D2,$D2
-	vmovdqa		$D3,-0x10(%r11)
-	vmovdqa		$D2,0x80(%rsp)
+	vpshufd		\$0xFF,$D0,$D0
+	vmovdqa		$D3,-0xFF(%r11)
+	vmovdqa		$D0,0xFF(%rsp)
+	vpshufd		\$0xFF,$D1,$D4
+	vpshufd		\$0xFF,$D1,$D1
+	vmovdqa		$D4,-0xFF(%r11)
+	vmovdqa		$D1,0xFF(%rsp)
+	vpshufd		\$0xFF,$D2,$D3
+	 vmovdqa	0xFF(%rsp),$D4		# preload r0^2
+	vpshufd		\$0xFF,$D2,$D2
+	vmovdqa		$D3,-0xFF(%r11)
+	vmovdqa		$D2,0xFF(%rsp)
 
 	jmp		.Loop_avx
 
@@ -893,43 +893,43 @@ $code.=<<___;
 
 	vpmuludq	$T0,$D4,$D0		# d0 = h0*r0
 	vpmuludq	$T1,$D4,$D1		# d1 = h1*r0
-	  vmovdqa	$H2,0x20(%r11)				# offload hash
+	  vmovdqa	$H2,0xFF(%r11)				# offload hash
 	vpmuludq	$T2,$D4,$D2		# d3 = h2*r0
-	 vmovdqa	0x10(%rsp),$H2		# r1^2
+	 vmovdqa	0xFF(%rsp),$H2		# r1^2
 	vpmuludq	$T3,$D4,$D3		# d3 = h3*r0
 	vpmuludq	$T4,$D4,$D4		# d4 = h4*r0
 
-	  vmovdqa	$H0,0x00(%r11)				#
-	vpmuludq	0x20(%rsp),$T4,$H0	# h4*s1
-	  vmovdqa	$H1,0x10(%r11)				#
+	  vmovdqa	$H0,0xFF(%r11)				#
+	vpmuludq	0xFF(%rsp),$T4,$H0	# h4*s1
+	  vmovdqa	$H1,0xFF(%r11)				#
 	vpmuludq	$T3,$H2,$H1		# h3*r1
 	vpaddq		$H0,$D0,$D0		# d0 += h4*s1
 	vpaddq		$H1,$D4,$D4		# d4 += h3*r1
-	  vmovdqa	$H3,0x30(%r11)				#
+	  vmovdqa	$H3,0xFF(%r11)				#
 	vpmuludq	$T2,$H2,$H0		# h2*r1
 	vpmuludq	$T1,$H2,$H1		# h1*r1
 	vpaddq		$H0,$D3,$D3		# d3 += h2*r1
-	 vmovdqa	0x30(%rsp),$H3		# r2^2
+	 vmovdqa	0xFF(%rsp),$H3		# r2^2
 	vpaddq		$H1,$D2,$D2		# d2 += h1*r1
-	  vmovdqa	$H4,0x40(%r11)				#
+	  vmovdqa	$H4,0xFF(%r11)				#
 	vpmuludq	$T0,$H2,$H2		# h0*r1
 	 vpmuludq	$T2,$H3,$H0		# h2*r2
 	vpaddq		$H2,$D1,$D1		# d1 += h0*r1
 
-	 vmovdqa	0x40(%rsp),$H4		# s2^2
+	 vmovdqa	0xFF(%rsp),$H4		# s2^2
 	vpaddq		$H0,$D4,$D4		# d4 += h2*r2
 	vpmuludq	$T1,$H3,$H1		# h1*r2
 	vpmuludq	$T0,$H3,$H3		# h0*r2
 	vpaddq		$H1,$D3,$D3		# d3 += h1*r2
-	 vmovdqa	0x50(%rsp),$H2		# r3^2
+	 vmovdqa	0xFF(%rsp),$H2		# r3^2
 	vpaddq		$H3,$D2,$D2		# d2 += h0*r2
 	vpmuludq	$T4,$H4,$H0		# h4*s2
 	vpmuludq	$T3,$H4,$H4		# h3*s2
 	vpaddq		$H0,$D1,$D1		# d1 += h4*s2
-	 vmovdqa	0x60(%rsp),$H3		# s3^2
+	 vmovdqa	0xFF(%rsp),$H3		# s3^2
 	vpaddq		$H4,$D0,$D0		# d0 += h3*s2
 
-	 vmovdqa	0x80(%rsp),$H4		# s4^2
+	 vmovdqa	0xFF(%rsp),$H4		# s4^2
 	vpmuludq	$T1,$H2,$H1		# h1*r3
 	vpmuludq	$T0,$H2,$H2		# h0*r3
 	vpaddq		$H1,$D4,$D4		# d4 += h1*r3
@@ -951,11 +951,11 @@ $code.=<<___;
 	vpaddq		$T3,$D2,$D2		# d2 += h3*s4
 	vpaddq		$T4,$D3,$D3		# d3 += h4*s4
 	 vpsrldq	\$6,$H1,$H3				#
-	vpmuludq	0x70(%rsp),$T0,$T4	# h0*r4
+	vpmuludq	0xFF(%rsp),$T0,$T4	# h0*r4
 	vpmuludq	$T1,$H4,$T0		# h1*s4
 	 vpunpckhqdq	$H1,$H0,$H4		# 4
 	vpaddq		$T4,$D4,$D4		# d4 += h0*r4
-	 vmovdqa	-0x90(%r11),$T4		# r0^4
+	 vmovdqa	-0xFF(%r11),$T4		# r0^4
 	vpaddq		$T0,$D0,$D0		# d0 += h1*s4
 
 	vpunpcklqdq	$H1,$H0,$H0		# 0:1
@@ -973,11 +973,11 @@ $code.=<<___;
 	vpand		$MASK,$H3,$H3		# 3
 	vpor		32(%rcx),$H4,$H4	# padbit, yes, always
 
-	vpaddq		0x00(%r11),$H0,$H0	# add hash value
-	vpaddq		0x10(%r11),$H1,$H1
-	vpaddq		0x20(%r11),$H2,$H2
-	vpaddq		0x30(%r11),$H3,$H3
-	vpaddq		0x40(%r11),$H4,$H4
+	vpaddq		0xFF(%r11),$H0,$H0	# add hash value
+	vpaddq		0xFF(%r11),$H1,$H1
+	vpaddq		0xFF(%r11),$H2,$H2
+	vpaddq		0xFF(%r11),$H3,$H3
+	vpaddq		0xFF(%r11),$H4,$H4
 
 	lea		16*2($inp),%rax
 	lea		16*4($inp),$inp
@@ -997,42 +997,42 @@ $code.=<<___;
 	vpmuludq	$H1,$T4,$T1		# h1*r0
 	vpaddq		$T0,$D0,$D0
 	vpaddq		$T1,$D1,$D1
-	 vmovdqa	-0x80(%r11),$T2		# r1^4
+	 vmovdqa	-0xFF(%r11),$T2		# r1^4
 	vpmuludq	$H2,$T4,$T0		# h2*r0
 	vpmuludq	$H3,$T4,$T1		# h3*r0
 	vpaddq		$T0,$D2,$D2
 	vpaddq		$T1,$D3,$D3
 	vpmuludq	$H4,$T4,$T4		# h4*r0
-	 vpmuludq	-0x70(%r11),$H4,$T0	# h4*s1
+	 vpmuludq	-0xFF(%r11),$H4,$T0	# h4*s1
 	vpaddq		$T4,$D4,$D4
 
 	vpaddq		$T0,$D0,$D0		# d0 += h4*s1
 	vpmuludq	$H2,$T2,$T1		# h2*r1
 	vpmuludq	$H3,$T2,$T0		# h3*r1
 	vpaddq		$T1,$D3,$D3		# d3 += h2*r1
-	 vmovdqa	-0x60(%r11),$T3		# r2^4
+	 vmovdqa	-0xFF(%r11),$T3		# r2^4
 	vpaddq		$T0,$D4,$D4		# d4 += h3*r1
 	vpmuludq	$H1,$T2,$T1		# h1*r1
 	vpmuludq	$H0,$T2,$T2		# h0*r1
 	vpaddq		$T1,$D2,$D2		# d2 += h1*r1
 	vpaddq		$T2,$D1,$D1		# d1 += h0*r1
 
-	 vmovdqa	-0x50(%r11),$T4		# s2^4
+	 vmovdqa	-0xFF(%r11),$T4		# s2^4
 	vpmuludq	$H2,$T3,$T0		# h2*r2
 	vpmuludq	$H1,$T3,$T1		# h1*r2
 	vpaddq		$T0,$D4,$D4		# d4 += h2*r2
 	vpaddq		$T1,$D3,$D3		# d3 += h1*r2
-	 vmovdqa	-0x40(%r11),$T2		# r3^4
+	 vmovdqa	-0xFF(%r11),$T2		# r3^4
 	vpmuludq	$H0,$T3,$T3		# h0*r2
 	vpmuludq	$H4,$T4,$T0		# h4*s2
 	vpaddq		$T3,$D2,$D2		# d2 += h0*r2
 	vpaddq		$T0,$D1,$D1		# d1 += h4*s2
-	 vmovdqa	-0x30(%r11),$T3		# s3^4
+	 vmovdqa	-0xFF(%r11),$T3		# s3^4
 	vpmuludq	$H3,$T4,$T4		# h3*s2
 	 vpmuludq	$H1,$T2,$T1		# h1*r3
 	vpaddq		$T4,$D0,$D0		# d0 += h3*s2
 
-	 vmovdqa	-0x10(%r11),$T4		# s4^4
+	 vmovdqa	-0xFF(%r11),$T4		# s4^4
 	vpaddq		$T1,$D4,$D4		# d4 += h1*r3
 	vpmuludq	$H0,$T2,$T2		# h0*r3
 	vpmuludq	$H4,$T3,$T0		# h4*s3
@@ -1053,7 +1053,7 @@ $code.=<<___;
 	 vpsrldq	\$6,$T1,$T3				#
 	vpaddq		$H3,$D2,$H2		# h2 = d2 + h3*s4
 	vpaddq		$H4,$D3,$H3		# h3 = d3 + h4*s4
-	vpmuludq	-0x20(%r11),$H0,$H4	# h0*r4
+	vpmuludq	-0xFF(%r11),$H0,$H4	# h0*r4
 	vpmuludq	$H1,$T4,$H0
 	 vpunpckhqdq	$T1,$T0,$T4		# 4
 	vpaddq		$H4,$D4,$H4		# h4 = d4 + h0*r4
@@ -1065,7 +1065,7 @@ $code.=<<___;
 	#vpsrlq		\$40,$T4,$T4		# 4
 	vpsrldq		\$`40/8`,$T4,$T4	# 4
 	vpsrlq		\$26,$T0,$T1
-	 vmovdqa	0x00(%rsp),$D4		# preload r0^2
+	 vmovdqa	0xFF(%rsp),$D4		# preload r0^2
 	vpand		$MASK,$T0,$T0		# 0
 	vpsrlq		\$4,$T3,$T2
 	vpand		$MASK,$T1,$T1		# 1
@@ -1116,7 +1116,7 @@ $code.=<<___;
 	################################################################
 	# multiply (inp[0:1]+hash) or inp[2:3] by r^2:r^1
 
-	vpshufd		\$0x10,$D4,$D4		# r0^n, xx12 -> x1x2
+	vpshufd		\$0xFF,$D4,$D4		# r0^n, xx12 -> x1x2
 	add		\$32,$len
 	jnz		.Long_tail_avx
 
@@ -1127,11 +1127,11 @@ $code.=<<___;
 	vpaddq		$H4,$T4,$T4
 
 .Long_tail_avx:
-	vmovdqa		$H2,0x20(%r11)
-	vmovdqa		$H0,0x00(%r11)
-	vmovdqa		$H1,0x10(%r11)
-	vmovdqa		$H3,0x30(%r11)
-	vmovdqa		$H4,0x40(%r11)
+	vmovdqa		$H2,0xFF(%r11)
+	vmovdqa		$H0,0xFF(%r11)
+	vmovdqa		$H1,0xFF(%r11)
+	vmovdqa		$H3,0xFF(%r11)
+	vmovdqa		$H4,0xFF(%r11)
 
 	# d4 = h4*r0 + h3*r1   + h2*r2   + h1*r3   + h0*r4
 	# d3 = h3*r0 + h2*r1   + h1*r2   + h0*r3   + h4*5*r4
@@ -1141,17 +1141,17 @@ $code.=<<___;
 
 	vpmuludq	$T2,$D4,$D2		# d2 = h2*r0
 	vpmuludq	$T0,$D4,$D0		# d0 = h0*r0
-	 vpshufd	\$0x10,`16*1-64`($ctx),$H2		# r1^n
+	 vpshufd	\$0xFF,`16*1-64`($ctx),$H2		# r1^n
 	vpmuludq	$T1,$D4,$D1		# d1 = h1*r0
 	vpmuludq	$T3,$D4,$D3		# d3 = h3*r0
 	vpmuludq	$T4,$D4,$D4		# d4 = h4*r0
 
 	vpmuludq	$T3,$H2,$H0		# h3*r1
 	vpaddq		$H0,$D4,$D4		# d4 += h3*r1
-	 vpshufd	\$0x10,`16*2-64`($ctx),$H3		# s1^n
+	 vpshufd	\$0xFF,`16*2-64`($ctx),$H3		# s1^n
 	vpmuludq	$T2,$H2,$H1		# h2*r1
 	vpaddq		$H1,$D3,$D3		# d3 += h2*r1
-	 vpshufd	\$0x10,`16*3-64`($ctx),$H4		# r2^n
+	 vpshufd	\$0xFF,`16*3-64`($ctx),$H4		# r2^n
 	vpmuludq	$T1,$H2,$H0		# h1*r1
 	vpaddq		$H0,$D2,$D2		# d2 += h1*r1
 	vpmuludq	$T0,$H2,$H2		# h0*r1
@@ -1159,17 +1159,17 @@ $code.=<<___;
 	vpmuludq	$T4,$H3,$H3		# h4*s1
 	vpaddq		$H3,$D0,$D0		# d0 += h4*s1
 
-	 vpshufd	\$0x10,`16*4-64`($ctx),$H2		# s2^n
+	 vpshufd	\$0xFF,`16*4-64`($ctx),$H2		# s2^n
 	vpmuludq	$T2,$H4,$H1		# h2*r2
 	vpaddq		$H1,$D4,$D4		# d4 += h2*r2
 	vpmuludq	$T1,$H4,$H0		# h1*r2
 	vpaddq		$H0,$D3,$D3		# d3 += h1*r2
-	 vpshufd	\$0x10,`16*5-64`($ctx),$H3		# r3^n
+	 vpshufd	\$0xFF,`16*5-64`($ctx),$H3		# r3^n
 	vpmuludq	$T0,$H4,$H4		# h0*r2
 	vpaddq		$H4,$D2,$D2		# d2 += h0*r2
 	vpmuludq	$T4,$H2,$H1		# h4*s2
 	vpaddq		$H1,$D1,$D1		# d1 += h4*s2
-	 vpshufd	\$0x10,`16*6-64`($ctx),$H4		# s3^n
+	 vpshufd	\$0xFF,`16*6-64`($ctx),$H4		# s3^n
 	vpmuludq	$T3,$H2,$H2		# h3*s2
 	vpaddq		$H2,$D0,$D0		# d0 += h3*s2
 
@@ -1177,10 +1177,10 @@ $code.=<<___;
 	vpaddq		$H0,$D4,$D4		# d4 += h1*r3
 	vpmuludq	$T0,$H3,$H3		# h0*r3
 	vpaddq		$H3,$D3,$D3		# d3 += h0*r3
-	 vpshufd	\$0x10,`16*7-64`($ctx),$H2		# r4^n
+	 vpshufd	\$0xFF,`16*7-64`($ctx),$H2		# r4^n
 	vpmuludq	$T4,$H4,$H1		# h4*s3
 	vpaddq		$H1,$D2,$D2		# d2 += h4*s3
-	 vpshufd	\$0x10,`16*8-64`($ctx),$H3		# s4^n
+	 vpshufd	\$0xFF,`16*8-64`($ctx),$H3		# s4^n
 	vpmuludq	$T3,$H4,$H0		# h3*s3
 	vpaddq		$H0,$D1,$D1		# d1 += h3*s3
 	vpmuludq	$T2,$H4,$H4		# h2*s3
@@ -1218,12 +1218,12 @@ $code.=<<___;
 	vpand		$MASK,$H3,$H3		# 3
 	vpor		32(%rcx),$H4,$H4	# padbit, yes, always
 
-	vpshufd		\$0x32,`16*0-64`($ctx),$T4	# r0^n, 34xx -> x3x4
-	vpaddq		0x00(%r11),$H0,$H0
-	vpaddq		0x10(%r11),$H1,$H1
-	vpaddq		0x20(%r11),$H2,$H2
-	vpaddq		0x30(%r11),$H3,$H3
-	vpaddq		0x40(%r11),$H4,$H4
+	vpshufd		\$0xFF,`16*0-64`($ctx),$T4	# r0^n, 34xx -> x3x4
+	vpaddq		0xFF(%r11),$H0,$H0
+	vpaddq		0xFF(%r11),$H1,$H1
+	vpaddq		0xFF(%r11),$H2,$H2
+	vpaddq		0xFF(%r11),$H3,$H3
+	vpaddq		0xFF(%r11),$H4,$H4
 
 	################################################################
 	# multiply (inp[0:1]+hash) by r^4:r^3 and accumulate
@@ -1234,7 +1234,7 @@ $code.=<<___;
 	vpaddq		$T1,$D1,$D1		# d1 += h1*r0
 	vpmuludq	$H2,$T4,$T0		# h2*r0
 	vpaddq		$T0,$D2,$D2		# d2 += h2*r0
-	 vpshufd	\$0x32,`16*1-64`($ctx),$T2		# r1^n
+	 vpshufd	\$0xFF,`16*1-64`($ctx),$T2		# r1^n
 	vpmuludq	$H3,$T4,$T1		# h3*r0
 	vpaddq		$T1,$D3,$D3		# d3 += h3*r0
 	vpmuludq	$H4,$T4,$T4		# h4*r0
@@ -1242,10 +1242,10 @@ $code.=<<___;
 
 	vpmuludq	$H3,$T2,$T0		# h3*r1
 	vpaddq		$T0,$D4,$D4		# d4 += h3*r1
-	 vpshufd	\$0x32,`16*2-64`($ctx),$T3		# s1
+	 vpshufd	\$0xFF,`16*2-64`($ctx),$T3		# s1
 	vpmuludq	$H2,$T2,$T1		# h2*r1
 	vpaddq		$T1,$D3,$D3		# d3 += h2*r1
-	 vpshufd	\$0x32,`16*3-64`($ctx),$T4		# r2
+	 vpshufd	\$0xFF,`16*3-64`($ctx),$T4		# r2
 	vpmuludq	$H1,$T2,$T0		# h1*r1
 	vpaddq		$T0,$D2,$D2		# d2 += h1*r1
 	vpmuludq	$H0,$T2,$T2		# h0*r1
@@ -1253,17 +1253,17 @@ $code.=<<___;
 	vpmuludq	$H4,$T3,$T3		# h4*s1
 	vpaddq		$T3,$D0,$D0		# d0 += h4*s1
 
-	 vpshufd	\$0x32,`16*4-64`($ctx),$T2		# s2
+	 vpshufd	\$0xFF,`16*4-64`($ctx),$T2		# s2
 	vpmuludq	$H2,$T4,$T1		# h2*r2
 	vpaddq		$T1,$D4,$D4		# d4 += h2*r2
 	vpmuludq	$H1,$T4,$T0		# h1*r2
 	vpaddq		$T0,$D3,$D3		# d3 += h1*r2
-	 vpshufd	\$0x32,`16*5-64`($ctx),$T3		# r3
+	 vpshufd	\$0xFF,`16*5-64`($ctx),$T3		# r3
 	vpmuludq	$H0,$T4,$T4		# h0*r2
 	vpaddq		$T4,$D2,$D2		# d2 += h0*r2
 	vpmuludq	$H4,$T2,$T1		# h4*s2
 	vpaddq		$T1,$D1,$D1		# d1 += h4*s2
-	 vpshufd	\$0x32,`16*6-64`($ctx),$T4		# s3
+	 vpshufd	\$0xFF,`16*6-64`($ctx),$T4		# s3
 	vpmuludq	$H3,$T2,$T2		# h3*s2
 	vpaddq		$T2,$D0,$D0		# d0 += h3*s2
 
@@ -1271,10 +1271,10 @@ $code.=<<___;
 	vpaddq		$T0,$D4,$D4		# d4 += h1*r3
 	vpmuludq	$H0,$T3,$T3		# h0*r3
 	vpaddq		$T3,$D3,$D3		# d3 += h0*r3
-	 vpshufd	\$0x32,`16*7-64`($ctx),$T2		# r4
+	 vpshufd	\$0xFF,`16*7-64`($ctx),$T2		# r4
 	vpmuludq	$H4,$T4,$T1		# h4*s3
 	vpaddq		$T1,$D2,$D2		# d2 += h4*s3
-	 vpshufd	\$0x32,`16*8-64`($ctx),$T3		# s4
+	 vpshufd	\$0xFF,`16*8-64`($ctx),$T3		# s4
 	vpmuludq	$H3,$T4,$T0		# h3*s3
 	vpaddq		$T0,$D1,$D1		# d1 += h3*s3
 	vpmuludq	$H2,$T4,$T4		# h2*s3
@@ -1347,21 +1347,21 @@ $code.=<<___;
 	vmovd		$D4,`4*4-48-64`($ctx)
 ___
 $code.=<<___	if ($win64);
-	vmovdqa		0x50(%r11),%xmm6
-	vmovdqa		0x60(%r11),%xmm7
-	vmovdqa		0x70(%r11),%xmm8
-	vmovdqa		0x80(%r11),%xmm9
-	vmovdqa		0x90(%r11),%xmm10
-	vmovdqa		0xa0(%r11),%xmm11
-	vmovdqa		0xb0(%r11),%xmm12
-	vmovdqa		0xc0(%r11),%xmm13
-	vmovdqa		0xd0(%r11),%xmm14
-	vmovdqa		0xe0(%r11),%xmm15
-	lea		0xf8(%r11),%rsp
+	vmovdqa		0xFF(%r11),%xmm6
+	vmovdqa		0xFF(%r11),%xmm7
+	vmovdqa		0xFF(%r11),%xmm8
+	vmovdqa		0xFF(%r11),%xmm9
+	vmovdqa		0xFF(%r11),%xmm10
+	vmovdqa		0xFF(%r11),%xmm11
+	vmovdqa		0xFF(%r11),%xmm12
+	vmovdqa		0xFF(%r11),%xmm13
+	vmovdqa		0xFF(%r11),%xmm14
+	vmovdqa		0xFF(%r11),%xmm15
+	lea		0xFF(%r11),%rsp
 .Ldo_avx_epilogue:
 ___
 $code.=<<___	if (!$win64);
-	lea		0x58(%r11),%rsp
+	lea		0xFF(%r11),%rsp
 .cfi_def_cfa		%rsp,8
 ___
 $code.=<<___;
@@ -1536,15 +1536,15 @@ poly1305_blocks_avx2:
 	mov	$h1,$r0
 	mov	$h1,$r1
 	shr	\$26,%rdx
-	and	\$0x3ffffff,%rax	# h[0]
+	and	\$0xFF,%rax	# h[0]
 	shl	\$12,$r0
-	and	\$0x3ffffff,%rdx	# h[1]
+	and	\$0xFF,%rdx	# h[1]
 	shr	\$14,$h1
 	or	$r0,$h0
 	shl	\$24,$h2
-	and	\$0x3ffffff,$h0		# h[2]
+	and	\$0xFF,$h0		# h[2]
 	shr	\$40,$r1
-	and	\$0x3ffffff,$h1		# h[3]
+	and	\$0xFF,$h1		# h[3]
 	or	$r1,$h2			# h[4]
 
 	test	%r15,%r15
@@ -1647,15 +1647,15 @@ poly1305_blocks_avx2:
 	mov	$h1,$d1
 	mov	$h1,$d2
 	shr	\$26,%rdx
-	and	\$0x3ffffff,%rax	# h[0]
+	and	\$0xFF,%rax	# h[0]
 	shl	\$12,$d1
-	and	\$0x3ffffff,%rdx	# h[1]
+	and	\$0xFF,%rdx	# h[1]
 	shr	\$14,$h1
 	or	$d1,$h0
 	shl	\$24,$h2
-	and	\$0x3ffffff,$h0		# h[2]
+	and	\$0xFF,$h0		# h[2]
 	shr	\$40,$d2
-	and	\$0x3ffffff,$h1		# h[3]
+	and	\$0xFF,$h1		# h[3]
 	or	$d2,$h2			# h[4]
 
 	vmovd	%rax#d,%x#$H0
@@ -1714,21 +1714,21 @@ ___
 $code.=<<___	if (!$win64);
 	lea		-8(%rsp),%r11
 .cfi_def_cfa		%r11,16
-	sub		\$0x128,%rsp
+	sub		\$0xFF,%rsp
 ___
 $code.=<<___	if ($win64);
-	lea		-0xf8(%rsp),%r11
-	sub		\$0x1c8,%rsp
-	vmovdqa		%xmm6,0x50(%r11)
-	vmovdqa		%xmm7,0x60(%r11)
-	vmovdqa		%xmm8,0x70(%r11)
-	vmovdqa		%xmm9,0x80(%r11)
-	vmovdqa		%xmm10,0x90(%r11)
-	vmovdqa		%xmm11,0xa0(%r11)
-	vmovdqa		%xmm12,0xb0(%r11)
-	vmovdqa		%xmm13,0xc0(%r11)
-	vmovdqa		%xmm14,0xd0(%r11)
-	vmovdqa		%xmm15,0xe0(%r11)
+	lea		-0xFF(%rsp),%r11
+	sub		\$0xFF,%rsp
+	vmovdqa		%xmm6,0xFF(%r11)
+	vmovdqa		%xmm7,0xFF(%r11)
+	vmovdqa		%xmm8,0xFF(%r11)
+	vmovdqa		%xmm9,0xFF(%r11)
+	vmovdqa		%xmm10,0xFF(%r11)
+	vmovdqa		%xmm11,0xFF(%r11)
+	vmovdqa		%xmm12,0xFF(%r11)
+	vmovdqa		%xmm13,0xFF(%r11)
+	vmovdqa		%xmm14,0xFF(%r11)
+	vmovdqa		%xmm15,0xFF(%r11)
 .Ldo_avx2_body:
 ___
 $code.=<<___;
@@ -1744,28 +1744,28 @@ $code.=<<___;
 	vmovdqu		`16*3-64`($ctx),%x#$D0
 	vmovdqu		`16*4-64`($ctx),%x#$D1
 	vmovdqu		`16*5-64`($ctx),%x#$D2
-	lea		0x90(%rsp),%rax		# size optimization
+	lea		0xFF(%rsp),%rax		# size optimization
 	vmovdqu		`16*6-64`($ctx),%x#$D3
 	vpermd		$T2,$T0,$T2		# 00003412 -> 14243444
 	vmovdqu		`16*7-64`($ctx),%x#$D4
 	vpermd		$T3,$T0,$T3
 	vmovdqu		`16*8-64`($ctx),%x#$MASK
 	vpermd		$T4,$T0,$T4
-	vmovdqa		$T2,0x00(%rsp)
+	vmovdqa		$T2,0xFF(%rsp)
 	vpermd		$D0,$T0,$D0
-	vmovdqa		$T3,0x20-0x90(%rax)
+	vmovdqa		$T3,0xFF-0xFF(%rax)
 	vpermd		$D1,$T0,$D1
-	vmovdqa		$T4,0x40-0x90(%rax)
+	vmovdqa		$T4,0xFF-0xFF(%rax)
 	vpermd		$D2,$T0,$D2
-	vmovdqa		$D0,0x60-0x90(%rax)
+	vmovdqa		$D0,0xFF-0xFF(%rax)
 	vpermd		$D3,$T0,$D3
-	vmovdqa		$D1,0x80-0x90(%rax)
+	vmovdqa		$D1,0xFF-0xFF(%rax)
 	vpermd		$D4,$T0,$D4
-	vmovdqa		$D2,0xa0-0x90(%rax)
+	vmovdqa		$D2,0xFF-0xFF(%rax)
 	vpermd		$MASK,$T0,$MASK
-	vmovdqa		$D3,0xc0-0x90(%rax)
-	vmovdqa		$D4,0xe0-0x90(%rax)
-	vmovdqa		$MASK,0x100-0x90(%rax)
+	vmovdqa		$D3,0xFF-0xFF(%rax)
+	vmovdqa		$D4,0xFF-0xFF(%rax)
+	vmovdqa		$MASK,0xFF-0xFF(%rax)
 	vmovdqa		64(%rcx),$MASK		# .Lmask26
 
 	################################################################
@@ -1814,8 +1814,8 @@ $code.=<<___;
 	vpaddq		$H3,$T3,$H3
 	vmovdqa		`32*3`(%rsp),$T2	# r2^4
 	vpaddq		$H4,$T4,$H4
-	vmovdqa		`32*6-0x90`(%rax),$T3	# s3^4
-	vmovdqa		`32*8-0x90`(%rax),$S4	# s4^4
+	vmovdqa		`32*6-0xFF`(%rax),$T3	# s3^4
+	vmovdqa		`32*8-0xFF`(%rax),$S4	# s4^4
 
 	# d4 = h4*r0 + h3*r1   + h2*r2   + h1*r3   + h0*r4
 	# d3 = h3*r0 + h2*r1   + h1*r2   + h0*r3   + h4*5*r4
@@ -1846,7 +1846,7 @@ $code.=<<___;
 	vpmuludq	`32*2`(%rsp),$H4,$H2	# h4*s1
 	vpaddq		$T4,$D4,$D4		# d4 += h3*r1
 	vpaddq		$H2,$D0,$D0		# d0 += h4*s1
-	 vmovdqa	`32*4-0x90`(%rax),$T1	# s2
+	 vmovdqa	`32*4-0xFF`(%rax),$T1	# s2
 
 	vpmuludq	$H0,$T0,$T4		# h0*r0
 	vpmuludq	$H1,$T0,$H2		# h1*r0
@@ -1864,7 +1864,7 @@ $code.=<<___;
 	 vmovdqu	16*1($inp),%x#$T1
 	vpaddq		$T4,$D0,$D0		# d0 += h3*s2
 	vpaddq		$H2,$D1,$D1		# d1 += h4*s2
-	 vmovdqa	`32*5-0x90`(%rax),$H2	# r3
+	 vmovdqa	`32*5-0xFF`(%rax),$H2	# r3
 	vpmuludq	$H1,$T2,$T4		# h1*r2
 	vpmuludq	$H0,$T2,$T2		# h0*r2
 	vpaddq		$T4,$D3,$D3		# d3 += h1*r2
@@ -1890,7 +1890,7 @@ $code.=<<___;
 	vpaddq		$H3,$D2,$H2		# h2 = d2 + h3*r4
 	vpaddq		$H4,$D3,$H3		# h3 = d3 + h4*r4
 	 vpunpcklqdq	$T3,$T2,$T3		# 2:3
-	vpmuludq	`32*7-0x90`(%rax),$H0,$H4	# h0*r4
+	vpmuludq	`32*7-0xFF`(%rax),$H0,$H4	# h0*r4
 	vpmuludq	$H1,$S4,$H0		# h1*s4
 	vmovdqa		64(%rcx),$MASK		# .Lmask26
 	vpaddq		$H4,$D4,$H4		# h4 = d4 + h0*r4
@@ -1948,7 +1948,7 @@ $code.=<<___;
 	sub		\$64,$len
 	jnz		.Loop_avx2
 
-	.byte		0x66,0x90
+	.byte		0xFF,0xFF
 .Ltail_avx2:
 	################################################################
 	# while above multiplications were by r^4 in all lanes, in last
@@ -1964,8 +1964,8 @@ $code.=<<___;
 	vpaddq		$H3,$T3,$H3
 	vmovdqu		`32*3+4`(%rsp),$T2	# r2^4
 	vpaddq		$H4,$T4,$H4
-	vmovdqu		`32*6+4-0x90`(%rax),$T3	# s3^4
-	vmovdqu		`32*8+4-0x90`(%rax),$S4	# s4^4
+	vmovdqu		`32*6+4-0xFF`(%rax),$T3	# s3^4
+	vmovdqu		`32*8+4-0xFF`(%rax),$S4	# s4^4
 
 	vpmuludq	$H2,$T0,$D2		# d2 = h2*r0
 	vpmuludq	$H2,$T1,$D3		# d3 = h2*r1
@@ -1985,7 +1985,7 @@ $code.=<<___;
 	vpmuludq	$H0,$T0,$T4		# h0*r0
 	vpmuludq	$H1,$T0,$H2		# h1*r0
 	vpaddq		$T4,$D0,$D0		# d0 += h0*r0
-	 vmovdqu	`32*4+4-0x90`(%rax),$T1	# s2
+	 vmovdqu	`32*4+4-0xFF`(%rax),$T1	# s2
 	vpaddq		$H2,$D1,$D1		# d1 += h1*r0
 	vpmuludq	$H3,$T0,$T4		# h3*r0
 	vpmuludq	$H4,$T0,$H2		# h4*r0
@@ -1996,7 +1996,7 @@ $code.=<<___;
 	vpmuludq	$H4,$T1,$H2		# h4*s2
 	vpaddq		$T4,$D0,$D0		# d0 += h3*s2
 	vpaddq		$H2,$D1,$D1		# d1 += h4*s2
-	 vmovdqu	`32*5+4-0x90`(%rax),$H2	# r3
+	 vmovdqu	`32*5+4-0xFF`(%rax),$H2	# r3
 	vpmuludq	$H1,$T2,$T4		# h1*r2
 	vpmuludq	$H0,$T2,$T2		# h0*r2
 	vpaddq		$T4,$D3,$D3		# d3 += h1*r2
@@ -2015,7 +2015,7 @@ $code.=<<___;
 	vpmuludq	$H4,$S4,$H4		# h4*s4
 	vpaddq		$H3,$D2,$H2		# h2 = d2 + h3*r4
 	vpaddq		$H4,$D3,$H3		# h3 = d3 + h4*r4
-	vpmuludq	`32*7+4-0x90`(%rax),$H0,$H4		# h0*r4
+	vpmuludq	`32*7+4-0xFF`(%rax),$H0,$H4		# h0*r4
 	vpmuludq	$H1,$S4,$H0		# h1*s4
 	vmovdqa		64(%rcx),$MASK		# .Lmask26
 	vpaddq		$H4,$D4,$H4		# h4 = d4 + h0*r4
@@ -2035,11 +2035,11 @@ $code.=<<___;
 	vpaddq		$T4,$H4,$H4
 	vpaddq		$T0,$H0,$H0
 
-	vpermq		\$0x2,$H3,$T3
-	vpermq		\$0x2,$H4,$T4
-	vpermq		\$0x2,$H0,$T0
-	vpermq		\$0x2,$D1,$T1
-	vpermq		\$0x2,$H2,$T2
+	vpermq		\$0xFF,$H3,$T3
+	vpermq		\$0xFF,$H4,$T4
+	vpermq		\$0xFF,$H0,$T0
+	vpermq		\$0xFF,$D1,$T1
+	vpermq		\$0xFF,$H2,$T2
 	vpaddq		$T3,$H3,$H3
 	vpaddq		$T4,$H4,$H4
 	vpaddq		$T0,$H0,$H0
@@ -2087,17 +2087,17 @@ $code.=<<___;
 	vmovd		%x#$H4,`4*4-48-64`($ctx)
 ___
 $code.=<<___	if ($win64);
-	vmovdqa		0x50(%r11),%xmm6
-	vmovdqa		0x60(%r11),%xmm7
-	vmovdqa		0x70(%r11),%xmm8
-	vmovdqa		0x80(%r11),%xmm9
-	vmovdqa		0x90(%r11),%xmm10
-	vmovdqa		0xa0(%r11),%xmm11
-	vmovdqa		0xb0(%r11),%xmm12
-	vmovdqa		0xc0(%r11),%xmm13
-	vmovdqa		0xd0(%r11),%xmm14
-	vmovdqa		0xe0(%r11),%xmm15
-	lea		0xf8(%r11),%rsp
+	vmovdqa		0xFF(%r11),%xmm6
+	vmovdqa		0xFF(%r11),%xmm7
+	vmovdqa		0xFF(%r11),%xmm8
+	vmovdqa		0xFF(%r11),%xmm9
+	vmovdqa		0xFF(%r11),%xmm10
+	vmovdqa		0xFF(%r11),%xmm11
+	vmovdqa		0xFF(%r11),%xmm12
+	vmovdqa		0xFF(%r11),%xmm13
+	vmovdqa		0xFF(%r11),%xmm14
+	vmovdqa		0xFF(%r11),%xmm15
+	lea		0xFF(%r11),%rsp
 .Ldo_avx2_epilogue:
 ___
 $code.=<<___	if (!$win64);
@@ -2139,21 +2139,21 @@ ___
 $code.=<<___	if (!$win64);
 	lea		-8(%rsp),%r11
 .cfi_def_cfa		%r11,16
-	sub		\$0x128,%rsp
+	sub		\$0xFF,%rsp
 ___
 $code.=<<___	if ($win64);
-	lea		-0xf8(%rsp),%r11
-	sub		\$0x1c8,%rsp
-	vmovdqa		%xmm6,0x50(%r11)
-	vmovdqa		%xmm7,0x60(%r11)
-	vmovdqa		%xmm8,0x70(%r11)
-	vmovdqa		%xmm9,0x80(%r11)
-	vmovdqa		%xmm10,0x90(%r11)
-	vmovdqa		%xmm11,0xa0(%r11)
-	vmovdqa		%xmm12,0xb0(%r11)
-	vmovdqa		%xmm13,0xc0(%r11)
-	vmovdqa		%xmm14,0xd0(%r11)
-	vmovdqa		%xmm15,0xe0(%r11)
+	lea		-0xFF(%rsp),%r11
+	sub		\$0xFF,%rsp
+	vmovdqa		%xmm6,0xFF(%r11)
+	vmovdqa		%xmm7,0xFF(%r11)
+	vmovdqa		%xmm8,0xFF(%r11)
+	vmovdqa		%xmm9,0xFF(%r11)
+	vmovdqa		%xmm10,0xFF(%r11)
+	vmovdqa		%xmm11,0xFF(%r11)
+	vmovdqa		%xmm12,0xFF(%r11)
+	vmovdqa		%xmm13,0xFF(%r11)
+	vmovdqa		%xmm14,0xFF(%r11)
+	vmovdqa		%xmm15,0xFF(%r11)
 .Ldo_avx512_body:
 ___
 $code.=<<___;
@@ -2165,7 +2165,7 @@ $code.=<<___;
 	vmovdqu		`16*0-64`($ctx),%x#$D0	# will become expanded ${R0}
 	and		\$-512,%rsp
 	vmovdqu		`16*1-64`($ctx),%x#$D1	# will become ... ${R1}
-	mov		\$0x20,%rax
+	mov		\$0xFF,%rax
 	vmovdqu		`16*2-64`($ctx),%x#$T0	# ... ${S1}
 	vmovdqu		`16*3-64`($ctx),%x#$D2	# ... ${R2}
 	vmovdqu		`16*4-64`($ctx),%x#$T1	# ... ${S2}
@@ -2178,22 +2178,22 @@ $code.=<<___;
 	vpermd		$D1,$T2,$R1
 	vpermd		$T0,$T2,$S1
 	vpermd		$D2,$T2,$R2
-	vmovdqa64	$R0,0x00(%rsp){%k2}	# save in case $len%128 != 0
+	vmovdqa64	$R0,0xFF(%rsp){%k2}	# save in case $len%128 != 0
 	 vpsrlq		\$32,$R0,$T0		# 14243444 -> 01020304
 	vpermd		$T1,$T2,$S2
-	vmovdqu64	$R1,0x00(%rsp,%rax){%k2}
+	vmovdqu64	$R1,0xFF(%rsp,%rax){%k2}
 	 vpsrlq		\$32,$R1,$T1
 	vpermd		$D3,$T2,$R3
-	vmovdqa64	$S1,0x40(%rsp){%k2}
+	vmovdqa64	$S1,0xFF(%rsp){%k2}
 	vpermd		$T3,$T2,$S3
 	vpermd		$D4,$T2,$R4
-	vmovdqu64	$R2,0x40(%rsp,%rax){%k2}
+	vmovdqu64	$R2,0xFF(%rsp,%rax){%k2}
 	vpermd		$T4,$T2,$S4
-	vmovdqa64	$S2,0x80(%rsp){%k2}
-	vmovdqu64	$R3,0x80(%rsp,%rax){%k2}
-	vmovdqa64	$S3,0xc0(%rsp){%k2}
-	vmovdqu64	$R4,0xc0(%rsp,%rax){%k2}
-	vmovdqa64	$S4,0x100(%rsp){%k2}
+	vmovdqa64	$S2,0xFF(%rsp){%k2}
+	vmovdqu64	$R3,0xFF(%rsp,%rax){%k2}
+	vmovdqa64	$S3,0xFF(%rsp){%k2}
+	vmovdqu64	$R4,0xFF(%rsp,%rax){%k2}
+	vmovdqa64	$S4,0xFF(%rsp){%k2}
 
 	################################################################
 	# calculate 5th through 8th powers of the key
@@ -2310,7 +2310,7 @@ $code.=<<___;
 	# 1858286838784888 ...
 
 	vmovdqa32	128(%rcx),$M0		# .Lpermd_avx512:
-	mov		\$0x7777,%eax
+	mov		\$0xFF,%eax
 	kmovw		%eax,%k1
 
 	vpermd		$R0,$M0,$R0		# 14243444 -> 1---2---3---4---
@@ -2591,11 +2591,11 @@ $code.=<<___;
 	# horizontal addition
 
 	mov		\$1,%eax
-	vpermq		\$0xb1,$H3,$D3
-	vpermq		\$0xb1,$D4,$H4
-	vpermq		\$0xb1,$H0,$D0
-	vpermq		\$0xb1,$H1,$D1
-	vpermq		\$0xb1,$H2,$D2
+	vpermq		\$0xFF,$H3,$D3
+	vpermq		\$0xFF,$D4,$H4
+	vpermq		\$0xFF,$H0,$D0
+	vpermq		\$0xFF,$H1,$D1
+	vpermq		\$0xFF,$H2,$D2
 	vpaddq		$D3,$H3,$H3
 	vpaddq		$D4,$H4,$H4
 	vpaddq		$D0,$H0,$H0
@@ -2603,22 +2603,22 @@ $code.=<<___;
 	vpaddq		$D2,$H2,$H2
 
 	kmovw		%eax,%k3
-	vpermq		\$0x2,$H3,$D3
-	vpermq		\$0x2,$H4,$D4
-	vpermq		\$0x2,$H0,$D0
-	vpermq		\$0x2,$H1,$D1
-	vpermq		\$0x2,$H2,$D2
+	vpermq		\$0xFF,$H3,$D3
+	vpermq		\$0xFF,$H4,$D4
+	vpermq		\$0xFF,$H0,$D0
+	vpermq		\$0xFF,$H1,$D1
+	vpermq		\$0xFF,$H2,$D2
 	vpaddq		$D3,$H3,$H3
 	vpaddq		$D4,$H4,$H4
 	vpaddq		$D0,$H0,$H0
 	vpaddq		$D1,$H1,$H1
 	vpaddq		$D2,$H2,$H2
 
-	vextracti64x4	\$0x1,$H3,%y#$D3
-	vextracti64x4	\$0x1,$H4,%y#$D4
-	vextracti64x4	\$0x1,$H0,%y#$D0
-	vextracti64x4	\$0x1,$H1,%y#$D1
-	vextracti64x4	\$0x1,$H2,%y#$D2
+	vextracti64x4	\$0xFF,$H3,%y#$D3
+	vextracti64x4	\$0xFF,$H4,%y#$D4
+	vextracti64x4	\$0xFF,$H0,%y#$D0
+	vextracti64x4	\$0xFF,$H1,%y#$D1
+	vextracti64x4	\$0xFF,$H2,%y#$D2
 	vpaddq		$D3,$H3,${H3}{%k3}{z}	# keep single qword in case
 	vpaddq		$D4,$H4,${H4}{%k3}{z}	# it's passed to .Ltail_avx2
 	vpaddq		$D0,$H0,${H0}{%k3}{z}
@@ -2677,7 +2677,7 @@ $code.=<<___;
 	 vpor		32(%rcx),$T4,$T4	# padbit, yes, always
 	vpaddq		$D3,$H4,$H4		# h3 -> h4
 
-	lea		0x90(%rsp),%rax		# size optimization for .Ltail_avx2
+	lea		0xFF(%rsp),%rax		# size optimization for .Ltail_avx2
 	add		\$64,$len
 	jnz		.Ltail_avx2
 
@@ -2690,17 +2690,17 @@ $code.=<<___;
 	vzeroall
 ___
 $code.=<<___	if ($win64);
-	movdqa		0x50(%r11),%xmm6
-	movdqa		0x60(%r11),%xmm7
-	movdqa		0x70(%r11),%xmm8
-	movdqa		0x80(%r11),%xmm9
-	movdqa		0x90(%r11),%xmm10
-	movdqa		0xa0(%r11),%xmm11
-	movdqa		0xb0(%r11),%xmm12
-	movdqa		0xc0(%r11),%xmm13
-	movdqa		0xd0(%r11),%xmm14
-	movdqa		0xe0(%r11),%xmm15
-	lea		0xf8(%r11),%rsp
+	movdqa		0xFF(%r11),%xmm6
+	movdqa		0xFF(%r11),%xmm7
+	movdqa		0xFF(%r11),%xmm8
+	movdqa		0xFF(%r11),%xmm9
+	movdqa		0xFF(%r11),%xmm10
+	movdqa		0xFF(%r11),%xmm11
+	movdqa		0xFF(%r11),%xmm12
+	movdqa		0xFF(%r11),%xmm13
+	movdqa		0xFF(%r11),%xmm14
+	movdqa		0xFF(%r11),%xmm15
+	lea		0xFF(%r11),%rsp
 .Ldo_avx512_epilogue:
 ___
 $code.=<<___	if (!$win64);
@@ -2750,12 +2750,12 @@ poly1305_init_base2_44:
 	lea	poly1305_blocks_vpmadd52(%rip),%r10
 	lea	poly1305_emit_base2_44(%rip),%r11
 
-	mov	\$0x0ffffffc0fffffff,%rax
-	mov	\$0x0ffffffc0ffffffc,%rcx
+	mov	\$0xFF,%rax
+	mov	\$0xFF,%rcx
 	and	0($inp),%rax
-	mov	\$0x00000fffffffffff,%r8
+	mov	\$0xFF,%r8
 	and	8($inp),%rcx
-	mov	\$0x00000fffffffffff,%r9
+	mov	\$0xFF,%r9
 	and	%rax,%r8
 	shrd	\$44,%rcx,%rax
 	mov	%r8,40($ctx)		# r0
@@ -2824,7 +2824,7 @@ poly1305_blocks_vpmadd52:
 	vmovq		$padbit,%x#$PAD
 	vmovdqa64	0(%r10),$inp_permd	# .L2_44_inp_permd
 	vmovdqa64	32(%r10),$inp_shift	# .L2_44_inp_shift
-	vpermq		\$0xcf,$PAD,$PAD
+	vpermq		\$0xFF,$PAD,$PAD
 	vmovdqa64	64(%r10),$reduc_mask	# .L2_44_mask
 
 	vmovdqu64	0($ctx),${Dlo}{%k7}{z}		# load hash value
@@ -3282,17 +3282,17 @@ poly1305_blocks_vpmadd52_4x:
 	vpsrldq		\$8,$D2hi,$H2
 	vpaddq		$T1,$D1lo,$D1lo
 	vpaddq		$H1,$D1hi,$D1hi
-	 vpermq		\$0x2,$D0lo,$T0
-	 vpermq		\$0x2,$D0hi,$H0
+	 vpermq		\$0xFF,$D0lo,$T0
+	 vpermq		\$0xFF,$D0hi,$H0
 	vpaddq		$T2,$D2lo,$D2lo
 	vpaddq		$H2,$D2hi,$D2hi
 
-	vpermq		\$0x2,$D1lo,$T1
-	vpermq		\$0x2,$D1hi,$H1
+	vpermq		\$0xFF,$D1lo,$T1
+	vpermq		\$0xFF,$D1hi,$H1
 	vpaddq		$T0,$D0lo,${D0lo}{%k1}{z}
 	vpaddq		$H0,$D0hi,${D0hi}{%k1}{z}
-	vpermq		\$0x2,$D2lo,$T2
-	vpermq		\$0x2,$D2hi,$H2
+	vpermq		\$0xFF,$D2lo,$T2
+	vpermq		\$0xFF,$D2hi,$H2
 	vpaddq		$T1,$D1lo,${D1lo}{%k1}{z}
 	vpaddq		$H1,$D1hi,${D1hi}{%k1}{z}
 	vpaddq		$T2,$D2lo,${D2lo}{%k1}{z}
@@ -3467,9 +3467,9 @@ map(s/%y/%z/, $T0,$T1,$T2,$T3,$mask44,$mask42,$tmp,$PAD);
 map(s/%y/%z/, $RR0,$RR1,$RR2,$SS1,$SS2);
 
 $code.=<<___;
-	vshufi64x2	\$0x44,$R2,$T2,$RR2	# 15263748
-	vshufi64x2	\$0x44,$R0,$T0,$RR0
-	vshufi64x2	\$0x44,$R1,$T1,$RR1
+	vshufi64x2	\$0xFF,$R2,$T2,$RR2	# 15263748
+	vshufi64x2	\$0xFF,$R0,$T0,$RR0
+	vshufi64x2	\$0xFF,$R1,$T1,$RR1
 
 	vmovdqu64	16*0($inp),$T2		# load data
 	vmovdqu64	16*4($inp),$T3
@@ -3637,17 +3637,17 @@ $code.=<<___;
 	vpsrldq		\$8,$D2hi,$H2
 	vpaddq		$T1,$D1lo,$D1lo
 	vpaddq		$H1,$D1hi,$D1hi
-	 vpermq		\$0x2,$D0lo,$T0
-	 vpermq		\$0x2,$D0hi,$H0
+	 vpermq		\$0xFF,$D0lo,$T0
+	 vpermq		\$0xFF,$D0hi,$H0
 	vpaddq		$T2,$D2lo,$D2lo
 	vpaddq		$H2,$D2hi,$D2hi
 
-	vpermq		\$0x2,$D1lo,$T1
-	vpermq		\$0x2,$D1hi,$H1
+	vpermq		\$0xFF,$D1lo,$T1
+	vpermq		\$0xFF,$D1hi,$H1
 	vpaddq		$T0,$D0lo,$D0lo
 	vpaddq		$H0,$D0hi,$D0hi
-	vpermq		\$0x2,$D2lo,$T2
-	vpermq		\$0x2,$D2hi,$H2
+	vpermq		\$0xFF,$D2lo,$T2
+	vpermq		\$0xFF,$D2hi,$H2
 	vpaddq		$T1,$D1lo,$D1lo
 	vpaddq		$H1,$D1hi,$D1hi
 	 vextracti64x4	\$1,$D0lo,%y#$T0
@@ -3757,11 +3757,11 @@ $code.=<<___;
 .align	64
 .Lconst:
 .Lmask24:
-.long	0x0ffffff,0,0x0ffffff,0,0x0ffffff,0,0x0ffffff,0
+.long	0xFF,0,0xFF,0,0xFF,0,0xFF,0
 .L129:
 .long	`1<<24`,0,`1<<24`,0,`1<<24`,0,`1<<24`,0
 .Lmask26:
-.long	0x3ffffff,0,0x3ffffff,0,0x3ffffff,0,0x3ffffff,0
+.long	0xFF,0,0xFF,0,0xFF,0,0xFF,0
 .Lpermd_avx2:
 .long	2,2,2,3,2,0,2,1
 .Lpermd_avx512:
@@ -3772,7 +3772,7 @@ $code.=<<___;
 .L2_44_inp_shift:
 .quad	0,12,24,64
 .L2_44_mask:
-.quad	0xfffffffffff,0xfffffffffff,0x3ffffffffff,0xffffffffffffffff
+.quad	0xFF,0xFF,0xFF,0xFF
 .L2_44_shift_rgt:
 .quad	44,44,42,64
 .L2_44_shift_lft:
@@ -3780,11 +3780,11 @@ $code.=<<___;
 
 .align	64
 .Lx_mask44:
-.quad	0xfffffffffff,0xfffffffffff,0xfffffffffff,0xfffffffffff
-.quad	0xfffffffffff,0xfffffffffff,0xfffffffffff,0xfffffffffff
+.quad	0xFF,0xFF,0xFF,0xFF
+.quad	0xFF,0xFF,0xFF,0xFF
 .Lx_mask42:
-.quad	0x3ffffffffff,0x3ffffffffff,0x3ffffffffff,0x3ffffffffff
-.quad	0x3ffffffffff,0x3ffffffffff,0x3ffffffffff,0x3ffffffffff
+.quad	0xFF,0xFF,0xFF,0xFF
+.quad	0xFF,0xFF,0xFF,0xFF
 ___
 }
 $code.=<<___;
@@ -3990,11 +3990,11 @@ avx_handler:
 
 	mov	208($context),%rax	# pull context->R11
 
-	lea	0x50(%rax),%rsi
-	lea	0xf8(%rax),%rax
+	lea	0xFF(%rax),%rsi
+	lea	0xFF(%rax),%rax
 	lea	512($context),%rdi	# &context.Xmm6
 	mov	\$20,%ecx
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 .Lcommon_seh_tail:
 	mov	8(%rax),%rdi
@@ -4006,7 +4006,7 @@ avx_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER

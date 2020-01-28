@@ -212,7 +212,7 @@ tls_version_max(void)
 #if defined(TLS1_3_VERSION)
     /* If this is defined we can safely assume TLS 1.3 support */
     return TLS_VER_1_3;
-#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+#elif OPENSSL_VERSION_NUMBER >= 0xFFL
     /*
      * The library we are *linked* against is OpenSSL 1.1.1
      * and therefore supports TLS 1.3. This needs to be checked at runtime
@@ -221,7 +221,7 @@ tls_version_max(void)
      * We only need need to this check for OpenSSL versions that can be
      * upgraded to 1.1.1 without recompile (>= 1.1.0)
      */
-    if (OpenSSL_version_num() >= 0x1010100fL)
+    if (OpenSSL_version_num() >= 0xFFL)
     {
         return TLS_VER_1_3;
     }
@@ -263,7 +263,7 @@ openssl_tls_version(int ver)
          * will change this constant
          */
 #ifndef TLS1_3_VERSION
-        return 0x0304;
+        return 0xFF;
 #else
         return TLS1_3_VERSION;
 #endif
@@ -489,7 +489,7 @@ tls_ctx_restrict_ciphers_tls13(struct tls_root_ctx *ctx, const char *ciphers)
         return;
     }
 
-#if (OPENSSL_VERSION_NUMBER < 0x1010100fL)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
     crypto_msg(M_WARN, "Not compiled with OpenSSL 1.1.1 or higher. "
                "Ignoring TLS 1.3 only tls-ciphersuites '%s' setting.",
                ciphers);
@@ -1220,7 +1220,7 @@ err:
     return 0;
 }
 
-#if OPENSSL_VERSION_NUMBER > 0x10100000L && !defined(OPENSSL_NO_EC) && !defined(LIBRESSL_VERSION_NUMBER)
+#if OPENSSL_VERSION_NUMBER > 0xFFL && !defined(OPENSSL_NO_EC) && !defined(LIBRESSL_VERSION_NUMBER)
 
 /* called when EC_KEY is destroyed */
 static void
@@ -1373,7 +1373,7 @@ tls_ctx_use_management_external_key(struct tls_root_ctx *ctx)
             goto cleanup;
         }
     }
-#if OPENSSL_VERSION_NUMBER > 0x10100000L && !defined(OPENSSL_NO_EC) && !defined(LIBRESSL_VERSION_NUMBER)
+#if OPENSSL_VERSION_NUMBER > 0xFFL && !defined(OPENSSL_NO_EC) && !defined(LIBRESSL_VERSION_NUMBER)
     else if (EVP_PKEY_id(pkey) == EVP_PKEY_EC)
     {
         if (!tls_ctx_use_external_ec_key(ctx, pkey))
@@ -1386,7 +1386,7 @@ tls_ctx_use_management_external_key(struct tls_root_ctx *ctx)
         crypto_msg(M_WARN, "management-external-key requires an RSA or EC certificate");
         goto cleanup;
     }
-#else  /* if OPENSSL_VERSION_NUMBER > 0x10100000L && !defined(OPENSSL_NO_EC) && !defined(LIBRESSL_VERSION_NUMBER) */
+#else  /* if OPENSSL_VERSION_NUMBER > 0xFFL && !defined(OPENSSL_NO_EC) && !defined(LIBRESSL_VERSION_NUMBER) */
     else
     {
         crypto_msg(M_WARN, "management-external-key requires an RSA certificate");
@@ -2023,7 +2023,7 @@ show_available_tls_ciphers_list(const char *cipher_list,
         crypto_msg(M_FATAL, "Cannot create SSL object");
     }
 
-#if (OPENSSL_VERSION_NUMBER < 0x1010000fL)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
     STACK_OF(SSL_CIPHER) *sk = SSL_get_ciphers(ssl);
 #else
     STACK_OF(SSL_CIPHER) *sk = SSL_get1_supported_ciphers(ssl);
@@ -2052,7 +2052,7 @@ show_available_tls_ciphers_list(const char *cipher_list,
             printf("%s\n", pair->iana_name);
         }
     }
-#if (OPENSSL_VERSION_NUMBER >= 0x1010000fL)
+#if (OPENSSL_VERSION_NUMBER >= 0xFFL)
     sk_SSL_CIPHER_free(sk);
 #endif
     SSL_free(ssl);

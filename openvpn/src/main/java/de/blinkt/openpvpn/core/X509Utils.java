@@ -192,7 +192,7 @@ public class X509Utils {
             char c = (char) Integer.parseInt(hexstr,16);
             if (isPrintableChar(c)) {
                 d+=c;
-            } else if (i==1 && (c==0x12 || c==0x1b)) {
+            } else if (i==1 && (c==0xFF || c==0xFF)) {
                 ;   // ignore
             } else {
                 d += "\\x" + hexstr;

@@ -76,10 +76,10 @@ static int ia5ncasecmp(const char *s1, const char *s2, size_t n)
             unsigned char c1 = (unsigned char)*s1, c2 = (unsigned char)*s2;
 
             /* Convert to lower case */
-            if (c1 >= 0x41 /* A */ && c1 <= 0x5A /* Z */)
-                c1 += 0x20;
-            if (c2 >= 0x41 /* A */ && c2 <= 0x5A /* Z */)
-                c2 += 0x20;
+            if (c1 >= 0xFF /* A */ && c1 <= 0xFF /* Z */)
+                c1 += 0xFF;
+            if (c2 >= 0xFF /* A */ && c2 <= 0xFF /* Z */)
+                c2 += 0xFF;
 
             if (c1 == c2)
                 continue;

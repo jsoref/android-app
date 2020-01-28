@@ -120,7 +120,7 @@ _vpaes_encrypt_core:
 	pxor	%xmm5,	%xmm4	# 4 = sb1u + k
 	movdqa  %xmm15,	%xmm5	# 4 : sb2u
 	pxor	%xmm4,	%xmm0	# 0 = A
-	movdqa	-0x40(%r11,%r10), %xmm1		# .Lk_mc_forward[]
+	movdqa	-0xFF(%r11,%r10), %xmm1		# .Lk_mc_forward[]
 	pshufb	%xmm2,	%xmm5	# 4 = sb2u
 	movdqa	(%r11,%r10), %xmm4		# .Lk_mc_backward[]
 	movdqa	%xmm14, %xmm2	# 2 : sb2t
@@ -134,7 +134,7 @@ _vpaes_encrypt_core:
 	add	\$16,	%r11	# next mc
 	pxor	%xmm0,	%xmm3	# 3 = 2A+B+D
 	pshufb  %xmm1,	%xmm0	# 0 = 2B+C
-	and	\$0x30,	%r11	# ... mod 4
+	and	\$0xFF,	%r11	# ... mod 4
 	sub	\$1,%rax	# nr--
 	pxor	%xmm3,	%xmm0	# 0 = 2A+3B+C+D
 
@@ -163,12 +163,12 @@ _vpaes_encrypt_core:
 	jnz	.Lenc_loop
 
 	# middle of last round
-	movdqa	-0x60(%r10), %xmm4	# 3 : sbou	.Lk_sbo
-	movdqa	-0x50(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
+	movdqa	-0xFF(%r10), %xmm4	# 3 : sbou	.Lk_sbo
+	movdqa	-0xFF(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
 	pshufb  %xmm2,  %xmm4	# 4 = sbou
 	pxor	%xmm5,  %xmm4	# 4 = sb1u + k
 	pshufb  %xmm3,	%xmm0	# 0 = sb1t
-	movdqa	0x40(%r11,%r10), %xmm1		# .Lk_sr[]
+	movdqa	0xFF(%r11,%r10), %xmm1		# .Lk_sr[]
 	pxor	%xmm4,	%xmm0	# 0 = A
 	pshufb	%xmm1,	%xmm0
 	ret
@@ -196,10 +196,10 @@ _vpaes_decrypt_core:
 	pand	%xmm9,	%xmm0
 	pshufb	%xmm0,	%xmm2
 	movdqa	.Lk_dipt+16(%rip), %xmm0 # ipthi
-	xor	\$0x30,	%r11
+	xor	\$0xFF,	%r11
 	lea	.Lk_dsbd(%rip),%r10
 	pshufb	%xmm1,	%xmm0
-	and	\$0x30,	%r11
+	and	\$0xFF,	%r11
 	pxor	%xmm5,	%xmm2
 	movdqa	.Lk_mc_forward+48(%rip), %xmm5
 	pxor	%xmm2,	%xmm0
@@ -212,30 +212,30 @@ _vpaes_decrypt_core:
 ##
 ##  Inverse mix columns
 ##
-	movdqa  -0x20(%r10),%xmm4	# 4 : sb9u
-	movdqa  -0x10(%r10),%xmm1	# 0 : sb9t
+	movdqa  -0xFF(%r10),%xmm4	# 4 : sb9u
+	movdqa  -0xFF(%r10),%xmm1	# 0 : sb9t
 	pshufb	%xmm2,	%xmm4		# 4 = sb9u
 	pshufb	%xmm3,	%xmm1		# 0 = sb9t
 	pxor	%xmm4,	%xmm0
-	movdqa  0x00(%r10),%xmm4	# 4 : sbdu
+	movdqa  0xFF(%r10),%xmm4	# 4 : sbdu
 	pxor	%xmm1,	%xmm0		# 0 = ch
-	movdqa  0x10(%r10),%xmm1	# 0 : sbdt
+	movdqa  0xFF(%r10),%xmm1	# 0 : sbdt
 
 	pshufb	%xmm2,	%xmm4		# 4 = sbdu
 	pshufb	%xmm5,	%xmm0		# MC ch
 	pshufb	%xmm3,	%xmm1		# 0 = sbdt
 	pxor	%xmm4,	%xmm0		# 4 = ch
-	movdqa  0x20(%r10),%xmm4	# 4 : sbbu
+	movdqa  0xFF(%r10),%xmm4	# 4 : sbbu
 	pxor	%xmm1,	%xmm0		# 0 = ch
-	movdqa  0x30(%r10),%xmm1	# 0 : sbbt
+	movdqa  0xFF(%r10),%xmm1	# 0 : sbbt
 
 	pshufb	%xmm2,	%xmm4		# 4 = sbbu
 	pshufb	%xmm5,	%xmm0		# MC ch
 	pshufb	%xmm3,	%xmm1		# 0 = sbbt
 	pxor	%xmm4,	%xmm0		# 4 = ch
-	movdqa  0x40(%r10),%xmm4	# 4 : sbeu
+	movdqa  0xFF(%r10),%xmm4	# 4 : sbeu
 	pxor	%xmm1,	%xmm0		# 0 = ch
-	movdqa  0x50(%r10),%xmm1	# 0 : sbet
+	movdqa  0xFF(%r10),%xmm1	# 0 : sbet
 
 	pshufb	%xmm2,	%xmm4		# 4 = sbeu
 	pshufb	%xmm5,	%xmm0		# MC ch
@@ -271,11 +271,11 @@ _vpaes_decrypt_core:
 	jnz	.Ldec_loop
 
 	# middle of last round
-	movdqa	0x60(%r10), %xmm4	# 3 : sbou
+	movdqa	0xFF(%r10), %xmm4	# 3 : sbou
 	pshufb  %xmm2,  %xmm4	# 4 = sbou
 	pxor	%xmm0,  %xmm4	# 4 = sb1u + k
-	movdqa	0x70(%r10), %xmm0	# 0 : sbot
-	movdqa	-0x160(%r11), %xmm2	# .Lk_sr-.Lk_dsbd=-0x160
+	movdqa	0xFF(%r10), %xmm0	# 0 : sbot
+	movdqa	-0xFF(%r11), %xmm2	# .Lk_sr-.Lk_dsbd=-0xFF
 	pshufb  %xmm3,	%xmm0	# 0 = sb1t
 	pxor	%xmm4,	%xmm0	# 0 = A
 	pshufb	%xmm2,	%xmm0
@@ -320,7 +320,7 @@ _vpaes_schedule_core:
 	movdqa	(%r8,%r10),%xmm1
 	pshufb  %xmm1,	%xmm3
 	movdqu	%xmm3,	(%rdx)
-	xor	\$0x30, %r8
+	xor	\$0xFF, %r8
 
 .Lschedule_go:
 	cmp	\$192,	%esi
@@ -479,8 +479,8 @@ _vpaes_schedule_core:
 .align	16
 _vpaes_schedule_192_smear:
 .cfi_startproc
-	pshufd	\$0x80,	%xmm6,	%xmm1	# d c 0 0 -> c 0 0 0
-	pshufd	\$0xFE,	%xmm7,	%xmm0	# b a _ _ -> b b b a
+	pshufd	\$0xFF,	%xmm6,	%xmm1	# d c 0 0 -> c 0 0 0
+	pshufd	\$0xFF,	%xmm7,	%xmm0	# b a _ _ -> b b b a
 	pxor	%xmm1,	%xmm6		# -> c+d c 0 0
 	pxor	%xmm1,	%xmm1
 	pxor	%xmm0,	%xmm6		# -> b+c+d b+c b a
@@ -573,7 +573,7 @@ _vpaes_schedule_low_round:
 ##
 ##  Linear-transform %xmm0 according to tables at (%r11)
 ##
-##  Requires that %xmm9 = 0x0F0F... as in preheat
+##  Requires that %xmm9 = 0xFF... as in preheat
 ##  Output in %xmm0
 ##  Clobbers %xmm1, %xmm2
 ##
@@ -601,12 +601,12 @@ _vpaes_schedule_transform:
 ##  to our version.
 ##
 ##  On encrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by circulant 0,1,1,1
 ##    apply shiftrows transform
 ##
 ##  On decrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by "inverse mixcolumns" circulant E,B,D,9
 ##    deskew
 ##    apply shiftrows transform
@@ -646,33 +646,33 @@ _vpaes_schedule_mangle:
 	psrld	\$4,	%xmm1	# 1 = hi
 	pand	%xmm9,	%xmm4	# 4 = lo
 
-	movdqa	0x00(%r11), %xmm2
+	movdqa	0xFF(%r11), %xmm2
 	pshufb	%xmm4,	%xmm2
-	movdqa	0x10(%r11), %xmm3
+	movdqa	0xFF(%r11), %xmm3
 	pshufb	%xmm1,	%xmm3
 	pxor	%xmm2,	%xmm3
 	pshufb	%xmm5,	%xmm3
 
-	movdqa	0x20(%r11), %xmm2
+	movdqa	0xFF(%r11), %xmm2
 	pshufb	%xmm4,	%xmm2
 	pxor	%xmm3,	%xmm2
-	movdqa	0x30(%r11), %xmm3
+	movdqa	0xFF(%r11), %xmm3
 	pshufb	%xmm1,	%xmm3
 	pxor	%xmm2,	%xmm3
 	pshufb	%xmm5,	%xmm3
 
-	movdqa	0x40(%r11), %xmm2
+	movdqa	0xFF(%r11), %xmm2
 	pshufb	%xmm4,	%xmm2
 	pxor	%xmm3,	%xmm2
-	movdqa	0x50(%r11), %xmm3
+	movdqa	0xFF(%r11), %xmm3
 	pshufb	%xmm1,	%xmm3
 	pxor	%xmm2,	%xmm3
 	pshufb	%xmm5,	%xmm3
 
-	movdqa	0x60(%r11), %xmm2
+	movdqa	0xFF(%r11), %xmm2
 	pshufb	%xmm4,	%xmm2
 	pxor	%xmm3,	%xmm2
-	movdqa	0x70(%r11), %xmm3
+	movdqa	0xFF(%r11), %xmm3
 	pshufb	%xmm1,	%xmm3
 	pxor	%xmm2,	%xmm3
 
@@ -682,7 +682,7 @@ _vpaes_schedule_mangle:
 	movdqa	(%r8,%r10),%xmm1
 	pshufb	%xmm1,%xmm3
 	add	\$-16,	%r8
-	and	\$0x30,	%r8
+	and	\$0xFF,	%r8
 	movdqu	%xmm3,	(%rdx)
 	ret
 .cfi_endproc
@@ -698,17 +698,17 @@ ${PREFIX}_set_encrypt_key:
 .cfi_startproc
 ___
 $code.=<<___ if ($win64);
-	lea	-0xb8(%rsp),%rsp
-	movaps	%xmm6,0x10(%rsp)
-	movaps	%xmm7,0x20(%rsp)
-	movaps	%xmm8,0x30(%rsp)
-	movaps	%xmm9,0x40(%rsp)
-	movaps	%xmm10,0x50(%rsp)
-	movaps	%xmm11,0x60(%rsp)
-	movaps	%xmm12,0x70(%rsp)
-	movaps	%xmm13,0x80(%rsp)
-	movaps	%xmm14,0x90(%rsp)
-	movaps	%xmm15,0xa0(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Lenc_key_body:
 ___
 $code.=<<___;
@@ -718,21 +718,21 @@ $code.=<<___;
 	mov	%eax,240(%rdx)	# AES_KEY->rounds = nbits/32+5;
 
 	mov	\$0,%ecx
-	mov	\$0x30,%r8d
+	mov	\$0xFF,%r8d
 	call	_vpaes_schedule_core
 ___
 $code.=<<___ if ($win64);
-	movaps	0x10(%rsp),%xmm6
-	movaps	0x20(%rsp),%xmm7
-	movaps	0x30(%rsp),%xmm8
-	movaps	0x40(%rsp),%xmm9
-	movaps	0x50(%rsp),%xmm10
-	movaps	0x60(%rsp),%xmm11
-	movaps	0x70(%rsp),%xmm12
-	movaps	0x80(%rsp),%xmm13
-	movaps	0x90(%rsp),%xmm14
-	movaps	0xa0(%rsp),%xmm15
-	lea	0xb8(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm6
+	movaps	0xFF(%rsp),%xmm7
+	movaps	0xFF(%rsp),%xmm8
+	movaps	0xFF(%rsp),%xmm9
+	movaps	0xFF(%rsp),%xmm10
+	movaps	0xFF(%rsp),%xmm11
+	movaps	0xFF(%rsp),%xmm12
+	movaps	0xFF(%rsp),%xmm13
+	movaps	0xFF(%rsp),%xmm14
+	movaps	0xFF(%rsp),%xmm15
+	lea	0xFF(%rsp),%rsp
 .Lenc_key_epilogue:
 ___
 $code.=<<___;
@@ -748,17 +748,17 @@ ${PREFIX}_set_decrypt_key:
 .cfi_startproc
 ___
 $code.=<<___ if ($win64);
-	lea	-0xb8(%rsp),%rsp
-	movaps	%xmm6,0x10(%rsp)
-	movaps	%xmm7,0x20(%rsp)
-	movaps	%xmm8,0x30(%rsp)
-	movaps	%xmm9,0x40(%rsp)
-	movaps	%xmm10,0x50(%rsp)
-	movaps	%xmm11,0x60(%rsp)
-	movaps	%xmm12,0x70(%rsp)
-	movaps	%xmm13,0x80(%rsp)
-	movaps	%xmm14,0x90(%rsp)
-	movaps	%xmm15,0xa0(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Ldec_key_body:
 ___
 $code.=<<___;
@@ -777,17 +777,17 @@ $code.=<<___;
 	call	_vpaes_schedule_core
 ___
 $code.=<<___ if ($win64);
-	movaps	0x10(%rsp),%xmm6
-	movaps	0x20(%rsp),%xmm7
-	movaps	0x30(%rsp),%xmm8
-	movaps	0x40(%rsp),%xmm9
-	movaps	0x50(%rsp),%xmm10
-	movaps	0x60(%rsp),%xmm11
-	movaps	0x70(%rsp),%xmm12
-	movaps	0x80(%rsp),%xmm13
-	movaps	0x90(%rsp),%xmm14
-	movaps	0xa0(%rsp),%xmm15
-	lea	0xb8(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm6
+	movaps	0xFF(%rsp),%xmm7
+	movaps	0xFF(%rsp),%xmm8
+	movaps	0xFF(%rsp),%xmm9
+	movaps	0xFF(%rsp),%xmm10
+	movaps	0xFF(%rsp),%xmm11
+	movaps	0xFF(%rsp),%xmm12
+	movaps	0xFF(%rsp),%xmm13
+	movaps	0xFF(%rsp),%xmm14
+	movaps	0xFF(%rsp),%xmm15
+	lea	0xFF(%rsp),%rsp
 .Ldec_key_epilogue:
 ___
 $code.=<<___;
@@ -803,17 +803,17 @@ ${PREFIX}_encrypt:
 .cfi_startproc
 ___
 $code.=<<___ if ($win64);
-	lea	-0xb8(%rsp),%rsp
-	movaps	%xmm6,0x10(%rsp)
-	movaps	%xmm7,0x20(%rsp)
-	movaps	%xmm8,0x30(%rsp)
-	movaps	%xmm9,0x40(%rsp)
-	movaps	%xmm10,0x50(%rsp)
-	movaps	%xmm11,0x60(%rsp)
-	movaps	%xmm12,0x70(%rsp)
-	movaps	%xmm13,0x80(%rsp)
-	movaps	%xmm14,0x90(%rsp)
-	movaps	%xmm15,0xa0(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Lenc_body:
 ___
 $code.=<<___;
@@ -823,17 +823,17 @@ $code.=<<___;
 	movdqu	%xmm0,(%rsi)
 ___
 $code.=<<___ if ($win64);
-	movaps	0x10(%rsp),%xmm6
-	movaps	0x20(%rsp),%xmm7
-	movaps	0x30(%rsp),%xmm8
-	movaps	0x40(%rsp),%xmm9
-	movaps	0x50(%rsp),%xmm10
-	movaps	0x60(%rsp),%xmm11
-	movaps	0x70(%rsp),%xmm12
-	movaps	0x80(%rsp),%xmm13
-	movaps	0x90(%rsp),%xmm14
-	movaps	0xa0(%rsp),%xmm15
-	lea	0xb8(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm6
+	movaps	0xFF(%rsp),%xmm7
+	movaps	0xFF(%rsp),%xmm8
+	movaps	0xFF(%rsp),%xmm9
+	movaps	0xFF(%rsp),%xmm10
+	movaps	0xFF(%rsp),%xmm11
+	movaps	0xFF(%rsp),%xmm12
+	movaps	0xFF(%rsp),%xmm13
+	movaps	0xFF(%rsp),%xmm14
+	movaps	0xFF(%rsp),%xmm15
+	lea	0xFF(%rsp),%rsp
 .Lenc_epilogue:
 ___
 $code.=<<___;
@@ -848,17 +848,17 @@ ${PREFIX}_decrypt:
 .cfi_startproc
 ___
 $code.=<<___ if ($win64);
-	lea	-0xb8(%rsp),%rsp
-	movaps	%xmm6,0x10(%rsp)
-	movaps	%xmm7,0x20(%rsp)
-	movaps	%xmm8,0x30(%rsp)
-	movaps	%xmm9,0x40(%rsp)
-	movaps	%xmm10,0x50(%rsp)
-	movaps	%xmm11,0x60(%rsp)
-	movaps	%xmm12,0x70(%rsp)
-	movaps	%xmm13,0x80(%rsp)
-	movaps	%xmm14,0x90(%rsp)
-	movaps	%xmm15,0xa0(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Ldec_body:
 ___
 $code.=<<___;
@@ -868,17 +868,17 @@ $code.=<<___;
 	movdqu	%xmm0,(%rsi)
 ___
 $code.=<<___ if ($win64);
-	movaps	0x10(%rsp),%xmm6
-	movaps	0x20(%rsp),%xmm7
-	movaps	0x30(%rsp),%xmm8
-	movaps	0x40(%rsp),%xmm9
-	movaps	0x50(%rsp),%xmm10
-	movaps	0x60(%rsp),%xmm11
-	movaps	0x70(%rsp),%xmm12
-	movaps	0x80(%rsp),%xmm13
-	movaps	0x90(%rsp),%xmm14
-	movaps	0xa0(%rsp),%xmm15
-	lea	0xb8(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm6
+	movaps	0xFF(%rsp),%xmm7
+	movaps	0xFF(%rsp),%xmm8
+	movaps	0xFF(%rsp),%xmm9
+	movaps	0xFF(%rsp),%xmm10
+	movaps	0xFF(%rsp),%xmm11
+	movaps	0xFF(%rsp),%xmm12
+	movaps	0xFF(%rsp),%xmm13
+	movaps	0xFF(%rsp),%xmm14
+	movaps	0xFF(%rsp),%xmm15
+	lea	0xFF(%rsp),%rsp
 .Ldec_epilogue:
 ___
 $code.=<<___;
@@ -905,17 +905,17 @@ $code.=<<___;
 	jc	.Lcbc_abort
 ___
 $code.=<<___ if ($win64);
-	lea	-0xb8(%rsp),%rsp
-	movaps	%xmm6,0x10(%rsp)
-	movaps	%xmm7,0x20(%rsp)
-	movaps	%xmm8,0x30(%rsp)
-	movaps	%xmm9,0x40(%rsp)
-	movaps	%xmm10,0x50(%rsp)
-	movaps	%xmm11,0x60(%rsp)
-	movaps	%xmm12,0x70(%rsp)
-	movaps	%xmm13,0x80(%rsp)
-	movaps	%xmm14,0x90(%rsp)
-	movaps	%xmm15,0xa0(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Lcbc_body:
 ___
 $code.=<<___;
@@ -951,17 +951,17 @@ $code.=<<___;
 	movdqu	%xmm6,($ivp)		# save IV
 ___
 $code.=<<___ if ($win64);
-	movaps	0x10(%rsp),%xmm6
-	movaps	0x20(%rsp),%xmm7
-	movaps	0x30(%rsp),%xmm8
-	movaps	0x40(%rsp),%xmm9
-	movaps	0x50(%rsp),%xmm10
-	movaps	0x60(%rsp),%xmm11
-	movaps	0x70(%rsp),%xmm12
-	movaps	0x80(%rsp),%xmm13
-	movaps	0x90(%rsp),%xmm14
-	movaps	0xa0(%rsp),%xmm15
-	lea	0xb8(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm6
+	movaps	0xFF(%rsp),%xmm7
+	movaps	0xFF(%rsp),%xmm8
+	movaps	0xFF(%rsp),%xmm9
+	movaps	0xFF(%rsp),%xmm10
+	movaps	0xFF(%rsp),%xmm11
+	movaps	0xFF(%rsp),%xmm12
+	movaps	0xFF(%rsp),%xmm13
+	movaps	0xFF(%rsp),%xmm14
+	movaps	0xFF(%rsp),%xmm15
+	lea	0xFF(%rsp),%rsp
 .Lcbc_epilogue:
 ___
 $code.=<<___;
@@ -983,13 +983,13 @@ $code.=<<___;
 _vpaes_preheat:
 .cfi_startproc
 	lea	.Lk_s0F(%rip), %r10
-	movdqa	-0x20(%r10), %xmm10	# .Lk_inv
-	movdqa	-0x10(%r10), %xmm11	# .Lk_inv+16
-	movdqa	0x00(%r10), %xmm9	# .Lk_s0F
-	movdqa	0x30(%r10), %xmm13	# .Lk_sb1
-	movdqa	0x40(%r10), %xmm12	# .Lk_sb1+16
-	movdqa	0x50(%r10), %xmm15	# .Lk_sb2
-	movdqa	0x60(%r10), %xmm14	# .Lk_sb2+16
+	movdqa	-0xFF(%r10), %xmm10	# .Lk_inv
+	movdqa	-0xFF(%r10), %xmm11	# .Lk_inv+16
+	movdqa	0xFF(%r10), %xmm9	# .Lk_s0F
+	movdqa	0xFF(%r10), %xmm13	# .Lk_sb1
+	movdqa	0xFF(%r10), %xmm12	# .Lk_sb1+16
+	movdqa	0xFF(%r10), %xmm15	# .Lk_sb2
+	movdqa	0xFF(%r10), %xmm14	# .Lk_sb2+16
 	ret
 .cfi_endproc
 .size	_vpaes_preheat,.-_vpaes_preheat
@@ -1002,98 +1002,98 @@ _vpaes_preheat:
 .align	64
 _vpaes_consts:
 .Lk_inv:	# inv, inva
-	.quad	0x0E05060F0D080180, 0x040703090A0B0C02
-	.quad	0x01040A060F0B0780, 0x030D0E0C02050809
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_s0F:	# s0F
-	.quad	0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F
+	.quad	0xFF, 0xFF
 
 .Lk_ipt:	# input transform (lo, hi)
-	.quad	0xC2B2E8985A2A7000, 0xCABAE09052227808
-	.quad	0x4C01307D317C4D00, 0xCD80B1FCB0FDCC81
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_sb1:	# sb1u, sb1t
-	.quad	0xB19BE18FCB503E00, 0xA5DF7A6E142AF544
-	.quad	0x3618D415FAE22300, 0x3BF7CCC10D2ED9EF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_sb2:	# sb2u, sb2t
-	.quad	0xE27A93C60B712400, 0x5EB7E955BC982FCD
-	.quad	0x69EB88400AE12900, 0xC2A163C8AB82234A
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_sbo:	# sbou, sbot
-	.quad	0xD0D26D176FBDC700, 0x15AABF7AC502A878
-	.quad	0xCFE474A55FBB6A00, 0x8E1E90D1412B35FA
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_mc_forward:	# mc_forward
-	.quad	0x0407060500030201, 0x0C0F0E0D080B0A09
-	.quad	0x080B0A0904070605, 0x000302010C0F0E0D
-	.quad	0x0C0F0E0D080B0A09, 0x0407060500030201
-	.quad	0x000302010C0F0E0D, 0x080B0A0904070605
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_mc_backward:# mc_backward
-	.quad	0x0605040702010003, 0x0E0D0C0F0A09080B
-	.quad	0x020100030E0D0C0F, 0x0A09080B06050407
-	.quad	0x0E0D0C0F0A09080B, 0x0605040702010003
-	.quad	0x0A09080B06050407, 0x020100030E0D0C0F
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_sr:		# sr
-	.quad	0x0706050403020100, 0x0F0E0D0C0B0A0908
-	.quad	0x030E09040F0A0500, 0x0B06010C07020D08
-	.quad	0x0F060D040B020900, 0x070E050C030A0108
-	.quad	0x0B0E0104070A0D00, 0x0306090C0F020508
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_rcon:	# rcon
-	.quad	0x1F8391B9AF9DEEB6, 0x702A98084D7C7D81
+	.quad	0xFF, 0xFF
 
-.Lk_s63:	# s63: all equal to 0x63 transformed
-	.quad	0x5B5B5B5B5B5B5B5B, 0x5B5B5B5B5B5B5B5B
+.Lk_s63:	# s63: all equal to 0xFF transformed
+	.quad	0xFF, 0xFF
 
 .Lk_opt:	# output transform
-	.quad	0xFF9F4929D6B66000, 0xF7974121DEBE6808
-	.quad	0x01EDBD5150BCEC00, 0xE10D5DB1B05C0CE0
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_deskew:	# deskew tables: inverts the sbox's "skew"
-	.quad	0x07E4A34047A4E300, 0x1DFEB95A5DBEF91A
-	.quad	0x5F36B5DC83EA6900, 0x2841C2ABF49D1E77
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 ##
 ##  Decryption stuff
 ##  Key schedule constants
 ##
 .Lk_dksd:	# decryption key schedule: invskew x*D
-	.quad	0xFEB91A5DA3E44700, 0x0740E3A45A1DBEF9
-	.quad	0x41C277F4B5368300, 0x5FDC69EAAB289D1E
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_dksb:	# decryption key schedule: invskew x*B
-	.quad	0x9A4FCA1F8550D500, 0x03D653861CC94C99
-	.quad	0x115BEDA7B6FC4A00, 0xD993256F7E3482C8
-.Lk_dkse:	# decryption key schedule: invskew x*E + 0x63
-	.quad	0xD5031CCA1FC9D600, 0x53859A4C994F5086
-	.quad	0xA23196054FDC7BE8, 0xCD5EF96A20B31487
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
+.Lk_dkse:	# decryption key schedule: invskew x*E + 0xFF
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_dks9:	# decryption key schedule: invskew x*9
-	.quad	0xB6116FC87ED9A700, 0x4AED933482255BFC
-	.quad	0x4576516227143300, 0x8BB89FACE9DAFDCE
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 ##
 ##  Decryption stuff
 ##  Round function constants
 ##
 .Lk_dipt:	# decryption input transform
-	.quad	0x0F505B040B545F00, 0x154A411E114E451A
-	.quad	0x86E383E660056500, 0x12771772F491F194
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 
 .Lk_dsb9:	# decryption sbox output *9*u, *9*t
-	.quad	0x851C03539A86D600, 0xCAD51F504F994CC9
-	.quad	0xC03B1789ECD74900, 0x725E2C9EB2FBA565
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_dsbd:	# decryption sbox output *D*u, *D*t
-	.quad	0x7D57CCDFE6B1A200, 0xF56E9B13882A4439
-	.quad	0x3CE2FAF724C6CB00, 0x2931180D15DEEFD3
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_dsbb:	# decryption sbox output *B*u, *B*t
-	.quad	0xD022649296B44200, 0x602646F6B0F2D404
-	.quad	0xC19498A6CD596700, 0xF3FF0C3E3255AA6B
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_dsbe:	# decryption sbox output *E*u, *E*t
-	.quad	0x46F2929626D4D000, 0x2242600464B4F6B0
-	.quad	0x0C55A6CDFFAAC100, 0x9467F36B98593E32
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .Lk_dsbo:	# decryption sbox final output
-	.quad	0x1387EA537EF94000, 0xC7AA6DB9D4943E2D
-	.quad	0x12D7560F93441D00, 0xCA4B8159D8C58E9C
+	.quad	0xFF, 0xFF
+	.quad	0xFF, 0xFF
 .asciz	"Vector Permutation AES for x86_64/SSSE3, Mike Hamburg (Stanford University)"
 .align	64
 .size	_vpaes_consts,.-_vpaes_consts
@@ -1144,8 +1144,8 @@ se_handler:
 	lea	16(%rax),%rsi		# %xmm save area
 	lea	512($context),%rdi	# &context.Xmm6
 	mov	\$20,%ecx		# 10*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
-	lea	0xb8(%rax),%rax		# adjust stack pointer
+	.long	0xFF		# cld; rep movsq
+	lea	0xFF(%rax),%rax		# adjust stack pointer
 
 .Lin_prologue:
 	mov	8(%rax),%rdi
@@ -1157,7 +1157,7 @@ se_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$`1232/8`,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER

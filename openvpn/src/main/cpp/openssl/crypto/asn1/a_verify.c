@@ -42,7 +42,7 @@ int ASN1_verify(i2d_of_void *i2d, X509_ALGOR *a, ASN1_BIT_STRING *signature,
         goto err;
     }
 
-    if (signature->type == V_ASN1_BIT_STRING && signature->flags & 0x7) {
+    if (signature->type == V_ASN1_BIT_STRING && signature->flags & 0xFF) {
         ASN1err(ASN1_F_ASN1_VERIFY, ASN1_R_INVALID_BIT_STRING_BITS_LEFT);
         goto err;
     }
@@ -99,7 +99,7 @@ int ASN1_item_verify(const ASN1_ITEM *it, X509_ALGOR *a,
         return -1;
     }
 
-    if (signature->type == V_ASN1_BIT_STRING && signature->flags & 0x7) {
+    if (signature->type == V_ASN1_BIT_STRING && signature->flags & 0xFF) {
         ASN1err(ASN1_F_ASN1_ITEM_VERIFY, ASN1_R_INVALID_BIT_STRING_BITS_LEFT);
         return -1;
     }

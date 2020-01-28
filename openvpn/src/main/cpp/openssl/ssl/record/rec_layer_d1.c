@@ -855,7 +855,7 @@ int do_dtls1_write(SSL *s, int type, const unsigned char *buf,
 
     /* write the header */
 
-    *(p++) = type & 0xff;
+    *(p++) = type & 0xFF;
     SSL3_RECORD_set_type(&wr, type);
     /*
      * Special case: for hello verify request, client version 1.0 and we
@@ -865,10 +865,10 @@ int do_dtls1_write(SSL *s, int type, const unsigned char *buf,
     if (s->method->version == DTLS_ANY_VERSION &&
         s->max_proto_version != DTLS1_BAD_VER) {
         *(p++) = DTLS1_VERSION >> 8;
-        *(p++) = DTLS1_VERSION & 0xff;
+        *(p++) = DTLS1_VERSION & 0xFF;
     } else {
         *(p++) = s->version >> 8;
-        *(p++) = s->version & 0xff;
+        *(p++) = s->version & 0xFF;
     }
 
     /* field where we are to write out packet epoch, seq num and len */

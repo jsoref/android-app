@@ -93,7 +93,7 @@
 # error "HASH_BLOCK_DATA_ORDER must be defined!"
 #endif
 
-#define ROTATE(a,n)     (((a)<<(n))|(((a)&0xffffffff)>>(32-(n))))
+#define ROTATE(a,n)     (((a)<<(n))|(((a)&0xFF)>>(32-(n))))
 
 #if defined(DATA_ORDER_IS_BIG_ENDIAN)
 
@@ -101,10 +101,10 @@
                          l|=(((unsigned long)(*((c)++)))<<16),          \
                          l|=(((unsigned long)(*((c)++)))<< 8),          \
                          l|=(((unsigned long)(*((c)++)))    )           )
-# define HOST_l2c(l,c)  (*((c)++)=(unsigned char)(((l)>>24)&0xff),      \
-                         *((c)++)=(unsigned char)(((l)>>16)&0xff),      \
-                         *((c)++)=(unsigned char)(((l)>> 8)&0xff),      \
-                         *((c)++)=(unsigned char)(((l)    )&0xff),      \
+# define HOST_l2c(l,c)  (*((c)++)=(unsigned char)(((l)>>24)&0xFF),      \
+                         *((c)++)=(unsigned char)(((l)>>16)&0xFF),      \
+                         *((c)++)=(unsigned char)(((l)>> 8)&0xFF),      \
+                         *((c)++)=(unsigned char)(((l)    )&0xFF),      \
                          l)
 
 #elif defined(DATA_ORDER_IS_LITTLE_ENDIAN)
@@ -113,10 +113,10 @@
                          l|=(((unsigned long)(*((c)++)))<< 8),          \
                          l|=(((unsigned long)(*((c)++)))<<16),          \
                          l|=(((unsigned long)(*((c)++)))<<24)           )
-# define HOST_l2c(l,c)  (*((c)++)=(unsigned char)(((l)    )&0xff),      \
-                         *((c)++)=(unsigned char)(((l)>> 8)&0xff),      \
-                         *((c)++)=(unsigned char)(((l)>>16)&0xff),      \
-                         *((c)++)=(unsigned char)(((l)>>24)&0xff),      \
+# define HOST_l2c(l,c)  (*((c)++)=(unsigned char)(((l)    )&0xFF),      \
+                         *((c)++)=(unsigned char)(((l)>> 8)&0xFF),      \
+                         *((c)++)=(unsigned char)(((l)>>16)&0xFF),      \
+                         *((c)++)=(unsigned char)(((l)>>24)&0xFF),      \
                          l)
 
 #endif
@@ -135,7 +135,7 @@ int HASH_UPDATE(HASH_CTX *c, const void *data_, size_t len)
     if (len == 0)
         return 1;
 
-    l = (c->Nl + (((HASH_LONG) len) << 3)) & 0xffffffffUL;
+    l = (c->Nl + (((HASH_LONG) len) << 3)) & 0xFFUL;
     if (l < c->Nl)              /* overflow */
         c->Nh++;
     c->Nh += (HASH_LONG) (len >> 29); /* might cause compiler warning on
@@ -193,7 +193,7 @@ int HASH_FINAL(unsigned char *md, HASH_CTX *c)
     unsigned char *p = (unsigned char *)c->data;
     size_t n = c->num;
 
-    p[n] = 0x80;                /* there is always room for one */
+    p[n] = 0xFF;                /* there is always room for one */
     n++;
 
     if (n > (HASH_CBLOCK - 8)) {

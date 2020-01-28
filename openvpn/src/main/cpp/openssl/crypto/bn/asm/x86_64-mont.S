@@ -67,7 +67,7 @@ bn_mul_mont:
 .Lmul_page_walk_done:
 
 	movq	%rax,8(%rsp,%r9,8)
-.cfi_escape	0x0f,0x0a,0x77,0x08,0x79,0x00,0x38,0x1e,0x22,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lmul_body:
 	movq	%rdx,%r12
 	movq	(%r8),%r8
@@ -252,7 +252,7 @@ bn_mul_mont:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmul_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_mul_mont,.-bn_mul_mont
 .type	bn_mul4x_mont,@function
@@ -263,8 +263,8 @@ bn_mul4x_mont:
 	movq	%rsp,%rax
 .cfi_def_cfa_register	%rax
 .Lmul4x_enter:
-	andl	$0x80100,%r11d
-	cmpl	$0x80100,%r11d
+	andl	$0xFF,%r11d
+	cmpl	$0xFF,%r11d
 	je	.Lmulx4x_enter
 	pushq	%rbx
 .cfi_offset	%rbx,-16
@@ -301,7 +301,7 @@ bn_mul4x_mont:
 .Lmul4x_page_walk_done:
 
 	movq	%rax,8(%rsp,%r9,8)
-.cfi_escape	0x0f,0x0a,0x77,0x08,0x79,0x00,0x38,0x1e,0x22,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lmul4x_body:
 	movq	%rdi,16(%rsp,%r9,8)
 	movq	%rdx,%r12
@@ -686,7 +686,7 @@ bn_mul4x_mont:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmul4x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_mul4x_mont,.-bn_mul4x_mont
 
@@ -766,7 +766,7 @@ bn_sqr8x_mont:
 
 	movq	%r8,32(%rsp)
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lsqr8x_body:
 
 .byte	102,72,15,110,209
@@ -774,8 +774,8 @@ bn_sqr8x_mont:
 .byte	102,72,15,110,207
 .byte	102,73,15,110,218
 	movl	OPENSSL_ia32cap_P+8(%rip),%eax
-	andl	$0x80100,%eax
-	cmpl	$0x80100,%eax
+	andl	$0xFF,%eax
+	cmpl	$0xFF,%eax
 	jne	.Lsqr8x_nox
 
 	call	bn_sqrx8x_internal
@@ -876,7 +876,7 @@ bn_sqr8x_mont:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lsqr8x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_sqr8x_mont,.-bn_sqr8x_mont
 .type	bn_mulx4x_mont,@function
@@ -943,7 +943,7 @@ bn_mulx4x_mont:
 	movq	%r8,24(%rsp)
 	movq	%rdi,32(%rsp)
 	movq	%rax,40(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x28,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	movq	%r9,48(%rsp)
 	jmp	.Lmulx4x_body
 
@@ -978,7 +978,7 @@ bn_mulx4x_mont:
 	mulxq	8(%rcx),%rax,%r11
 	adcxq	%rax,%r10
 	adoxq	%r12,%r11
-.byte	0xc4,0x62,0xfb,0xf6,0xa1,0x10,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	movq	48(%rsp),%rdi
 	movq	%r10,-32(%rbx)
 	adcxq	%rax,%r11
@@ -1003,7 +1003,7 @@ bn_mulx4x_mont:
 	mulxq	16(%rsi),%r12,%rax
 	adcxq	%r14,%r12
 	mulxq	24(%rsi),%r13,%r14
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	movq	%r8,%rdx
 	adcxq	%rax,%r13
 	adcxq	%rbp,%r14
@@ -1232,7 +1232,7 @@ bn_mulx4x_mont:
 	leaq	(%rsi),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmulx4x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	bn_mulx4x_mont,.-bn_mulx4x_mont
 .byte	77,111,110,116,103,111,109,101,114,121,32,77,117,108,116,105,112,108,105,99,97,116,105,111,110,32,102,111,114,32,120,56,54,95,54,52,44,32,67,82,89,80,84,79,71,65,77,83,32,98,121,32,60,97,112,112,114,111,64,111,112,101,110,115,115,108,46,111,114,103,62,0

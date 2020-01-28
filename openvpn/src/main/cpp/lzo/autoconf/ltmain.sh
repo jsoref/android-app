@@ -4926,7 +4926,7 @@ func_cygming_dll_for_implib_fallback_core ()
     # all those that have a first or second character that is
     # a '.' (that is, objdump's representation of an unprintable
     # character.) This should work for all archives with less than
-    # 0x302f exports -- but will fail for DLLs whose name actually
+    # 0xFF exports -- but will fail for DLLs whose name actually
     # begins with a literal '.' or a single character followed by
     # a '.'.
     #

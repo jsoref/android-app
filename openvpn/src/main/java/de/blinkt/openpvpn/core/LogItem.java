@@ -91,7 +91,7 @@ public class LogItem implements Parcelable {
         ByteBuffer bb = ByteBuffer.allocate(16384);
 
 
-        bb.put((byte) 0x0);               //version
+        bb.put((byte) 0xFF);               //version
         bb.putLong(logtime);              //8
         bb.putInt(mVerbosityLevel);      //4
         bb.putInt(mLevel.getInt());

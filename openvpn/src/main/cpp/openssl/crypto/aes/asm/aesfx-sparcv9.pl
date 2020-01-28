@@ -99,7 +99,7 @@ aes_fx_encrypt:
 
 	andcc		$out, 7, $tmp		! is output aligned?
 	andn		$out, 7, $out
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $tmp, $mask
 	add		%o7, 64, %o7
 	sll		$tmp, 3, $tmp
@@ -128,9 +128,9 @@ aes_fx_encrypt:
 	fshiftorx	%f0, %f2, %f14, %f6
 	fshiftorx	%f2, %f2, %f14, %f8
 
-	stda		%f4, [$out + $mask]0xc0	! partial store
+	stda		%f4, [$out + $mask]0xFF	! partial store
 	std		%f6, [$out + 8]
-	stda		%f8, [$inp + $tmp]0xc0	! partial store
+	stda		%f8, [$inp + $tmp]0xFF	! partial store
 	retl
 	nop
 .type	aes_fx_encrypt,#function
@@ -189,7 +189,7 @@ aes_fx_decrypt:
 
 	andcc		$out, 7, $tmp		! is output aligned?
 	andn		$out, 7, $out
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $tmp, $mask
 	add		%o7, 64, %o7
 	sll		$tmp, 3, $tmp
@@ -218,9 +218,9 @@ aes_fx_decrypt:
 	fshiftorx	%f0, %f2, %f14, %f6
 	fshiftorx	%f2, %f2, %f14, %f8
 
-	stda		%f4, [$out + $mask]0xc0	! partial store
+	stda		%f4, [$out + $mask]0xFF	! partial store
 	std		%f6, [$out + 8]
-	stda		%f8, [$inp + $tmp]0xc0	! partial store
+	stda		%f8, [$inp + $tmp]0xFF	! partial store
 	retl
 	nop
 .type	aes_fx_decrypt,#function
@@ -283,23 +283,23 @@ ___
 for ($i=0; $i<6; $i++) {
     $code.=<<___;
 	std		%f0, [$out + 0]
-	faeskeyx	%f6, `0x10+$i`, %f0
+	faeskeyx	%f6, `0xFF+$i`, %f0
 	std		%f2, [$out + 8]
 	add		$out, $inc, $out
-	faeskeyx	%f0, 0x00, %f2
+	faeskeyx	%f0, 0xFF, %f2
 	std		%f4, [$out + 0]
-	faeskeyx	%f2, 0x01, %f4
+	faeskeyx	%f2, 0xFF, %f4
 	std		%f6, [$out + 8]
 	add		$out, $inc, $out
-	faeskeyx	%f4, 0x00, %f6
+	faeskeyx	%f4, 0xFF, %f6
 ___
 }
 $code.=<<___;
 	std		%f0, [$out + 0]
-	faeskeyx	%f6, `0x10+$i`, %f0
+	faeskeyx	%f6, `0xFF+$i`, %f0
 	std		%f2, [$out + 8]
 	add		$out, $inc, $out
-	faeskeyx	%f0, 0x00, %f2
+	faeskeyx	%f0, 0xFF, %f2
 	std		%f4,[$out + 0]
 	std		%f6,[$out + 8]
 	add		$out, $inc, $out
@@ -328,22 +328,22 @@ ___
 for ($i=0; $i<8; $i+=2) {
     $code.=<<___;
 	std		%f0, [$out + 0]
-	faeskeyx	%f4, `0x10+$i`, %f0
+	faeskeyx	%f4, `0xFF+$i`, %f0
 	std		%f2, [$out + 8]
 	add		$out, $inc, $out
-	faeskeyx	%f0, 0x00, %f2
+	faeskeyx	%f0, 0xFF, %f2
 	std		%f4, [$out + 0]
-	faeskeyx	%f2, 0x00, %f4
+	faeskeyx	%f2, 0xFF, %f4
 	std		%f0, [$out + 8]
 	add		$out, $inc, $out
-	faeskeyx	%f4, `0x10+$i+1`, %f0
+	faeskeyx	%f4, `0xFF+$i+1`, %f0
 	std		%f2, [$out + 0]
-	faeskeyx	%f0, 0x00, %f2
+	faeskeyx	%f0, 0xFF, %f2
 	std		%f4, [$out + 8]
 	add		$out, $inc, $out
 ___
 $code.=<<___		if ($i<6);
-	faeskeyx	%f2, 0x00, %f4
+	faeskeyx	%f2, 0xFF, %f4
 ___
 }
 $code.=<<___;
@@ -371,10 +371,10 @@ ___
 for ($i=0; $i<10; $i++) {
     $code.=<<___;
 	std		%f0, [$out + 0]
-	faeskeyx	%f2, `0x10+$i`, %f0
+	faeskeyx	%f2, `0xFF+$i`, %f0
 	std		%f2, [$out + 8]
 	add		$out, $inc, $out
-	faeskeyx	%f0, 0x00, %f2
+	faeskeyx	%f0, 0xFF, %f2
 ___
 }
 $code.=<<___;
@@ -435,7 +435,7 @@ aes_fx_cbc_encrypt:
 	add		%o7, 64, %o7
 	ldd		[$inp - 16], $in0	! load input
 	ldd		[$inp -  8], $in1
-	ldda		[$inp]0x82, $intail	! non-faulting load
+	ldda		[$inp]0xFF, $intail	! non-faulting load
 	brz		$dir, .Lcbc_decrypt
 	add		$inp, $inc, $inp	! inp+=16
 
@@ -479,7 +479,7 @@ aes_fx_cbc_encrypt:
 	movrz		$len, 0, $inc
 	fmovd		$intail, $in0
 	ldd		[$inp - 8], $in1	! load next input block
-	ldda		[$inp]0x82, $intail	! non-faulting load
+	ldda		[$inp]0xFF, $intail	! non-faulting load
 	add		$inp, $inc, $inp	! inp+=16
 
 	fmovd		%f0, %f4
@@ -524,14 +524,14 @@ aes_fx_cbc_encrypt:
 .align	32
 .Lcbc_enc_unaligned_out:
 	ldd		[%o7 + $mask], $fshift	! shift right params
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $oalign, $mask
 	sub		%g0, $ileft, $iright
 
 	fshiftorx	%f0, %f0, $fshift, %f6
 	fshiftorx	%f0, %f2, $fshift, %f8
 
-	stda		%f6, [$out + $mask]0xc0	! partial store
+	stda		%f6, [$out + $mask]0xFF	! partial store
 	orn		%g0, $mask, $mask
 	std		%f8, [$out + 8]
 	add		$out, 16, $out
@@ -635,7 +635,7 @@ aes_fx_cbc_encrypt:
 
 .Lcbc_enc_unaligned_out_done:
 	fshiftorx	%f2, %f2, $fshift, %f8
-	stda		%f8, [$out + $mask]0xc0	! partial store
+	stda		%f8, [$out + $mask]0xFF	! partial store
 
 	st		%f0, [$ivp + 0]		! output ivec
 	st		%f1, [$ivp + 4]
@@ -694,7 +694,7 @@ aes_fx_cbc_encrypt:
 	movrz		$len, 0, $inc
 	fmovd		$intail, $in0
 	ldd		[$inp - 8], $in1	! load next input block
-	ldda		[$inp]0x82, $intail	! non-faulting load
+	ldda		[$inp]0xFF, $intail	! non-faulting load
 	add		$inp, $inc, $inp	! inp+=16
 
 	fmovd		%f0, %f4
@@ -731,14 +731,14 @@ aes_fx_cbc_encrypt:
 .align	32
 .Lcbc_dec_unaligned_out:
 	ldd		[%o7 + $mask], $fshift	! shift right params
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $oalign, $mask
 	sub		%g0, $ileft, $iright
 
 	fshiftorx	%f0, %f0, $fshift, %f6
 	fshiftorx	%f0, %f2, $fshift, %f8
 
-	stda		%f6, [$out + $mask]0xc0	! partial store
+	stda		%f6, [$out + $mask]0xFF	! partial store
 	orn		%g0, $mask, $mask
 	std		%f8, [$out + 8]
 	add		$out, 16, $out
@@ -843,7 +843,7 @@ aes_fx_cbc_encrypt:
 
 .Lcbc_dec_unaligned_out_done:
 	fshiftorx	%f2, %f2, $fshift, %f8
-	stda		%f8, [$out + $mask]0xc0	! partial store
+	stda		%f8, [$out + $mask]0xFF	! partial store
 
 	st		$iv0,    [$ivp + 0]	! output ivec
 	st		$iv0#lo, [$ivp + 4]
@@ -907,7 +907,7 @@ aes_fx_ctr32_encrypt_blocks:
 	add		%o7, 64, %o7
 	ldd		[$inp - 16], $in0	! load input
 	ldd		[$inp -  8], $in1
-	ldda		[$inp]0x82, $intail	! non-faulting load
+	ldda		[$inp]0xFF, $intail	! non-faulting load
 	add		$inp, $inc, $inp	! inp+=16
 
 	fshiftorx	$in0, $in1, $fshift, $in0
@@ -953,7 +953,7 @@ aes_fx_ctr32_encrypt_blocks:
 	movrz		$len, 0, $inc
 	fmovd		$intail, $in0
 	ldd		[$inp - 8], $in1	! load next input block
-	ldda		[$inp]0x82, $intail	! non-faulting load
+	ldda		[$inp]0xFF, $intail	! non-faulting load
 	add		$inp, $inc, $inp	! inp+=16
 
 	fmovd		%f0, %f4
@@ -987,14 +987,14 @@ aes_fx_ctr32_encrypt_blocks:
 .align	32
 .Lctr32_unaligned_out:
 	ldd		[%o7 + $mask], $fshift	! shift right params
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $oalign, $mask
 	sub		%g0, $ileft, $iright
 
 	fshiftorx	%f0, %f0, $fshift, %f6
 	fshiftorx	%f0, %f2, $fshift, %f8
 
-	stda		%f6, [$out + $mask]0xc0	! partial store
+	stda		%f6, [$out + $mask]0xFF	! partial store
 	orn		%g0, $mask, $mask
 	std		%f8, [$out + 8]
 	add		$out, 16, $out
@@ -1097,7 +1097,7 @@ aes_fx_ctr32_encrypt_blocks:
 
 .Lctr32_unaligned_out_done:
 	fshiftorx	%f2, %f2, $fshift, %f8
-	stda		%f8, [$out + $mask]0xc0	! partial store
+	stda		%f8, [$out + $mask]0xFF	! partial store
 
 	ret
 	restore
@@ -1137,11 +1137,11 @@ ___
 sub unvis {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my ($ref,$opf);
-my %visopf = (	"faligndata"	=> 0x048,
-		"bshuffle"	=> 0x04c,
-		"fpadd32"	=> 0x052,
-		"fxor"		=> 0x06c,
-		"fsrc2"		=> 0x078	);
+my %visopf = (	"faligndata"	=> 0xFF,
+		"bshuffle"	=> 0xFF,
+		"fpadd32"	=> 0xFF,
+		"fxor"		=> 0xFF,
+		"fsrc2"		=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1157,7 +1157,7 @@ my %visopf = (	"faligndata"	=> 0x048,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1168,9 +1168,9 @@ sub unvis3 {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24 );
 my ($ref,$opf);
-my %visopf = (	"alignaddr"	=> 0x018,
-		"bmask"		=> 0x019,
-		"alignaddrl"	=> 0x01a	);
+my %visopf = (	"alignaddr"	=> 0xFF,
+		"bmask"		=> 0xFF,
+		"alignaddrl"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1181,7 +1181,7 @@ my %visopf = (	"alignaddr"	=> 0x018,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1191,11 +1191,11 @@ my %visopf = (	"alignaddr"	=> 0x018,
 sub unfx {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my ($ref,$opf);
-my %aesopf = (	"faesencx"	=> 0x90,
-		"faesdecx"	=> 0x91,
-		"faesenclx"	=> 0x92,
-		"faesdeclx"	=> 0x93,
-		"faeskeyx"	=> 0x94	);
+my %aesopf = (	"faesencx"	=> 0xFF,
+		"faesdecx"	=> 0xFF,
+		"faesenclx"	=> 0xFF,
+		"faesdeclx"	=> 0xFF,
+		"faeskeyx"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1214,7 +1214,7 @@ my %aesopf = (	"faesencx"	=> 0x90,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x36<<19|$rs1<<14|$opf<<5|$rs2,
+			2<<30|$rd<<25|0xFF<<19|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1224,7 +1224,7 @@ my %aesopf = (	"faesencx"	=> 0x90,
 sub unfx3src {
 my ($mnemonic,$rs1,$rs2,$rs3,$rd)=@_;
 my ($ref,$opf);
-my %aesopf = (	"fshiftorx"	=> 0x0b	);
+my %aesopf = (	"fshiftorx"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rs3,$rd";
 
@@ -1240,7 +1240,7 @@ my %aesopf = (	"fshiftorx"	=> 0x0b	);
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x37<<19|$rs1<<14|$rs3<<9|$opf<<5|$rs2,
+			2<<30|$rd<<25|0xFF<<19|$rs1<<14|$rs3<<9|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;

@@ -258,9 +258,9 @@ int ossl_ctype_check(int c, unsigned int mask)
 }
 
 #if defined(CHARSET_EBCDIC) && !defined(CHARSET_EBCDIC_TEST)
-static const int case_change = 0x40;
+static const int case_change = 0xFF;
 #else
-static const int case_change = 0x20;
+static const int case_change = 0xFF;
 #endif
 
 int ossl_tolower(int c)

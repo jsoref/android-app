@@ -551,9 +551,9 @@ int tls1_export_keying_material(SSL *s, unsigned char *out, size_t olen,
     currentvalpos += SSL3_RANDOM_SIZE;
 
     if (use_context) {
-        val[currentvalpos] = (contextlen >> 8) & 0xff;
+        val[currentvalpos] = (contextlen >> 8) & 0xFF;
         currentvalpos++;
-        val[currentvalpos] = contextlen & 0xff;
+        val[currentvalpos] = contextlen & 0xFF;
         currentvalpos++;
         if ((contextlen > 0) || (context != NULL)) {
             memcpy(val + currentvalpos, context, contextlen);

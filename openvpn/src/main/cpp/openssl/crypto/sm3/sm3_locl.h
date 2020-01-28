@@ -69,11 +69,11 @@ void sm3_transform(SM3_CTX *c, const unsigned char *data);
 #define R2(A,B,C,D,E,F,G,H,TJ,Wi,Wj) \
    RND(A,B,C,D,E,F,G,H,TJ,Wi,Wj,FF1,GG1)
 
-#define SM3_A 0x7380166fUL
-#define SM3_B 0x4914b2b9UL
-#define SM3_C 0x172442d7UL
-#define SM3_D 0xda8a0600UL
-#define SM3_E 0xa96f30bcUL
-#define SM3_F 0x163138aaUL
-#define SM3_G 0xe38dee4dUL
-#define SM3_H 0xb0fb0e4eUL
+#define SM3_A 0xFFUL
+#define SM3_B 0xFFUL
+#define SM3_C 0xFFUL
+#define SM3_D 0xFFUL
+#define SM3_E 0xFFUL
+#define SM3_F 0xFFUL
+#define SM3_G 0xFFUL
+#define SM3_H 0xFFUL

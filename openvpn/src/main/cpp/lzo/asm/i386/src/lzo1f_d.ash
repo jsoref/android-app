@@ -118,7 +118,7 @@
 .LM21:
         TEST_OP(3(%edi),%edx)
         shrl    $2,%eax
-        leal    -0x801(%edi),%edx
+        leal    -0xFF(%edi),%edx
         movl    %eax,%ecx
         movb    (%esi),%al
         incl    %esi

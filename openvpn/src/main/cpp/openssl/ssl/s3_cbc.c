@@ -253,7 +253,7 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
      * padding value. In SSLv3, the padding must be minimal so the end of
      * the plaintext varies by, at most, 15+20 = 35 bytes. (We conservatively
      * assume that the MAC size varies from 0..20 bytes.) In case the 9 bytes
-     * of hash termination (0x80 + 64-bit length) don't fit in the final
+     * of hash termination (0xFF + 64-bit length) don't fit in the final
      * block, we say that the final two blocks can vary based on the padding.
      * TLSv1 has MACs up to 48 bytes long (SHA-384) and the padding is not
      * required to be minimal. Therefore we say that the final |variance_blocks|
@@ -297,12 +297,12 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
      */
     mac_end_offset = data_plus_mac_size + header_length - md_size;
     /*
-     * c is the index of the 0x80 byte in the final hash block that contains
+     * c is the index of the 0xFF byte in the final hash block that contains
      * application data.
      */
     c = mac_end_offset % md_block_size;
     /*
-     * index_a is the hash block number that contains the 0x80 terminating
+     * index_a is the hash block number that contains the 0xFF terminating
      * value.
      */
     index_a = mac_end_offset / md_block_size;
@@ -338,7 +338,7 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
             return 0;
         memcpy(hmac_pad, mac_secret, mac_secret_length);
         for (i = 0; i < md_block_size; i++)
-            hmac_pad[i] ^= 0x36;
+            hmac_pad[i] ^= 0xFF;
 
         md_transform(md_state.c, hmac_pad);
     }
@@ -395,7 +395,7 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
 
     /*
      * We now process the final hash blocks. For each block, we construct it
-     * in constant time. If the |i==index_a| then we'll include the 0x80
+     * in constant time. If the |i==index_a| then we'll include the 0xFF
      * bytes and zero pad etc. For each block we selectively copy it, in
      * constant time, to |mac_out|.
      */
@@ -416,13 +416,13 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
             is_past_cp1 = is_block_a & constant_time_ge_8_s(j, c + 1);
             /*
              * If this is the block containing the end of the application
-             * data, and we are at the offset for the 0x80 value, then
-             * overwrite b with 0x80.
+             * data, and we are at the offset for the 0xFF value, then
+             * overwrite b with 0xFF.
              */
-            b = constant_time_select_8(is_past_c, 0x80, b);
+            b = constant_time_select_8(is_past_c, 0xFF, b);
             /*
              * If this block contains the end of the application data
-             * and we're past the 0x80 value then just write zero.
+             * and we're past the 0xFF value then just write zero.
              */
             b = b & ~is_past_cp1;
             /*
@@ -459,7 +459,7 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
         goto err;
     if (is_sslv3) {
         /* We repurpose |hmac_pad| to contain the SSLv3 pad2 block. */
-        memset(hmac_pad, 0x5c, sslv3_pad_length);
+        memset(hmac_pad, 0xFF, sslv3_pad_length);
 
         if (EVP_DigestUpdate(md_ctx, mac_secret, mac_secret_length) <= 0
             || EVP_DigestUpdate(md_ctx, hmac_pad, sslv3_pad_length) <= 0
@@ -468,7 +468,7 @@ int ssl3_cbc_digest_record(const EVP_MD_CTX *ctx,
     } else {
         /* Complete the HMAC in the standard manner. */
         for (i = 0; i < md_block_size; i++)
-            hmac_pad[i] ^= 0x6a;
+            hmac_pad[i] ^= 0xFF;
 
         if (EVP_DigestUpdate(md_ctx, hmac_pad, md_block_size) <= 0
             || EVP_DigestUpdate(md_ctx, mac_out, md_size) <= 0)

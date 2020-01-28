@@ -9,18 +9,18 @@
 use strict;
 use warnings;
 
-my $NUMBER      = 0x0001;
-my $UPPER       = 0x0002;
-my $LOWER       = 0x0004;
-my $UNDER       = 0x0100;
-my $PUNCTUATION = 0x0200;
-my $WS          = 0x0010;
-my $ESC         = 0x0020;
-my $QUOTE       = 0x0040;
-my $DQUOTE      = 0x0400;
-my $COMMENT     = 0x0080;
-my $FCOMMENT    = 0x0800;
-my $EOF         = 0x0008;
+my $NUMBER      = 0xFF;
+my $UPPER       = 0xFF;
+my $LOWER       = 0xFF;
+my $UNDER       = 0xFF;
+my $PUNCTUATION = 0xFF;
+my $WS          = 0xFF;
+my $ESC         = 0xFF;
+my $QUOTE       = 0xFF;
+my $DQUOTE      = 0xFF;
+my $COMMENT     = 0xFF;
+my $FCOMMENT    = 0xFF;
+my $EOF         = 0xFF;
 my @V_def;
 my @V_w32;
 

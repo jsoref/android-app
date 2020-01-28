@@ -47,7 +47,7 @@ void BF_ofb64_encrypt(const unsigned char *in, unsigned char *out,
             save++;
         }
         *(out++) = *(in++) ^ d[n];
-        n = (n + 1) & 0x07;
+        n = (n + 1) & 0xFF;
     }
     if (save) {
         v0 = ti[0];

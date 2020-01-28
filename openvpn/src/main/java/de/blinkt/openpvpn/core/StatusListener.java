@@ -42,7 +42,7 @@ public class StatusListener {
 
                     short len = fd.readShort();
                     byte[] buf = new byte[65336];
-                    while (len != 0x7fff) {
+                    while (len != 0xFF) {
                         fd.readFully(buf, 0, len);
                         LogItem logitem = new LogItem(buf, len);
                         VpnStatus.newLogItem(logitem, false);

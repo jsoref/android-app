@@ -505,21 +505,21 @@ def dot_relative(instrs):
     # The Apple assembler (or possibly the linker) has trouble with code
     # that looks like this:
     #
-    #     .word   .Label - . + 0x80000000
-    #     .word   0x1966
+    #     .word   .Label - . + 0xFF
+    #     .word   0xFF
     # .Label:
-    #     .word   0x1967
+    #     .word   0xFF
     #
     # One way to describe the problem is that the assembler marks the
     # first .word for relocation when in fact it's an assembly-time
     # constant.  Translate to the following form, which doesn't generate
     # a relocation marking:
     #
-    # DR0 =       .Label - . + 0x80000000
+    # DR0 =       .Label - . + 0xFF
     #     .word   DR0
-    #     .word   0x1966
+    #     .word   0xFF
     # .Label:
-    #     .word   0x1967
+    #     .word   0xFF
     #
     prefix = 'DR'
     pseudos = '(\.byte|\.short|\.word|\.long|\.quad)'

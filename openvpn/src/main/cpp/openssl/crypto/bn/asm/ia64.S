@@ -206,22 +206,22 @@ bn_add_words:
 { .mii;	(p16)	ld8		r32=[r16],8	  // b=*(bp++)
 	(p18)	add		r39=r37,r34
 	(p19)	cmp.ltu.unc	p56,p0=r40,r38	}
-{ .mfb;	(p0)	nop.m		0x0
-	(p0)	nop.f		0x0
-	(p0)	nop.b		0x0		}
+{ .mfb;	(p0)	nop.m		0xFF
+	(p0)	nop.f		0xFF
+	(p0)	nop.b		0xFF		}
 { .mii;	(p16)	ld8		r35=[r15],8	  // a=*(ap++)
 	(p58)	cmp.eq.or	p57,p0=-1,r41	  // (p20)
 	(p58)	add		r41=1,r41	} // (p20)
 { .mfb;	(p21)	st8		[r14]=r42,8	  // *(rp++)=r
-	(p0)	nop.f		0x0
+	(p0)	nop.f		0xFF
 	br.ctop.sptk	.L_bn_add_words_ctop	};;
 .L_bn_add_words_cend:
 
 { .mii;
 (p59)	add		r8=1,r8		// return value
-	mov		pr=r9,0x1ffff
+	mov		pr=r9,0xFF
 	mov		ar.lc=r3	}
-{ .mbb;	nop.b		0x0
+{ .mbb;	nop.b		0xFF
 	br.ret.sptk.many	b0	};;
 .endp	bn_add_words#
 
@@ -259,22 +259,22 @@ bn_sub_words:
 { .mii;	(p16)	ld8		r32=[r16],8	  // b=*(bp++)
 	(p18)	sub		r39=r37,r34
 	(p19)	cmp.gtu.unc	p56,p0=r40,r38	}
-{ .mfb;	(p0)	nop.m		0x0
-	(p0)	nop.f		0x0
-	(p0)	nop.b		0x0		}
+{ .mfb;	(p0)	nop.m		0xFF
+	(p0)	nop.f		0xFF
+	(p0)	nop.b		0xFF		}
 { .mii;	(p16)	ld8		r35=[r15],8	  // a=*(ap++)
 	(p58)	cmp.eq.or	p57,p0=0,r41	  // (p20)
 	(p58)	add		r41=-1,r41	} // (p20)
 { .mbb;	(p21)	st8		[r14]=r42,8	  // *(rp++)=r
-	(p0)	nop.b		0x0
+	(p0)	nop.b		0xFF
 	br.ctop.sptk	.L_bn_sub_words_ctop	};;
 .L_bn_sub_words_cend:
 
 { .mii;
 (p59)	add		r8=1,r8		// return value
-	mov		pr=r9,0x1ffff
+	mov		pr=r9,0xFF
 	mov		ar.lc=r3	}
-{ .mbb;	nop.b		0x0
+{ .mbb;	nop.b		0xFF
 	br.ret.sptk.many	b0	};;
 .endp	bn_sub_words#
 #endif
@@ -311,7 +311,7 @@ bn_mul_words:
 
 	.body
 { .mib;	setf.sig	f8=r35	// w
-	mov		pr.rot=0x800001<<16
+	mov		pr.rot=0xFF<<16
 			// ------^----- serves as (p50) at first (p27)
 	brp.loop.imp	.L_bn_mul_words_ctop,.L_bn_mul_words_cend-16
 					}
@@ -341,23 +341,23 @@ bn_mul_words:
 	(p28)	cmp.ltu		p54,p50=r41,r39	}
 { .mfi;	(p16)	ldf8		f32=[r15],8
 	(p21)	xmpy.hu		f40=f37,f8
-	(p0)	nop.i		0x0		};;
+	(p0)	nop.i		0xFF		};;
 { .mii;	(p25)	getf.sig	r32=f44			// high
 	.pred.rel	"mutex",p50,p54
 	(p50)	add		r40=r38,r35		// (p27)
 	(p54)	add		r40=r38,r35,1	}	// (p27)
 { .mfb;	(p28)	st8		[r14]=r41,8
-	(p0)	nop.f		0x0
+	(p0)	nop.f		0xFF
 	br.ctop.sptk	.L_bn_mul_words_ctop	};;
 .L_bn_mul_words_cend:
 
-{ .mii;	nop.m		0x0
+{ .mii;	nop.m		0xFF
 .pred.rel	"mutex",p51,p55
 (p51)	add		r8=r36,r0
 (p55)	add		r8=r36,r0,1	}
-{ .mfb;	nop.m	0x0
-	nop.f	0x0
-	nop.b	0x0			}
+{ .mfb;	nop.m	0xFF
+	nop.f	0xFF
+	nop.b	0xFF			}
 
 #else	// XMA_TEMPTATION
 
@@ -388,11 +388,11 @@ bn_mul_words:
 
 #endif	// XMA_TEMPTATION
 
-{ .mii;	nop.m		0x0
-	mov		pr=r9,0x1ffff
+{ .mii;	nop.m		0xFF
+	mov		pr=r9,0xFF
 	mov		ar.lc=r3	}
 { .mfb;	rum		1<<5		// clear um.mfh
-	nop.f		0x0
+	nop.f		0xFF
 	br.ret.sptk.many	b0	};;
 .endp	bn_mul_words#
 #endif
@@ -426,7 +426,7 @@ bn_mul_add_words:
 	ADDP		r15=0,r33	// ap
 	mov		ar.lc=r10	}
 { .mii;	ADDP		r16=0,r32	// rp copy
-	mov		pr.rot=0x2001<<16
+	mov		pr.rot=0xFF<<16
 			// ------^----- serves as (p40) at first (p27)
 	mov		ar.ec=11	};;
 
@@ -458,7 +458,7 @@ bn_mul_add_words:
 { .mmi;	.pred.rel	"mutex",p40,p42
 (p40)	add		r8=r35,r0
 (p42)	add		r8=r35,r0,1
-	mov		pr=r9,0x1ffff	}
+	mov		pr=r9,0xFF	}
 { .mib;	rum		1<<5		// clear um.mfh
 	mov		ar.lc=r3
 	br.ret.sptk.many	b0	};;
@@ -481,7 +481,7 @@ bn_sqr_words:
 { .mii;	cmp.le		p6,p0=r34,r0
 	mov		r8=r0		}	// return value
 { .mfb;	ADDP		r32=0,r32
-	nop.f		0x0
+	nop.f		0xFF
 (p6)	br.ret.spnt.many	b0	};;
 
 { .mii;	sub	r10=r34,r0,1
@@ -509,23 +509,23 @@ bn_sqr_words:
 .L_bn_sqr_words_ctop:
 { .mfi;	(p16)	ldf8		f32=[r33],8
 	(p25)	xmpy.lu		f42=f41,f41
-	(p0)	nop.i		0x0		}
+	(p0)	nop.i		0xFF		}
 { .mib;	(p33)	stf8		[r32]=f50,16
-	(p0)	nop.i		0x0
-	(p0)	nop.b		0x0		}
-{ .mfi;	(p0)	nop.m		0x0
+	(p0)	nop.i		0xFF
+	(p0)	nop.b		0xFF		}
+{ .mfi;	(p0)	nop.m		0xFF
 	(p25)	xmpy.hu		f52=f41,f41
-	(p0)	nop.i		0x0		}
+	(p0)	nop.i		0xFF		}
 { .mib;	(p33)	stf8		[r34]=f60,16
-	(p0)	nop.i		0x0
+	(p0)	nop.i		0xFF
 	br.ctop.sptk	.L_bn_sqr_words_ctop	};;
 .L_bn_sqr_words_cend:
 
-{ .mii;	nop.m		0x0
-	mov		pr=r9,0x1ffff
+{ .mii;	nop.m		0xFF
+	mov		pr=r9,0xFF
 	mov		ar.lc=r3	}
 { .mfb;	rum		1<<5		// clear um.mfh
-	nop.f		0x0
+	nop.f		0xFF
 	br.ret.sptk.many	b0	};;
 .endp	bn_sqr_words#
 #endif
@@ -952,7 +952,7 @@ bn_mul_comba8:
 (p6)	add		carry1=1,carry1
 	cmp.ltu		p6,p0=r26,r25
 	add		r27=r27,r26		};;
-{ .mfb;	nop.m	0x0				}
+{ .mfb;	nop.m	0xFF				}
 { .mii;
 (p6)	add		carry1=1,carry1
 	cmp.ltu		p6,p0=r27,r26
@@ -980,7 +980,7 @@ bn_mul_comba8:
 { .mii;	(p7)	add		carry3=1,carry3
 		cmp.ltu		p7,p0=r18,r17
 		add		r19=r19,r18	}
-{ .mfb;	nop.m	0x0				}
+{ .mfb;	nop.m	0xFF				}
 { .mii;
 (p6)	add		carry1=1,carry1
 	cmp.ltu		p6,p0=r31,r30
@@ -989,7 +989,7 @@ bn_mul_comba8:
 { .mii;	(p7)	add		carry3=1,carry3
 		cmp.ltu		p7,p0=r19,r18
 		add		r20=r20,r19	}
-{ .mfb;	nop.m	0x0				}
+{ .mfb;	nop.m	0xFF				}
 { .mii;
 (p6)	add		carry1=1,carry1
 	cmp.ltu		p6,p0=r31,carry2	};;
@@ -1023,7 +1023,7 @@ bn_mul_comba8:
 	(p7)	add		carry2=1,carry3
 	(p8)	add		carry2=0,carry3	};;
 
-{ .mfb;	nop.m	0x0				}
+{ .mfb;	nop.m	0xFF				}
 { .mii;	getf.sig	r29=f67
 	cmp.ltu		p6,p0=r25,r24
 	add		r26=r26,r25		};;
@@ -1142,7 +1142,7 @@ bn_mul_comba8:
 (p6)	add		carry1=1,carry1
 	cmp.ltu		p6,p0=r26,r25
 	add		r26=r26,carry2		};;
-{ .mfb;	nop.m	0x0				}
+{ .mfb;	nop.m	0xFF				}
 { .mii;
 (p6)	add		carry1=1,carry1
 	cmp.ltu		p6,p0=r26,carry2	};;
@@ -1438,7 +1438,7 @@ bn_div_words:
 { .mfi;	(p0)	cmp.lt		p16,p0=r0,r34	// d
 	(p0)	shladd		r33=r34,1,r0	}
 { .mfb;	(p0)	add		r35=1,r36
-	(p0)	nop.f		0x0
+	(p0)	nop.f		0xFF
 (p16)	br.wtop.dpnt		.L_divw_shift	};;
 
 { .mii;	mov		D=r34
@@ -1456,12 +1456,12 @@ bn_div_words:
 { .mii;	shl		L=L,r36
 	or		H=H,AT			};;
 
-{ .mii;	nop.m		0x0
+{ .mii;	nop.m		0xFF
 	cmp.leu		p6,p0=D,H;;
 (p6)	sub		H=H,D			}
 
 { .mlx;	setf.sig	f14=D
-	movl		AT=0xffffffff		};;
+	movl		AT=0xFF		};;
 ///////////////////////////////////////////////////////////
 { .mii;	setf.sig	f6=H
 	shr.u		HH=H,32;;
@@ -1523,7 +1523,7 @@ bn_div_words:
 	or	r8=r8,r33
 	mov	ar.pfs=r2		};;
 { .mii;	shr.u	r9=H,I			// remainder if anybody wants it
-	mov	pr=r10,0x1ffff		}
+	mov	pr=r10,0xFF		}
 { .mfb;	br.ret.sptk.many	b0	};;
 
 // Unsigned 64 by 32 (well, by 64 for the moment) bit integer division

@@ -207,13 +207,13 @@ public:
   }
 
 private:
-#if defined(WINVER) && (WINVER < 0x0500)
+#if defined(WINVER) && (WINVER < 0xFF)
   typedef DWORD dword_ptr_t;
   typedef ULONG ulong_ptr_t;
-#else // defined(WINVER) && (WINVER < 0x0500)
+#else // defined(WINVER) && (WINVER < 0xFF)
   typedef DWORD_PTR dword_ptr_t;
   typedef ULONG_PTR ulong_ptr_t;
-#endif // defined(WINVER) && (WINVER < 0x0500)
+#endif // defined(WINVER) && (WINVER < 0xFF)
 
   // Dequeues at most one operation from the I/O completion port, and then
   // executes it. Returns the number of operations that were dequeued (i.e.

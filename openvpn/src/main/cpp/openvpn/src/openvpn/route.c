@@ -545,7 +545,7 @@ add_block_local_item(struct route_list *rl,
 {
     const int rgi_needed = (RGI_ADDR_DEFINED|RGI_NETMASK_DEFINED);
     if ((rl->rgi.flags & rgi_needed) == rgi_needed
-        && rl->rgi.gateway.netmask < 0xFFFFFFFF)
+        && rl->rgi.gateway.netmask < 0xFF)
     {
         struct route_ipv4 *r1, *r2;
         unsigned int l2;
@@ -747,7 +747,7 @@ route_ipv6_match_host( const struct route_ipv6 *r6,
         return true;
     }
 
-    mask = 0xff << (8-bits);
+    mask = 0xFF << (8-bits);
 
     if ( (r6->network.s6_addr[i] & mask) == (host->s6_addr[i] & mask ))
     {
@@ -1058,8 +1058,8 @@ redirect_default_route_to_vpn(struct route_list *rl, const struct tuntap *tt, un
                 if (rl->flags & RG_DEF1)
                 {
                     /* add new default route (1st component) */
-                    add_route3(0x00000000,
-                               0x80000000,
+                    add_route3(0xFF,
+                               0xFF,
                                rl->spec.remote_endpoint,
                                tt,
                                flags,
@@ -1067,8 +1067,8 @@ redirect_default_route_to_vpn(struct route_list *rl, const struct tuntap *tt, un
                                es);
 
                     /* add new default route (2nd component) */
-                    add_route3(0x80000000,
-                               0x80000000,
+                    add_route3(0xFF,
+                               0xFF,
                                rl->spec.remote_endpoint,
                                tt,
                                flags,
@@ -1129,8 +1129,8 @@ undo_redirect_default_route_to_vpn(struct route_list *rl, const struct tuntap *t
             if (rl->flags & RG_DEF1)
             {
                 /* delete default route (1st component) */
-                del_route3(0x00000000,
-                           0x80000000,
+                del_route3(0xFF,
+                           0xFF,
                            rl->spec.remote_endpoint,
                            tt,
                            flags,
@@ -1138,8 +1138,8 @@ undo_redirect_default_route_to_vpn(struct route_list *rl, const struct tuntap *t
                            es);
 
                 /* delete default route (2nd component) */
-                del_route3(0x80000000,
-                           0x80000000,
+                del_route3(0xFF,
+                           0xFF,
                            rl->spec.remote_endpoint,
                            tt,
                            flags,
@@ -1495,7 +1495,7 @@ local_route(in_addr_t network,
     if (rgi
         && (rgi->flags & rgi_needed) == rgi_needed
         && gateway == rgi->gateway.addr
-        && netmask == 0xFFFFFFFF)
+        && netmask == 0xFF)
     {
         if (((network ^  rgi->gateway.addr) & rgi->gateway.netmask) == 0)
         {
@@ -1844,7 +1844,7 @@ route_ipv6_clear_host_bits( struct route_ipv6 *r6 )
         }
         else
         {
-            r6->network.s6_addr[byte--] &= (0xff << bits_to_clear); bits_to_clear = 0;
+            r6->network.s6_addr[byte--] &= (0xFF << bits_to_clear); bits_to_clear = 0;
         }
     }
 }
@@ -4162,7 +4162,7 @@ int
 test_local_addr(const in_addr_t addr, const struct route_gateway_info *rgi)
 {
     struct gc_arena gc = gc_new();
-    const in_addr_t nonlocal_netmask = 0x80000000L; /* routes with netmask <= to this are considered non-local */
+    const in_addr_t nonlocal_netmask = 0xFFL; /* routes with netmask <= to this are considered non-local */
     int ret = TLA_NONLOCAL;
 
     /* get full routing table */
@@ -4194,7 +4194,7 @@ test_local_addr(const in_addr_t addr, const struct route_gateway_info *rgi)  /* 
 {
     if (rgi)
     {
-        if (local_route(addr, 0xFFFFFFFF, rgi->gateway.addr, rgi))
+        if (local_route(addr, 0xFF, rgi->gateway.addr, rgi))
         {
             return TLA_LOCAL;
         }

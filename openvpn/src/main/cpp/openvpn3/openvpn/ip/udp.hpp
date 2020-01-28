@@ -51,19 +51,19 @@ namespace openvpn {
     /* calculate the sum of all 16 bit words */
     for (unsigned int i = 0; i < len_udp; i += 2)
       {
-	std::uint16_t word16 = ((buf[i] << 8) & 0xFF00) + ((i + 1 < len_udp) ? (buf[i+1] & 0xFF) : 0);
+	std::uint16_t word16 = ((buf[i] << 8) & 0xFF) + ((i + 1 < len_udp) ? (buf[i+1] & 0xFF) : 0);
 	sum += word16;
       }
 
     /* add the UDP pseudo header which contains the IP source and destination addresses */
     for (unsigned int i = 0; i < 4; i += 2)
       {
-	std::uint16_t word16 =((src_addr[i] << 8) & 0xFF00) + (src_addr[i+1] & 0xFF);
+	std::uint16_t word16 =((src_addr[i] << 8) & 0xFF) + (src_addr[i+1] & 0xFF);
 	sum += word16;
       }
     for (unsigned int i = 0; i < 4; i += 2)
       {
-	std::uint16_t word16 =((dest_addr[i] << 8) & 0xFF00) + (dest_addr[i+1] & 0xFF);
+	std::uint16_t word16 =((dest_addr[i] << 8) & 0xFF) + (dest_addr[i+1] & 0xFF);
 	sum += word16;
       }
 
@@ -72,7 +72,7 @@ namespace openvpn {
 
     /* keep only the last 16 bits of the 32 bit calculated sum and add the carries */
     while (sum >> 16)
-      sum = (sum & 0xFFFF) + (sum >> 16);
+      sum = (sum & 0xFF) + (sum >> 16);
 
     /* take the one's complement of sum */
     return std::uint16_t(~sum);

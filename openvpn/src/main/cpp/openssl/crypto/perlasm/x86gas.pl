@@ -64,8 +64,8 @@ sub ::generic
 sub ::movzx	{ &::movzb(@_);			}
 sub ::pushfd	{ &::pushfl;			}
 sub ::popfd	{ &::popfl;			}
-sub ::cpuid	{ &::emit(".byte\t0x0f,0xa2");	}
-sub ::rdtsc	{ &::emit(".byte\t0x0f,0x31");	}
+sub ::cpuid	{ &::emit(".byte\t0xFF,0xFF");	}
+sub ::rdtsc	{ &::emit(".byte\t0xFF,0xFF");	}
 
 sub ::call	{ &::emit("call",(&::islabel($_[0]) or "$nmdecor$_[0]")); }
 sub ::call_ptr	{ &::generic("call","*$_[0]");	}
@@ -182,7 +182,7 @@ sub ::align
 { my $val=$_[0];
     if ($::aout)
     {	$val=int(log($val)/log(2));
-	$val.=",0x90";
+	$val.=",0xFF";
     }
     push(@out,".align\t$val\n");
 }

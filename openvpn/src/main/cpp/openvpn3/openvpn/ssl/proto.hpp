@@ -130,12 +130,12 @@ namespace openvpn {
       const unsigned char auth_prefix[] = { 0, 0, 0, 0, 2 }; // CONST GLOBAL
 
       const unsigned char keepalive_message[] = {    // CONST GLOBAL
-	0x2a, 0x18, 0x7b, 0xf3, 0x64, 0x1e, 0xb4, 0xcb,
-	0x07, 0xed, 0x2d, 0x0a, 0x98, 0x1f, 0xc7, 0x48
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
       };
 
       enum {
-	KEEPALIVE_FIRST_BYTE = 0x2a  // first byte of keepalive message
+	KEEPALIVE_FIRST_BYTE = 0xFF  // first byte of keepalive message
       };
 
       inline bool is_keepalive(const Buffer& buf)
@@ -146,13 +146,13 @@ namespace openvpn {
       }
 
       const unsigned char explicit_exit_notify_message[] = {    // CONST GLOBAL
-	0x28, 0x7f, 0x34, 0x6b, 0xd4, 0xef, 0x7a, 0x81,
-	0x2d, 0x56, 0xb8, 0xd3, 0xaf, 0xc5, 0x45, 0x9c,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 	6 // OCC_EXIT
       };
 
       enum {
-	EXPLICIT_EXIT_NOTIFY_FIRST_BYTE = 0x28  // first byte of exit message
+	EXPLICIT_EXIT_NOTIFY_FIRST_BYTE = 0xFF  // first byte of exit message
       };
     }
   }
@@ -164,7 +164,7 @@ namespace openvpn {
 
     enum {
       // packet opcode (high 5 bits) and key-id (low 3 bits) are combined in one byte
-      KEY_ID_MASK =             0x07,
+      KEY_ID_MASK =             0xFF,
       OPCODE_SHIFT =            3,
 
       // packet opcodes -- the V1 is intended to allow protocol changes in the future
@@ -188,7 +188,7 @@ namespace openvpn {
 
       // DATA_V2 constants
       OP_SIZE_V2 = 4,                // size of initial packet opcode
-      OP_PEER_ID_UNDEF = 0x00FFFFFF, // indicates that Peer ID is undefined
+      OP_PEER_ID_UNDEF = 0xFF, // indicates that Peer ID is undefined
 
       // states
       // C_x : client states
@@ -240,7 +240,7 @@ namespace openvpn {
 				     const unsigned int key_id,
 				     const int op_peer_id)
     {
-      return (op_compose(opcode, key_id) << 24) | (op_peer_id & 0x00FFFFFF);
+      return (op_compose(opcode, key_id) << 24) | (op_peer_id & 0xFF);
     }
 
   public:
@@ -660,7 +660,7 @@ namespace openvpn {
 	      bool status = parse_number_validate<int>(o->get(1, 16),
 						       16,
 						       -1,
-						       0xFFFFFE,
+						       0xFF,
 						       &remote_peer_id);
 	      if (!status)
 		throw Exception("parse/range issue");
@@ -944,7 +944,7 @@ namespace openvpn {
 		  {
 		    if (unlikely(buf.size() < 4))
 		      return;
-		    const int opi = ntohl(*(const std::uint32_t *)buf.c_data()) & 0x00FFFFFF;
+		    const int opi = ntohl(*(const std::uint32_t *)buf.c_data()) & 0xFF;
 		    if (opi != OP_PEER_ID_UNDEF)
 		      peer_id_ = opi;
 		    opcode = opc;
@@ -1042,7 +1042,7 @@ namespace openvpn {
 		const unsigned int p2 = b.pop_front();
 		const unsigned int p3 = b.pop_front();
 		const unsigned int peer_id = (p1<<16) + (p2<<8) + p3;
-		if (peer_id != 0xFFFFFF)
+		if (peer_id != 0xFF)
 		  out << " PEER_ID=" << peer_id;
 	      }
 	    out << " SIZE=" << b.size() << '/' << orig_size;
@@ -1118,7 +1118,7 @@ namespace openvpn {
 
     static void write_string_length(const size_t size, Buffer& buf)
     {
-      if (size > 0xFFFF)
+      if (size > 0xFF)
 	throw proto_error("auth_string_overflow");
       const std::uint16_t net_size = htons(size);
       buf.write((const unsigned char *)&net_size, sizeof(net_size));

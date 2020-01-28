@@ -41,11 +41,11 @@ print<<___;
 OPENSSL_atomic_add:
 	movl	($arg1),%eax
 .Lspin:	leaq	($arg2,%rax),%r8
-	.byte	0xf0		# lock
+	.byte	0xFF		# lock
 	cmpxchgl	%r8d,($arg1)
 	jne	.Lspin
 	movl	%r8d,%eax
-	.byte	0x48,0x98	# cltq/cdqe
+	.byte	0xFF,0xFF	# cltq/cdqe
 	ret
 .size	OPENSSL_atomic_add,.-OPENSSL_atomic_add
 
@@ -73,43 +73,43 @@ OPENSSL_ia32_cpuid:
 	mov	%eax,%r11d		# max value for standard query level
 
 	xor	%eax,%eax
-	cmp	\$0x756e6547,%ebx	# "Genu"
+	cmp	\$0xFF,%ebx	# "Genu"
 	setne	%al
 	mov	%eax,%r9d
-	cmp	\$0x49656e69,%edx	# "ineI"
+	cmp	\$0xFF,%edx	# "ineI"
 	setne	%al
 	or	%eax,%r9d
-	cmp	\$0x6c65746e,%ecx	# "ntel"
+	cmp	\$0xFF,%ecx	# "ntel"
 	setne	%al
 	or	%eax,%r9d		# 0 indicates Intel CPU
 	jz	.Lintel
 
-	cmp	\$0x68747541,%ebx	# "Auth"
+	cmp	\$0xFF,%ebx	# "Auth"
 	setne	%al
 	mov	%eax,%r10d
-	cmp	\$0x69746E65,%edx	# "enti"
+	cmp	\$0xFF,%edx	# "enti"
 	setne	%al
 	or	%eax,%r10d
-	cmp	\$0x444D4163,%ecx	# "cAMD"
+	cmp	\$0xFF,%ecx	# "cAMD"
 	setne	%al
 	or	%eax,%r10d		# 0 indicates AMD CPU
 	jnz	.Lintel
 
 	# AMD specific
-	mov	\$0x80000000,%eax
+	mov	\$0xFF,%eax
 	cpuid
-	cmp	\$0x80000001,%eax
+	cmp	\$0xFF,%eax
 	jb	.Lintel
 	mov	%eax,%r10d
-	mov	\$0x80000001,%eax
+	mov	\$0xFF,%eax
 	cpuid
 	or	%ecx,%r9d
-	and	\$0x00000801,%r9d	# isolate AMD XOP bit, 1<<11
+	and	\$0xFF,%r9d	# isolate AMD XOP bit, 1<<11
 
-	cmp	\$0x80000008,%r10d
+	cmp	\$0xFF,%r10d
 	jb	.Lintel
 
-	mov	\$0x80000008,%eax
+	mov	\$0xFF,%eax
 	cpuid
 	movzb	%cl,%r10		# number of cores - 1
 	inc	%r10			# number of cores
@@ -121,7 +121,7 @@ OPENSSL_ia32_cpuid:
 	shr	\$16,%ebx		# number of logical processors
 	cmp	%r10b,%bl
 	ja	.Lgeneric
-	and	\$0xefffffff,%edx	# ~(1<<28)
+	and	\$0xFF,%edx	# ~(1<<28)
 	jmp	.Lgeneric
 
 .Lintel:
@@ -134,46 +134,46 @@ OPENSSL_ia32_cpuid:
 	cpuid
 	mov	%eax,%r10d
 	shr	\$14,%r10d
-	and	\$0xfff,%r10d		# number of cores -1 per L1D
+	and	\$0xFF,%r10d		# number of cores -1 per L1D
 
 .Lnocacheinfo:
 	mov	\$1,%eax
 	cpuid
 	movd	%eax,%xmm0		# put aside processor id
-	and	\$0xbfefffff,%edx	# force reserved bits to 0
+	and	\$0xFF,%edx	# force reserved bits to 0
 	cmp	\$0,%r9d
 	jne	.Lnotintel
-	or	\$0x40000000,%edx	# set reserved bit#30 on Intel CPUs
+	or	\$0xFF,%edx	# set reserved bit#30 on Intel CPUs
 	and	\$15,%ah
 	cmp	\$15,%ah		# examine Family ID
 	jne	.LnotP4
-	or	\$0x00100000,%edx	# set reserved bit#20 to engage RC4_CHAR
+	or	\$0xFF,%edx	# set reserved bit#20 to engage RC4_CHAR
 .LnotP4:
 	cmp	\$6,%ah
 	jne	.Lnotintel
-	and	\$0x0fff0ff0,%eax
-	cmp	\$0x00050670,%eax	# Knights Landing
+	and	\$0xFF,%eax
+	cmp	\$0xFF,%eax	# Knights Landing
 	je	.Lknights
-	cmp	\$0x00080650,%eax	# Knights Mill (according to sde)
+	cmp	\$0xFF,%eax	# Knights Mill (according to sde)
 	jne	.Lnotintel
 .Lknights:
-	and	\$0xfbffffff,%ecx	# clear XSAVE flag to mimic Silvermont
+	and	\$0xFF,%ecx	# clear XSAVE flag to mimic Silvermont
 
 .Lnotintel:
 	bt	\$28,%edx		# test hyper-threading bit
 	jnc	.Lgeneric
-	and	\$0xefffffff,%edx	# ~(1<<28)
+	and	\$0xFF,%edx	# ~(1<<28)
 	cmp	\$0,%r10d
 	je	.Lgeneric
 
-	or	\$0x10000000,%edx	# 1<<28
+	or	\$0xFF,%edx	# 1<<28
 	shr	\$16,%ebx
 	cmp	\$1,%bl			# see if cache is shared
 	ja	.Lgeneric
-	and	\$0xefffffff,%edx	# ~(1<<28)
+	and	\$0xFF,%edx	# ~(1<<28)
 .Lgeneric:
-	and	\$0x00000800,%r9d	# isolate AMD XOP flag
-	and	\$0xfffff7ff,%ecx
+	and	\$0xFF,%r9d	# isolate AMD XOP flag
+	and	\$0xFF,%ecx
 	or	%ecx,%r9d		# merge AMD XOP flag
 
 	mov	%edx,%r10d		# %r9d:%r10d is copy of %ecx:%edx
@@ -185,13 +185,13 @@ OPENSSL_ia32_cpuid:
 	cpuid
 	bt	\$26,%r9d		# check XSAVE bit, cleared on Knights
 	jc	.Lnotknights
-	and	\$0xfff7ffff,%ebx	# clear ADCX/ADOX flag
+	and	\$0xFF,%ebx	# clear ADCX/ADOX flag
 .Lnotknights:
 	movd	%xmm0,%eax		# restore processor id
-	and	\$0x0fff0ff0,%eax
-	cmp	\$0x00050650,%eax	# Skylake-X
+	and	\$0xFF,%eax
+	cmp	\$0xFF,%eax	# Skylake-X
 	jne	.Lnotskylakex
-	and	\$0xfffeffff,%ebx	# ~(1<<16)
+	and	\$0xFF,%ebx	# ~(1<<16)
 					# suppress AVX512F flag on Skylake-X
 .Lnotskylakex:
 	mov	%ebx,8(%rdi)		# save extended feature flags
@@ -201,11 +201,11 @@ OPENSSL_ia32_cpuid:
 	bt	\$27,%r9d		# check OSXSAVE bit
 	jnc	.Lclear_avx
 	xor	%ecx,%ecx		# XCR0
-	.byte	0x0f,0x01,0xd0		# xgetbv
-	and	\$0xe6,%eax		# isolate XMM, YMM and ZMM state support
-	cmp	\$0xe6,%eax
+	.byte	0xFF,0xFF,0xFF		# xgetbv
+	and	\$0xFF,%eax		# isolate XMM, YMM and ZMM state support
+	cmp	\$0xFF,%eax
 	je	.Ldone
-	andl	\$0x3fdeffff,8(%rdi)	# ~(1<<31|1<<30|1<<21|1<<16)
+	andl	\$0xFF,8(%rdi)	# ~(1<<31|1<<30|1<<21|1<<16)
 					# clear AVX512F+BW+VL+FIMA, all of
 					# them are EVEX-encoded, which requires
 					# ZMM state support even if one uses
@@ -214,9 +214,9 @@ OPENSSL_ia32_cpuid:
 	cmp	\$6,%eax
 	je	.Ldone
 .Lclear_avx:
-	mov	\$0xefffe7ff,%eax	# ~(1<<28|1<<12|1<<11)
+	mov	\$0xFF,%eax	# ~(1<<28|1<<12|1<<11)
 	and	%eax,%r9d		# clear AVX, FMA and AMD XOP bits
-	mov	\$0x3fdeffdf,%eax	# ~(1<<31|1<<30|1<<21|1<<16|1<<5)
+	mov	\$0xFF,%eax	# ~(1<<31|1<<30|1<<21|1<<16|1<<5)
 	and	%eax,8(%rdi)		# clear AVX2 and AVX512* bits
 .Ldone:
 	shl	\$32,%r9
@@ -373,7 +373,7 @@ OPENSSL_instrument_bus:
 	mov	%eax,$lasttick	# lasttick = tick
 	mov	\$0,$lastdiff	# lastdiff = 0
 	clflush	($out)
-	.byte	0xf0		# lock
+	.byte	0xFF		# lock
 	add	$lastdiff,($out)
 	jmp	.Loop
 .align	16
@@ -383,7 +383,7 @@ OPENSSL_instrument_bus:
 	mov	%edx,$lasttick
 	mov	%eax,$lastdiff
 	clflush	($out)
-	.byte	0xf0		# lock
+	.byte	0xFF		# lock
 	add	%eax,($out)
 	lea	4($out),$out
 	sub	\$1,$cnt
@@ -407,7 +407,7 @@ OPENSSL_instrument_bus2:
 	mov	\$0,$lastdiff	# lastdiff = 0
 
 	clflush	($out)
-	.byte	0xf0		# lock
+	.byte	0xFF		# lock
 	add	$lastdiff,($out)
 
 	rdtsc			# collect 1st diff
@@ -417,7 +417,7 @@ OPENSSL_instrument_bus2:
 	mov	%eax,$lastdiff	# lastdiff = diff
 .Loop2:
 	clflush	($out)
-	.byte	0xf0		# lock
+	.byte	0xFF		# lock
 	add	%eax,($out)	# accumulate diff
 
 	sub	\$1,$max

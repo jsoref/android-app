@@ -61,7 +61,7 @@ static void FUZ_writeLE32 (void* dstVoidPtr, U32 value32)
 /*-************************************
 *  Constants
 **************************************/
-#define LZ4F_MAGIC_SKIPPABLE_START 0x184D2A50U
+#define LZ4F_MAGIC_SKIPPABLE_START 0xFFU
 
 #define KB *(1U<<10)
 #define MB *(1U<<20)
@@ -119,7 +119,7 @@ unsigned int FUZ_rand(unsigned int* src)
 }
 
 
-#define FUZ_RAND15BITS  (FUZ_rand(seed) & 0x7FFF)
+#define FUZ_RAND15BITS  (FUZ_rand(seed) & 0xFF)
 #define FUZ_RANDLENGTH  ( (FUZ_rand(seed) & 3) ? (FUZ_rand(seed) % 15) : (FUZ_rand(seed) % 510) + 15)
 static void FUZ_fillCompressibleNoiseBuffer(void* buffer, size_t bufferSize, double proba, U32* seed)
 {
@@ -489,7 +489,7 @@ int basicTests(U32 seed, double compressibility)
 
     /* dictID tests */
     {   size_t cErr;
-        U32 const dictID = 0x99;
+        U32 const dictID = 0xFF;
         CHECK( LZ4F_createCompressionContext(&cctx, LZ4F_VERSION) );
 
         DISPLAYLEVEL(3, "insert a dictID : ");
@@ -796,20 +796,20 @@ int fuzzerTests(U32 seed, unsigned nbTests, unsigned startTest, double compressi
         prefs.frameInfo.blockSizeID = (LZ4F_blockSizeID_t)(4 + (FUZ_rand(&randState) & 3));
         prefs.frameInfo.blockChecksumFlag = (LZ4F_blockChecksum_t)(FUZ_rand(&randState) & 1);
         prefs.frameInfo.contentChecksumFlag = (LZ4F_contentChecksum_t)(FUZ_rand(&randState) & 1);
-        prefs.frameInfo.contentSize = ((FUZ_rand(&randState) & 0xF) == 1) ? srcSize : 0;
+        prefs.frameInfo.contentSize = ((FUZ_rand(&randState) & 0xFF) == 1) ? srcSize : 0;
         prefs.autoFlush = neverFlush ? 0 : (FUZ_rand(&randState) & 7) == 2;
         prefs.compressionLevel = -5 + (int)(FUZ_rand(&randState) % 11);
-        if ((FUZ_rand(&randState) & 0xF) == 1) prefsPtr = NULL;
+        if ((FUZ_rand(&randState) & 0xFF) == 1) prefsPtr = NULL;
 
         DISPLAYUPDATE(2, "\r%5u   ", testNb);
 
-        if ((FUZ_rand(&randState) & 0xFFF) == 0) {
+        if ((FUZ_rand(&randState) & 0xFF) == 0) {
             /* create a skippable frame (rare case) */
             BYTE* op = (BYTE*)compressedBuffer;
             FUZ_writeLE32(op, LZ4F_MAGIC_SKIPPABLE_START + (FUZ_rand(&randState) & 15));
             FUZ_writeLE32(op+4, (U32)srcSize);
             cSize = srcSize+8;
-        } else if ((FUZ_rand(&randState) & 0xF) == 2) {  /* single pass compression (simple) */
+        } else if ((FUZ_rand(&randState) & 0xFF) == 2) {  /* single pass compression (simple) */
             cSize = LZ4F_compressFrame(compressedBuffer, LZ4F_compressFrameBound(srcSize, prefsPtr), srcStart, srcSize, prefsPtr);
             CHECK(LZ4F_isError(cSize), "LZ4F_compressFrame failed : error %i (%s)", (int)cSize, LZ4F_getErrorName(cSize));
         } else {   /* multi-segments compression */

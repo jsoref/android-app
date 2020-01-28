@@ -148,8 +148,8 @@ int dsa_builtin_paramgen(DSA *ret, size_t bits, size_t qbits,
                 md[i] ^= buf2[i];
 
             /* step 3 */
-            md[0] |= 0x80;
-            md[qsize - 1] |= 0x01;
+            md[0] |= 0xFF;
+            md[qsize - 1] |= 0xFF;
             if (!BN_bin2bn(md, qsize, q))
                 goto err;
 
@@ -419,8 +419,8 @@ int dsa_builtin_paramgen2(DSA *ret, size_t L, size_t N,
                 memset(md + mdsize, 0, qsize - mdsize);
 
             /* step 3 */
-            pmd[0] |= 0x80;
-            pmd[qsize - 1] |= 0x01;
+            pmd[0] |= 0xFF;
+            pmd[qsize - 1] |= 0xFF;
             if (!BN_bin2bn(pmd, qsize, q))
                 goto err;
 
@@ -549,11 +549,11 @@ int dsa_builtin_paramgen2(DSA *ret, size_t L, size_t N,
         goto err;
 
     for (;;) {
-        static const unsigned char ggen[4] = { 0x67, 0x67, 0x65, 0x6e };
+        static const unsigned char ggen[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
         if (idx >= 0) {
-            md[0] = idx & 0xff;
-            md[1] = (h >> 8) & 0xff;
-            md[2] = h & 0xff;
+            md[0] = idx & 0xFF;
+            md[1] = (h >> 8) & 0xFF;
+            md[2] = h & 0xFF;
             if (!EVP_DigestInit_ex(mctx, evpmd, NULL))
                 goto err;
             if (!EVP_DigestUpdate(mctx, seed_tmp, seed_len))
@@ -575,7 +575,7 @@ int dsa_builtin_paramgen2(DSA *ret, size_t L, size_t N,
         if (idx < 0 && !BN_add(test, test, BN_value_one()))
             goto err;
         h++;
-        if (idx >= 0 && h > 0xffff)
+        if (idx >= 0 && h > 0xFF)
             goto err;
     }
 

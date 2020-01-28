@@ -65,7 +65,7 @@ void ecp_test_vect( int id, char * dA_str, char * xA_str, char * yA_str,
     mbedtls_ecp_group_init( &grp ); mbedtls_ecp_point_init( &R );
     mbedtls_mpi_init( &dA ); mbedtls_mpi_init( &xA ); mbedtls_mpi_init( &yA ); mbedtls_mpi_init( &dB );
     mbedtls_mpi_init( &xB ); mbedtls_mpi_init( &yB ); mbedtls_mpi_init( &xZ ); mbedtls_mpi_init( &yZ );
-    memset( &rnd_info, 0x00, sizeof( rnd_pseudo_info ) );
+    memset( &rnd_info, 0xFF, sizeof( rnd_pseudo_info ) );
 
     TEST_ASSERT( mbedtls_ecp_group_load( &grp, id ) == 0 );
 
@@ -120,7 +120,7 @@ void ecp_test_vec_x( int id, char * dA_hex, char * xA_hex, char * dB_hex,
     mbedtls_mpi_init( &dA ); mbedtls_mpi_init( &xA );
     mbedtls_mpi_init( &dB ); mbedtls_mpi_init( &xB );
     mbedtls_mpi_init( &xS );
-    memset( &rnd_info, 0x00, sizeof( rnd_pseudo_info ) );
+    memset( &rnd_info, 0xFF, sizeof( rnd_pseudo_info ) );
 
     TEST_ASSERT( mbedtls_ecp_group_load( &grp, id ) == 0 );
 
@@ -305,14 +305,14 @@ void ecp_tls_write_read_point( int id )
 
     TEST_ASSERT( mbedtls_ecp_group_load( &grp, id ) == 0 );
 
-    memset( buf, 0x00, sizeof( buf ) ); vbuf = buf;
+    memset( buf, 0xFF, sizeof( buf ) ); vbuf = buf;
     TEST_ASSERT( mbedtls_ecp_tls_write_point( &grp, &grp.G,
                     MBEDTLS_ECP_PF_COMPRESSED, &olen, buf, 256 ) == 0 );
     TEST_ASSERT( mbedtls_ecp_tls_read_point( &grp, &pt, &vbuf, olen )
                  == MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
     TEST_ASSERT( vbuf == buf + olen );
 
-    memset( buf, 0x00, sizeof( buf ) ); vbuf = buf;
+    memset( buf, 0xFF, sizeof( buf ) ); vbuf = buf;
     TEST_ASSERT( mbedtls_ecp_tls_write_point( &grp, &grp.G,
                     MBEDTLS_ECP_PF_UNCOMPRESSED, &olen, buf, 256 ) == 0 );
     TEST_ASSERT( mbedtls_ecp_tls_read_point( &grp, &pt, &vbuf, olen ) == 0 );
@@ -321,7 +321,7 @@ void ecp_tls_write_read_point( int id )
     TEST_ASSERT( mbedtls_mpi_cmp_mpi( &grp.G.Z, &pt.Z ) == 0 );
     TEST_ASSERT( vbuf == buf + olen );
 
-    memset( buf, 0x00, sizeof( buf ) ); vbuf = buf;
+    memset( buf, 0xFF, sizeof( buf ) ); vbuf = buf;
     TEST_ASSERT( mbedtls_ecp_set_zero( &pt ) == 0 );
     TEST_ASSERT( mbedtls_ecp_tls_write_point( &grp, &pt,
                     MBEDTLS_ECP_PF_COMPRESSED, &olen, buf, 256 ) == 0 );
@@ -329,7 +329,7 @@ void ecp_tls_write_read_point( int id )
     TEST_ASSERT( mbedtls_ecp_is_zero( &pt ) );
     TEST_ASSERT( vbuf == buf + olen );
 
-    memset( buf, 0x00, sizeof( buf ) ); vbuf = buf;
+    memset( buf, 0xFF, sizeof( buf ) ); vbuf = buf;
     TEST_ASSERT( mbedtls_ecp_set_zero( &pt ) == 0 );
     TEST_ASSERT( mbedtls_ecp_tls_write_point( &grp, &pt,
                     MBEDTLS_ECP_PF_UNCOMPRESSED, &olen, buf, 256 ) == 0 );
@@ -378,7 +378,7 @@ void ecp_tls_write_read_group( int id )
 
     mbedtls_ecp_group_init( &grp1 );
     mbedtls_ecp_group_init( &grp2 );
-    memset( buf, 0x00, sizeof( buf ) );
+    memset( buf, 0xFF, sizeof( buf ) );
 
     TEST_ASSERT( mbedtls_ecp_group_load( &grp1, id ) == 0 );
 
@@ -456,7 +456,7 @@ void mbedtls_ecp_gen_keypair( int id )
     mbedtls_ecp_group_init( &grp );
     mbedtls_ecp_point_init( &Q );
     mbedtls_mpi_init( &d );
-    memset( &rnd_info, 0x00, sizeof( rnd_pseudo_info ) );
+    memset( &rnd_info, 0xFF, sizeof( rnd_pseudo_info ) );
 
     TEST_ASSERT( mbedtls_ecp_group_load( &grp, id ) == 0 );
 
@@ -480,7 +480,7 @@ void mbedtls_ecp_gen_key( int id )
     rnd_pseudo_info rnd_info;
 
     mbedtls_ecp_keypair_init( &key );
-    memset( &rnd_info, 0x00, sizeof( rnd_pseudo_info ) );
+    memset( &rnd_info, 0xFF, sizeof( rnd_pseudo_info ) );
 
     TEST_ASSERT( mbedtls_ecp_gen_key( id, &key, &rnd_pseudo_rand, &rnd_info ) == 0 );
 

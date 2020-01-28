@@ -34,7 +34,7 @@ static int bnrand(BNRAND_FLAG flag, BIGNUM *rnd, int bits, int top, int bottom)
 
     bytes = (bits + 7) / 8;
     bit = (bits - 1) % 8;
-    mask = 0xff << (bit + 1);
+    mask = 0xFF << (bit + 1);
 
     buf = OPENSSL_malloc(bytes);
     if (buf == NULL) {
@@ -70,7 +70,7 @@ static int bnrand(BNRAND_FLAG flag, BIGNUM *rnd, int bits, int top, int bottom)
         if (top) {
             if (bit == 0) {
                 buf[0] = 1;
-                buf[1] |= 0x80;
+                buf[1] |= 0xFF;
             } else {
                 buf[0] |= (3 << (bit - 1));
             }

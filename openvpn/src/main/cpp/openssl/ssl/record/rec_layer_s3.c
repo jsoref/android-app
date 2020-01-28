@@ -423,7 +423,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, size_t len,
         int packleni;
 
         /* minimize address aliasing conflicts */
-        if ((max_send_fragment & 0xfff) == 0)
+        if ((max_send_fragment & 0xFF) == 0)
             max_send_fragment -= 512;
 
         if (tot == 0 || wb->buf == NULL) { /* allocate jumbo buffer */

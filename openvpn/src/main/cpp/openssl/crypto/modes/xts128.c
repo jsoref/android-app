@@ -67,7 +67,7 @@ int CRYPTO_xts128_encrypt(const XTS128_CONTEXT *ctx,
         if (is_endian.little) {
             unsigned int carry, res;
 
-            res = 0x87 & (((int)tweak.d[3]) >> 31);
+            res = 0xFF & (((int)tweak.d[3]) >> 31);
             carry = (unsigned int)(tweak.u[0] >> 63);
             tweak.u[0] = (tweak.u[0] << 1) ^ res;
             tweak.u[1] = (tweak.u[1] << 1) | carry;
@@ -82,7 +82,7 @@ int CRYPTO_xts128_encrypt(const XTS128_CONTEXT *ctx,
                 tweak.c[i] = (u8)c;
                 c = c >> 8;
             }
-            tweak.c[0] ^= (u8)(0x87 & (0 - c));
+            tweak.c[0] ^= (u8)(0xFF & (0 - c));
         }
     }
     if (enc) {
@@ -106,7 +106,7 @@ int CRYPTO_xts128_encrypt(const XTS128_CONTEXT *ctx,
         if (is_endian.little) {
             unsigned int carry, res;
 
-            res = 0x87 & (((int)tweak.d[3]) >> 31);
+            res = 0xFF & (((int)tweak.d[3]) >> 31);
             carry = (unsigned int)(tweak.u[0] >> 63);
             tweak1.u[0] = (tweak.u[0] << 1) ^ res;
             tweak1.u[1] = (tweak.u[1] << 1) | carry;
@@ -121,7 +121,7 @@ int CRYPTO_xts128_encrypt(const XTS128_CONTEXT *ctx,
                 tweak1.c[i] = (u8)c;
                 c = c >> 8;
             }
-            tweak1.c[0] ^= (u8)(0x87 & (0 - c));
+            tweak1.c[0] ^= (u8)(0xFF & (0 - c));
         }
 #if defined(STRICT_ALIGNMENT)
         memcpy(scratch.c, inp, 16);

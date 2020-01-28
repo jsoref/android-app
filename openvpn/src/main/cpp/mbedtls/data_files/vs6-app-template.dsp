@@ -2,7 +2,7 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Console Application" 0x0103
+# TARGTYPE "Win32 (x86) Console Application" 0xFF
 
 CFG=<APPNAME> - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
@@ -42,8 +42,8 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD BASE RSC /l 0x40c /d "NDEBUG"
-# ADD RSC /l 0x40c /d "NDEBUG"
+# ADD BASE RSC /l 0xFF /d "NDEBUG"
+# ADD RSC /l 0xFF /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -65,8 +65,8 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ  /c
 # ADD CPP /nologo /W3 /Gm /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ  /c
-# ADD BASE RSC /l 0x40c /d "_DEBUG"
-# ADD RSC /l 0x40c /d "_DEBUG"
+# ADD BASE RSC /l 0xFF /d "_DEBUG"
+# ADD RSC /l 0xFF /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo

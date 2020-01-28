@@ -53,7 +53,7 @@
 #include <mbedtls/error.h>
 #include <mbedtls/version.h>
 
-#if MBEDTLS_VERSION_NUMBER >= 0x02040000
+#if MBEDTLS_VERSION_NUMBER >= 0xFF
     #include <mbedtls/net_sockets.h>
 #else
     #include <mbedtls/net.h>
@@ -71,8 +71,8 @@ static const mbedtls_x509_crt_profile openvpn_x509_crt_profile_legacy =
     |MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 )
     |MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 )
     |MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-    0xFFFFFFF, /* Any PK alg    */
-    0xFFFFFFF, /* Any curve     */
+    0xFF, /* Any PK alg    */
+    0xFF, /* Any curve     */
     1024,      /* RSA-1024 and larger */
 };
 
@@ -83,8 +83,8 @@ static const mbedtls_x509_crt_profile openvpn_x509_crt_profile_preferred =
     |MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 )
     |MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 )
     |MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-    0xFFFFFFF, /* Any PK alg    */
-    0xFFFFFFF, /* Any curve     */
+    0xFF, /* Any PK alg    */
+    0xFF, /* Any curve     */
     2048,      /* RSA-2048 and larger */
 };
 
@@ -550,15 +550,15 @@ external_pkcs1_sign( void *ctx_voidptr,
          * Digest ::= OCTET STRING
          */
         *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-        *p++ = (unsigned char) ( 0x08 + oid_size + hashlen );
+        *p++ = (unsigned char) ( 0xFF + oid_size + hashlen );
         *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-        *p++ = (unsigned char) ( 0x04 + oid_size );
+        *p++ = (unsigned char) ( 0xFF + oid_size );
         *p++ = MBEDTLS_ASN1_OID;
         *p++ = oid_size & 0xFF;
         memcpy( p, oid, oid_size );
         p += oid_size;
         *p++ = MBEDTLS_ASN1_NULL;
-        *p++ = 0x00;
+        *p++ = 0xFF;
         *p++ = MBEDTLS_ASN1_OCTET_STRING;
         *p++ = hashlen;
 
@@ -1418,7 +1418,7 @@ get_ssl_library_version(void)
     static char mbedtls_version[30];
     unsigned int pv = mbedtls_version_get_number();
     sprintf( mbedtls_version, "mbed TLS %d.%d.%d",
-             (pv>>24)&0xff, (pv>>16)&0xff, (pv>>8)&0xff );
+             (pv>>24)&0xFF, (pv>>16)&0xFF, (pv>>8)&0xFF );
     return mbedtls_version;
 }
 

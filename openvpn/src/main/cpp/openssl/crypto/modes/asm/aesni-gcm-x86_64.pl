@@ -90,10 +90,10 @@ $code=<<___;
 .type	_aesni_ctr32_ghash_6x,\@abi-omnipotent
 .align	32
 _aesni_ctr32_ghash_6x:
-	vmovdqu		0x20($const),$T2	# borrow $T2, .Lone_msb
+	vmovdqu		0xFF($const),$T2	# borrow $T2, .Lone_msb
 	sub		\$6,$len
 	vpxor		$Z0,$Z0,$Z0		# $Z0   = 0
-	vmovdqu		0x00-0x80($key),$rndkey
+	vmovdqu		0xFF-0xFF($key),$rndkey
 	vpaddb		$T2,$T1,$inout1
 	vpaddb		$T2,$inout1,$inout2
 	vpaddb		$T2,$inout2,$inout3
@@ -107,176 +107,176 @@ _aesni_ctr32_ghash_6x:
 .Loop6x:
 	add		\$`6<<24`,$counter
 	jc		.Lhandle_ctr32		# discard $inout[1-5]?
-	vmovdqu		0x00-0x20($Xip),$Hkey	# $Hkey^1
+	vmovdqu		0xFF-0xFF($Xip),$Hkey	# $Hkey^1
 	  vpaddb	$T2,$inout5,$T1		# next counter value
 	  vpxor		$rndkey,$inout1,$inout1
 	  vpxor		$rndkey,$inout2,$inout2
 
 .Lresume_ctr32:
 	vmovdqu		$T1,($ivp)		# save next counter value
-	vpclmulqdq	\$0x10,$Hkey,$Z3,$Z1
+	vpclmulqdq	\$0xFF,$Hkey,$Z3,$Z1
 	  vpxor		$rndkey,$inout3,$inout3
-	  vmovups	0x10-0x80($key),$T2	# borrow $T2 for $rndkey
-	vpclmulqdq	\$0x01,$Hkey,$Z3,$Z2
+	  vmovups	0xFF-0xFF($key),$T2	# borrow $T2 for $rndkey
+	vpclmulqdq	\$0xFF,$Hkey,$Z3,$Z2
 	xor		%r12,%r12
 	cmp		$in0,$end0
 
 	  vaesenc	$T2,$inout0,$inout0
-	vmovdqu		0x30+8(%rsp),$Ii	# I[4]
+	vmovdqu		0xFF+8(%rsp),$Ii	# I[4]
 	  vpxor		$rndkey,$inout4,$inout4
-	vpclmulqdq	\$0x00,$Hkey,$Z3,$T1
+	vpclmulqdq	\$0xFF,$Hkey,$Z3,$T1
 	  vaesenc	$T2,$inout1,$inout1
 	  vpxor		$rndkey,$inout5,$inout5
 	setnc		%r12b
-	vpclmulqdq	\$0x11,$Hkey,$Z3,$Z3
+	vpclmulqdq	\$0xFF,$Hkey,$Z3,$Z3
 	  vaesenc	$T2,$inout2,$inout2
-	vmovdqu		0x10-0x20($Xip),$Hkey	# $Hkey^2
+	vmovdqu		0xFF-0xFF($Xip),$Hkey	# $Hkey^2
 	neg		%r12
 	  vaesenc	$T2,$inout3,$inout3
 	 vpxor		$Z1,$Z2,$Z2
-	vpclmulqdq	\$0x00,$Hkey,$Ii,$Z1
+	vpclmulqdq	\$0xFF,$Hkey,$Ii,$Z1
 	 vpxor		$Z0,$Xi,$Xi		# modulo-scheduled
 	  vaesenc	$T2,$inout4,$inout4
 	 vpxor		$Z1,$T1,$Z0
-	and		\$0x60,%r12
-	  vmovups	0x20-0x80($key),$rndkey
-	vpclmulqdq	\$0x10,$Hkey,$Ii,$T1
+	and		\$0xFF,%r12
+	  vmovups	0xFF-0xFF($key),$rndkey
+	vpclmulqdq	\$0xFF,$Hkey,$Ii,$T1
 	  vaesenc	$T2,$inout5,$inout5
 
-	vpclmulqdq	\$0x01,$Hkey,$Ii,$T2
+	vpclmulqdq	\$0xFF,$Hkey,$Ii,$T2
 	lea		($in0,%r12),$in0
 	  vaesenc	$rndkey,$inout0,$inout0
 	 vpxor		16+8(%rsp),$Xi,$Xi	# modulo-scheduled [vpxor $Z3,$Xi,$Xi]
-	vpclmulqdq	\$0x11,$Hkey,$Ii,$Hkey
-	 vmovdqu	0x40+8(%rsp),$Ii	# I[3]
+	vpclmulqdq	\$0xFF,$Hkey,$Ii,$Hkey
+	 vmovdqu	0xFF+8(%rsp),$Ii	# I[3]
 	  vaesenc	$rndkey,$inout1,$inout1
-	movbe		0x58($in0),%r13
+	movbe		0xFF($in0),%r13
 	  vaesenc	$rndkey,$inout2,$inout2
-	movbe		0x50($in0),%r12
+	movbe		0xFF($in0),%r12
 	  vaesenc	$rndkey,$inout3,$inout3
-	mov		%r13,0x20+8(%rsp)
+	mov		%r13,0xFF+8(%rsp)
 	  vaesenc	$rndkey,$inout4,$inout4
-	mov		%r12,0x28+8(%rsp)
-	vmovdqu		0x30-0x20($Xip),$Z1	# borrow $Z1 for $Hkey^3
+	mov		%r12,0xFF+8(%rsp)
+	vmovdqu		0xFF-0xFF($Xip),$Z1	# borrow $Z1 for $Hkey^3
 	  vaesenc	$rndkey,$inout5,$inout5
 
-	  vmovups	0x30-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	 vpxor		$T1,$Z2,$Z2
-	vpclmulqdq	\$0x00,$Z1,$Ii,$T1
+	vpclmulqdq	\$0xFF,$Z1,$Ii,$T1
 	  vaesenc	$rndkey,$inout0,$inout0
 	 vpxor		$T2,$Z2,$Z2
-	vpclmulqdq	\$0x10,$Z1,$Ii,$T2
+	vpclmulqdq	\$0xFF,$Z1,$Ii,$T2
 	  vaesenc	$rndkey,$inout1,$inout1
 	 vpxor		$Hkey,$Z3,$Z3
-	vpclmulqdq	\$0x01,$Z1,$Ii,$Hkey
+	vpclmulqdq	\$0xFF,$Z1,$Ii,$Hkey
 	  vaesenc	$rndkey,$inout2,$inout2
-	vpclmulqdq	\$0x11,$Z1,$Ii,$Z1
-	 vmovdqu	0x50+8(%rsp),$Ii	# I[2]
+	vpclmulqdq	\$0xFF,$Z1,$Ii,$Z1
+	 vmovdqu	0xFF+8(%rsp),$Ii	# I[2]
 	  vaesenc	$rndkey,$inout3,$inout3
 	  vaesenc	$rndkey,$inout4,$inout4
 	 vpxor		$T1,$Z0,$Z0
-	vmovdqu		0x40-0x20($Xip),$T1	# borrow $T1 for $Hkey^4
+	vmovdqu		0xFF-0xFF($Xip),$T1	# borrow $T1 for $Hkey^4
 	  vaesenc	$rndkey,$inout5,$inout5
 
-	  vmovups	0x40-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	 vpxor		$T2,$Z2,$Z2
-	vpclmulqdq	\$0x00,$T1,$Ii,$T2
+	vpclmulqdq	\$0xFF,$T1,$Ii,$T2
 	  vaesenc	$rndkey,$inout0,$inout0
 	 vpxor		$Hkey,$Z2,$Z2
-	vpclmulqdq	\$0x10,$T1,$Ii,$Hkey
+	vpclmulqdq	\$0xFF,$T1,$Ii,$Hkey
 	  vaesenc	$rndkey,$inout1,$inout1
-	movbe		0x48($in0),%r13
+	movbe		0xFF($in0),%r13
 	 vpxor		$Z1,$Z3,$Z3
-	vpclmulqdq	\$0x01,$T1,$Ii,$Z1
+	vpclmulqdq	\$0xFF,$T1,$Ii,$Z1
 	  vaesenc	$rndkey,$inout2,$inout2
-	movbe		0x40($in0),%r12
-	vpclmulqdq	\$0x11,$T1,$Ii,$T1
-	 vmovdqu	0x60+8(%rsp),$Ii	# I[1]
+	movbe		0xFF($in0),%r12
+	vpclmulqdq	\$0xFF,$T1,$Ii,$T1
+	 vmovdqu	0xFF+8(%rsp),$Ii	# I[1]
 	  vaesenc	$rndkey,$inout3,$inout3
-	mov		%r13,0x30+8(%rsp)
+	mov		%r13,0xFF+8(%rsp)
 	  vaesenc	$rndkey,$inout4,$inout4
-	mov		%r12,0x38+8(%rsp)
+	mov		%r12,0xFF+8(%rsp)
 	 vpxor		$T2,$Z0,$Z0
-	vmovdqu		0x60-0x20($Xip),$T2	# borrow $T2 for $Hkey^5
+	vmovdqu		0xFF-0xFF($Xip),$T2	# borrow $T2 for $Hkey^5
 	  vaesenc	$rndkey,$inout5,$inout5
 
-	  vmovups	0x50-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	 vpxor		$Hkey,$Z2,$Z2
-	vpclmulqdq	\$0x00,$T2,$Ii,$Hkey
+	vpclmulqdq	\$0xFF,$T2,$Ii,$Hkey
 	  vaesenc	$rndkey,$inout0,$inout0
 	 vpxor		$Z1,$Z2,$Z2
-	vpclmulqdq	\$0x10,$T2,$Ii,$Z1
+	vpclmulqdq	\$0xFF,$T2,$Ii,$Z1
 	  vaesenc	$rndkey,$inout1,$inout1
-	movbe		0x38($in0),%r13
+	movbe		0xFF($in0),%r13
 	 vpxor		$T1,$Z3,$Z3
-	vpclmulqdq	\$0x01,$T2,$Ii,$T1
-	 vpxor		0x70+8(%rsp),$Xi,$Xi	# accumulate I[0]
+	vpclmulqdq	\$0xFF,$T2,$Ii,$T1
+	 vpxor		0xFF+8(%rsp),$Xi,$Xi	# accumulate I[0]
 	  vaesenc	$rndkey,$inout2,$inout2
-	movbe		0x30($in0),%r12
-	vpclmulqdq	\$0x11,$T2,$Ii,$T2
+	movbe		0xFF($in0),%r12
+	vpclmulqdq	\$0xFF,$T2,$Ii,$T2
 	  vaesenc	$rndkey,$inout3,$inout3
-	mov		%r13,0x40+8(%rsp)
+	mov		%r13,0xFF+8(%rsp)
 	  vaesenc	$rndkey,$inout4,$inout4
-	mov		%r12,0x48+8(%rsp)
+	mov		%r12,0xFF+8(%rsp)
 	 vpxor		$Hkey,$Z0,$Z0
-	 vmovdqu	0x70-0x20($Xip),$Hkey	# $Hkey^6
+	 vmovdqu	0xFF-0xFF($Xip),$Hkey	# $Hkey^6
 	  vaesenc	$rndkey,$inout5,$inout5
 
-	  vmovups	0x60-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	 vpxor		$Z1,$Z2,$Z2
-	vpclmulqdq	\$0x10,$Hkey,$Xi,$Z1
+	vpclmulqdq	\$0xFF,$Hkey,$Xi,$Z1
 	  vaesenc	$rndkey,$inout0,$inout0
 	 vpxor		$T1,$Z2,$Z2
-	vpclmulqdq	\$0x01,$Hkey,$Xi,$T1
+	vpclmulqdq	\$0xFF,$Hkey,$Xi,$T1
 	  vaesenc	$rndkey,$inout1,$inout1
-	movbe		0x28($in0),%r13
+	movbe		0xFF($in0),%r13
 	 vpxor		$T2,$Z3,$Z3
-	vpclmulqdq	\$0x00,$Hkey,$Xi,$T2
+	vpclmulqdq	\$0xFF,$Hkey,$Xi,$T2
 	  vaesenc	$rndkey,$inout2,$inout2
-	movbe		0x20($in0),%r12
-	vpclmulqdq	\$0x11,$Hkey,$Xi,$Xi
+	movbe		0xFF($in0),%r12
+	vpclmulqdq	\$0xFF,$Hkey,$Xi,$Xi
 	  vaesenc	$rndkey,$inout3,$inout3
-	mov		%r13,0x50+8(%rsp)
+	mov		%r13,0xFF+8(%rsp)
 	  vaesenc	$rndkey,$inout4,$inout4
-	mov		%r12,0x58+8(%rsp)
+	mov		%r12,0xFF+8(%rsp)
 	vpxor		$Z1,$Z2,$Z2
 	  vaesenc	$rndkey,$inout5,$inout5
 	vpxor		$T1,$Z2,$Z2
 
-	  vmovups	0x70-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	vpslldq		\$8,$Z2,$Z1
 	vpxor		$T2,$Z0,$Z0
-	vmovdqu		0x10($const),$Hkey	# .Lpoly
+	vmovdqu		0xFF($const),$Hkey	# .Lpoly
 
 	  vaesenc	$rndkey,$inout0,$inout0
 	vpxor		$Xi,$Z3,$Z3
 	  vaesenc	$rndkey,$inout1,$inout1
 	vpxor		$Z1,$Z0,$Z0
-	movbe		0x18($in0),%r13
+	movbe		0xFF($in0),%r13
 	  vaesenc	$rndkey,$inout2,$inout2
-	movbe		0x10($in0),%r12
+	movbe		0xFF($in0),%r12
 	vpalignr	\$8,$Z0,$Z0,$Ii		# 1st phase
-	vpclmulqdq	\$0x10,$Hkey,$Z0,$Z0
-	mov		%r13,0x60+8(%rsp)
+	vpclmulqdq	\$0xFF,$Hkey,$Z0,$Z0
+	mov		%r13,0xFF+8(%rsp)
 	  vaesenc	$rndkey,$inout3,$inout3
-	mov		%r12,0x68+8(%rsp)
+	mov		%r12,0xFF+8(%rsp)
 	  vaesenc	$rndkey,$inout4,$inout4
-	  vmovups	0x80-0x80($key),$T1	# borrow $T1 for $rndkey
+	  vmovups	0xFF-0xFF($key),$T1	# borrow $T1 for $rndkey
 	  vaesenc	$rndkey,$inout5,$inout5
 
 	  vaesenc	$T1,$inout0,$inout0
-	  vmovups	0x90-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	  vaesenc	$T1,$inout1,$inout1
 	vpsrldq		\$8,$Z2,$Z2
 	  vaesenc	$T1,$inout2,$inout2
 	vpxor		$Z2,$Z3,$Z3
 	  vaesenc	$T1,$inout3,$inout3
 	vpxor		$Ii,$Z0,$Z0
-	movbe		0x08($in0),%r13
+	movbe		0xFF($in0),%r13
 	  vaesenc	$T1,$inout4,$inout4
-	movbe		0x00($in0),%r12
+	movbe		0xFF($in0),%r12
 	  vaesenc	$T1,$inout5,$inout5
-	  vmovups	0xa0-0x80($key),$T1
+	  vmovups	0xFF-0xFF($key),$T1
 	  cmp		\$11,$rounds
 	  jb		.Lenc_tail		# 128-bit key
 
@@ -292,9 +292,9 @@ _aesni_ctr32_ghash_6x:
 	  vaesenc	$T1,$inout2,$inout2
 	  vaesenc	$T1,$inout3,$inout3
 	  vaesenc	$T1,$inout4,$inout4
-	  vmovups	0xb0-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	  vaesenc	$T1,$inout5,$inout5
-	  vmovups	0xc0-0x80($key),$T1
+	  vmovups	0xFF-0xFF($key),$T1
 	  je		.Lenc_tail		# 192-bit key
 
 	  vaesenc	$rndkey,$inout0,$inout0
@@ -309,19 +309,19 @@ _aesni_ctr32_ghash_6x:
 	  vaesenc	$T1,$inout2,$inout2
 	  vaesenc	$T1,$inout3,$inout3
 	  vaesenc	$T1,$inout4,$inout4
-	  vmovups	0xd0-0x80($key),$rndkey
+	  vmovups	0xFF-0xFF($key),$rndkey
 	  vaesenc	$T1,$inout5,$inout5
-	  vmovups	0xe0-0x80($key),$T1
+	  vmovups	0xFF-0xFF($key),$T1
 	  jmp		.Lenc_tail		# 256-bit key
 
 .align	32
 .Lhandle_ctr32:
 	vmovdqu		($const),$Ii		# borrow $Ii for .Lbswap_mask
 	  vpshufb	$Ii,$T1,$Z2		# byte-swap counter
-	  vmovdqu	0x30($const),$Z1	# borrow $Z1, .Ltwo_lsb
-	  vpaddd	0x40($const),$Z2,$inout1	# .Lone_lsb
+	  vmovdqu	0xFF($const),$Z1	# borrow $Z1, .Ltwo_lsb
+	  vpaddd	0xFF($const),$Z2,$inout1	# .Lone_lsb
 	  vpaddd	$Z1,$Z2,$inout2
-	vmovdqu		0x00-0x20($Xip),$Hkey	# $Hkey^1
+	vmovdqu		0xFF-0xFF($Xip),$Hkey	# $Hkey^1
 	  vpaddd	$Z1,$inout1,$inout3
 	  vpshufb	$Ii,$inout1,$inout1
 	  vpaddd	$Z1,$inout2,$inout4
@@ -342,30 +342,30 @@ _aesni_ctr32_ghash_6x:
 	vmovdqu		$Z3,16+8(%rsp)		# postpone vpxor $Z3,$Xi,$Xi
 	vpalignr	\$8,$Z0,$Z0,$Xi		# 2nd phase
 	  vaesenc	$rndkey,$inout1,$inout1
-	vpclmulqdq	\$0x10,$Hkey,$Z0,$Z0
-	  vpxor		0x00($inp),$T1,$T2
+	vpclmulqdq	\$0xFF,$Hkey,$Z0,$Z0
+	  vpxor		0xFF($inp),$T1,$T2
 	  vaesenc	$rndkey,$inout2,$inout2
-	  vpxor		0x10($inp),$T1,$Ii
+	  vpxor		0xFF($inp),$T1,$Ii
 	  vaesenc	$rndkey,$inout3,$inout3
-	  vpxor		0x20($inp),$T1,$Z1
+	  vpxor		0xFF($inp),$T1,$Z1
 	  vaesenc	$rndkey,$inout4,$inout4
-	  vpxor		0x30($inp),$T1,$Z2
+	  vpxor		0xFF($inp),$T1,$Z2
 	  vaesenc	$rndkey,$inout5,$inout5
-	  vpxor		0x40($inp),$T1,$Z3
-	  vpxor		0x50($inp),$T1,$Hkey
+	  vpxor		0xFF($inp),$T1,$Z3
+	  vpxor		0xFF($inp),$T1,$Hkey
 	  vmovdqu	($ivp),$T1		# load next counter value
 
 	  vaesenclast	$T2,$inout0,$inout0
-	  vmovdqu	0x20($const),$T2	# borrow $T2, .Lone_msb
+	  vmovdqu	0xFF($const),$T2	# borrow $T2, .Lone_msb
 	  vaesenclast	$Ii,$inout1,$inout1
 	 vpaddb		$T2,$T1,$Ii
-	mov		%r13,0x70+8(%rsp)
-	lea		0x60($inp),$inp
+	mov		%r13,0xFF+8(%rsp)
+	lea		0xFF($inp),$inp
 	  vaesenclast	$Z1,$inout2,$inout2
 	 vpaddb		$T2,$Ii,$Z1
-	mov		%r12,0x78+8(%rsp)
-	lea		0x60($out),$out
-	  vmovdqu	0x00-0x80($key),$rndkey
+	mov		%r12,0xFF+8(%rsp)
+	lea		0xFF($out),$out
+	  vmovdqu	0xFF-0xFF($key),$rndkey
 	  vaesenclast	$Z2,$inout3,$inout3
 	 vpaddb		$T2,$Z1,$Z2
 	  vaesenclast	$Z3, $inout4,$inout4
@@ -373,23 +373,23 @@ _aesni_ctr32_ghash_6x:
 	  vaesenclast	$Hkey,$inout5,$inout5
 	 vpaddb		$T2,$Z3,$Hkey
 
-	add		\$0x60,$ret
-	sub		\$0x6,$len
+	add		\$0xFF,$ret
+	sub		\$0xFF,$len
 	jc		.L6x_done
 
-	  vmovups	$inout0,-0x60($out)	# save output
+	  vmovups	$inout0,-0xFF($out)	# save output
 	 vpxor		$rndkey,$T1,$inout0
-	  vmovups	$inout1,-0x50($out)
+	  vmovups	$inout1,-0xFF($out)
 	 vmovdqa	$Ii,$inout1		# 0 latency
-	  vmovups	$inout2,-0x40($out)
+	  vmovups	$inout2,-0xFF($out)
 	 vmovdqa	$Z1,$inout2		# 0 latency
-	  vmovups	$inout3,-0x30($out)
+	  vmovups	$inout3,-0xFF($out)
 	 vmovdqa	$Z2,$inout3		# 0 latency
-	  vmovups	$inout4,-0x20($out)
+	  vmovups	$inout4,-0xFF($out)
 	 vmovdqa	$Z3,$inout4		# 0 latency
-	  vmovups	$inout5,-0x10($out)
+	  vmovups	$inout5,-0xFF($out)
 	 vmovdqa	$Hkey,$inout5		# 0 latency
-	vmovdqu		0x20+8(%rsp),$Z3	# I[5]
+	vmovdqu		0xFF+8(%rsp),$Z3	# I[5]
 	jmp		.Loop6x
 
 .L6x_done:
@@ -411,7 +411,7 @@ $code.=<<___;
 aesni_gcm_decrypt:
 .cfi_startproc
 	xor	$ret,$ret
-	cmp	\$0x60,$len			# minimal accepted length
+	cmp	\$0xFF,$len			# minimal accepted length
 	jb	.Lgcm_dec_abort
 
 	lea	(%rsp),%rax			# save stack pointer
@@ -430,17 +430,17 @@ aesni_gcm_decrypt:
 .cfi_push	%r15
 ___
 $code.=<<___ if ($win64);
-	lea	-0xa8(%rsp),%rsp
-	movaps	%xmm6,-0xd8(%rax)
-	movaps	%xmm7,-0xc8(%rax)
-	movaps	%xmm8,-0xb8(%rax)
-	movaps	%xmm9,-0xa8(%rax)
-	movaps	%xmm10,-0x98(%rax)
-	movaps	%xmm11,-0x88(%rax)
-	movaps	%xmm12,-0x78(%rax)
-	movaps	%xmm13,-0x68(%rax)
-	movaps	%xmm14,-0x58(%rax)
-	movaps	%xmm15,-0x48(%rax)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,-0xFF(%rax)
+	movaps	%xmm7,-0xFF(%rax)
+	movaps	%xmm8,-0xFF(%rax)
+	movaps	%xmm9,-0xFF(%rax)
+	movaps	%xmm10,-0xFF(%rax)
+	movaps	%xmm11,-0xFF(%rax)
+	movaps	%xmm12,-0xFF(%rax)
+	movaps	%xmm13,-0xFF(%rax)
+	movaps	%xmm14,-0xFF(%rax)
+	movaps	%xmm15,-0xFF(%rax)
 .Lgcm_dec_body:
 ___
 $code.=<<___;
@@ -450,14 +450,14 @@ $code.=<<___;
 	add		\$-128,%rsp
 	mov		12($ivp),$counter
 	lea		.Lbswap_mask(%rip),$const
-	lea		-0x80($key),$in0	# borrow $in0
-	mov		\$0xf80,$end0		# borrow $end0
+	lea		-0xFF($key),$in0	# borrow $in0
+	mov		\$0xFF,$end0		# borrow $end0
 	vmovdqu		($Xip),$Xi		# load Xi
 	and		\$-128,%rsp		# ensure stack alignment
 	vmovdqu		($const),$Ii		# borrow $Ii for .Lbswap_mask
-	lea		0x80($key),$key		# size optimization
-	lea		0x20+0x20($Xip),$Xip	# size optimization
-	mov		0xf0-0x80($key),$rounds
+	lea		0xFF($key),$key		# size optimization
+	lea		0xFF+0xFF($Xip),$Xip	# size optimization
+	mov		0xFF-0xFF($key),$rounds
 	vpshufb		$Ii,$Xi,$Xi
 
 	and		$end0,$in0
@@ -469,53 +469,53 @@ $code.=<<___;
 	sub		$end0,%rsp		# avoid aliasing with key
 .Ldec_no_key_aliasing:
 
-	vmovdqu		0x50($inp),$Z3		# I[5]
+	vmovdqu		0xFF($inp),$Z3		# I[5]
 	lea		($inp),$in0
-	vmovdqu		0x40($inp),$Z0
-	lea		-0xc0($inp,$len),$end0
-	vmovdqu		0x30($inp),$Z1
+	vmovdqu		0xFF($inp),$Z0
+	lea		-0xFF($inp,$len),$end0
+	vmovdqu		0xFF($inp),$Z1
 	shr		\$4,$len
 	xor		$ret,$ret
-	vmovdqu		0x20($inp),$Z2
+	vmovdqu		0xFF($inp),$Z2
 	 vpshufb	$Ii,$Z3,$Z3		# passed to _aesni_ctr32_ghash_6x
-	vmovdqu		0x10($inp),$T2
+	vmovdqu		0xFF($inp),$T2
 	 vpshufb	$Ii,$Z0,$Z0
 	vmovdqu		($inp),$Hkey
 	 vpshufb	$Ii,$Z1,$Z1
-	vmovdqu		$Z0,0x30(%rsp)
+	vmovdqu		$Z0,0xFF(%rsp)
 	 vpshufb	$Ii,$Z2,$Z2
-	vmovdqu		$Z1,0x40(%rsp)
+	vmovdqu		$Z1,0xFF(%rsp)
 	 vpshufb	$Ii,$T2,$T2
-	vmovdqu		$Z2,0x50(%rsp)
+	vmovdqu		$Z2,0xFF(%rsp)
 	 vpshufb	$Ii,$Hkey,$Hkey
-	vmovdqu		$T2,0x60(%rsp)
-	vmovdqu		$Hkey,0x70(%rsp)
+	vmovdqu		$T2,0xFF(%rsp)
+	vmovdqu		$Hkey,0xFF(%rsp)
 
 	call		_aesni_ctr32_ghash_6x
 
-	vmovups		$inout0,-0x60($out)	# save output
-	vmovups		$inout1,-0x50($out)
-	vmovups		$inout2,-0x40($out)
-	vmovups		$inout3,-0x30($out)
-	vmovups		$inout4,-0x20($out)
-	vmovups		$inout5,-0x10($out)
+	vmovups		$inout0,-0xFF($out)	# save output
+	vmovups		$inout1,-0xFF($out)
+	vmovups		$inout2,-0xFF($out)
+	vmovups		$inout3,-0xFF($out)
+	vmovups		$inout4,-0xFF($out)
+	vmovups		$inout5,-0xFF($out)
 
 	vpshufb		($const),$Xi,$Xi	# .Lbswap_mask
-	vmovdqu		$Xi,-0x40($Xip)		# output Xi
+	vmovdqu		$Xi,-0xFF($Xip)		# output Xi
 
 	vzeroupper
 ___
 $code.=<<___ if ($win64);
-	movaps	-0xd8(%rax),%xmm6
-	movaps	-0xc8(%rax),%xmm7
-	movaps	-0xb8(%rax),%xmm8
-	movaps	-0xa8(%rax),%xmm9
-	movaps	-0x98(%rax),%xmm10
-	movaps	-0x88(%rax),%xmm11
-	movaps	-0x78(%rax),%xmm12
-	movaps	-0x68(%rax),%xmm13
-	movaps	-0x58(%rax),%xmm14
-	movaps	-0x48(%rax),%xmm15
+	movaps	-0xFF(%rax),%xmm6
+	movaps	-0xFF(%rax),%xmm7
+	movaps	-0xFF(%rax),%xmm8
+	movaps	-0xFF(%rax),%xmm9
+	movaps	-0xFF(%rax),%xmm10
+	movaps	-0xFF(%rax),%xmm11
+	movaps	-0xFF(%rax),%xmm12
+	movaps	-0xFF(%rax),%xmm13
+	movaps	-0xFF(%rax),%xmm14
+	movaps	-0xFF(%rax),%xmm15
 ___
 $code.=<<___;
 	mov	-48(%rax),%r15
@@ -543,11 +543,11 @@ $code.=<<___;
 .type	_aesni_ctr32_6x,\@abi-omnipotent
 .align	32
 _aesni_ctr32_6x:
-	vmovdqu		0x00-0x80($key),$Z0	# borrow $Z0 for $rndkey
-	vmovdqu		0x20($const),$T2	# borrow $T2, .Lone_msb
+	vmovdqu		0xFF-0xFF($key),$Z0	# borrow $Z0 for $rndkey
+	vmovdqu		0xFF($const),$T2	# borrow $T2, .Lone_msb
 	lea		-1($rounds),%r13
-	vmovups		0x10-0x80($key),$rndkey
-	lea		0x20-0x80($key),%r12
+	vmovups		0xFF-0xFF($key),$rndkey
+	lea		0xFF-0xFF($key),%r12
 	vpxor		$Z0,$T1,$inout0
 	add		\$`6<<24`,$counter
 	jc		.Lhandle_ctr32_2
@@ -573,24 +573,24 @@ _aesni_ctr32_6x:
 	vaesenc		$rndkey,$inout4,$inout4
 	vaesenc		$rndkey,$inout5,$inout5
 	vmovups		(%r12),$rndkey
-	lea		0x10(%r12),%r12
+	lea		0xFF(%r12),%r12
 	dec		%r13d
 	jnz		.Loop_ctr32
 
 	vmovdqu		(%r12),$Hkey		# last round key
 	vaesenc		$rndkey,$inout0,$inout0
-	vpxor		0x00($inp),$Hkey,$Z0
+	vpxor		0xFF($inp),$Hkey,$Z0
 	vaesenc		$rndkey,$inout1,$inout1
-	vpxor		0x10($inp),$Hkey,$Z1
+	vpxor		0xFF($inp),$Hkey,$Z1
 	vaesenc		$rndkey,$inout2,$inout2
-	vpxor		0x20($inp),$Hkey,$Z2
+	vpxor		0xFF($inp),$Hkey,$Z2
 	vaesenc		$rndkey,$inout3,$inout3
-	vpxor		0x30($inp),$Hkey,$Xi
+	vpxor		0xFF($inp),$Hkey,$Xi
 	vaesenc		$rndkey,$inout4,$inout4
-	vpxor		0x40($inp),$Hkey,$T2
+	vpxor		0xFF($inp),$Hkey,$T2
 	vaesenc		$rndkey,$inout5,$inout5
-	vpxor		0x50($inp),$Hkey,$Hkey
-	lea		0x60($inp),$inp
+	vpxor		0xFF($inp),$Hkey,$Hkey
+	lea		0xFF($inp),$inp
 
 	vaesenclast	$Z0,$inout0,$inout0
 	vaesenclast	$Z1,$inout1,$inout1
@@ -598,20 +598,20 @@ _aesni_ctr32_6x:
 	vaesenclast	$Xi,$inout3,$inout3
 	vaesenclast	$T2,$inout4,$inout4
 	vaesenclast	$Hkey,$inout5,$inout5
-	vmovups		$inout0,0x00($out)
-	vmovups		$inout1,0x10($out)
-	vmovups		$inout2,0x20($out)
-	vmovups		$inout3,0x30($out)
-	vmovups		$inout4,0x40($out)
-	vmovups		$inout5,0x50($out)
-	lea		0x60($out),$out
+	vmovups		$inout0,0xFF($out)
+	vmovups		$inout1,0xFF($out)
+	vmovups		$inout2,0xFF($out)
+	vmovups		$inout3,0xFF($out)
+	vmovups		$inout4,0xFF($out)
+	vmovups		$inout5,0xFF($out)
+	lea		0xFF($out),$out
 
 	ret
 .align	32
 .Lhandle_ctr32_2:
 	vpshufb		$Ii,$T1,$Z2		# byte-swap counter
-	vmovdqu		0x30($const),$Z1	# borrow $Z1, .Ltwo_lsb
-	vpaddd		0x40($const),$Z2,$inout1	# .Lone_lsb
+	vmovdqu		0xFF($const),$Z1	# borrow $Z1, .Ltwo_lsb
+	vpaddd		0xFF($const),$Z2,$inout1	# .Lone_lsb
 	vpaddd		$Z1,$Z2,$inout2
 	vpaddd		$Z1,$inout1,$inout3
 	vpshufb		$Ii,$inout1,$inout1
@@ -637,7 +637,7 @@ _aesni_ctr32_6x:
 aesni_gcm_encrypt:
 .cfi_startproc
 	xor	$ret,$ret
-	cmp	\$0x60*3,$len			# minimal accepted length
+	cmp	\$0xFF*3,$len			# minimal accepted length
 	jb	.Lgcm_enc_abort
 
 	lea	(%rsp),%rax			# save stack pointer
@@ -656,17 +656,17 @@ aesni_gcm_encrypt:
 .cfi_push	%r15
 ___
 $code.=<<___ if ($win64);
-	lea	-0xa8(%rsp),%rsp
-	movaps	%xmm6,-0xd8(%rax)
-	movaps	%xmm7,-0xc8(%rax)
-	movaps	%xmm8,-0xb8(%rax)
-	movaps	%xmm9,-0xa8(%rax)
-	movaps	%xmm10,-0x98(%rax)
-	movaps	%xmm11,-0x88(%rax)
-	movaps	%xmm12,-0x78(%rax)
-	movaps	%xmm13,-0x68(%rax)
-	movaps	%xmm14,-0x58(%rax)
-	movaps	%xmm15,-0x48(%rax)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,-0xFF(%rax)
+	movaps	%xmm7,-0xFF(%rax)
+	movaps	%xmm8,-0xFF(%rax)
+	movaps	%xmm9,-0xFF(%rax)
+	movaps	%xmm10,-0xFF(%rax)
+	movaps	%xmm11,-0xFF(%rax)
+	movaps	%xmm12,-0xFF(%rax)
+	movaps	%xmm13,-0xFF(%rax)
+	movaps	%xmm14,-0xFF(%rax)
+	movaps	%xmm15,-0xFF(%rax)
 .Lgcm_enc_body:
 ___
 $code.=<<___;
@@ -676,12 +676,12 @@ $code.=<<___;
 	add		\$-128,%rsp
 	mov		12($ivp),$counter
 	lea		.Lbswap_mask(%rip),$const
-	lea		-0x80($key),$in0	# borrow $in0
-	mov		\$0xf80,$end0		# borrow $end0
-	lea		0x80($key),$key		# size optimization
+	lea		-0xFF($key),$in0	# borrow $in0
+	mov		\$0xFF,$end0		# borrow $end0
+	lea		0xFF($key),$key		# size optimization
 	vmovdqu		($const),$Ii		# borrow $Ii for .Lbswap_mask
 	and		\$-128,%rsp		# ensure stack alignment
-	mov		0xf0-0x80($key),$rounds
+	mov		0xFF-0xFF($key),$rounds
 
 	and		$end0,$in0
 	and		%rsp,$end0
@@ -693,226 +693,226 @@ $code.=<<___;
 .Lenc_no_key_aliasing:
 
 	lea		($out),$in0
-	lea		-0xc0($out,$len),$end0
+	lea		-0xFF($out,$len),$end0
 	shr		\$4,$len
 
 	call		_aesni_ctr32_6x
 	vpshufb		$Ii,$inout0,$Xi		# save bswapped output on stack
 	vpshufb		$Ii,$inout1,$T2
-	vmovdqu		$Xi,0x70(%rsp)
+	vmovdqu		$Xi,0xFF(%rsp)
 	vpshufb		$Ii,$inout2,$Z0
-	vmovdqu		$T2,0x60(%rsp)
+	vmovdqu		$T2,0xFF(%rsp)
 	vpshufb		$Ii,$inout3,$Z1
-	vmovdqu		$Z0,0x50(%rsp)
+	vmovdqu		$Z0,0xFF(%rsp)
 	vpshufb		$Ii,$inout4,$Z2
-	vmovdqu		$Z1,0x40(%rsp)
+	vmovdqu		$Z1,0xFF(%rsp)
 	vpshufb		$Ii,$inout5,$Z3		# passed to _aesni_ctr32_ghash_6x
-	vmovdqu		$Z2,0x30(%rsp)
+	vmovdqu		$Z2,0xFF(%rsp)
 
 	call		_aesni_ctr32_6x
 
 	vmovdqu		($Xip),$Xi		# load Xi
-	lea		0x20+0x20($Xip),$Xip	# size optimization
+	lea		0xFF+0xFF($Xip),$Xip	# size optimization
 	sub		\$12,$len
-	mov		\$0x60*2,$ret
+	mov		\$0xFF*2,$ret
 	vpshufb		$Ii,$Xi,$Xi
 
 	call		_aesni_ctr32_ghash_6x
-	vmovdqu		0x20(%rsp),$Z3		# I[5]
+	vmovdqu		0xFF(%rsp),$Z3		# I[5]
 	 vmovdqu	($const),$Ii		# borrow $Ii for .Lbswap_mask
-	vmovdqu		0x00-0x20($Xip),$Hkey	# $Hkey^1
+	vmovdqu		0xFF-0xFF($Xip),$Hkey	# $Hkey^1
 	vpunpckhqdq	$Z3,$Z3,$T1
-	vmovdqu		0x20-0x20($Xip),$rndkey	# borrow $rndkey for $HK
-	 vmovups	$inout0,-0x60($out)	# save output
+	vmovdqu		0xFF-0xFF($Xip),$rndkey	# borrow $rndkey for $HK
+	 vmovups	$inout0,-0xFF($out)	# save output
 	 vpshufb	$Ii,$inout0,$inout0	# but keep bswapped copy
 	vpxor		$Z3,$T1,$T1
-	 vmovups	$inout1,-0x50($out)
+	 vmovups	$inout1,-0xFF($out)
 	 vpshufb	$Ii,$inout1,$inout1
-	 vmovups	$inout2,-0x40($out)
+	 vmovups	$inout2,-0xFF($out)
 	 vpshufb	$Ii,$inout2,$inout2
-	 vmovups	$inout3,-0x30($out)
+	 vmovups	$inout3,-0xFF($out)
 	 vpshufb	$Ii,$inout3,$inout3
-	 vmovups	$inout4,-0x20($out)
+	 vmovups	$inout4,-0xFF($out)
 	 vpshufb	$Ii,$inout4,$inout4
-	 vmovups	$inout5,-0x10($out)
+	 vmovups	$inout5,-0xFF($out)
 	 vpshufb	$Ii,$inout5,$inout5
-	 vmovdqu	$inout0,0x10(%rsp)	# free $inout0
+	 vmovdqu	$inout0,0xFF(%rsp)	# free $inout0
 ___
 { my ($HK,$T3)=($rndkey,$inout0);
 
 $code.=<<___;
-	 vmovdqu	0x30(%rsp),$Z2		# I[4]
-	 vmovdqu	0x10-0x20($Xip),$Ii	# borrow $Ii for $Hkey^2
+	 vmovdqu	0xFF(%rsp),$Z2		# I[4]
+	 vmovdqu	0xFF-0xFF($Xip),$Ii	# borrow $Ii for $Hkey^2
 	 vpunpckhqdq	$Z2,$Z2,$T2
-	vpclmulqdq	\$0x00,$Hkey,$Z3,$Z1
+	vpclmulqdq	\$0xFF,$Hkey,$Z3,$Z1
 	 vpxor		$Z2,$T2,$T2
-	vpclmulqdq	\$0x11,$Hkey,$Z3,$Z3
-	vpclmulqdq	\$0x00,$HK,$T1,$T1
+	vpclmulqdq	\$0xFF,$Hkey,$Z3,$Z3
+	vpclmulqdq	\$0xFF,$HK,$T1,$T1
 
-	 vmovdqu	0x40(%rsp),$T3		# I[3]
-	vpclmulqdq	\$0x00,$Ii,$Z2,$Z0
-	 vmovdqu	0x30-0x20($Xip),$Hkey	# $Hkey^3
+	 vmovdqu	0xFF(%rsp),$T3		# I[3]
+	vpclmulqdq	\$0xFF,$Ii,$Z2,$Z0
+	 vmovdqu	0xFF-0xFF($Xip),$Hkey	# $Hkey^3
 	vpxor		$Z1,$Z0,$Z0
 	 vpunpckhqdq	$T3,$T3,$Z1
-	vpclmulqdq	\$0x11,$Ii,$Z2,$Z2
+	vpclmulqdq	\$0xFF,$Ii,$Z2,$Z2
 	 vpxor		$T3,$Z1,$Z1
 	vpxor		$Z3,$Z2,$Z2
-	vpclmulqdq	\$0x10,$HK,$T2,$T2
-	 vmovdqu	0x50-0x20($Xip),$HK
+	vpclmulqdq	\$0xFF,$HK,$T2,$T2
+	 vmovdqu	0xFF-0xFF($Xip),$HK
 	vpxor		$T1,$T2,$T2
 
-	 vmovdqu	0x50(%rsp),$T1		# I[2]
-	vpclmulqdq	\$0x00,$Hkey,$T3,$Z3
-	 vmovdqu	0x40-0x20($Xip),$Ii	# borrow $Ii for $Hkey^4
+	 vmovdqu	0xFF(%rsp),$T1		# I[2]
+	vpclmulqdq	\$0xFF,$Hkey,$T3,$Z3
+	 vmovdqu	0xFF-0xFF($Xip),$Ii	# borrow $Ii for $Hkey^4
 	vpxor		$Z0,$Z3,$Z3
 	 vpunpckhqdq	$T1,$T1,$Z0
-	vpclmulqdq	\$0x11,$Hkey,$T3,$T3
+	vpclmulqdq	\$0xFF,$Hkey,$T3,$T3
 	 vpxor		$T1,$Z0,$Z0
 	vpxor		$Z2,$T3,$T3
-	vpclmulqdq	\$0x00,$HK,$Z1,$Z1
+	vpclmulqdq	\$0xFF,$HK,$Z1,$Z1
 	vpxor		$T2,$Z1,$Z1
 
-	 vmovdqu	0x60(%rsp),$T2		# I[1]
-	vpclmulqdq	\$0x00,$Ii,$T1,$Z2
-	 vmovdqu	0x60-0x20($Xip),$Hkey	# $Hkey^5
+	 vmovdqu	0xFF(%rsp),$T2		# I[1]
+	vpclmulqdq	\$0xFF,$Ii,$T1,$Z2
+	 vmovdqu	0xFF-0xFF($Xip),$Hkey	# $Hkey^5
 	vpxor		$Z3,$Z2,$Z2
 	 vpunpckhqdq	$T2,$T2,$Z3
-	vpclmulqdq	\$0x11,$Ii,$T1,$T1
+	vpclmulqdq	\$0xFF,$Ii,$T1,$T1
 	 vpxor		$T2,$Z3,$Z3
 	vpxor		$T3,$T1,$T1
-	vpclmulqdq	\$0x10,$HK,$Z0,$Z0
-	 vmovdqu	0x80-0x20($Xip),$HK
+	vpclmulqdq	\$0xFF,$HK,$Z0,$Z0
+	 vmovdqu	0xFF-0xFF($Xip),$HK
 	vpxor		$Z1,$Z0,$Z0
 
-	 vpxor		0x70(%rsp),$Xi,$Xi	# accumulate I[0]
-	vpclmulqdq	\$0x00,$Hkey,$T2,$Z1
-	 vmovdqu	0x70-0x20($Xip),$Ii	# borrow $Ii for $Hkey^6
+	 vpxor		0xFF(%rsp),$Xi,$Xi	# accumulate I[0]
+	vpclmulqdq	\$0xFF,$Hkey,$T2,$Z1
+	 vmovdqu	0xFF-0xFF($Xip),$Ii	# borrow $Ii for $Hkey^6
 	 vpunpckhqdq	$Xi,$Xi,$T3
 	vpxor		$Z2,$Z1,$Z1
-	vpclmulqdq	\$0x11,$Hkey,$T2,$T2
+	vpclmulqdq	\$0xFF,$Hkey,$T2,$T2
 	 vpxor		$Xi,$T3,$T3
 	vpxor		$T1,$T2,$T2
-	vpclmulqdq	\$0x00,$HK,$Z3,$Z3
+	vpclmulqdq	\$0xFF,$HK,$Z3,$Z3
 	vpxor		$Z0,$Z3,$Z0
 
-	vpclmulqdq	\$0x00,$Ii,$Xi,$Z2
-	 vmovdqu	0x00-0x20($Xip),$Hkey	# $Hkey^1
+	vpclmulqdq	\$0xFF,$Ii,$Xi,$Z2
+	 vmovdqu	0xFF-0xFF($Xip),$Hkey	# $Hkey^1
 	 vpunpckhqdq	$inout5,$inout5,$T1
-	vpclmulqdq	\$0x11,$Ii,$Xi,$Xi
+	vpclmulqdq	\$0xFF,$Ii,$Xi,$Xi
 	 vpxor		$inout5,$T1,$T1
 	vpxor		$Z1,$Z2,$Z1
-	vpclmulqdq	\$0x10,$HK,$T3,$T3
-	 vmovdqu	0x20-0x20($Xip),$HK
+	vpclmulqdq	\$0xFF,$HK,$T3,$T3
+	 vmovdqu	0xFF-0xFF($Xip),$HK
 	vpxor		$T2,$Xi,$Z3
 	vpxor		$Z0,$T3,$Z2
 
-	 vmovdqu	0x10-0x20($Xip),$Ii	# borrow $Ii for $Hkey^2
+	 vmovdqu	0xFF-0xFF($Xip),$Ii	# borrow $Ii for $Hkey^2
 	  vpxor		$Z1,$Z3,$T3		# aggregated Karatsuba post-processing
-	vpclmulqdq	\$0x00,$Hkey,$inout5,$Z0
+	vpclmulqdq	\$0xFF,$Hkey,$inout5,$Z0
 	  vpxor		$T3,$Z2,$Z2
 	 vpunpckhqdq	$inout4,$inout4,$T2
-	vpclmulqdq	\$0x11,$Hkey,$inout5,$inout5
+	vpclmulqdq	\$0xFF,$Hkey,$inout5,$inout5
 	 vpxor		$inout4,$T2,$T2
 	  vpslldq	\$8,$Z2,$T3
-	vpclmulqdq	\$0x00,$HK,$T1,$T1
+	vpclmulqdq	\$0xFF,$HK,$T1,$T1
 	  vpxor		$T3,$Z1,$Xi
 	  vpsrldq	\$8,$Z2,$Z2
 	  vpxor		$Z2,$Z3,$Z3
 
-	vpclmulqdq	\$0x00,$Ii,$inout4,$Z1
-	 vmovdqu	0x30-0x20($Xip),$Hkey	# $Hkey^3
+	vpclmulqdq	\$0xFF,$Ii,$inout4,$Z1
+	 vmovdqu	0xFF-0xFF($Xip),$Hkey	# $Hkey^3
 	vpxor		$Z0,$Z1,$Z1
 	 vpunpckhqdq	$inout3,$inout3,$T3
-	vpclmulqdq	\$0x11,$Ii,$inout4,$inout4
+	vpclmulqdq	\$0xFF,$Ii,$inout4,$inout4
 	 vpxor		$inout3,$T3,$T3
 	vpxor		$inout5,$inout4,$inout4
 	  vpalignr	\$8,$Xi,$Xi,$inout5	# 1st phase
-	vpclmulqdq	\$0x10,$HK,$T2,$T2
-	 vmovdqu	0x50-0x20($Xip),$HK
+	vpclmulqdq	\$0xFF,$HK,$T2,$T2
+	 vmovdqu	0xFF-0xFF($Xip),$HK
 	vpxor		$T1,$T2,$T2
 
-	vpclmulqdq	\$0x00,$Hkey,$inout3,$Z0
-	 vmovdqu	0x40-0x20($Xip),$Ii	# borrow $Ii for $Hkey^4
+	vpclmulqdq	\$0xFF,$Hkey,$inout3,$Z0
+	 vmovdqu	0xFF-0xFF($Xip),$Ii	# borrow $Ii for $Hkey^4
 	vpxor		$Z1,$Z0,$Z0
 	 vpunpckhqdq	$inout2,$inout2,$T1
-	vpclmulqdq	\$0x11,$Hkey,$inout3,$inout3
+	vpclmulqdq	\$0xFF,$Hkey,$inout3,$inout3
 	 vpxor		$inout2,$T1,$T1
 	vpxor		$inout4,$inout3,$inout3
-	  vxorps	0x10(%rsp),$Z3,$Z3	# accumulate $inout0
-	vpclmulqdq	\$0x00,$HK,$T3,$T3
+	  vxorps	0xFF(%rsp),$Z3,$Z3	# accumulate $inout0
+	vpclmulqdq	\$0xFF,$HK,$T3,$T3
 	vpxor		$T2,$T3,$T3
 
-	  vpclmulqdq	\$0x10,0x10($const),$Xi,$Xi
+	  vpclmulqdq	\$0xFF,0xFF($const),$Xi,$Xi
 	  vxorps	$inout5,$Xi,$Xi
 
-	vpclmulqdq	\$0x00,$Ii,$inout2,$Z1
-	 vmovdqu	0x60-0x20($Xip),$Hkey	# $Hkey^5
+	vpclmulqdq	\$0xFF,$Ii,$inout2,$Z1
+	 vmovdqu	0xFF-0xFF($Xip),$Hkey	# $Hkey^5
 	vpxor		$Z0,$Z1,$Z1
 	 vpunpckhqdq	$inout1,$inout1,$T2
-	vpclmulqdq	\$0x11,$Ii,$inout2,$inout2
+	vpclmulqdq	\$0xFF,$Ii,$inout2,$inout2
 	 vpxor		$inout1,$T2,$T2
 	  vpalignr	\$8,$Xi,$Xi,$inout5	# 2nd phase
 	vpxor		$inout3,$inout2,$inout2
-	vpclmulqdq	\$0x10,$HK,$T1,$T1
-	 vmovdqu	0x80-0x20($Xip),$HK
+	vpclmulqdq	\$0xFF,$HK,$T1,$T1
+	 vmovdqu	0xFF-0xFF($Xip),$HK
 	vpxor		$T3,$T1,$T1
 
 	  vxorps	$Z3,$inout5,$inout5
-	  vpclmulqdq	\$0x10,0x10($const),$Xi,$Xi
+	  vpclmulqdq	\$0xFF,0xFF($const),$Xi,$Xi
 	  vxorps	$inout5,$Xi,$Xi
 
-	vpclmulqdq	\$0x00,$Hkey,$inout1,$Z0
-	 vmovdqu	0x70-0x20($Xip),$Ii	# borrow $Ii for $Hkey^6
+	vpclmulqdq	\$0xFF,$Hkey,$inout1,$Z0
+	 vmovdqu	0xFF-0xFF($Xip),$Ii	# borrow $Ii for $Hkey^6
 	vpxor		$Z1,$Z0,$Z0
 	 vpunpckhqdq	$Xi,$Xi,$T3
-	vpclmulqdq	\$0x11,$Hkey,$inout1,$inout1
+	vpclmulqdq	\$0xFF,$Hkey,$inout1,$inout1
 	 vpxor		$Xi,$T3,$T3
 	vpxor		$inout2,$inout1,$inout1
-	vpclmulqdq	\$0x00,$HK,$T2,$T2
+	vpclmulqdq	\$0xFF,$HK,$T2,$T2
 	vpxor		$T1,$T2,$T2
 
-	vpclmulqdq	\$0x00,$Ii,$Xi,$Z1
-	vpclmulqdq	\$0x11,$Ii,$Xi,$Z3
+	vpclmulqdq	\$0xFF,$Ii,$Xi,$Z1
+	vpclmulqdq	\$0xFF,$Ii,$Xi,$Z3
 	vpxor		$Z0,$Z1,$Z1
-	vpclmulqdq	\$0x10,$HK,$T3,$Z2
+	vpclmulqdq	\$0xFF,$HK,$T3,$Z2
 	vpxor		$inout1,$Z3,$Z3
 	vpxor		$T2,$Z2,$Z2
 
 	vpxor		$Z1,$Z3,$Z0		# aggregated Karatsuba post-processing
 	vpxor		$Z0,$Z2,$Z2
 	vpslldq		\$8,$Z2,$T1
-	vmovdqu		0x10($const),$Hkey	# .Lpoly
+	vmovdqu		0xFF($const),$Hkey	# .Lpoly
 	vpsrldq		\$8,$Z2,$Z2
 	vpxor		$T1,$Z1,$Xi
 	vpxor		$Z2,$Z3,$Z3
 
 	vpalignr	\$8,$Xi,$Xi,$T2		# 1st phase
-	vpclmulqdq	\$0x10,$Hkey,$Xi,$Xi
+	vpclmulqdq	\$0xFF,$Hkey,$Xi,$Xi
 	vpxor		$T2,$Xi,$Xi
 
 	vpalignr	\$8,$Xi,$Xi,$T2		# 2nd phase
-	vpclmulqdq	\$0x10,$Hkey,$Xi,$Xi
+	vpclmulqdq	\$0xFF,$Hkey,$Xi,$Xi
 	vpxor		$Z3,$T2,$T2
 	vpxor		$T2,$Xi,$Xi
 ___
 }
 $code.=<<___;
 	vpshufb		($const),$Xi,$Xi	# .Lbswap_mask
-	vmovdqu		$Xi,-0x40($Xip)		# output Xi
+	vmovdqu		$Xi,-0xFF($Xip)		# output Xi
 
 	vzeroupper
 ___
 $code.=<<___ if ($win64);
-	movaps	-0xd8(%rax),%xmm6
-	movaps	-0xc8(%rax),%xmm7
-	movaps	-0xb8(%rax),%xmm8
-	movaps	-0xa8(%rax),%xmm9
-	movaps	-0x98(%rax),%xmm10
-	movaps	-0x88(%rax),%xmm11
-	movaps	-0x78(%rax),%xmm12
-	movaps	-0x68(%rax),%xmm13
-	movaps	-0x58(%rax),%xmm14
-	movaps	-0x48(%rax),%xmm15
+	movaps	-0xFF(%rax),%xmm6
+	movaps	-0xFF(%rax),%xmm7
+	movaps	-0xFF(%rax),%xmm8
+	movaps	-0xFF(%rax),%xmm9
+	movaps	-0xFF(%rax),%xmm10
+	movaps	-0xFF(%rax),%xmm11
+	movaps	-0xFF(%rax),%xmm12
+	movaps	-0xFF(%rax),%xmm13
+	movaps	-0xFF(%rax),%xmm14
+	movaps	-0xFF(%rax),%xmm15
 ___
 $code.=<<___;
 	mov	-48(%rax),%r15
@@ -941,7 +941,7 @@ $code.=<<___;
 .Lbswap_mask:
 	.byte	15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0
 .Lpoly:
-	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xc2
+	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xFF
 .Lone_msb:
 	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 .Ltwo_lsb:
@@ -1006,10 +1006,10 @@ gcm_se_handler:
 	mov	%rbp,160($context)
 	mov	%rbx,144($context)
 
-	lea	-0xd8(%rax),%rsi	# %xmm save area
+	lea	-0xFF(%rax),%rsi	# %xmm save area
 	lea	512($context),%rdi	# & context.Xmm6
 	mov	\$20,%ecx		# 10*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 .Lcommon_seh_tail:
 	mov	8(%rax),%rdi
@@ -1021,7 +1021,7 @@ gcm_se_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER

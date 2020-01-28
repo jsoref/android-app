@@ -174,7 +174,7 @@ sub x86_loop {
 	    for($i=1;$i<=2;$i++) {
 		&mov	(&LB($rem),&LB($Zll));
 		&shrd	($Zll,$Zlh,4);
-		&and	(&LB($rem),0xf);
+		&and	(&LB($rem),0xFF);
 		&shrd	($Zlh,$Zhl,4);
 		&shrd	($Zhl,$Zhh,4);
 		&shr	($Zhh,4);
@@ -182,7 +182,7 @@ sub x86_loop {
 
 		&mov	(&LB($rem),&BP($off,"esp",$cnt));
 		if ($i&1) {
-			&and	(&LB($rem),0xf0);
+			&and	(&LB($rem),0xFF);
 		} else {
 			&shl	(&LB($rem),4);
 		}
@@ -205,7 +205,7 @@ sub x86_loop {
 		&comment($i);
 		&mov	(&LB($rem),&LB($Zll));
 		&shrd	($Zll,$Zlh,4);
-		&and	(&LB($rem),0xf);
+		&and	(&LB($rem),0xFF);
 		&shrd	($Zlh,$Zhl,4);
 		&shrd	($Zhl,$Zhh,4);
 		&shr	($Zhh,4);
@@ -213,7 +213,7 @@ sub x86_loop {
 
 		if ($i&1) {
 			&mov	(&LB($rem),&BP($off+15-($i>>1),"esp"));
-			&and	(&LB($rem),0xf0);
+			&and	(&LB($rem),0xFF);
 		} else {
 			&mov	(&LB($rem),&BP($off+15-($i>>1),"esp"));
 			&shl	(&LB($rem),4);
@@ -247,22 +247,22 @@ if ($unroll) {
 sub deposit_rem_4bit {
     my $bias = shift;
 
-	&mov	(&DWP($bias+0, "esp"),0x0000<<16);
-	&mov	(&DWP($bias+4, "esp"),0x1C20<<16);
-	&mov	(&DWP($bias+8, "esp"),0x3840<<16);
-	&mov	(&DWP($bias+12,"esp"),0x2460<<16);
-	&mov	(&DWP($bias+16,"esp"),0x7080<<16);
-	&mov	(&DWP($bias+20,"esp"),0x6CA0<<16);
-	&mov	(&DWP($bias+24,"esp"),0x48C0<<16);
-	&mov	(&DWP($bias+28,"esp"),0x54E0<<16);
-	&mov	(&DWP($bias+32,"esp"),0xE100<<16);
-	&mov	(&DWP($bias+36,"esp"),0xFD20<<16);
-	&mov	(&DWP($bias+40,"esp"),0xD940<<16);
-	&mov	(&DWP($bias+44,"esp"),0xC560<<16);
-	&mov	(&DWP($bias+48,"esp"),0x9180<<16);
-	&mov	(&DWP($bias+52,"esp"),0x8DA0<<16);
-	&mov	(&DWP($bias+56,"esp"),0xA9C0<<16);
-	&mov	(&DWP($bias+60,"esp"),0xB5E0<<16);
+	&mov	(&DWP($bias+0, "esp"),0xFF<<16);
+	&mov	(&DWP($bias+4, "esp"),0xFF<<16);
+	&mov	(&DWP($bias+8, "esp"),0xFF<<16);
+	&mov	(&DWP($bias+12,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+16,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+20,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+24,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+28,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+32,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+36,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+40,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+44,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+48,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+52,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+56,"esp"),0xFF<<16);
+	&mov	(&DWP($bias+60,"esp"),0xFF<<16);
 }
 
 $suffix = $x86only ? "" : "_x86";
@@ -284,7 +284,7 @@ $suffix = $x86only ? "" : "_x86";
 	&mov	(&DWP(8,"esp"),$Zlh);
 	&mov	(&DWP(12,"esp"),$Zll);
 	&shr	($Zll,20);
-	&and	($Zll,0xf0);
+	&and	($Zll,0xFF);
 
 	if ($unroll) {
 		&call	("_x86_gmult_4bit_inner");
@@ -327,7 +327,7 @@ $suffix = $x86only ? "" : "_x86";
 	&mov	(&DWP(0,"esp"),$Zhh);
 
 	&shr	($Zll,20);
-	&and	($Zll,0xf0);
+	&and	($Zll,0xFF);
 
 	if ($unroll) {
 		&call	("_x86_gmult_4bit_inner");
@@ -362,7 +362,7 @@ $S=12;		# shift factor for rem_4bit
 # on Core2 and PIII... In other words effort is considered to be well
 # spent... Since initial release the loop was unrolled in order to
 # "liberate" register previously used as loop counter. Instead it's
-# used to optimize critical path in 'Z.hi ^= rem_4bit[Z.lo&0xf]'.
+# used to optimize critical path in 'Z.hi ^= rem_4bit[Z.lo&0xFF]'.
 # The path involves move of Z.lo from MMX to integer register,
 # effective address calculation and finally merge of value to Z.hi.
 # Reference to rem_4bit is scheduled so late that I had to >>4
@@ -382,7 +382,7 @@ $S=12;		# shift factor for rem_4bit
 	&mov	($nhi,$Zll);
 	&mov	(&LB($nlo),&LB($nhi));
 	&shl	(&LB($nlo),4);
-	&and	($nhi,0xf0);
+	&and	($nhi,0xFF);
 	&movq	($Zlo,&QWP(8,$Htbl,$nlo));
 	&movq	($Zhi,&QWP(0,$Htbl,$nlo));
 	&movd	($rem[0],$Zlo);
@@ -398,9 +398,9 @@ $S=12;		# shift factor for rem_4bit
 		&pxor	($Zlo,&QWP(8,$Htbl,$nix));
 		&mov	(&LB($nlo),&BP($cnt/2,$inp))	if (!$odd && $cnt>=0);
 		&psllq	($tmp,60);
-		&and	($nhi,0xf0)			if ($odd);
+		&and	($nhi,0xFF)			if ($odd);
 		&pxor	($Zhi,&QWP(0,$rem_4bit,$rem[1],8)) if ($cnt<28);
-		&and	($rem[0],0xf);
+		&and	($rem[0],0xFF);
 		&pxor	($Zhi,&QWP(0,$Htbl,$nix));
 		&mov	($nhi,$nlo)			if (!$odd && $cnt>=0);
 		&movd	($rem[1],$Zlo);
@@ -528,7 +528,7 @@ sub mmx_loop() {
 	&mov	(&LB($nlo),&LB($nhi));
 	&mov	($cnt,14);
 	&shl	(&LB($nlo),4);
-	&and	($nhi,0xf0);
+	&and	($nhi,0xFF);
 	&movq	($Zlo,&QWP(8,$Htbl,$nlo));
 	&movq	($Zhi,&QWP(0,$Htbl,$nlo));
 	&movd	($rem,$Zlo);
@@ -536,7 +536,7 @@ sub mmx_loop() {
 
     &set_label("mmx_loop",16);
 	&psrlq	($Zlo,4);
-	&and	($rem,0xf);
+	&and	($rem,0xFF);
 	&movq	($tmp,$Zhi);
 	&psrlq	($Zhi,4);
 	&pxor	($Zlo,&QWP(8,$Htbl,$nhi));
@@ -551,9 +551,9 @@ sub mmx_loop() {
 	&js	(&label("mmx_break"));
 
 	&shl	(&LB($nlo),4);
-	&and	($rem,0xf);
+	&and	($rem,0xFF);
 	&psrlq	($Zlo,4);
-	&and	($nhi,0xf0);
+	&and	($nhi,0xFF);
 	&movq	($tmp,$Zhi);
 	&psrlq	($Zhi,4);
 	&pxor	($Zlo,&QWP(8,$Htbl,$nlo));
@@ -566,9 +566,9 @@ sub mmx_loop() {
 
     &set_label("mmx_break",16);
 	&shl	(&LB($nlo),4);
-	&and	($rem,0xf);
+	&and	($rem,0xFF);
 	&psrlq	($Zlo,4);
-	&and	($nhi,0xf0);
+	&and	($nhi,0xFF);
 	&movq	($tmp,$Zhi);
 	&psrlq	($Zhi,4);
 	&pxor	($Zlo,&QWP(8,$Htbl,$nlo));
@@ -579,7 +579,7 @@ sub mmx_loop() {
 	&pxor	($Zlo,$tmp);
 
 	&psrlq	($Zlo,4);
-	&and	($rem,0xf);
+	&and	($rem,0xFF);
 	&movq	($tmp,$Zhi);
 	&psrlq	($Zhi,4);
 	&pxor	($Zlo,&QWP(8,$Htbl,$nhi));
@@ -714,7 +714,7 @@ sub mmx_loop() {
     &rol	($dat,8);
     &mov	(&LB($nlo),&LB($dat));
     &mov	($nhi[1],$nlo);
-    &and	(&LB($nlo),0x0f);
+    &and	(&LB($nlo),0xFF);
     &shr	($nhi[1],4);
     &pxor	($red[0],$red[0]);
     &rol	($dat,8);			# next byte
@@ -722,7 +722,7 @@ sub mmx_loop() {
     &pxor	($red[2],$red[2]);
 
     # Just like in "May" version modulo-schedule for critical path in
-    # 'Z.hi ^= rem_8bit[Z.lo&0xff^((u8)H[nhi]<<4)]<<48'. Final 'pxor'
+    # 'Z.hi ^= rem_8bit[Z.lo&0xFF^((u8)H[nhi]<<4)]<<48'. Final 'pxor'
     # is scheduled so late that rem_8bit[] has to be shifted *right*
     # by 16, which is why last argument to pinsrw is 2, which
     # corresponds to <<32=<<48>>16...
@@ -753,7 +753,7 @@ sub mmx_loop() {
 	&psrlq	($Zhi,8);
 
 	&pxor	($Zlo,&QWP(16+256+0,"esp",$nhi[1],8));	# Z^=H[nhi]>>4
-	&and	(&LB($nlo),0x0f);
+	&and	(&LB($nlo),0xFF);
 	&psllq	($tmp,56);
 
 	&pxor	($Zhi,$red[1])				if ($i>1);
@@ -852,9 +852,9 @@ my ($Xhi,$Xi,$Hkey,$HK)=@_;
 	&pxor		($T2,$Hkey)		if (!defined($HK));
 			$HK=$T2			if (!defined($HK));
 
-	&pclmulqdq	($Xi,$Hkey,0x00);	#######
-	&pclmulqdq	($Xhi,$Hkey,0x11);	#######
-	&pclmulqdq	($T1,$HK,0x00);		#######
+	&pclmulqdq	($Xi,$Hkey,0xFF);	#######
+	&pclmulqdq	($Xhi,$Hkey,0xFF);	#######
+	&pclmulqdq	($T1,$HK,0xFF);		#######
 	&xorps		($T1,$Xi);		#
 	&xorps		($T1,$Xhi);		#
 
@@ -875,13 +875,13 @@ my ($Xhi,$Xi,$Hkey)=@_;
 
 	&movdqa		($T1,$Xi);		#
 	&movdqa		($Xhi,$Xi);
-	&pclmulqdq	($Xi,$Hkey,0x00);	#######
-	&pclmulqdq	($Xhi,$Hkey,0x11);	#######
+	&pclmulqdq	($Xi,$Hkey,0xFF);	#######
+	&pclmulqdq	($Xhi,$Hkey,0xFF);	#######
 	&pshufd		($T2,$T1,0b01001110);	#
 	&pshufd		($T3,$Hkey,0b01001110);
 	&pxor		($T2,$T1);		#
 	&pxor		($T3,$Hkey);
-	&pclmulqdq	($T2,$T3,0x00);		#######
+	&pclmulqdq	($T2,$T3,0xFF);		#######
 	&pxor		($T2,$Xi);		#
 	&pxor		($T2,$Xhi);		#
 
@@ -952,8 +952,8 @@ my ($Xhi,$Xi) = @_;
 	&por		($Hkey,$T1);		# H<<=1
 
 	# magic reduction
-	&pand		($T3,&QWP(16,$const));	# 0x1c2_polynomial
-	&pxor		($Hkey,$T3);		# if(carry) H^=0x1c2_polynomial
+	&pand		($T3,&QWP(16,$const));	# 0xFF_polynomial
+	&pxor		($Hkey,$T3);		# if(carry) H^=0xFF_polynomial
 
 	# calculate H^2
 	&movdqa		($Xi,$Hkey);
@@ -1012,7 +1012,7 @@ my ($Xhi,$Xi) = @_;
 	&movdqu		($Hkey,&QWP(0,$Htbl));
 	&pshufb		($Xi,$T3);
 
-	&sub		($len,0x10);
+	&sub		($len,0xFF);
 	&jz		(&label("odd_tail"));
 
 	#######
@@ -1032,13 +1032,13 @@ my ($Xhi,$Xi) = @_;
 	&pxor		($T1,$Xn);		#
 	&lea		($inp,&DWP(32,$inp));	# i+=2
 
-	&pclmulqdq	($Xn,$Hkey,0x00);	#######
-	&pclmulqdq	($Xhn,$Hkey,0x11);	#######
-	&pclmulqdq	($T1,$T3,0x00);		#######
+	&pclmulqdq	($Xn,$Hkey,0xFF);	#######
+	&pclmulqdq	($Xhn,$Hkey,0xFF);	#######
+	&pclmulqdq	($T1,$T3,0xFF);		#######
 	&movups		($Hkey,&QWP(16,$Htbl));	# load H^2
 	&nop		();
 
-	&sub		($len,0x20);
+	&sub		($len,0xFF);
 	&jbe		(&label("even_tail"));
 	&jmp		(&label("mod_loop"));
 
@@ -1048,9 +1048,9 @@ my ($Xhi,$Xi) = @_;
 	&pxor		($T2,$Xi);		#
 	&nop		();
 
-	&pclmulqdq	($Xi,$Hkey,0x00);	#######
-	&pclmulqdq	($Xhi,$Hkey,0x11);	#######
-	&pclmulqdq	($T2,$T3,0x10);		#######
+	&pclmulqdq	($Xi,$Hkey,0xFF);	#######
+	&pclmulqdq	($Xhi,$Hkey,0xFF);	#######
+	&pclmulqdq	($T2,$T3,0xFF);		#######
 	&movups		($Hkey,&QWP(0,$Htbl));	# load H
 
 	&xorps		($Xi,$Xn);		# (H*Ii+1) + H^2*(Ii+Xi)
@@ -1079,7 +1079,7 @@ my ($Xhi,$Xi) = @_;
 	  &pxor		($T1,$Xi);		#
 	  &psllq	($Xi,1);
 	  &pxor		($Xi,$T1);		#
-	&pclmulqdq	($Xn,$Hkey,0x00);	#######
+	&pclmulqdq	($Xn,$Hkey,0xFF);	#######
 	&movups		($T3,&QWP(32,$Htbl));
 	  &psllq	($Xi,57);		#
 	  &movdqa	($T1,$Xi);		#
@@ -1092,17 +1092,17 @@ my ($Xhi,$Xi) = @_;
 	  &psrlq	($Xi,1);
 	&pxor		($T1,$Xhn);
 	  &pxor		($Xhi,$T2);		#
-	&pclmulqdq	($Xhn,$Hkey,0x11);	#######
+	&pclmulqdq	($Xhn,$Hkey,0xFF);	#######
 	&movups		($Hkey,&QWP(16,$Htbl));	# load H^2
 	  &pxor		($T2,$Xi);
 	  &psrlq	($Xi,5);
 	  &pxor		($Xi,$T2);		#
 	  &psrlq	($Xi,1);		#
 	  &pxor		($Xi,$Xhi)		#
-	&pclmulqdq	($T1,$T3,0x00);		#######
+	&pclmulqdq	($T1,$T3,0xFF);		#######
 
 	&lea		($inp,&DWP(32,$inp));
-	&sub		($len,0x20);
+	&sub		($len,0xFF);
 	&ja		(&label("mod_loop"));
 
 &set_label("even_tail");
@@ -1110,9 +1110,9 @@ my ($Xhi,$Xi) = @_;
 	&movdqa		($Xhi,$Xi);
 	&pxor		($T2,$Xi);		#
 
-	&pclmulqdq	($Xi,$Hkey,0x00);	#######
-	&pclmulqdq	($Xhi,$Hkey,0x11);	#######
-	&pclmulqdq	($T2,$T3,0x10);		#######
+	&pclmulqdq	($Xi,$Hkey,0xFF);	#######
+	&pclmulqdq	($Xhi,$Hkey,0xFF);	#######
+	&pclmulqdq	($T2,$T3,0xFF);		#######
 	&movdqa		($T3,&QWP(0,$const));
 
 	&xorps		($Xi,$Xn);		# (H*Ii+1) + H^2*(Ii+Xi)
@@ -1256,7 +1256,7 @@ my ($Xhi,$Xi)=@_;
 	&movdqu		($Hkey,&QWP(0,$Htbl));
 	&pshufb		($Xi,$T3);
 
-	&sub		($len,0x10);
+	&sub		($len,0xFF);
 	&jz		(&label("odd_tail"));
 
 	#######
@@ -1273,7 +1273,7 @@ my ($Xhi,$Xi)=@_;
 	&clmul64x64_T3	($Xhn,$Xn,$Hkey);	# H*Ii+1
 	&movdqu		($Hkey,&QWP(16,$Htbl));	# load H^2
 
-	&sub		($len,0x20);
+	&sub		($len,0xFF);
 	&lea		($inp,&DWP(32,$inp));	# i+=2
 	&jbe		(&label("even_tail"));
 
@@ -1297,7 +1297,7 @@ my ($Xhi,$Xi)=@_;
 	&clmul64x64_T3	($Xhn,$Xn,$Hkey);	# H*Ii+1
 	&movdqu		($Hkey,&QWP(16,$Htbl));	# load H^2
 
-	&sub		($len,0x20);
+	&sub		($len,0xFF);
 	&lea		($inp,&DWP(32,$inp));
 	&ja		(&label("mod_loop"));
 
@@ -1332,47 +1332,47 @@ my ($Xhi,$Xi)=@_;
 
 &set_label("bswap",64);
 	&data_byte(15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0);
-	&data_byte(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xc2);	# 0x1c2_polynomial
+	&data_byte(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xFF);	# 0xFF_polynomial
 &set_label("rem_8bit",64);
-	&data_short(0x0000,0x01C2,0x0384,0x0246,0x0708,0x06CA,0x048C,0x054E);
-	&data_short(0x0E10,0x0FD2,0x0D94,0x0C56,0x0918,0x08DA,0x0A9C,0x0B5E);
-	&data_short(0x1C20,0x1DE2,0x1FA4,0x1E66,0x1B28,0x1AEA,0x18AC,0x196E);
-	&data_short(0x1230,0x13F2,0x11B4,0x1076,0x1538,0x14FA,0x16BC,0x177E);
-	&data_short(0x3840,0x3982,0x3BC4,0x3A06,0x3F48,0x3E8A,0x3CCC,0x3D0E);
-	&data_short(0x3650,0x3792,0x35D4,0x3416,0x3158,0x309A,0x32DC,0x331E);
-	&data_short(0x2460,0x25A2,0x27E4,0x2626,0x2368,0x22AA,0x20EC,0x212E);
-	&data_short(0x2A70,0x2BB2,0x29F4,0x2836,0x2D78,0x2CBA,0x2EFC,0x2F3E);
-	&data_short(0x7080,0x7142,0x7304,0x72C6,0x7788,0x764A,0x740C,0x75CE);
-	&data_short(0x7E90,0x7F52,0x7D14,0x7CD6,0x7998,0x785A,0x7A1C,0x7BDE);
-	&data_short(0x6CA0,0x6D62,0x6F24,0x6EE6,0x6BA8,0x6A6A,0x682C,0x69EE);
-	&data_short(0x62B0,0x6372,0x6134,0x60F6,0x65B8,0x647A,0x663C,0x67FE);
-	&data_short(0x48C0,0x4902,0x4B44,0x4A86,0x4FC8,0x4E0A,0x4C4C,0x4D8E);
-	&data_short(0x46D0,0x4712,0x4554,0x4496,0x41D8,0x401A,0x425C,0x439E);
-	&data_short(0x54E0,0x5522,0x5764,0x56A6,0x53E8,0x522A,0x506C,0x51AE);
-	&data_short(0x5AF0,0x5B32,0x5974,0x58B6,0x5DF8,0x5C3A,0x5E7C,0x5FBE);
-	&data_short(0xE100,0xE0C2,0xE284,0xE346,0xE608,0xE7CA,0xE58C,0xE44E);
-	&data_short(0xEF10,0xEED2,0xEC94,0xED56,0xE818,0xE9DA,0xEB9C,0xEA5E);
-	&data_short(0xFD20,0xFCE2,0xFEA4,0xFF66,0xFA28,0xFBEA,0xF9AC,0xF86E);
-	&data_short(0xF330,0xF2F2,0xF0B4,0xF176,0xF438,0xF5FA,0xF7BC,0xF67E);
-	&data_short(0xD940,0xD882,0xDAC4,0xDB06,0xDE48,0xDF8A,0xDDCC,0xDC0E);
-	&data_short(0xD750,0xD692,0xD4D4,0xD516,0xD058,0xD19A,0xD3DC,0xD21E);
-	&data_short(0xC560,0xC4A2,0xC6E4,0xC726,0xC268,0xC3AA,0xC1EC,0xC02E);
-	&data_short(0xCB70,0xCAB2,0xC8F4,0xC936,0xCC78,0xCDBA,0xCFFC,0xCE3E);
-	&data_short(0x9180,0x9042,0x9204,0x93C6,0x9688,0x974A,0x950C,0x94CE);
-	&data_short(0x9F90,0x9E52,0x9C14,0x9DD6,0x9898,0x995A,0x9B1C,0x9ADE);
-	&data_short(0x8DA0,0x8C62,0x8E24,0x8FE6,0x8AA8,0x8B6A,0x892C,0x88EE);
-	&data_short(0x83B0,0x8272,0x8034,0x81F6,0x84B8,0x857A,0x873C,0x86FE);
-	&data_short(0xA9C0,0xA802,0xAA44,0xAB86,0xAEC8,0xAF0A,0xAD4C,0xAC8E);
-	&data_short(0xA7D0,0xA612,0xA454,0xA596,0xA0D8,0xA11A,0xA35C,0xA29E);
-	&data_short(0xB5E0,0xB422,0xB664,0xB7A6,0xB2E8,0xB32A,0xB16C,0xB0AE);
-	&data_short(0xBBF0,0xBA32,0xB874,0xB9B6,0xBCF8,0xBD3A,0xBF7C,0xBEBE);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
+	&data_short(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF);
 }}	# $sse2
 
 &set_label("rem_4bit",64);
-	&data_word(0,0x0000<<$S,0,0x1C20<<$S,0,0x3840<<$S,0,0x2460<<$S);
-	&data_word(0,0x7080<<$S,0,0x6CA0<<$S,0,0x48C0<<$S,0,0x54E0<<$S);
-	&data_word(0,0xE100<<$S,0,0xFD20<<$S,0,0xD940<<$S,0,0xC560<<$S);
-	&data_word(0,0x9180<<$S,0,0x8DA0<<$S,0,0xA9C0<<$S,0,0xB5E0<<$S);
+	&data_word(0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S);
+	&data_word(0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S);
+	&data_word(0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S);
+	&data_word(0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S,0,0xFF<<$S);
 }}}	# !$x86only
 
 &asciz("GHASH for x86, CRYPTOGAMS by <appro\@openssl.org>");

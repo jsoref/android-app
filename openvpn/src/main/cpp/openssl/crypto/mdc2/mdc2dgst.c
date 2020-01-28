@@ -21,18 +21,18 @@
                          l|=((DES_LONG)(*((c)++)))<<24L)
 
 #undef l2c
-#define l2c(l,c)        (*((c)++)=(unsigned char)(((l)     )&0xff), \
-                        *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                        *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                        *((c)++)=(unsigned char)(((l)>>24L)&0xff))
+#define l2c(l,c)        (*((c)++)=(unsigned char)(((l)     )&0xFF), \
+                        *((c)++)=(unsigned char)(((l)>> 8L)&0xFF), \
+                        *((c)++)=(unsigned char)(((l)>>16L)&0xFF), \
+                        *((c)++)=(unsigned char)(((l)>>24L)&0xFF))
 
 static void mdc2_body(MDC2_CTX *c, const unsigned char *in, size_t len);
 int MDC2_Init(MDC2_CTX *c)
 {
     c->num = 0;
     c->pad_type = 1;
-    memset(&(c->h[0]), 0x52, MDC2_BLOCK);
-    memset(&(c->hh[0]), 0x25, MDC2_BLOCK);
+    memset(&(c->h[0]), 0xFF, MDC2_BLOCK);
+    memset(&(c->hh[0]), 0xFF, MDC2_BLOCK);
     return 1;
 }
 
@@ -82,8 +82,8 @@ static void mdc2_body(MDC2_CTX *c, const unsigned char *in, size_t len)
         d[0] = dd[0] = tin0;
         c2l(in, tin1);
         d[1] = dd[1] = tin1;
-        c->h[0] = (c->h[0] & 0x9f) | 0x40;
-        c->hh[0] = (c->hh[0] & 0x9f) | 0x20;
+        c->h[0] = (c->h[0] & 0xFF) | 0xFF;
+        c->hh[0] = (c->hh[0] & 0xFF) | 0xFF;
 
         DES_set_odd_parity(&c->h);
         DES_set_key_unchecked(&c->h, &k);
@@ -116,7 +116,7 @@ int MDC2_Final(unsigned char *md, MDC2_CTX *c)
     j = c->pad_type;
     if ((i > 0) || (j == 2)) {
         if (j == 2)
-            c->data[i++] = 0x80;
+            c->data[i++] = 0xFF;
         memset(&(c->data[i]), 0, MDC2_BLOCK - i);
         mdc2_body(c, c->data, MDC2_BLOCK);
     }

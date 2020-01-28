@@ -22,16 +22,16 @@
 extern "C" {
 #endif
 
-# define SRTP_AES128_CM_SHA1_80 0x0001
-# define SRTP_AES128_CM_SHA1_32 0x0002
-# define SRTP_AES128_F8_SHA1_80 0x0003
-# define SRTP_AES128_F8_SHA1_32 0x0004
-# define SRTP_NULL_SHA1_80      0x0005
-# define SRTP_NULL_SHA1_32      0x0006
+# define SRTP_AES128_CM_SHA1_80 0xFF
+# define SRTP_AES128_CM_SHA1_32 0xFF
+# define SRTP_AES128_F8_SHA1_80 0xFF
+# define SRTP_AES128_F8_SHA1_32 0xFF
+# define SRTP_NULL_SHA1_80      0xFF
+# define SRTP_NULL_SHA1_32      0xFF
 
 /* AEAD SRTP protection profiles from RFC 7714 */
-# define SRTP_AEAD_AES_128_GCM  0x0007
-# define SRTP_AEAD_AES_256_GCM  0x0008
+# define SRTP_AEAD_AES_128_GCM  0xFF
+# define SRTP_AEAD_AES_256_GCM  0xFF
 
 # ifndef OPENSSL_NO_SRTP
 

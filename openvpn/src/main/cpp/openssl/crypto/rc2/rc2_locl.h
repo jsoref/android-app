@@ -38,31 +38,31 @@
                         }
 
 #undef l2c
-#define l2c(l,c)        (*((c)++)=(unsigned char)(((l)     )&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>24L)&0xff))
+#define l2c(l,c)        (*((c)++)=(unsigned char)(((l)     )&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>24L)&0xFF))
 
 /* NOTE - c is not incremented as per l2c */
 #undef l2cn
 #define l2cn(l1,l2,c,n) { \
                         c+=n; \
                         switch (n) { \
-                        case 8: *(--(c))=(unsigned char)(((l2)>>24L)&0xff); \
+                        case 8: *(--(c))=(unsigned char)(((l2)>>24L)&0xFF); \
                         /* fall thru */                                     \
-                        case 7: *(--(c))=(unsigned char)(((l2)>>16L)&0xff); \
+                        case 7: *(--(c))=(unsigned char)(((l2)>>16L)&0xFF); \
                         /* fall thru */                                     \
-                        case 6: *(--(c))=(unsigned char)(((l2)>> 8L)&0xff); \
+                        case 6: *(--(c))=(unsigned char)(((l2)>> 8L)&0xFF); \
                         /* fall thru */                                     \
-                        case 5: *(--(c))=(unsigned char)(((l2)     )&0xff); \
+                        case 5: *(--(c))=(unsigned char)(((l2)     )&0xFF); \
                         /* fall thru */                                     \
-                        case 4: *(--(c))=(unsigned char)(((l1)>>24L)&0xff); \
+                        case 4: *(--(c))=(unsigned char)(((l1)>>24L)&0xFF); \
                         /* fall thru */                                     \
-                        case 3: *(--(c))=(unsigned char)(((l1)>>16L)&0xff); \
+                        case 3: *(--(c))=(unsigned char)(((l1)>>16L)&0xFF); \
                         /* fall thru */                                     \
-                        case 2: *(--(c))=(unsigned char)(((l1)>> 8L)&0xff); \
+                        case 2: *(--(c))=(unsigned char)(((l1)>> 8L)&0xFF); \
                         /* fall thru */                                     \
-                        case 1: *(--(c))=(unsigned char)(((l1)     )&0xff); \
+                        case 1: *(--(c))=(unsigned char)(((l1)     )&0xFF); \
                                 } \
                         }
 
@@ -93,21 +93,21 @@
 #define l2nn(l1,l2,c,n) { \
                         c+=n; \
                         switch (n) { \
-                        case 8: *(--(c))=(unsigned char)(((l2)    )&0xff); \
+                        case 8: *(--(c))=(unsigned char)(((l2)    )&0xFF); \
                         /* fall thru */                                    \
-                        case 7: *(--(c))=(unsigned char)(((l2)>> 8)&0xff); \
+                        case 7: *(--(c))=(unsigned char)(((l2)>> 8)&0xFF); \
                         /* fall thru */                                    \
-                        case 6: *(--(c))=(unsigned char)(((l2)>>16)&0xff); \
+                        case 6: *(--(c))=(unsigned char)(((l2)>>16)&0xFF); \
                         /* fall thru */                                    \
-                        case 5: *(--(c))=(unsigned char)(((l2)>>24)&0xff); \
+                        case 5: *(--(c))=(unsigned char)(((l2)>>24)&0xFF); \
                         /* fall thru */                                    \
-                        case 4: *(--(c))=(unsigned char)(((l1)    )&0xff); \
+                        case 4: *(--(c))=(unsigned char)(((l1)    )&0xFF); \
                         /* fall thru */                                    \
-                        case 3: *(--(c))=(unsigned char)(((l1)>> 8)&0xff); \
+                        case 3: *(--(c))=(unsigned char)(((l1)>> 8)&0xFF); \
                         /* fall thru */                                    \
-                        case 2: *(--(c))=(unsigned char)(((l1)>>16)&0xff); \
+                        case 2: *(--(c))=(unsigned char)(((l1)>>16)&0xFF); \
                         /* fall thru */                                    \
-                        case 1: *(--(c))=(unsigned char)(((l1)>>24)&0xff); \
+                        case 1: *(--(c))=(unsigned char)(((l1)>>24)&0xFF); \
                                 } \
                         }
 
@@ -118,17 +118,17 @@
                          l|=((unsigned long)(*((c)++))))
 
 #undef l2n
-#define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)     )&0xff))
+#define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)     )&0xFF))
 
 #define C_RC2(n) \
-        t=(x0+(x1& ~x3)+(x2&x3)+ *(p0++))&0xffff; \
+        t=(x0+(x1& ~x3)+(x2&x3)+ *(p0++))&0xFF; \
         x0=(t<<1)|(t>>15); \
-        t=(x1+(x2& ~x0)+(x3&x0)+ *(p0++))&0xffff; \
+        t=(x1+(x2& ~x0)+(x3&x0)+ *(p0++))&0xFF; \
         x1=(t<<2)|(t>>14); \
-        t=(x2+(x3& ~x1)+(x0&x1)+ *(p0++))&0xffff; \
+        t=(x2+(x3& ~x1)+(x0&x1)+ *(p0++))&0xFF; \
         x2=(t<<3)|(t>>13); \
-        t=(x3+(x0& ~x2)+(x1&x2)+ *(p0++))&0xffff; \
+        t=(x3+(x0& ~x2)+(x1&x2)+ *(p0++))&0xFF; \
         x3=(t<<5)|(t>>11);

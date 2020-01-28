@@ -70,7 +70,7 @@ namespace openvpn {
 	  subLayer.displayData.name = L"OpenVPN";
 	  subLayer.displayData.description = L"OpenVPN";
 	  subLayer.flags = 0;
-	  subLayer.weight = 0x100;
+	  subLayer.weight = 0xFF;
 
 	  // Add packet filter to interface
 	  const DWORD status = ::FwpmSubLayerAdd0(engineHandle(), &subLayer, NULL);
@@ -82,7 +82,7 @@ namespace openvpn {
 	filter.subLayerKey = subLayerGUID;
 	filter.displayData.name = L"OpenVPN";
 	filter.weight.type = FWP_UINT8;
-	filter.weight.uint8 = 0xF;
+	filter.weight.uint8 = 0xFF;
 	filter.filterCondition = condition;
 
 	// Filter #1 -- permit IPv4 DNS requests from OpenVPN app

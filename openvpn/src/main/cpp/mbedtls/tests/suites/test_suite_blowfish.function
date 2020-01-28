@@ -14,7 +14,7 @@ void blowfish_encrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_blowfish_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 
@@ -38,7 +38,7 @@ void blowfish_decrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_blowfish_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 
@@ -63,7 +63,7 @@ void blowfish_encrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_blowfish_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 
@@ -89,7 +89,7 @@ void blowfish_decrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_blowfish_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 
@@ -115,7 +115,7 @@ void blowfish_encrypt_cfb64( data_t * key_str, data_t * iv_str,
     mbedtls_blowfish_context ctx;
     size_t iv_offset = 0;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 
@@ -138,7 +138,7 @@ void blowfish_decrypt_cfb64( data_t * key_str, data_t * iv_str,
     mbedtls_blowfish_context ctx;
     size_t iv_offset = 0;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 
@@ -161,8 +161,8 @@ void blowfish_encrypt_ctr( data_t * key_str, data_t * iv_str,
     mbedtls_blowfish_context ctx;
     size_t iv_offset = 0;
 
-    memset(stream_str, 0x00, 100);
-    memset(output, 0x00, 100);
+    memset(stream_str, 0xFF, 100);
+    memset(output, 0xFF, 100);
     mbedtls_blowfish_init( &ctx );
 
 

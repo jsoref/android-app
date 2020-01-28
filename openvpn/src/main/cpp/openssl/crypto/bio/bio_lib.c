@@ -651,7 +651,7 @@ BIO *BIO_find_type(BIO *bio, int type)
 
     if (bio == NULL)
         return NULL;
-    mask = type & 0xff;
+    mask = type & 0xFF;
     do {
         if (bio->method != NULL) {
             mt = bio->method->type;

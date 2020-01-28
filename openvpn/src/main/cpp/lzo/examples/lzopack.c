@@ -54,7 +54,7 @@ static lzo_bool opt_debug = 0;
 
 /* magic file header for lzopack-compressed files */
 static const unsigned char magic[7] =
-    { 0x00, 0xe9, 0x4c, 0x5a, 0x4f, 0xff, 0x1a };
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 
 /*************************************************************************
@@ -101,7 +101,7 @@ static int xgetc(FILE *fp)
 
 static void xputc(FILE *fp, int c)
 {
-    unsigned char cc = (unsigned char) (c & 0xff);
+    unsigned char cc = (unsigned char) (c & 0xFF);
     xwrite(fp, (const lzo_voidp) &cc, 1);
 }
 
@@ -124,10 +124,10 @@ static void xwrite32(FILE *fp, lzo_uint v)
 {
     unsigned char b[4];
 
-    b[3] = (unsigned char) ((v >>  0) & 0xff);
-    b[2] = (unsigned char) ((v >>  8) & 0xff);
-    b[1] = (unsigned char) ((v >> 16) & 0xff);
-    b[0] = (unsigned char) ((v >> 24) & 0xff);
+    b[3] = (unsigned char) ((v >>  0) & 0xFF);
+    b[2] = (unsigned char) ((v >>  8) & 0xFF);
+    b[1] = (unsigned char) ((v >> 16) & 0xFF);
+    b[0] = (unsigned char) ((v >> 24) & 0xFF);
     xwrite(fp, b, 4);
 }
 
@@ -202,7 +202,7 @@ static int do_compress(FILE *fi, FILE *fo, int compression_level, lzo_uint block
 
         /* clear wrkmem (not needed, only for debug/benchmark purposes) */
         if (opt_debug)
-            lzo_memset(wrkmem, 0xff, wrkmem_size);
+            lzo_memset(wrkmem, 0xFF, wrkmem_size);
 
         /* compress block */
         if (compression_level == 9)

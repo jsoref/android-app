@@ -27,7 +27,7 @@
                         } else { \
                                 long ii; \
                                 bitmask[((start) >> 3)] |= bitmask_start_values[((start) & 7)]; \
-                                for (ii = (((start) >> 3) + 1); ii < ((((end) - 1)) >> 3); ii++) bitmask[ii] = 0xff; \
+                                for (ii = (((start) >> 3) + 1); ii < ((((end) - 1)) >> 3); ii++) bitmask[ii] = 0xFF; \
                                 bitmask[(((end) - 1) >> 3)] |= bitmask_end_values[((end) & 7)]; \
                         } }
 
@@ -36,12 +36,12 @@
                         is_complete = 1; \
                         if (bitmask[(((msg_len) - 1) >> 3)] != bitmask_end_values[((msg_len) & 7)]) is_complete = 0; \
                         if (is_complete) for (ii = (((msg_len) - 1) >> 3) - 1; ii >= 0 ; ii--) \
-                                if (bitmask[ii] != 0xff) { is_complete = 0; break; } }
+                                if (bitmask[ii] != 0xFF) { is_complete = 0; break; } }
 
 static unsigned char bitmask_start_values[] =
-    { 0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80 };
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 static unsigned char bitmask_end_values[] =
-    { 0xff, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f };
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 static void dtls1_fix_message_header(SSL *s, size_t frag_off,
                                      size_t frag_len);

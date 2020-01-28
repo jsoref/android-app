@@ -545,7 +545,7 @@ namespace openvpn {
 	 * longer needed.
 	 */
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
 	ssl23_method_client_ = *SSLv23_client_method();
 	ssl23_method_client_.ssl_pending = ssl_pending_override;
 
@@ -688,7 +688,7 @@ namespace openvpn {
 	return bio;
       }
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
       /*
        * Return modified OpenSSL SSLv23 methods,
        * as configured in init_static().
@@ -1003,7 +1003,7 @@ namespace openvpn {
 					   ":!tlsv2"
 					   ))
 		  OPENVPN_THROW(ssl_context_error, "OpenSSLContext: SSL_CTX_set_cipher_list failed");
-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
+#if OPENSSL_VERSION_NUMBER >= 0xFFL
 	      SSL_CTX_set_ecdh_auto(ctx, 1);
 #endif
 	    }
@@ -1170,7 +1170,7 @@ namespace openvpn {
 	  }
 
 	  // Fixup if no LSB bits
-	  if ((nku & 0xff) == 0)
+	  if ((nku & 0xFF) == 0)
 	    nku >>= 8;
 
 	  // Validating certificate key usage
@@ -1620,7 +1620,7 @@ namespace openvpn {
   int OpenSSLContext::SSL::mydata_index = -1;
   int OpenSSLContext::SSL::context_data_index = -1;
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
   SSL_METHOD OpenSSLContext::SSL::ssl23_method_client_;
   SSL_METHOD OpenSSLContext::SSL::ssl23_method_server_;
 #endif

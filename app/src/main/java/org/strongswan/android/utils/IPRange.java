@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
  */
 public class IPRange implements Comparable<IPRange> {
 
-    private final byte[] mBitmask = {(byte) 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
+    private final byte[] mBitmask = {(byte) 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
     private byte[] mFrom;
     private byte[] mTo;
     private Integer mPrefix;
@@ -95,14 +95,14 @@ public class IPRange implements Comparable<IPRange> {
             throw new IllegalArgumentException("Invalid prefix");
         }
         byte[] to = from.clone();
-        byte mask = (byte) (0xff << (8 - prefix % 8));
+        byte mask = (byte) (0xFF << (8 - prefix % 8));
         int i = prefix / 8;
 
         if (i < from.length) {
             from[i] = (byte) (from[i] & mask);
             to[i] = (byte) (to[i] | ~mask);
             Arrays.fill(from, i + 1, from.length, (byte) 0);
-            Arrays.fill(to, i + 1, to.length, (byte) 0xff);
+            Arrays.fill(to, i + 1, to.length, (byte) 0xFF);
         }
         mFrom = from;
         mTo = to;
@@ -200,7 +200,7 @@ public class IPRange implements Comparable<IPRange> {
         }
         for (int i = 0; i < a.length; i++) {
             if (a[i] != b[i]) {
-                if (((int) a[i] & 0xff) < ((int) b[i] & 0xff)) {
+                if (((int) a[i] & 0xFF) < ((int) b[i] & 0xFF)) {
                     return -1;
                 }
                 else {
@@ -227,7 +227,7 @@ public class IPRange implements Comparable<IPRange> {
 
     private byte[] dec(byte[] addr) {
         for (int i = addr.length - 1; i >= 0; i--) {
-            if (--addr[i] != (byte) 0xff) {
+            if (--addr[i] != (byte) 0xFF) {
                 break;
             }
         }

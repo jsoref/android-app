@@ -84,10 +84,10 @@ openvpn_base64_encode(const void *data, int size, char **str)
             c += q[i];
         }
         i++;
-        p[0] = base64_chars[(c & 0x00fc0000) >> 18];
-        p[1] = base64_chars[(c & 0x0003f000) >> 12];
-        p[2] = base64_chars[(c & 0x00000fc0) >> 6];
-        p[3] = base64_chars[(c & 0x0000003f) >> 0];
+        p[0] = base64_chars[(c & 0xFF) >> 18];
+        p[1] = base64_chars[(c & 0xFF) >> 12];
+        p[2] = base64_chars[(c & 0xFF) >> 6];
+        p[3] = base64_chars[(c & 0xFF) >> 0];
         if (i > size)
         {
             p[3] = '=';
@@ -117,7 +117,7 @@ pos(char c)
     return -1;
 }
 
-#define DECODE_ERROR 0xffffffff
+#define DECODE_ERROR 0xFF
 
 static unsigned int
 token_decode(const char *token)
@@ -171,7 +171,7 @@ openvpn_base64_decode(const char *str, void *data, int size)
     for (p = str; *p && (*p == '=' || strchr(base64_chars, *p)); p += 4)
     {
         unsigned int val = token_decode(p);
-        unsigned int marker = (val >> 24) & 0xff;
+        unsigned int marker = (val >> 24) & 0xFF;
         if (val == DECODE_ERROR)
         {
             return -1;
@@ -180,14 +180,14 @@ openvpn_base64_decode(const char *str, void *data, int size)
         {
             return -1;
         }
-        *q++ = (val >> 16) & 0xff;
+        *q++ = (val >> 16) & 0xFF;
         if (marker < 2)
         {
             if (e && q >= e)
             {
                 return -1;
             }
-            *q++ = (val >> 8) & 0xff;
+            *q++ = (val >> 8) & 0xFF;
         }
         if (marker < 1)
         {
@@ -195,7 +195,7 @@ openvpn_base64_decode(const char *str, void *data, int size)
             {
                 return -1;
             }
-            *q++ = val & 0xff;
+            *q++ = val & 0xFF;
         }
     }
     return q - (unsigned char *) data;

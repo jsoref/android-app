@@ -31,7 +31,7 @@ namespace detail {
 DWORD win_tss_ptr_create()
 {
 #if defined(UNDER_CE)
-  const DWORD out_of_indexes = 0xFFFFFFFF;
+  const DWORD out_of_indexes = 0xFF;
 #else
   const DWORD out_of_indexes = TLS_OUT_OF_INDEXES;
 #endif

@@ -49,7 +49,7 @@ typedef enum {
     X509_LU_X509, X509_LU_CRL
 } X509_LOOKUP_TYPE;
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 #define X509_LU_RETRY   -1
 #define X509_LU_FAIL    0
 #endif
@@ -187,61 +187,61 @@ void X509_STORE_CTX_set_depth(X509_STORE_CTX *ctx, int depth);
 
 /* Certificate verify flags */
 
-# if OPENSSL_API_COMPAT < 0x10100000L
-#  define X509_V_FLAG_CB_ISSUER_CHECK             0x0   /* Deprecated */
+# if OPENSSL_API_COMPAT < 0xFFL
+#  define X509_V_FLAG_CB_ISSUER_CHECK             0xFF   /* Deprecated */
 # endif
 /* Use check time instead of current time */
-# define X509_V_FLAG_USE_CHECK_TIME              0x2
+# define X509_V_FLAG_USE_CHECK_TIME              0xFF
 /* Lookup CRLs */
-# define X509_V_FLAG_CRL_CHECK                   0x4
+# define X509_V_FLAG_CRL_CHECK                   0xFF
 /* Lookup CRLs for whole chain */
-# define X509_V_FLAG_CRL_CHECK_ALL               0x8
+# define X509_V_FLAG_CRL_CHECK_ALL               0xFF
 /* Ignore unhandled critical extensions */
-# define X509_V_FLAG_IGNORE_CRITICAL             0x10
+# define X509_V_FLAG_IGNORE_CRITICAL             0xFF
 /* Disable workarounds for broken certificates */
-# define X509_V_FLAG_X509_STRICT                 0x20
+# define X509_V_FLAG_X509_STRICT                 0xFF
 /* Enable proxy certificate validation */
-# define X509_V_FLAG_ALLOW_PROXY_CERTS           0x40
+# define X509_V_FLAG_ALLOW_PROXY_CERTS           0xFF
 /* Enable policy checking */
-# define X509_V_FLAG_POLICY_CHECK                0x80
+# define X509_V_FLAG_POLICY_CHECK                0xFF
 /* Policy variable require-explicit-policy */
-# define X509_V_FLAG_EXPLICIT_POLICY             0x100
+# define X509_V_FLAG_EXPLICIT_POLICY             0xFF
 /* Policy variable inhibit-any-policy */
-# define X509_V_FLAG_INHIBIT_ANY                 0x200
+# define X509_V_FLAG_INHIBIT_ANY                 0xFF
 /* Policy variable inhibit-policy-mapping */
-# define X509_V_FLAG_INHIBIT_MAP                 0x400
+# define X509_V_FLAG_INHIBIT_MAP                 0xFF
 /* Notify callback that policy is OK */
-# define X509_V_FLAG_NOTIFY_POLICY               0x800
+# define X509_V_FLAG_NOTIFY_POLICY               0xFF
 /* Extended CRL features such as indirect CRLs, alternate CRL signing keys */
-# define X509_V_FLAG_EXTENDED_CRL_SUPPORT        0x1000
+# define X509_V_FLAG_EXTENDED_CRL_SUPPORT        0xFF
 /* Delta CRL support */
-# define X509_V_FLAG_USE_DELTAS                  0x2000
+# define X509_V_FLAG_USE_DELTAS                  0xFF
 /* Check self-signed CA signature */
-# define X509_V_FLAG_CHECK_SS_SIGNATURE          0x4000
+# define X509_V_FLAG_CHECK_SS_SIGNATURE          0xFF
 /* Use trusted store first */
-# define X509_V_FLAG_TRUSTED_FIRST               0x8000
+# define X509_V_FLAG_TRUSTED_FIRST               0xFF
 /* Suite B 128 bit only mode: not normally used */
-# define X509_V_FLAG_SUITEB_128_LOS_ONLY         0x10000
+# define X509_V_FLAG_SUITEB_128_LOS_ONLY         0xFF
 /* Suite B 192 bit only mode */
-# define X509_V_FLAG_SUITEB_192_LOS              0x20000
+# define X509_V_FLAG_SUITEB_192_LOS              0xFF
 /* Suite B 128 bit mode allowing 192 bit algorithms */
-# define X509_V_FLAG_SUITEB_128_LOS              0x30000
+# define X509_V_FLAG_SUITEB_128_LOS              0xFF
 /* Allow partial chains if at least one certificate is in trusted store */
-# define X509_V_FLAG_PARTIAL_CHAIN               0x80000
+# define X509_V_FLAG_PARTIAL_CHAIN               0xFF
 /*
  * If the initial chain is not trusted, do not attempt to build an alternative
  * chain. Alternate chain checking was introduced in 1.1.0. Setting this flag
  * will force the behaviour to match that of previous versions.
  */
-# define X509_V_FLAG_NO_ALT_CHAINS               0x100000
+# define X509_V_FLAG_NO_ALT_CHAINS               0xFF
 /* Do not check certificate/CRL validity against current time */
-# define X509_V_FLAG_NO_CHECK_TIME               0x200000
+# define X509_V_FLAG_NO_CHECK_TIME               0xFF
 
-# define X509_VP_FLAG_DEFAULT                    0x1
-# define X509_VP_FLAG_OVERWRITE                  0x2
-# define X509_VP_FLAG_RESET_FLAGS                0x4
-# define X509_VP_FLAG_LOCKED                     0x8
-# define X509_VP_FLAG_ONCE                       0x10
+# define X509_VP_FLAG_DEFAULT                    0xFF
+# define X509_VP_FLAG_OVERWRITE                  0xFF
+# define X509_VP_FLAG_RESET_FLAGS                0xFF
+# define X509_VP_FLAG_LOCKED                     0xFF
+# define X509_VP_FLAG_ONCE                       0xFF
 
 /* Internal use: mask of policy related options */
 # define X509_V_FLAG_POLICY_MASK (X509_V_FLAG_POLICY_CHECK \
@@ -357,7 +357,7 @@ X509_STORE_CTX_lookup_certs_fn X509_STORE_CTX_get_lookup_certs(X509_STORE_CTX *c
 X509_STORE_CTX_lookup_crls_fn X509_STORE_CTX_get_lookup_crls(X509_STORE_CTX *ctx);
 X509_STORE_CTX_cleanup_fn X509_STORE_CTX_get_cleanup(X509_STORE_CTX *ctx);
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define X509_STORE_CTX_get_chain X509_STORE_CTX_get0_chain
 # define X509_STORE_CTX_set_chain X509_STORE_CTX_set0_untrusted
 # define X509_STORE_CTX_trusted_stack X509_STORE_CTX_set0_trusted_stack

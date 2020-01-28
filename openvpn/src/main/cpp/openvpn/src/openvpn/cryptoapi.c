@@ -65,10 +65,10 @@
 #define CERT_SYSTEM_STORE_CURRENT_USER (CERT_SYSTEM_STORE_CURRENT_USER_ID << CERT_SYSTEM_STORE_LOCATION_SHIFT)
 #endif
 #ifndef CERT_STORE_READONLY_FLAG
-#define CERT_STORE_READONLY_FLAG 0x00008000
+#define CERT_STORE_READONLY_FLAG 0xFF
 #endif
 #ifndef CERT_STORE_OPEN_EXISTING_FLAG
-#define CERT_STORE_OPEN_EXISTING_FLAG 0x00004000
+#define CERT_STORE_OPEN_EXISTING_FLAG 0xFF
 #endif
 
 /* Size of an SSL signature: MD5+SHA1 */
@@ -536,7 +536,7 @@ finish(RSA *rsa)
     return 1;
 }
 
-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && !defined(OPENSSL_NO_EC)
+#if (OPENSSL_VERSION_NUMBER >= 0xFFL) && !defined(OPENSSL_NO_EC)
 
 static EC_KEY_METHOD *ec_method = NULL;
 
@@ -805,7 +805,7 @@ find_certificate_in_store(const char *cert_prop, HCERTSTORE cert_store)
     return rv;
 }
 
-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+#if (OPENSSL_VERSION_NUMBER >= 0xFFL)
 
 static const CAPI_DATA *
 retrieve_capi_data(EVP_PKEY *pkey)
@@ -955,7 +955,7 @@ pkey_rsa_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
         {
             const RSA *rsa = EVP_PKEY_get0_RSA(pkey);
             saltlen = RSA_size(rsa) - hashlen - 2; /* max salt length for RSASSA-PSS */
-            if (RSA_bits(rsa) &0x7) /* number of bits in the key not a multiple of 8 */
+            if (RSA_bits(rsa) &0xFF) /* number of bits in the key not a multiple of 8 */
             {
                 saltlen--;
             }
@@ -1008,7 +1008,7 @@ ssl_ctx_set_rsakey(SSL_CTX *ssl_ctx, CAPI_DATA *cd, EVP_PKEY *pkey)
      */
     if (cd->key_spec == CERT_NCRYPT_KEY_SPEC)
     {
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
         RSA_meth_set_sign(my_rsa_method, rsa_sign_CNG);
 #else
         /* pmethod is global -- initialize only if NULL */
@@ -1029,7 +1029,7 @@ ssl_ctx_set_rsakey(SSL_CTX *ssl_ctx, CAPI_DATA *cd, EVP_PKEY *pkey)
 
             /* Keep a copy of the default sign and sign_init methods */
 
-#if (OPENSSL_VERSION_NUMBER < 0x1010009fL)   /* > version 1.1.0i */
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)   /* > version 1.1.0i */
             /* The function signature is not const-correct in these versions */
             EVP_PKEY_meth_get_sign((EVP_PKEY_METHOD *)default_pmethod, &default_pkey_sign_init,
                                    &default_pkey_sign);
@@ -1039,7 +1039,7 @@ ssl_ctx_set_rsakey(SSL_CTX *ssl_ctx, CAPI_DATA *cd, EVP_PKEY *pkey)
 
 #endif
         }
-#endif /* (OPENSSL_VERSION_NUMBER < 0x10100000L) */
+#endif /* (OPENSSL_VERSION_NUMBER < 0xFFL) */
     }
 
     rsa = RSA_new();
@@ -1205,7 +1205,7 @@ SSL_CTX_use_CryptoAPI_certificate(SSL_CTX *ssl_ctx, const char *cert_prop)
             goto err;
         }
     }
-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && !defined(OPENSSL_NO_EC)
+#if (OPENSSL_VERSION_NUMBER >= 0xFFL) && !defined(OPENSSL_NO_EC)
     else if (EVP_PKEY_id(pkey) == EVP_PKEY_EC)
     {
         if (!ssl_ctx_set_eckey(ssl_ctx, cd, pkey))

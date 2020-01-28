@@ -47,7 +47,7 @@ int win_mutex::do_init()
   if (!::InitializeCriticalSectionEx(&crit_section_, 0, 0))
     return ::GetLastError();
 # else
-  if (!::InitializeCriticalSectionAndSpinCount(&crit_section_, 0x80000000))
+  if (!::InitializeCriticalSectionAndSpinCount(&crit_section_, 0xFF))
     return ::GetLastError();
 # endif
   return 0;
@@ -60,7 +60,7 @@ int win_mutex::do_init()
     if (!::InitializeCriticalSectionEx(&crit_section_, 0, 0))
       return ::GetLastError();
 # else
-    if (!::InitializeCriticalSectionAndSpinCount(&crit_section_, 0x80000000))
+    if (!::InitializeCriticalSectionAndSpinCount(&crit_section_, 0xFF))
       return ::GetLastError();
 # endif
   }

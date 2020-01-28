@@ -739,10 +739,10 @@ public class VpnProfile implements Serializable, Cloneable {
             return null;
 
 
-        long nm = 0xffffffffL;
-        nm = (nm << (32 - len)) & 0xffffffffL;
+        long nm = 0xFFL;
+        nm = (nm << (32 - len)) & 0xFFL;
 
-        String netmask = String.format(Locale.ENGLISH, "%d.%d.%d.%d", (nm & 0xff000000) >> 24, (nm & 0xff0000) >> 16, (nm & 0xff00) >> 8, nm & 0xff);
+        String netmask = String.format(Locale.ENGLISH, "%d.%d.%d.%d", (nm & 0xFF) >> 24, (nm & 0xFF) >> 16, (nm & 0xFF) >> 8, nm & 0xFF);
         return parts[0] + "  " + netmask;
     }
 

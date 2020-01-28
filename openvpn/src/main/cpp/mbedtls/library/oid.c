@@ -738,9 +738,9 @@ int mbedtls_oid_get_numeric_string( char *buf, size_t size,
             return( MBEDTLS_ERR_OID_BUF_TOO_SMALL );
 
         value <<= 7;
-        value += oid->p[i] & 0x7F;
+        value += oid->p[i] & 0xFF;
 
-        if( !( oid->p[i] & 0x80 ) )
+        if( !( oid->p[i] & 0xFF ) )
         {
             /* Last byte */
             ret = mbedtls_snprintf( p, n, ".%d", value );

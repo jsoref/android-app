@@ -143,22 +143,22 @@ public:
 # if defined(SSL_OP_NO_TLSv1_1)
   ASIO_STATIC_CONSTANT(long, no_tlsv1_1 = SSL_OP_NO_TLSv1_1);
 # else // defined(SSL_OP_NO_TLSv1_1)
-  ASIO_STATIC_CONSTANT(long, no_tlsv1_1 = 0x10000000L);
+  ASIO_STATIC_CONSTANT(long, no_tlsv1_1 = 0xFFL);
 # endif // defined(SSL_OP_NO_TLSv1_1)
 # if defined(SSL_OP_NO_TLSv1_2)
   ASIO_STATIC_CONSTANT(long, no_tlsv1_2 = SSL_OP_NO_TLSv1_2);
 # else // defined(SSL_OP_NO_TLSv1_2)
-  ASIO_STATIC_CONSTANT(long, no_tlsv1_2 = 0x08000000L);
+  ASIO_STATIC_CONSTANT(long, no_tlsv1_2 = 0xFFL);
 # endif // defined(SSL_OP_NO_TLSv1_2)
 # if defined(SSL_OP_NO_TLSv1_3)
   ASIO_STATIC_CONSTANT(long, no_tlsv1_3 = SSL_OP_NO_TLSv1_3);
 # else // defined(SSL_OP_NO_TLSv1_3)
-  ASIO_STATIC_CONSTANT(long, no_tlsv1_3 = 0x20000000L);
+  ASIO_STATIC_CONSTANT(long, no_tlsv1_3 = 0xFFL);
 # endif // defined(SSL_OP_NO_TLSv1_3)
 # if defined(SSL_OP_NO_COMPRESSION)
   ASIO_STATIC_CONSTANT(long, no_compression = SSL_OP_NO_COMPRESSION);
 # else // defined(SSL_OP_NO_COMPRESSION)
-  ASIO_STATIC_CONSTANT(long, no_compression = 0x20000L);
+  ASIO_STATIC_CONSTANT(long, no_compression = 0xFFL);
 # endif // defined(SSL_OP_NO_COMPRESSION)
 #endif
 

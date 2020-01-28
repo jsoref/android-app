@@ -88,7 +88,7 @@ namespace openvpn {
 
 	    // ConfigOptions
 	    {
-	      const DWORD value = 0x8; // Only the Generic DNS server option (that is, the option defined in section 2.2.2.13) is specified.
+	      const DWORD value = 0xFF; // Only the Generic DNS server option (that is, the option defined in section 2.2.2.13) is specified.
 	      const LONG status = ::RegSetValueExW(key(),
 						   L"ConfigOptions",
 						   0,
@@ -100,7 +100,7 @@ namespace openvpn {
 
 	    // Version
 	    {
-	      const DWORD value = 0x2;
+	      const DWORD value = 0xFF;
 	      const LONG status = ::RegSetValueExW(key(),
 						   L"Version",
 						   0,

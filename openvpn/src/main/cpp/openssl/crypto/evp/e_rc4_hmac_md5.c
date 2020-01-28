@@ -140,7 +140,7 @@ static int rc4_hmac_md5_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
             blocks *= MD5_CBLOCK;
             rc4_off += blocks;
             md5_off += blocks;
-            l = (key->md.Nl + (blocks << 3)) & 0xffffffffU;
+            l = (key->md.Nl + (blocks << 3)) & 0xFFU;
             if (l < key->md.Nl)
                 key->md.Nh++;
             key->md.Nl = l;
@@ -195,12 +195,12 @@ static int rc4_hmac_md5_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg,
             }
 
             for (i = 0; i < sizeof(hmac_key); i++)
-                hmac_key[i] ^= 0x36; /* ipad */
+                hmac_key[i] ^= 0xFF; /* ipad */
             MD5_Init(&key->head);
             MD5_Update(&key->head, hmac_key, sizeof(hmac_key));
 
             for (i = 0; i < sizeof(hmac_key); i++)
-                hmac_key[i] ^= 0x36 ^ 0x5c; /* opad */
+                hmac_key[i] ^= 0xFF ^ 0xFF; /* opad */
             MD5_Init(&key->tail);
             MD5_Update(&key->tail, hmac_key, sizeof(hmac_key));
 

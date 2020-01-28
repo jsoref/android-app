@@ -17,7 +17,7 @@
 # include <openssl/bio.h>
 # include <openssl/crypto.h>
 # include <openssl/ossl_typ.h>
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/bn.h>
 # endif
 # include <openssl/rsaerr.h>
@@ -42,8 +42,8 @@ extern "C" {
 #  define OPENSSL_RSA_MAX_PUBEXP_BITS    64
 # endif
 
-# define RSA_3   0x3L
-# define RSA_F4  0x10001L
+# define RSA_3   0xFFL
+# define RSA_F4  0xFFL
 
 /* based on RFC 8017 appendix A.1.2 */
 # define RSA_ASN1_VERSION_DEFAULT        0
@@ -51,20 +51,20 @@ extern "C" {
 
 # define RSA_DEFAULT_PRIME_NUM           2
 
-# define RSA_METHOD_FLAG_NO_CHECK        0x0001/* don't check pub/private
+# define RSA_METHOD_FLAG_NO_CHECK        0xFF/* don't check pub/private
                                                 * match */
 
-# define RSA_FLAG_CACHE_PUBLIC           0x0002
-# define RSA_FLAG_CACHE_PRIVATE          0x0004
-# define RSA_FLAG_BLINDING               0x0008
-# define RSA_FLAG_THREAD_SAFE            0x0010
+# define RSA_FLAG_CACHE_PUBLIC           0xFF
+# define RSA_FLAG_CACHE_PRIVATE          0xFF
+# define RSA_FLAG_BLINDING               0xFF
+# define RSA_FLAG_THREAD_SAFE            0xFF
 /*
  * This flag means the private key operations will be handled by rsa_mod_exp
  * and that they do not depend on the private key components being present:
  * for example a key stored in external hardware. Without this flag
  * bn_mod_exp gets called when private key components are absent.
  */
-# define RSA_FLAG_EXT_PKEY               0x0020
+# define RSA_FLAG_EXT_PKEY               0xFF
 
 /*
  * new with 0.9.6j and 0.9.7b; the built-in
@@ -72,14 +72,14 @@ extern "C" {
  * default (ignoring RSA_FLAG_BLINDING),
  * but other engines might not need it
  */
-# define RSA_FLAG_NO_BLINDING            0x0080
-# if OPENSSL_API_COMPAT < 0x10100000L
+# define RSA_FLAG_NO_BLINDING            0xFF
+# if OPENSSL_API_COMPAT < 0xFFL
 /*
  * Does nothing. Previously this switched off constant time behaviour.
  */
-#  define RSA_FLAG_NO_CONSTTIME           0x0000
+#  define RSA_FLAG_NO_CONSTTIME           0xFF
 # endif
-# if OPENSSL_API_COMPAT < 0x00908000L
+# if OPENSSL_API_COMPAT < 0xFFL
 /* deprecated name for the flag*/
 /*
  * new with 0.9.7h; the built-in RSA
@@ -403,7 +403,7 @@ RSA *RSAPrivateKey_dup(RSA *rsa);
  * result is compliant.
  */
 
-# define RSA_FLAG_FIPS_METHOD                    0x0400
+# define RSA_FLAG_FIPS_METHOD                    0xFF
 
 /*
  * If this flag is set the operations normally disabled in FIPS mode are
@@ -411,12 +411,12 @@ RSA *RSAPrivateKey_dup(RSA *rsa);
  * usage is compliant.
  */
 
-# define RSA_FLAG_NON_FIPS_ALLOW                 0x0400
+# define RSA_FLAG_NON_FIPS_ALLOW                 0xFF
 /*
  * Application has decided PRNG is good enough to generate a key: don't
  * check.
  */
-# define RSA_FLAG_CHECKED                        0x0800
+# define RSA_FLAG_CHECKED                        0xFF
 
 RSA_METHOD *RSA_meth_new(const char *name, int flags);
 void RSA_meth_free(RSA_METHOD *meth);

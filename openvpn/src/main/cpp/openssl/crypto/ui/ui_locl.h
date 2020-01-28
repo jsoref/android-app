@@ -87,7 +87,7 @@ struct ui_string_st {
         } boolean_data;
     } _;
 
-# define OUT_STRING_FREEABLE 0x01
+# define OUT_STRING_FREEABLE 0xFF
     int flags;                  /* flags for internal use */
 };
 
@@ -98,9 +98,9 @@ struct ui_st {
                                    * echoing status.  */
     void *user_data;
     CRYPTO_EX_DATA ex_data;
-# define UI_FLAG_REDOABLE        0x0001
-# define UI_FLAG_DUPL_DATA       0x0002 /* user_data was duplicated */
-# define UI_FLAG_PRINT_ERRORS    0x0100
+# define UI_FLAG_REDOABLE        0xFF
+# define UI_FLAG_DUPL_DATA       0xFF /* user_data was duplicated */
+# define UI_FLAG_PRINT_ERRORS    0xFF
     int flags;
 
     CRYPTO_RWLOCK *lock;

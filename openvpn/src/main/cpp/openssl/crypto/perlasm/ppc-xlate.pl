@@ -123,7 +123,7 @@ my $quad = sub {
 	if (/^0x([0-9a-f]*?)([0-9a-f]{1,8})$/io)
 	{  $hi=$1?"0x$1":"0"; $lo="0x$2";  }
 	elsif (/^([0-9]+)$/o)
-	{  $hi=$1>>32; $lo=$1&0xffffffff;  } # error-prone with 32-bit perl
+	{  $hi=$1>>32; $lo=$1&0xFF;  } # error-prone with 32-bit perl
 	else
 	{  $hi=undef; $lo=$_; }
 
@@ -289,7 +289,7 @@ my $iseleq = sub {
 my $vspltib	= sub {				# xxspltib
     my ($f, $vrt, $imm8) = @_;
     $imm8 = oct($imm8) if ($imm8 =~ /^0/);
-    $imm8 &= 0xff;
+    $imm8 &= 0xFF;
     "	.long	".sprintf "0x%X",(60<<26)|($vrt<<21)|($imm8<<11)|(360<<1)|1;
 };
 

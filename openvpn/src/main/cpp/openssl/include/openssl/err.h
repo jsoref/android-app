@@ -33,10 +33,10 @@ extern "C" {
 
 # include <errno.h>
 
-# define ERR_TXT_MALLOCED        0x01
-# define ERR_TXT_STRING          0x02
+# define ERR_TXT_MALLOCED        0xFF
+# define ERR_TXT_STRING          0xFF
 
-# define ERR_FLAG_MARK           0x01
+# define ERR_FLAG_MARK           0xFF
 
 # define ERR_NUM_ERRORS  16
 typedef struct err_state_st {
@@ -135,12 +135,12 @@ typedef struct err_state_st {
 # define SM2err(f,r) ERR_PUT_error(ERR_LIB_SM2,(f),(r),OPENSSL_FILE,OPENSSL_LINE)
 
 # define ERR_PACK(l,f,r) ( \
-        (((unsigned int)(l) & 0x0FF) << 24L) | \
-        (((unsigned int)(f) & 0xFFF) << 12L) | \
-        (((unsigned int)(r) & 0xFFF)       ) )
-# define ERR_GET_LIB(l)          (int)(((l) >> 24L) & 0x0FFL)
-# define ERR_GET_FUNC(l)         (int)(((l) >> 12L) & 0xFFFL)
-# define ERR_GET_REASON(l)       (int)( (l)         & 0xFFFL)
+        (((unsigned int)(l) & 0xFF) << 24L) | \
+        (((unsigned int)(f) & 0xFF) << 12L) | \
+        (((unsigned int)(r) & 0xFF)       ) )
+# define ERR_GET_LIB(l)          (int)(((l) >> 24L) & 0xFFL)
+# define ERR_GET_FUNC(l)         (int)(((l) >> 12L) & 0xFFL)
+# define ERR_GET_REASON(l)       (int)( (l)         & 0xFFL)
 # define ERR_FATAL_ERROR(l)      (int)( (l)         & ERR_R_FATAL)
 
 /* OS functions */
@@ -250,7 +250,7 @@ int ERR_load_strings_const(const ERR_STRING_DATA *str);
 int ERR_unload_strings(int lib, ERR_STRING_DATA *str);
 int ERR_load_ERR_strings(void);
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define ERR_load_crypto_strings() \
     OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL)
 # define ERR_free_strings() while(0) continue

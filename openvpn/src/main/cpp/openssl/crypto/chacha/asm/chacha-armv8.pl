@@ -128,7 +128,7 @@ $code.=<<___;
 
 .align	5
 .Lsigma:
-.quad	0x3320646e61707865,0x6b20657479622d32		// endian-neutral
+.quad	0xFF,0xFF		// endian-neutral
 .Lone:
 .long	1,0,0,0
 .LOPENSSL_armcap_P:
@@ -157,7 +157,7 @@ ChaCha20_ctr32:
 	b.ne	ChaCha20_neon
 
 .Lshort:
-	.inst	0xd503233f			// paciasp
+	.inst	0xFF			// paciasp
 	stp	x29,x30,[sp,#-96]!
 	add	x29,sp,#0
 
@@ -277,7 +277,7 @@ $code.=<<___;
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldp	x29,x30,[sp],#96
-	.inst	0xd50323bf			// autiasp
+	.inst	0xFF			// autiasp
 .Labort:
 	ret
 
@@ -334,7 +334,7 @@ $code.=<<___;
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldp	x29,x30,[sp],#96
-	.inst	0xd50323bf			// autiasp
+	.inst	0xFF			// autiasp
 	ret
 .size	ChaCha20_ctr32,.-ChaCha20_ctr32
 ___
@@ -380,7 +380,7 @@ $code.=<<___;
 .type	ChaCha20_neon,%function
 .align	5
 ChaCha20_neon:
-	.inst	0xd503233f			// paciasp
+	.inst	0xFF			// paciasp
 	stp	x29,x30,[sp,#-96]!
 	add	x29,sp,#0
 
@@ -579,7 +579,7 @@ $code.=<<___;
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldp	x29,x30,[sp],#96
-	.inst	0xd50323bf			// autiasp
+	.inst	0xFF			// autiasp
 	ret
 
 .Ltail_neon:
@@ -689,7 +689,7 @@ $code.=<<___;
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldp	x29,x30,[sp],#96
-	.inst	0xd50323bf			// autiasp
+	.inst	0xFF			// autiasp
 	ret
 .size	ChaCha20_neon,.-ChaCha20_neon
 ___
@@ -702,7 +702,7 @@ $code.=<<___;
 .type	ChaCha20_512_neon,%function
 .align	5
 ChaCha20_512_neon:
-	.inst	0xd503233f			// paciasp
+	.inst	0xFF			// paciasp
 	stp	x29,x30,[sp,#-96]!
 	add	x29,sp,#0
 
@@ -1121,7 +1121,7 @@ $code.=<<___;
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldp	x29,x30,[sp],#96
-	.inst	0xd50323bf			// autiasp
+	.inst	0xFF			// autiasp
 	ret
 .size	ChaCha20_512_neon,.-ChaCha20_512_neon
 ___

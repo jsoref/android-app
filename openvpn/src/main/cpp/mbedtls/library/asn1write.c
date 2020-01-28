@@ -41,7 +41,7 @@
 
 int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len )
 {
-    if( len < 0x80 )
+    if( len < 0xFF )
     {
         if( *p - start < 1 )
             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
@@ -56,22 +56,22 @@ int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len 
             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
 
         *--(*p) = (unsigned char) len;
-        *--(*p) = 0x81;
+        *--(*p) = 0xFF;
         return( 2 );
     }
 
-    if( len <= 0xFFFF )
+    if( len <= 0xFF )
     {
         if( *p - start < 3 )
             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
 
         *--(*p) = ( len       ) & 0xFF;
         *--(*p) = ( len >>  8 ) & 0xFF;
-        *--(*p) = 0x82;
+        *--(*p) = 0xFF;
         return( 3 );
     }
 
-    if( len <= 0xFFFFFF )
+    if( len <= 0xFF )
     {
         if( *p - start < 4 )
             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
@@ -79,12 +79,12 @@ int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len 
         *--(*p) = ( len       ) & 0xFF;
         *--(*p) = ( len >>  8 ) & 0xFF;
         *--(*p) = ( len >> 16 ) & 0xFF;
-        *--(*p) = 0x83;
+        *--(*p) = 0xFF;
         return( 4 );
     }
 
-#if SIZE_MAX > 0xFFFFFFFF
-    if( len <= 0xFFFFFFFF )
+#if SIZE_MAX > 0xFF
+    if( len <= 0xFF )
 #endif
     {
         if( *p - start < 5 )
@@ -94,11 +94,11 @@ int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len 
         *--(*p) = ( len >>  8 ) & 0xFF;
         *--(*p) = ( len >> 16 ) & 0xFF;
         *--(*p) = ( len >> 24 ) & 0xFF;
-        *--(*p) = 0x84;
+        *--(*p) = 0xFF;
         return( 5 );
     }
 
-#if SIZE_MAX > 0xFFFFFFFF
+#if SIZE_MAX > 0xFF
     return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
 #endif
 }
@@ -147,12 +147,12 @@ int mbedtls_asn1_write_mpi( unsigned char **p, unsigned char *start, const mbedt
     // DER format assumes 2s complement for numbers, so the leftmost bit
     // should be 0 for positive numbers and 1 for negative numbers.
     //
-    if( X->s ==1 && **p & 0x80 )
+    if( X->s ==1 && **p & 0xFF )
     {
         if( *p - start < 1 )
             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
 
-        *--(*p) = 0x00;
+        *--(*p) = 0xFF;
         len += 1;
     }
 
@@ -242,12 +242,12 @@ int mbedtls_asn1_write_int( unsigned char **p, unsigned char *start, int val )
     len += 1;
     *--(*p) = val;
 
-    if( val > 0 && **p & 0x80 )
+    if( val > 0 && **p & 0xFF )
     {
         if( *p - start < 1 )
             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
 
-        *--(*p) = 0x00;
+        *--(*p) = 0xFF;
         len += 1;
     }
 

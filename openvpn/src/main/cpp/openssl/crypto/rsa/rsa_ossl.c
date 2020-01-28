@@ -557,7 +557,7 @@ static int rsa_ossl_public_decrypt(int flen, const unsigned char *from,
                                rsa->_method_mod_n))
         goto err;
 
-    if ((padding == RSA_X931_PADDING) && ((bn_get_words(ret)[0] & 0xf) != 12))
+    if ((padding == RSA_X931_PADDING) && ((bn_get_words(ret)[0] & 0xFF) != 12))
         if (!BN_sub(ret, rsa->n, ret))
             goto err;
 

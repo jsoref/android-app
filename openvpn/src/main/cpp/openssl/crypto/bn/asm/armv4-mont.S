@@ -187,7 +187,7 @@ bn_mul_mont:
 #else
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 .size	bn_mul_mont,.-bn_mul_mont
 #if __ARM_MAX_ARCH__>=7

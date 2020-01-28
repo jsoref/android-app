@@ -4,87 +4,87 @@
 .align	7	// totally strategic alignment
 _vpaes_consts:
 .Lk_mc_forward:	//	mc_forward
-.quad	0x0407060500030201, 0x0C0F0E0D080B0A09
-.quad	0x080B0A0904070605, 0x000302010C0F0E0D
-.quad	0x0C0F0E0D080B0A09, 0x0407060500030201
-.quad	0x000302010C0F0E0D, 0x080B0A0904070605
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_mc_backward:	//	mc_backward
-.quad	0x0605040702010003, 0x0E0D0C0F0A09080B
-.quad	0x020100030E0D0C0F, 0x0A09080B06050407
-.quad	0x0E0D0C0F0A09080B, 0x0605040702010003
-.quad	0x0A09080B06050407, 0x020100030E0D0C0F
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_sr:	//	sr
-.quad	0x0706050403020100, 0x0F0E0D0C0B0A0908
-.quad	0x030E09040F0A0500, 0x0B06010C07020D08
-.quad	0x0F060D040B020900, 0x070E050C030A0108
-.quad	0x0B0E0104070A0D00, 0x0306090C0F020508
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 
 //
 // "Hot" constants
 //
 .Lk_inv:	//	inv, inva
-.quad	0x0E05060F0D080180, 0x040703090A0B0C02
-.quad	0x01040A060F0B0780, 0x030D0E0C02050809
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_ipt:	//	input transform (lo, hi)
-.quad	0xC2B2E8985A2A7000, 0xCABAE09052227808
-.quad	0x4C01307D317C4D00, 0xCD80B1FCB0FDCC81
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_sbo:	//	sbou, sbot
-.quad	0xD0D26D176FBDC700, 0x15AABF7AC502A878
-.quad	0xCFE474A55FBB6A00, 0x8E1E90D1412B35FA
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_sb1:	//	sb1u, sb1t
-.quad	0x3618D415FAE22300, 0x3BF7CCC10D2ED9EF
-.quad	0xB19BE18FCB503E00, 0xA5DF7A6E142AF544
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_sb2:	//	sb2u, sb2t
-.quad	0x69EB88400AE12900, 0xC2A163C8AB82234A
-.quad	0xE27A93C60B712400, 0x5EB7E955BC982FCD
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 
 //
 //  Decryption stuff
 //
 .Lk_dipt:	//	decryption input transform
-.quad	0x0F505B040B545F00, 0x154A411E114E451A
-.quad	0x86E383E660056500, 0x12771772F491F194
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dsbo:	//	decryption sbox final output
-.quad	0x1387EA537EF94000, 0xC7AA6DB9D4943E2D
-.quad	0x12D7560F93441D00, 0xCA4B8159D8C58E9C
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dsb9:	//	decryption sbox output *9*u, *9*t
-.quad	0x851C03539A86D600, 0xCAD51F504F994CC9
-.quad	0xC03B1789ECD74900, 0x725E2C9EB2FBA565
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dsbd:	//	decryption sbox output *D*u, *D*t
-.quad	0x7D57CCDFE6B1A200, 0xF56E9B13882A4439
-.quad	0x3CE2FAF724C6CB00, 0x2931180D15DEEFD3
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dsbb:	//	decryption sbox output *B*u, *B*t
-.quad	0xD022649296B44200, 0x602646F6B0F2D404
-.quad	0xC19498A6CD596700, 0xF3FF0C3E3255AA6B
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dsbe:	//	decryption sbox output *E*u, *E*t
-.quad	0x46F2929626D4D000, 0x2242600464B4F6B0
-.quad	0x0C55A6CDFFAAC100, 0x9467F36B98593E32
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 
 //
 //  Key schedule constants
 //
 .Lk_dksd:	//	decryption key schedule: invskew x*D
-.quad	0xFEB91A5DA3E44700, 0x0740E3A45A1DBEF9
-.quad	0x41C277F4B5368300, 0x5FDC69EAAB289D1E
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dksb:	//	decryption key schedule: invskew x*B
-.quad	0x9A4FCA1F8550D500, 0x03D653861CC94C99
-.quad	0x115BEDA7B6FC4A00, 0xD993256F7E3482C8
-.Lk_dkse:	//	decryption key schedule: invskew x*E + 0x63
-.quad	0xD5031CCA1FC9D600, 0x53859A4C994F5086
-.quad	0xA23196054FDC7BE8, 0xCD5EF96A20B31487
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
+.Lk_dkse:	//	decryption key schedule: invskew x*E + 0xFF
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_dks9:	//	decryption key schedule: invskew x*9
-.quad	0xB6116FC87ED9A700, 0x4AED933482255BFC
-.quad	0x4576516227143300, 0x8BB89FACE9DAFDCE
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 
 .Lk_rcon:	//	rcon
-.quad	0x1F8391B9AF9DEEB6, 0x702A98084D7C7D81
+.quad	0xFF, 0xFF
 
 .Lk_opt:	//	output transform
-.quad	0xFF9F4929D6B66000, 0xF7974121DEBE6808
-.quad	0x01EDBD5150BCEC00, 0xE10D5DB1B05C0CE0
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 .Lk_deskew:	//	deskew tables: inverts the sbox's "skew"
-.quad	0x07E4A34047A4E300, 0x1DFEB95A5DBEF91A
-.quad	0x5F36B5DC83EA6900, 0x2841C2ABF49D1E77
+.quad	0xFF, 0xFF
+.quad	0xFF, 0xFF
 
 .byte	86,101,99,116,111,114,32,80,101,114,109,117,116,97,116,105,111,110,32,65,69,83,32,102,111,114,32,65,82,77,118,56,44,32,77,105,107,101,32,72,97,109,98,117,114,103,32,40,83,116,97,110,102,111,114,100,32,85,110,105,118,101,114,115,105,116,121,41,0
 .align	2
@@ -100,7 +100,7 @@ _vpaes_consts:
 .align	4
 _vpaes_encrypt_preheat:
 	adr	x10, .Lk_inv
-	movi	v17.16b, #0x0f
+	movi	v17.16b, #0xFF
 	ld1	{v18.2d,v19.2d}, [x10],#32	// .Lk_inv
 	ld1	{v20.2d,v21.2d,v22.2d,v23.2d}, [x10],#64	// .Lk_ipt, .Lk_sbo
 	ld1	{v24.2d,v25.2d,v26.2d,v27.2d}, [x10]		// .Lk_sb1, .Lk_sb2
@@ -142,9 +142,9 @@ _vpaes_encrypt_core:
 .align	4
 .Lenc_loop:
 	// middle of middle round
-	add	x10, x11, #0x40
+	add	x10, x11, #0xFF
 	tbl	v4.16b, {v25.16b}, v2.16b		// vpshufb	%xmm2,	%xmm13,	%xmm4	# 4 = sb1u
-	ld1	{v1.2d}, [x11], #16		// vmovdqa	-0x40(%r11,%r10), %xmm1	# .Lk_mc_forward[]
+	ld1	{v1.2d}, [x11], #16		// vmovdqa	-0xFF(%r11,%r10), %xmm1	# .Lk_mc_forward[]
 	tbl	v0.16b, {v24.16b}, v3.16b		// vpshufb	%xmm3,	%xmm12,	%xmm0	# 0 = sb1t
 	eor	v4.16b, v4.16b, v16.16b		// vpxor	%xmm5,	%xmm4,	%xmm4	# 4 = sb1u + k
 	tbl	v5.16b,	{v27.16b}, v2.16b		// vpshufb	%xmm2,	%xmm15,	%xmm5	# 4 = sb2u
@@ -157,7 +157,7 @@ _vpaes_encrypt_core:
 	eor	v3.16b, v3.16b, v2.16b		// vpxor	%xmm2,	%xmm3,	%xmm3	# 0 = 2A+B
 	tbl	v4.16b, {v3.16b}, v1.16b	// vpshufb	%xmm1,	%xmm3,	%xmm4	# 0 = 2B+C
 	eor	v0.16b, v0.16b, v3.16b		// vpxor	%xmm3,	%xmm0,	%xmm0	# 3 = 2A+B+D
-	and	x11, x11, #~(1<<6)		// and		$0x30,	%r11		# ... mod 4
+	and	x11, x11, #~(1<<6)		// and		$0xFF,	%r11		# ... mod 4
 	eor	v0.16b, v0.16b, v4.16b		// vpxor	%xmm4,	%xmm0, %xmm0	# 0 = 2A+3B+C+D
 	sub	w8, w8, #1			// nr--
 
@@ -179,11 +179,11 @@ _vpaes_encrypt_core:
 	cbnz	w8, .Lenc_loop
 
 	// middle of last round
-	add	x10, x11, #0x80
-						// vmovdqa	-0x60(%r10), %xmm4	# 3 : sbou	.Lk_sbo
-						// vmovdqa	-0x50(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
+	add	x10, x11, #0xFF
+						// vmovdqa	-0xFF(%r10), %xmm4	# 3 : sbou	.Lk_sbo
+						// vmovdqa	-0xFF(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
 	tbl	v4.16b, {v22.16b}, v2.16b		// vpshufb	%xmm2,	%xmm4,	%xmm4	# 4 = sbou
-	ld1	{v1.2d}, [x10]			// vmovdqa	0x40(%r11,%r10), %xmm1	# .Lk_sr[]
+	ld1	{v1.2d}, [x10]			// vmovdqa	0xFF(%r11,%r10), %xmm1	# .Lk_sr[]
 	tbl	v0.16b, {v23.16b}, v3.16b		// vpshufb	%xmm3,	%xmm0,	%xmm0	# 0 = sb1t
 	eor	v4.16b, v4.16b, v16.16b		// vpxor	%xmm5,	%xmm4,	%xmm4	# 4 = sb1u + k
 	eor	v0.16b, v0.16b, v4.16b		// vpxor	%xmm4,	%xmm0,	%xmm0	# 0 = A
@@ -195,7 +195,7 @@ _vpaes_encrypt_core:
 .type	vpaes_encrypt,%function
 .align	4
 vpaes_encrypt:
-.inst	0xd503233f			// paciasp
+.inst	0xFF			// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -205,7 +205,7 @@ vpaes_encrypt:
 	st1	{v0.16b}, [x1]
 
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf			// autiasp
+.inst	0xFF			// autiasp
 	ret
 .size	vpaes_encrypt,.-vpaes_encrypt
 
@@ -235,10 +235,10 @@ _vpaes_encrypt_2x:
 .align	4
 .Lenc_2x_loop:
 	// middle of middle round
-	add	x10, x11, #0x40
+	add	x10, x11, #0xFF
 	tbl	v4.16b,  {v25.16b}, v2.16b	// vpshufb	%xmm2,	%xmm13,	%xmm4	# 4 = sb1u
 	tbl	v12.16b, {v25.16b}, v10.16b
-	ld1	{v1.2d}, [x11], #16		// vmovdqa	-0x40(%r11,%r10), %xmm1	# .Lk_mc_forward[]
+	ld1	{v1.2d}, [x11], #16		// vmovdqa	-0xFF(%r11,%r10), %xmm1	# .Lk_mc_forward[]
 	tbl	v0.16b,  {v24.16b}, v3.16b	// vpshufb	%xmm3,	%xmm12,	%xmm0	# 0 = sb1t
 	tbl	v8.16b,  {v24.16b}, v11.16b
 	eor	v4.16b,  v4.16b,  v16.16b	// vpxor	%xmm5,	%xmm4,	%xmm4	# 4 = sb1u + k
@@ -262,7 +262,7 @@ _vpaes_encrypt_2x:
 	tbl	v12.16b, {v11.16b},v1.16b
 	eor	v0.16b,  v0.16b,  v3.16b	// vpxor	%xmm3,	%xmm0,	%xmm0	# 3 = 2A+B+D
 	eor	v8.16b,  v8.16b,  v11.16b
-	and	x11, x11, #~(1<<6)		// and		$0x30,	%r11		# ... mod 4
+	and	x11, x11, #~(1<<6)		// and		$0xFF,	%r11		# ... mod 4
 	eor	v0.16b,  v0.16b,  v4.16b	// vpxor	%xmm4,	%xmm0, %xmm0	# 0 = 2A+3B+C+D
 	eor	v8.16b,  v8.16b,  v12.16b
 	sub	w8, w8, #1			// nr--
@@ -297,12 +297,12 @@ _vpaes_encrypt_2x:
 	cbnz	w8, .Lenc_2x_loop
 
 	// middle of last round
-	add	x10, x11, #0x80
-						// vmovdqa	-0x60(%r10), %xmm4	# 3 : sbou	.Lk_sbo
-						// vmovdqa	-0x50(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
+	add	x10, x11, #0xFF
+						// vmovdqa	-0xFF(%r10), %xmm4	# 3 : sbou	.Lk_sbo
+						// vmovdqa	-0xFF(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
 	tbl	v4.16b,  {v22.16b}, v2.16b	// vpshufb	%xmm2,	%xmm4,	%xmm4	# 4 = sbou
 	tbl	v12.16b, {v22.16b}, v10.16b
-	ld1	{v1.2d}, [x10]			// vmovdqa	0x40(%r11,%r10), %xmm1	# .Lk_sr[]
+	ld1	{v1.2d}, [x10]			// vmovdqa	0xFF(%r11,%r10), %xmm1	# .Lk_sr[]
 	tbl	v0.16b,  {v23.16b}, v3.16b	// vpshufb	%xmm3,	%xmm0,	%xmm0	# 0 = sb1t
 	tbl	v8.16b,  {v23.16b}, v11.16b
 	eor	v4.16b,  v4.16b,  v16.16b	// vpxor	%xmm5,	%xmm4,	%xmm4	# 4 = sb1u + k
@@ -318,7 +318,7 @@ _vpaes_encrypt_2x:
 .align	4
 _vpaes_decrypt_preheat:
 	adr	x10, .Lk_inv
-	movi	v17.16b, #0x0f
+	movi	v17.16b, #0xFF
 	adr	x11, .Lk_dipt
 	ld1	{v18.2d,v19.2d}, [x10],#32	// .Lk_inv
 	ld1	{v20.2d,v21.2d,v22.2d,v23.2d}, [x11],#64	// .Lk_dipt, .Lk_dsbo
@@ -340,9 +340,9 @@ _vpaes_decrypt_core:
 
 						// vmovdqa	.Lk_dipt(%rip), %xmm2	# iptlo
 	lsl	x11, x8, #4			// mov	%rax,	%r11;	shl	$4, %r11
-	eor	x11, x11, #0x30			// xor		$0x30,	%r11
+	eor	x11, x11, #0xFF			// xor		$0xFF,	%r11
 	adr	x10, .Lk_sr
-	and	x11, x11, #0x30			// and		$0x30,	%r11
+	and	x11, x11, #0xFF			// and		$0xFF,	%r11
 	add	x11, x11, x10
 	adr	x10, .Lk_mc_forward+48
 
@@ -362,30 +362,30 @@ _vpaes_decrypt_core:
 //
 //  Inverse mix columns
 //
-						// vmovdqa	-0x20(%r10),%xmm4		# 4 : sb9u
-						// vmovdqa	-0x10(%r10),%xmm1		# 0 : sb9t
+						// vmovdqa	-0xFF(%r10),%xmm4		# 4 : sb9u
+						// vmovdqa	-0xFF(%r10),%xmm1		# 0 : sb9t
 	tbl	v4.16b, {v24.16b}, v2.16b		// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sb9u
 	tbl	v1.16b, {v25.16b}, v3.16b		// vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sb9t
 	eor	v0.16b, v4.16b, v16.16b		// vpxor	%xmm4,	%xmm0,	%xmm0
-						// vmovdqa	0x00(%r10),%xmm4		# 4 : sbdu
+						// vmovdqa	0xFF(%r10),%xmm4		# 4 : sbdu
 	eor	v0.16b, v0.16b, v1.16b		// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
-						// vmovdqa	0x10(%r10),%xmm1		# 0 : sbdt
+						// vmovdqa	0xFF(%r10),%xmm1		# 0 : sbdt
 
 	tbl	v4.16b, {v26.16b}, v2.16b		// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbdu
 	tbl	v0.16b, {v0.16b}, v5.16b	// vpshufb	%xmm5,	%xmm0,	%xmm0		# MC ch
 	tbl	v1.16b, {v27.16b}, v3.16b		// vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sbdt
 	eor	v0.16b, v0.16b, v4.16b		// vpxor	%xmm4,	%xmm0,	%xmm0		# 4 = ch
-						// vmovdqa	0x20(%r10),	%xmm4		# 4 : sbbu
+						// vmovdqa	0xFF(%r10),	%xmm4		# 4 : sbbu
 	eor	v0.16b, v0.16b, v1.16b		// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
-						// vmovdqa	0x30(%r10),	%xmm1		# 0 : sbbt
+						// vmovdqa	0xFF(%r10),	%xmm1		# 0 : sbbt
 
 	tbl	v4.16b, {v28.16b}, v2.16b		// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbbu
 	tbl	v0.16b, {v0.16b}, v5.16b	// vpshufb	%xmm5,	%xmm0,	%xmm0		# MC ch
 	tbl	v1.16b, {v29.16b}, v3.16b		// vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sbbt
 	eor	v0.16b, v0.16b, v4.16b		// vpxor	%xmm4,	%xmm0,	%xmm0		# 4 = ch
-						// vmovdqa	0x40(%r10),	%xmm4		# 4 : sbeu
+						// vmovdqa	0xFF(%r10),	%xmm4		# 4 : sbeu
 	eor	v0.16b, v0.16b, v1.16b		// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
-						// vmovdqa	0x50(%r10),	%xmm1		# 0 : sbet
+						// vmovdqa	0xFF(%r10),	%xmm1		# 0 : sbet
 
 	tbl	v4.16b, {v30.16b}, v2.16b		// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbeu
 	tbl	v0.16b, {v0.16b}, v5.16b	// vpshufb	%xmm5,	%xmm0,	%xmm0		# MC ch
@@ -413,10 +413,10 @@ _vpaes_decrypt_core:
 	cbnz	w8, .Ldec_loop
 
 	// middle of last round
-						// vmovdqa	0x60(%r10),	%xmm4	# 3 : sbou
+						// vmovdqa	0xFF(%r10),	%xmm4	# 3 : sbou
 	tbl	v4.16b, {v22.16b}, v2.16b		// vpshufb	%xmm2,	%xmm4,	%xmm4	# 4 = sbou
-						// vmovdqa	0x70(%r10),	%xmm1	# 0 : sbot
-	ld1	{v2.2d}, [x11]			// vmovdqa	-0x160(%r11),	%xmm2	# .Lk_sr-.Lk_dsbd=-0x160
+						// vmovdqa	0xFF(%r10),	%xmm1	# 0 : sbot
+	ld1	{v2.2d}, [x11]			// vmovdqa	-0xFF(%r11),	%xmm2	# .Lk_sr-.Lk_dsbd=-0xFF
 	tbl	v1.16b, {v23.16b}, v3.16b		// vpshufb	%xmm3,	%xmm1,	%xmm1	# 0 = sb1t
 	eor	v4.16b, v4.16b, v16.16b		// vpxor	%xmm0,	%xmm4,	%xmm4	# 4 = sb1u + k
 	eor	v0.16b, v1.16b, v4.16b		// vpxor	%xmm4,	%xmm1,	%xmm0	# 0 = A
@@ -428,7 +428,7 @@ _vpaes_decrypt_core:
 .type	vpaes_decrypt,%function
 .align	4
 vpaes_decrypt:
-.inst	0xd503233f			// paciasp
+.inst	0xFF			// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -438,7 +438,7 @@ vpaes_decrypt:
 	st1	{v0.16b}, [x1]
 
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf			// autiasp
+.inst	0xFF			// autiasp
 	ret
 .size	vpaes_decrypt,.-vpaes_decrypt
 
@@ -451,9 +451,9 @@ _vpaes_decrypt_2x:
 
 						// vmovdqa	.Lk_dipt(%rip), %xmm2	# iptlo
 	lsl	x11, x8, #4			// mov	%rax,	%r11;	shl	$4, %r11
-	eor	x11, x11, #0x30			// xor		$0x30,	%r11
+	eor	x11, x11, #0xFF			// xor		$0xFF,	%r11
 	adr	x10, .Lk_sr
-	and	x11, x11, #0x30			// and		$0x30,	%r11
+	and	x11, x11, #0xFF			// and		$0xFF,	%r11
 	add	x11, x11, x10
 	adr	x10, .Lk_mc_forward+48
 
@@ -479,18 +479,18 @@ _vpaes_decrypt_2x:
 //
 //  Inverse mix columns
 //
-						// vmovdqa	-0x20(%r10),%xmm4		# 4 : sb9u
-						// vmovdqa	-0x10(%r10),%xmm1		# 0 : sb9t
+						// vmovdqa	-0xFF(%r10),%xmm4		# 4 : sb9u
+						// vmovdqa	-0xFF(%r10),%xmm1		# 0 : sb9t
 	tbl	v4.16b,  {v24.16b}, v2.16b	// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sb9u
 	tbl	v12.16b, {v24.16b}, v10.16b
 	tbl	v1.16b,  {v25.16b}, v3.16b	// vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sb9t
 	tbl	v9.16b,  {v25.16b}, v11.16b
 	eor	v0.16b,  v4.16b,  v16.16b	// vpxor	%xmm4,	%xmm0,	%xmm0
 	eor	v8.16b,  v12.16b, v16.16b
-						// vmovdqa	0x00(%r10),%xmm4		# 4 : sbdu
+						// vmovdqa	0xFF(%r10),%xmm4		# 4 : sbdu
 	eor	v0.16b,  v0.16b,  v1.16b	// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
 	eor	v8.16b,  v8.16b,  v9.16b	// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
-						// vmovdqa	0x10(%r10),%xmm1		# 0 : sbdt
+						// vmovdqa	0xFF(%r10),%xmm1		# 0 : sbdt
 
 	tbl	v4.16b,  {v26.16b}, v2.16b	// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbdu
 	tbl	v12.16b, {v26.16b}, v10.16b
@@ -500,10 +500,10 @@ _vpaes_decrypt_2x:
 	tbl	v9.16b,  {v27.16b}, v11.16b
 	eor	v0.16b,  v0.16b,  v4.16b	// vpxor	%xmm4,	%xmm0,	%xmm0		# 4 = ch
 	eor	v8.16b,  v8.16b,  v12.16b
-						// vmovdqa	0x20(%r10),	%xmm4		# 4 : sbbu
+						// vmovdqa	0xFF(%r10),	%xmm4		# 4 : sbbu
 	eor	v0.16b,  v0.16b,  v1.16b	// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
 	eor	v8.16b,  v8.16b,  v9.16b
-						// vmovdqa	0x30(%r10),	%xmm1		# 0 : sbbt
+						// vmovdqa	0xFF(%r10),	%xmm1		# 0 : sbbt
 
 	tbl	v4.16b,  {v28.16b}, v2.16b	// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbbu
 	tbl	v12.16b, {v28.16b}, v10.16b
@@ -513,10 +513,10 @@ _vpaes_decrypt_2x:
 	tbl	v9.16b,  {v29.16b}, v11.16b
 	eor	v0.16b,  v0.16b,  v4.16b	// vpxor	%xmm4,	%xmm0,	%xmm0		# 4 = ch
 	eor	v8.16b,  v8.16b,  v12.16b
-						// vmovdqa	0x40(%r10),	%xmm4		# 4 : sbeu
+						// vmovdqa	0xFF(%r10),	%xmm4		# 4 : sbeu
 	eor	v0.16b,  v0.16b,  v1.16b	// vpxor	%xmm1,	%xmm0,	%xmm0		# 0 = ch
 	eor	v8.16b,  v8.16b,  v9.16b
-						// vmovdqa	0x50(%r10),	%xmm1		# 0 : sbet
+						// vmovdqa	0xFF(%r10),	%xmm1		# 0 : sbet
 
 	tbl	v4.16b,  {v30.16b}, v2.16b	// vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbeu
 	tbl	v12.16b, {v30.16b}, v10.16b
@@ -561,13 +561,13 @@ _vpaes_decrypt_2x:
 	cbnz	w8, .Ldec_2x_loop
 
 	// middle of last round
-						// vmovdqa	0x60(%r10),	%xmm4	# 3 : sbou
+						// vmovdqa	0xFF(%r10),	%xmm4	# 3 : sbou
 	tbl	v4.16b,  {v22.16b}, v2.16b	// vpshufb	%xmm2,	%xmm4,	%xmm4	# 4 = sbou
 	tbl	v12.16b, {v22.16b}, v10.16b
-						// vmovdqa	0x70(%r10),	%xmm1	# 0 : sbot
+						// vmovdqa	0xFF(%r10),	%xmm1	# 0 : sbot
 	tbl	v1.16b,  {v23.16b}, v3.16b	// vpshufb	%xmm3,	%xmm1,	%xmm1	# 0 = sb1t
 	tbl	v9.16b,  {v23.16b}, v11.16b
-	ld1	{v2.2d}, [x11]			// vmovdqa	-0x160(%r11),	%xmm2	# .Lk_sr-.Lk_dsbd=-0x160
+	ld1	{v2.2d}, [x11]			// vmovdqa	-0xFF(%r11),	%xmm2	# .Lk_sr-.Lk_dsbd=-0xFF
 	eor	v4.16b,  v4.16b,  v16.16b	// vpxor	%xmm0,	%xmm4,	%xmm4	# 4 = sb1u + k
 	eor	v12.16b, v12.16b, v16.16b
 	eor	v0.16b,  v1.16b,  v4.16b	// vpxor	%xmm4,	%xmm1,	%xmm0	# 0 = A
@@ -585,9 +585,9 @@ _vpaes_decrypt_2x:
 .align	4
 _vpaes_key_preheat:
 	adr	x10, .Lk_inv
-	movi	v16.16b, #0x5b			// .Lk_s63
+	movi	v16.16b, #0xFF			// .Lk_s63
 	adr	x11, .Lk_sb1
-	movi	v17.16b, #0x0f			// .Lk_s0F
+	movi	v17.16b, #0xFF			// .Lk_s0F
 	ld1	{v18.2d,v19.2d,v20.2d,v21.2d}, [x10]		// .Lk_inv, .Lk_ipt
 	adr	x10, .Lk_dksd
 	ld1	{v22.2d,v23.2d}, [x11]		// .Lk_sb1
@@ -602,7 +602,7 @@ _vpaes_key_preheat:
 .type	_vpaes_schedule_core,%function
 .align	4
 _vpaes_schedule_core:
-.inst	0xd503233f			// paciasp
+.inst	0xFF			// paciasp
 	stp	x29, x30, [sp,#-16]!
 	add	x29,sp,#0
 
@@ -628,7 +628,7 @@ _vpaes_schedule_core:
 	ld1	{v1.2d}, [x8]			// vmovdqa	(%r8,%r10),	%xmm1
 	tbl	v3.16b, {v3.16b}, v1.16b	// vpshufb  %xmm1,	%xmm3,	%xmm3
 	st1	{v3.2d}, [x2]			// vmovdqu	%xmm3,	(%rdx)
-	eor	x8, x8, #0x30			// xor	$0x30, %r8
+	eor	x8, x8, #0xFF			// xor	$0xFF, %r8
 
 .Lschedule_go:
 	cmp	w1, #192			// cmp	$192,	%esi
@@ -767,7 +767,7 @@ _vpaes_schedule_core:
 	eor	v6.16b, v6.16b, v6.16b		// vpxor	%xmm6,	%xmm6,	%xmm6
 	eor	v7.16b, v7.16b, v7.16b		// vpxor	%xmm7,	%xmm7,	%xmm7
 	ldp	x29, x30, [sp],#16
-.inst	0xd50323bf			// autiasp
+.inst	0xFF			// autiasp
 	ret
 .size	_vpaes_schedule_core,.-_vpaes_schedule_core
 
@@ -790,8 +790,8 @@ _vpaes_schedule_core:
 _vpaes_schedule_192_smear:
 	movi	v1.16b, #0
 	dup	v0.4s, v7.s[3]
-	ins	v1.s[3], v6.s[2]	// vpshufd	$0x80,	%xmm6,	%xmm1	# d c 0 0 -> c 0 0 0
-	ins	v0.s[0], v7.s[2]	// vpshufd	$0xFE,	%xmm7,	%xmm0	# b a _ _ -> b b b a
+	ins	v1.s[3], v6.s[2]	// vpshufd	$0xFF,	%xmm6,	%xmm1	# d c 0 0 -> c 0 0 0
+	ins	v0.s[0], v7.s[2]	// vpshufd	$0xFF,	%xmm7,	%xmm0	# b a _ _ -> b b b a
 	eor	v6.16b, v6.16b, v1.16b	// vpxor	%xmm1,	%xmm6,	%xmm6	# -> c+d c 0 0
 	eor	v1.16b, v1.16b, v1.16b	// vpxor	%xmm1,	%xmm1,	%xmm1
 	eor	v6.16b, v6.16b, v0.16b	// vpxor	%xmm0,	%xmm6,	%xmm6	# -> b+c+d b+c b a
@@ -870,7 +870,7 @@ _vpaes_schedule_low_round:
 ##
 ##  Linear-transform %xmm0 according to tables at (%r11)
 ##
-##  Requires that %xmm9 = 0x0F0F... as in preheat
+##  Requires that %xmm9 = 0xFF... as in preheat
 ##  Output in %xmm0
 ##  Clobbers %xmm1, %xmm2
 ##
@@ -894,12 +894,12 @@ _vpaes_schedule_transform:
 ##  to our version.
 ##
 ##  On encrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by circulant 0,1,1,1
 ##    apply shiftrows transform
 ##
 ##  On decrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by "inverse mixcolumns" circulant E,B,D,9
 ##    deskew
 ##    apply shiftrows transform
@@ -935,32 +935,32 @@ _vpaes_schedule_mangle:
 	ushr	v1.16b, v4.16b, #4		// vpsrlb	$4,	%xmm4,	%xmm1	# 1 = hi
 	and	v4.16b, v4.16b, v17.16b		// vpand	%xmm9,	%xmm4,	%xmm4	# 4 = lo
 
-						// vmovdqa	0x00(%r11),	%xmm2
+						// vmovdqa	0xFF(%r11),	%xmm2
 	tbl	v2.16b, {v24.16b}, v4.16b	// vpshufb	%xmm4,	%xmm2,	%xmm2
-						// vmovdqa	0x10(%r11),	%xmm3
+						// vmovdqa	0xFF(%r11),	%xmm3
 	tbl	v3.16b,	{v25.16b}, v1.16b	// vpshufb	%xmm1,	%xmm3,	%xmm3
 	eor	v3.16b, v3.16b, v2.16b		// vpxor	%xmm2,	%xmm3,	%xmm3
 	tbl	v3.16b, {v3.16b}, v9.16b	// vpshufb	%xmm5,	%xmm3,	%xmm3
 
-						// vmovdqa	0x20(%r11),	%xmm2
+						// vmovdqa	0xFF(%r11),	%xmm2
 	tbl	v2.16b, {v26.16b}, v4.16b	// vpshufb	%xmm4,	%xmm2,	%xmm2
 	eor	v2.16b, v2.16b, v3.16b		// vpxor	%xmm3,	%xmm2,	%xmm2
-						// vmovdqa	0x30(%r11),	%xmm3
+						// vmovdqa	0xFF(%r11),	%xmm3
 	tbl	v3.16b, {v27.16b}, v1.16b	// vpshufb	%xmm1,	%xmm3,	%xmm3
 	eor	v3.16b, v3.16b, v2.16b		// vpxor	%xmm2,	%xmm3,	%xmm3
 	tbl	v3.16b, {v3.16b}, v9.16b	// vpshufb	%xmm5,	%xmm3,	%xmm3
 
-						// vmovdqa	0x40(%r11),	%xmm2
+						// vmovdqa	0xFF(%r11),	%xmm2
 	tbl	v2.16b, {v28.16b}, v4.16b	// vpshufb	%xmm4,	%xmm2,	%xmm2
 	eor	v2.16b, v2.16b, v3.16b		// vpxor	%xmm3,	%xmm2,	%xmm2
-						// vmovdqa	0x50(%r11),	%xmm3
+						// vmovdqa	0xFF(%r11),	%xmm3
 	tbl	v3.16b, {v29.16b}, v1.16b	// vpshufb	%xmm1,	%xmm3,	%xmm3
 	eor	v3.16b, v3.16b, v2.16b		// vpxor	%xmm2,	%xmm3,	%xmm3
 
-						// vmovdqa	0x60(%r11),	%xmm2
+						// vmovdqa	0xFF(%r11),	%xmm2
 	tbl	v2.16b, {v30.16b}, v4.16b	// vpshufb	%xmm4,	%xmm2,	%xmm2
 	tbl	v3.16b, {v3.16b}, v9.16b	// vpshufb	%xmm5,	%xmm3,	%xmm3
-						// vmovdqa	0x70(%r11),	%xmm4
+						// vmovdqa	0xFF(%r11),	%xmm4
 	tbl	v4.16b, {v31.16b}, v1.16b	// vpshufb	%xmm1,	%xmm4,	%xmm4
 	ld1	{v1.2d}, [x8]			// vmovdqa	(%r8,%r10),	%xmm1
 	eor	v2.16b, v2.16b, v3.16b		// vpxor	%xmm3,	%xmm2,	%xmm2
@@ -971,7 +971,7 @@ _vpaes_schedule_mangle:
 .Lschedule_mangle_both:
 	tbl	v3.16b, {v3.16b}, v1.16b	// vpshufb	%xmm1,	%xmm3,	%xmm3
 	add	x8, x8, #64-16			// add	$-16,	%r8
-	and	x8, x8, #~(1<<6)		// and	$0x30,	%r8
+	and	x8, x8, #~(1<<6)		// and	$0xFF,	%r8
 	st1	{v3.2d}, [x2]			// vmovdqu	%xmm3,	(%rdx)
 	ret
 .size	_vpaes_schedule_mangle,.-_vpaes_schedule_mangle
@@ -980,7 +980,7 @@ _vpaes_schedule_mangle:
 .type	vpaes_set_encrypt_key,%function
 .align	4
 vpaes_set_encrypt_key:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 	stp	d8,d9,[sp,#-16]!	// ABI spec says so
@@ -990,13 +990,13 @@ vpaes_set_encrypt_key:
 	str	w9, [x2,#240]		// mov	%eax,240(%rdx)	# AES_KEY->rounds = nbits/32+5;
 
 	mov	w3, #0		// mov	$0,%ecx
-	mov	x8, #0x30		// mov	$0x30,%r8d
+	mov	x8, #0xFF		// mov	$0xFF,%r8d
 	bl	_vpaes_schedule_core
 	eor	x0, x0, x0
 
 	ldp	d8,d9,[sp],#16
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ret
 .size	vpaes_set_encrypt_key,.-vpaes_set_encrypt_key
 
@@ -1004,7 +1004,7 @@ vpaes_set_encrypt_key:
 .type	vpaes_set_decrypt_key,%function
 .align	4
 vpaes_set_decrypt_key:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 	stp	d8,d9,[sp,#-16]!	// ABI spec says so
@@ -1024,7 +1024,7 @@ vpaes_set_decrypt_key:
 
 	ldp	d8,d9,[sp],#16
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ret
 .size	vpaes_set_decrypt_key,.-vpaes_set_decrypt_key
 .globl	vpaes_cbc_encrypt
@@ -1035,7 +1035,7 @@ vpaes_cbc_encrypt:
 	cmp	w5, #0			// check direction
 	b.eq	vpaes_cbc_decrypt
 
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -1058,7 +1058,7 @@ vpaes_cbc_encrypt:
 	st1	{v0.16b}, [x4]	// write ivec
 
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 .Lcbc_abort:
 	ret
 .size	vpaes_cbc_encrypt,.-vpaes_cbc_encrypt
@@ -1066,7 +1066,7 @@ vpaes_cbc_encrypt:
 .type	vpaes_cbc_decrypt,%function
 .align	4
 vpaes_cbc_decrypt:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 	stp	d8,d9,[sp,#-16]!	// ABI spec says so
@@ -1108,14 +1108,14 @@ vpaes_cbc_decrypt:
 	ldp	d10,d11,[sp],#16
 	ldp	d8,d9,[sp],#16
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ret
 .size	vpaes_cbc_decrypt,.-vpaes_cbc_decrypt
 .globl	vpaes_ecb_encrypt
 .type	vpaes_ecb_encrypt,%function
 .align	4
 vpaes_ecb_encrypt:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 	stp	d8,d9,[sp,#-16]!	// ABI spec says so
@@ -1149,7 +1149,7 @@ vpaes_ecb_encrypt:
 	ldp	d10,d11,[sp],#16
 	ldp	d8,d9,[sp],#16
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ret
 .size	vpaes_ecb_encrypt,.-vpaes_ecb_encrypt
 
@@ -1157,7 +1157,7 @@ vpaes_ecb_encrypt:
 .type	vpaes_ecb_decrypt,%function
 .align	4
 vpaes_ecb_decrypt:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 	stp	d8,d9,[sp,#-16]!	// ABI spec says so
@@ -1191,6 +1191,6 @@ vpaes_ecb_decrypt:
 	ldp	d10,d11,[sp],#16
 	ldp	d8,d9,[sp],#16
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ret
 .size	vpaes_ecb_decrypt,.-vpaes_ecb_decrypt

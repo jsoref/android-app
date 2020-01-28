@@ -26,8 +26,8 @@ poly1305_init:
 	adr	x10,.LOPENSSL_armcap_P
 
 	ldp	x7,x8,[x1]		// load key
-	mov	x9,#0xfffffffc0fffffff
-	movk	x9,#0x0fff,lsl#48
+	mov	x9,#0xFF
+	movk	x9,#0xFF,lsl#48
 	ldr	w17,[x10,x11]
 #ifdef	__ARMEB__
 	rev	x7,x7			// flip bytes
@@ -193,10 +193,10 @@ poly1305_mult:
 .type	poly1305_splat,%function
 .align	5
 poly1305_splat:
-	and	x12,x4,#0x03ffffff	// base 2^64 -> base 2^26
+	and	x12,x4,#0xFF	// base 2^64 -> base 2^26
 	ubfx	x13,x4,#26,#26
 	extr	x14,x5,x4,#52
-	and	x14,x14,#0x03ffffff
+	and	x14,x14,#0xFF
 	ubfx	x15,x5,#14,#26
 	extr	x16,x6,x5,#40
 
@@ -226,7 +226,7 @@ poly1305_blocks_neon:
 	cbz	x17,poly1305_blocks
 
 .Lblocks_neon:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-80]!
 	add	x29,sp,#0
 
@@ -277,10 +277,10 @@ poly1305_blocks_neon:
 
 	cbz	x3,.Lstore_base2_64_neon
 
-	and	x10,x4,#0x03ffffff	// base 2^64 -> base 2^26
+	and	x10,x4,#0xFF	// base 2^64 -> base 2^26
 	ubfx	x11,x4,#26,#26
 	extr	x12,x5,x4,#52
-	and	x12,x12,#0x03ffffff
+	and	x12,x12,#0xFF
 	ubfx	x13,x5,#14,#26
 	extr	x14,x6,x5,#40
 
@@ -321,10 +321,10 @@ poly1305_blocks_neon:
 	bl	poly1305_mult
 
 .Linit_neon:
-	and	x10,x4,#0x03ffffff	// base 2^64 -> base 2^26
+	and	x10,x4,#0xFF	// base 2^64 -> base 2^26
 	ubfx	x11,x4,#26,#26
 	extr	x12,x5,x4,#52
-	and	x12,x12,#0x03ffffff
+	and	x12,x12,#0xFF
 	ubfx	x13,x5,#14,#26
 	extr	x14,x6,x5,#40
 
@@ -401,8 +401,8 @@ poly1305_blocks_neon:
 	rev	x9,x9
 	rev	x13,x13
 #endif
-	and	x4,x8,#0x03ffffff	// base 2^64 -> base 2^26
-	and	x5,x9,#0x03ffffff
+	and	x4,x8,#0xFF	// base 2^64 -> base 2^26
+	and	x5,x9,#0xFF
 	ubfx	x6,x8,#26,#26
 	ubfx	x7,x9,#26,#26
 	add	x4,x4,x5,lsl#32		// bfi	x4,x5,#32,#32
@@ -410,8 +410,8 @@ poly1305_blocks_neon:
 	extr	x9,x13,x9,#52
 	add	x6,x6,x7,lsl#32		// bfi	x6,x7,#32,#32
 	fmov	d14,x4
-	and	x8,x8,#0x03ffffff
-	and	x9,x9,#0x03ffffff
+	and	x8,x8,#0xFF
+	and	x9,x9,#0xFF
 	ubfx	x10,x12,#14,#26
 	ubfx	x11,x13,#14,#26
 	add	x12,x3,x12,lsr#40
@@ -437,8 +437,8 @@ poly1305_blocks_neon:
 	rev	x9,x9
 	rev	x13,x13
 #endif
-	and	x4,x8,#0x03ffffff	// base 2^64 -> base 2^26
-	and	x5,x9,#0x03ffffff
+	and	x4,x8,#0xFF	// base 2^64 -> base 2^26
+	and	x5,x9,#0xFF
 	ubfx	x6,x8,#26,#26
 	ubfx	x7,x9,#26,#26
 	add	x4,x4,x5,lsl#32		// bfi	x4,x5,#32,#32
@@ -446,8 +446,8 @@ poly1305_blocks_neon:
 	extr	x9,x13,x9,#52
 	add	x6,x6,x7,lsl#32		// bfi	x6,x7,#32,#32
 	fmov	d9,x4
-	and	x8,x8,#0x03ffffff
-	and	x9,x9,#0x03ffffff
+	and	x8,x8,#0xFF
+	and	x9,x9,#0xFF
 	ubfx	x10,x12,#14,#26
 	ubfx	x11,x13,#14,#26
 	add	x12,x3,x12,lsr#40
@@ -500,9 +500,9 @@ poly1305_blocks_neon:
 #endif
 
 	umlal	v23.2d,v15.2s,v5.s[2]
-	and	x4,x8,#0x03ffffff	// base 2^64 -> base 2^26
+	and	x4,x8,#0xFF	// base 2^64 -> base 2^26
 	umlal	v22.2d,v15.2s,v3.s[2]
-	and	x5,x9,#0x03ffffff
+	and	x5,x9,#0xFF
 	umlal	v21.2d,v15.2s,v1.s[2]
 	ubfx	x6,x8,#26,#26
 	umlal	v20.2d,v15.2s,v0.s[2]
@@ -519,10 +519,10 @@ poly1305_blocks_neon:
 	umlal	v20.2d,v16.2s,v8.s[2]
 	fmov	d14,x4
 	umlal	v19.2d,v16.2s,v6.s[2]
-	and	x8,x8,#0x03ffffff
+	and	x8,x8,#0xFF
 
 	umlal	v23.2d,v17.2s,v1.s[2]
-	and	x9,x9,#0x03ffffff
+	and	x9,x9,#0xFF
 	umlal	v22.2d,v17.2s,v0.s[2]
 	ubfx	x10,x12,#14,#26
 	umlal	v21.2d,v17.2s,v8.s[2]
@@ -567,9 +567,9 @@ poly1305_blocks_neon:
 	add	v10.2s,v10.2s,v25.2s
 	umlal	v22.2d,v9.2s,v5.s[0]
 	umlal	v23.2d,v9.2s,v7.s[0]
-	and	x4,x8,#0x03ffffff	// base 2^64 -> base 2^26
+	and	x4,x8,#0xFF	// base 2^64 -> base 2^26
 	umlal	v21.2d,v9.2s,v3.s[0]
-	and	x5,x9,#0x03ffffff
+	and	x5,x9,#0xFF
 	umlal	v19.2d,v9.2s,v0.s[0]
 	ubfx	x6,x8,#26,#26
 	umlal	v20.2d,v9.2s,v1.s[0]
@@ -586,10 +586,10 @@ poly1305_blocks_neon:
 	umlal	v21.2d,v10.2s,v1.s[0]
 	fmov	d9,x4
 	umlal	v20.2d,v10.2s,v0.s[0]
-	and	x8,x8,#0x03ffffff
+	and	x8,x8,#0xFF
 
 	add	v13.2s,v13.2s,v28.2s
-	and	x9,x9,#0x03ffffff
+	and	x9,x9,#0xFF
 	umlal	v22.2d,v12.2s,v0.s[0]
 	ubfx	x10,x12,#14,#26
 	umlal	v19.2d,v12.2s,v4.s[0]
@@ -624,14 +624,14 @@ poly1305_blocks_neon:
 	ushr	v30.2d,v19.2d,#26
 	and	v19.16b,v19.16b,v31.16b
 	add	v23.2d,v23.2d,v29.2d	// h3 -> h4
-	bic	v27.2s,#0xfc,lsl#24	// &=0x03ffffff
+	bic	v27.2s,#0xFF,lsl#24	// &=0xFF
 	add	v20.2d,v20.2d,v30.2d	// h0 -> h1
 
 	ushr	v29.2d,v23.2d,#26
 	xtn	v28.2s,v23.2d
 	ushr	v30.2d,v20.2d,#26
 	xtn	v25.2s,v20.2d
-	bic	v28.2s,#0xfc,lsl#24
+	bic	v28.2s,#0xFF,lsl#24
 	add	v21.2d,v21.2d,v30.2d	// h1 -> h2
 
 	add	v19.2d,v19.2d,v29.2d
@@ -639,15 +639,15 @@ poly1305_blocks_neon:
 	shrn	v30.2s,v21.2d,#26
 	xtn	v26.2s,v21.2d
 	add	v19.2d,v19.2d,v29.2d	// h4 -> h0
-	bic	v25.2s,#0xfc,lsl#24
+	bic	v25.2s,#0xFF,lsl#24
 	add	v27.2s,v27.2s,v30.2s		// h2 -> h3
-	bic	v26.2s,#0xfc,lsl#24
+	bic	v26.2s,#0xFF,lsl#24
 
 	shrn	v29.2s,v19.2d,#26
 	xtn	v24.2s,v19.2d
 	ushr	v30.2s,v27.2s,#26
-	bic	v27.2s,#0xfc,lsl#24
-	bic	v24.2s,#0xfc,lsl#24
+	bic	v27.2s,#0xFF,lsl#24
+	bic	v24.2s,#0xFF,lsl#24
 	add	v25.2s,v25.2s,v29.2s		// h0 -> h1
 	add	v28.2s,v28.2s,v30.2s		// h3 -> h4
 
@@ -795,7 +795,7 @@ poly1305_blocks_neon:
 	st1	{v23.s}[0],[x0]
 
 .Lno_data_neon:
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ldr	x29,[sp],#80
 	ret
 .size	poly1305_blocks_neon,.-poly1305_blocks_neon

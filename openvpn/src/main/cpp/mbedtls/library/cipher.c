@@ -614,9 +614,9 @@ static void add_one_and_zeros_padding( unsigned char *output,
     size_t padding_len = output_len - data_len;
     unsigned char i = 0;
 
-    output[data_len] = 0x80;
+    output[data_len] = 0xFF;
     for( i = 1; i < padding_len; i++ )
-        output[data_len + i] = 0x00;
+        output[data_len + i] = 0xFF;
 }
 
 static int get_one_and_zeros_padding( unsigned char *input, size_t input_len,
@@ -628,7 +628,7 @@ static int get_one_and_zeros_padding( unsigned char *input, size_t input_len,
     if( NULL == input || NULL == data_len )
         return( MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA );
 
-    bad = 0x80;
+    bad = 0xFF;
     *data_len = 0;
     for( i = input_len; i > 0; i-- )
     {
@@ -654,7 +654,7 @@ static void add_zeros_and_len_padding( unsigned char *output,
     unsigned char i = 0;
 
     for( i = 1; i < padding_len; i++ )
-        output[data_len + i - 1] = 0x00;
+        output[data_len + i - 1] = 0xFF;
     output[output_len - 1] = (unsigned char) padding_len;
 }
 
@@ -693,7 +693,7 @@ static void add_zeros_padding( unsigned char *output,
     size_t i;
 
     for( i = data_len; i < output_len; i++ )
-        output[i] = 0x00;
+        output[i] = 0xFF;
 }
 
 static int get_zeros_padding( unsigned char *input, size_t input_len,

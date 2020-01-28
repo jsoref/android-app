@@ -499,23 +499,23 @@ struct ASN1_ADB_TABLE_st {
 /* template flags */
 
 /* Field is optional */
-# define ASN1_TFLG_OPTIONAL      (0x1)
+# define ASN1_TFLG_OPTIONAL      (0xFF)
 
 /* Field is a SET OF */
-# define ASN1_TFLG_SET_OF        (0x1 << 1)
+# define ASN1_TFLG_SET_OF        (0xFF << 1)
 
 /* Field is a SEQUENCE OF */
-# define ASN1_TFLG_SEQUENCE_OF   (0x2 << 1)
+# define ASN1_TFLG_SEQUENCE_OF   (0xFF << 1)
 
 /*
  * Special case: this refers to a SET OF that will be sorted into DER order
  * when encoded *and* the corresponding STACK will be modified to match the
  * new order.
  */
-# define ASN1_TFLG_SET_ORDER     (0x3 << 1)
+# define ASN1_TFLG_SET_ORDER     (0xFF << 1)
 
 /* Mask for SET OF or SEQUENCE OF */
-# define ASN1_TFLG_SK_MASK       (0x3 << 1)
+# define ASN1_TFLG_SK_MASK       (0xFF << 1)
 
 /*
  * These flags mean the tag should be taken from the tag field. If EXPLICIT
@@ -523,12 +523,12 @@ struct ASN1_ADB_TABLE_st {
  */
 
 /* IMPLICIT tagging */
-# define ASN1_TFLG_IMPTAG        (0x1 << 3)
+# define ASN1_TFLG_IMPTAG        (0xFF << 3)
 
 /* EXPLICIT tagging, inner tag from underlying type */
-# define ASN1_TFLG_EXPTAG        (0x2 << 3)
+# define ASN1_TFLG_EXPTAG        (0xFF << 3)
 
-# define ASN1_TFLG_TAG_MASK      (0x3 << 3)
+# define ASN1_TFLG_TAG_MASK      (0xFF << 3)
 
 /* context specific IMPLICIT */
 # define ASN1_TFLG_IMPLICIT      (ASN1_TFLG_IMPTAG|ASN1_TFLG_CONTEXT)
@@ -543,15 +543,15 @@ struct ASN1_ADB_TABLE_st {
  */
 
 /* Universal tag */
-# define ASN1_TFLG_UNIVERSAL     (0x0<<6)
+# define ASN1_TFLG_UNIVERSAL     (0xFF<<6)
 /* Application tag */
-# define ASN1_TFLG_APPLICATION   (0x1<<6)
+# define ASN1_TFLG_APPLICATION   (0xFF<<6)
 /* Context specific tag */
-# define ASN1_TFLG_CONTEXT       (0x2<<6)
+# define ASN1_TFLG_CONTEXT       (0xFF<<6)
 /* Private tag */
-# define ASN1_TFLG_PRIVATE       (0x3<<6)
+# define ASN1_TFLG_PRIVATE       (0xFF<<6)
 
-# define ASN1_TFLG_TAG_CLASS     (0x3<<6)
+# define ASN1_TFLG_TAG_CLASS     (0xFF<<6)
 
 /*
  * These are for ANY DEFINED BY type. In this case the 'item' field points to
@@ -559,21 +559,21 @@ struct ASN1_ADB_TABLE_st {
  * relevant type
  */
 
-# define ASN1_TFLG_ADB_MASK      (0x3<<8)
+# define ASN1_TFLG_ADB_MASK      (0xFF<<8)
 
-# define ASN1_TFLG_ADB_OID       (0x1<<8)
+# define ASN1_TFLG_ADB_OID       (0xFF<<8)
 
-# define ASN1_TFLG_ADB_INT       (0x1<<9)
+# define ASN1_TFLG_ADB_INT       (0xFF<<9)
 
 /*
  * This flag when present in a SEQUENCE OF, SET OF or EXPLICIT causes
  * indefinite length constructed encoding to be used if required.
  */
 
-# define ASN1_TFLG_NDEF          (0x1<<11)
+# define ASN1_TFLG_NDEF          (0xFF<<11)
 
 /* Field is embedded and not a pointer */
-# define ASN1_TFLG_EMBED         (0x1 << 12)
+# define ASN1_TFLG_EMBED         (0xFF << 12)
 
 /* This is the actual ASN1 item itself */
 
@@ -630,17 +630,17 @@ struct ASN1_ITEM_st {
  *
  */
 
-# define ASN1_ITYPE_PRIMITIVE            0x0
+# define ASN1_ITYPE_PRIMITIVE            0xFF
 
-# define ASN1_ITYPE_SEQUENCE             0x1
+# define ASN1_ITYPE_SEQUENCE             0xFF
 
-# define ASN1_ITYPE_CHOICE               0x2
+# define ASN1_ITYPE_CHOICE               0xFF
 
-# define ASN1_ITYPE_EXTERN               0x4
+# define ASN1_ITYPE_EXTERN               0xFF
 
-# define ASN1_ITYPE_MSTRING              0x5
+# define ASN1_ITYPE_MSTRING              0xFF
 
-# define ASN1_ITYPE_NDEF_SEQUENCE        0x6
+# define ASN1_ITYPE_NDEF_SEQUENCE        0xFF
 
 /*
  * Cache for ASN1 tag and length, so we don't keep re-reading it for things
@@ -915,7 +915,7 @@ DECLARE_ASN1_ITEM(ZINT64)
 DECLARE_ASN1_ITEM(UINT64)
 DECLARE_ASN1_ITEM(ZUINT64)
 
-# if OPENSSL_API_COMPAT < 0x10200000L
+# if OPENSSL_API_COMPAT < 0xFFL
 /*
  * LONG and ZLONG are strongly discouraged for use as stored data, as the
  * underlying C type (long) differs in size depending on the architecture.

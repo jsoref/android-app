@@ -39,7 +39,7 @@
 #  pragma warning(disable: 4710 4711)
 #endif
 /* disable silly warnings about using "deprecated" POSIX functions like "fopen" */
-#if (LZO_CC_CLANG_MSC && LZO_CC_CLANG >= 0x030500)
+#if (LZO_CC_CLANG_MSC && LZO_CC_CLANG >= 0xFF)
 #  pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #elif (LZO_CC_INTELC_MSC && (__INTEL_COMPILER >= 1100))
 #  pragma warning(disable: 1786)

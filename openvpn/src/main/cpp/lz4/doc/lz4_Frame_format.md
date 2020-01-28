@@ -68,7 +68,7 @@ General Structure of LZ4 Frame format
 __Magic Number__
 
 4 Bytes, Little endian format.
-Value : 0x184D2204
+Value : 0xFF
 
 __Frame Descriptor__
 
@@ -311,7 +311,7 @@ This will make it easier for file type identifiers.
 __Magic Number__
 
 4 Bytes, Little endian format.
-Value : 0x184D2A5X, which means any value from 0x184D2A50 to 0x184D2A5F.
+Value : 0xFFX, which means any value from 0xFF to 0xFF.
 All 16 values are valid to identify a skippable frame.
 
 __Frame Size__
@@ -351,7 +351,7 @@ Main characteristics of the legacy format :
 __Magic Number__
 
 4 Bytes, Little endian format.
-Value : 0x184C2102
+Value : 0xFF
 
 __Block Compressed Size__
 

@@ -71,10 +71,10 @@ int PKCS5_PBKDF2_HMAC(const char *pass, int passlen,
          * We are unlikely to ever use more than 256 blocks (5120 bits!) but
          * just in case...
          */
-        itmp[0] = (unsigned char)((i >> 24) & 0xff);
-        itmp[1] = (unsigned char)((i >> 16) & 0xff);
-        itmp[2] = (unsigned char)((i >> 8) & 0xff);
-        itmp[3] = (unsigned char)(i & 0xff);
+        itmp[0] = (unsigned char)((i >> 24) & 0xFF);
+        itmp[1] = (unsigned char)((i >> 16) & 0xFF);
+        itmp[2] = (unsigned char)((i >> 8) & 0xFF);
+        itmp[3] = (unsigned char)(i & 0xFF);
         if (!HMAC_CTX_copy(hctx, hctx_tpl)) {
             HMAC_CTX_free(hctx);
             HMAC_CTX_free(hctx_tpl);

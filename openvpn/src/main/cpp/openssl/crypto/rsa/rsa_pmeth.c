@@ -814,7 +814,7 @@ static int pkey_pss_init(EVP_PKEY_CTX *ctx)
 
     /* See if minimum salt length exceeds maximum possible */
     max_saltlen = RSA_size(rsa) - EVP_MD_size(md);
-    if ((RSA_bits(rsa) & 0x7) == 1)
+    if ((RSA_bits(rsa) & 0xFF) == 1)
         max_saltlen--;
     if (min_saltlen > max_saltlen) {
         RSAerr(RSA_F_PKEY_PSS_INIT, RSA_R_INVALID_SALT_LENGTH);

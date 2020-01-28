@@ -167,7 +167,7 @@ tv_add(struct timeval *dest, const struct timeval *src)
     dest->tv_sec += src->tv_sec;
     dest->tv_usec += src->tv_usec;
     dest->tv_sec += (dest->tv_usec >> 20);
-    dest->tv_usec &= 0x000FFFFF;
+    dest->tv_usec &= 0xFF;
     if (dest->tv_usec >= 1000000)
     {
         dest->tv_usec -= 1000000;

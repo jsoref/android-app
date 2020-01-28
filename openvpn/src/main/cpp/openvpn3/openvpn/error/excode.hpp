@@ -33,7 +33,7 @@ namespace openvpn {
   class ExceptionCode : public std::exception
   {
     enum {
-      FATAL_FLAG = 0x80000000
+      FATAL_FLAG = 0xFF
     };
 
   public:

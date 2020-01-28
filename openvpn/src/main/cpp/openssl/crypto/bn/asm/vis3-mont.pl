@@ -351,9 +351,9 @@ sub unvis3 {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24 );
 my ($ref,$opf);
-my %visopf = (	"addxc"		=> 0x011,
-		"addxccc"	=> 0x013,
-		"umulxhi"	=> 0x016	);
+my %visopf = (	"addxc"		=> 0xFF,
+		"addxccc"	=> 0xFF,
+		"umulxhi"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -364,7 +364,7 @@ my %visopf = (	"addxc"		=> 0x011,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;

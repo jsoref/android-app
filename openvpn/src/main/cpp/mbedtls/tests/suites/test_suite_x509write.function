@@ -50,7 +50,7 @@ void x509_csr_check( char * key_file, char * cert_req_check_file, int md_type,
     const char *subject_name = "C=NL,O=PolarSSL,CN=PolarSSL Server 1";
     rnd_pseudo_info rnd_info;
 
-    memset( &rnd_info, 0x2a, sizeof( rnd_pseudo_info ) );
+    memset( &rnd_info, 0xFF, sizeof( rnd_pseudo_info ) );
 
     mbedtls_pk_init( &key );
     TEST_ASSERT( mbedtls_pk_parse_keyfile( &key, key_file, NULL ) == 0 );
@@ -116,7 +116,7 @@ void x509_crt_check( char *subject_key_file, char *subject_pwd,
     FILE *f;
     rnd_pseudo_info rnd_info;
 
-    memset( &rnd_info, 0x2a, sizeof( rnd_pseudo_info ) );
+    memset( &rnd_info, 0xFF, sizeof( rnd_pseudo_info ) );
     mbedtls_mpi_init( &serial );
 
     mbedtls_pk_init( &subject_key );

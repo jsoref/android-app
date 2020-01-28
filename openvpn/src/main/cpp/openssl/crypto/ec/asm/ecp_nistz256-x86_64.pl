@@ -85,11 +85,11 @@ $code.=<<___;
 # The polynomial
 .align 64
 .Lpoly:
-.quad 0xffffffffffffffff, 0x00000000ffffffff, 0x0000000000000000, 0xffffffff00000001
+.quad 0xFF, 0xFF, 0xFF, 0xFF
 
 # 2^512 mod P precomputed for NIST P256 polynomial
 .LRR:
-.quad 0x0000000000000003, 0xfffffffbffffffff, 0xfffffffffffffffe, 0x00000004fffffffd
+.quad 0xFF, 0xFF, 0xFF, 0xFF
 
 .LOne:
 .long 1,1,1,1,1,1,1,1
@@ -98,13 +98,13 @@ $code.=<<___;
 .LThree:
 .long 3,3,3,3,3,3,3,3
 .LONE_mont:
-.quad 0x0000000000000001, 0xffffffff00000000, 0xffffffffffffffff, 0x00000000fffffffe
+.quad 0xFF, 0xFF, 0xFF, 0xFF
 
 # Constants for computations modulo ord(p256)
 .Lord:
-.quad 0xf3b9cac2fc632551, 0xbce6faada7179e84, 0xffffffffffffffff, 0xffffffff00000000
+.quad 0xFF, 0xFF, 0xFF, 0xFF
 .LordK:
-.quad 0xccd1c8aaee00bc4f
+.quad 0xFF
 ___
 
 {
@@ -505,9 +505,9 @@ ecp_nistz256_ord_mul_mont:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lecp_nistz256_ord_mul_montx
 ___
 $code.=<<___;
@@ -835,9 +835,9 @@ ecp_nistz256_ord_sqr_mont:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lecp_nistz256_ord_sqr_montx
 ___
 $code.=<<___;
@@ -1433,7 +1433,7 @@ ecp_nistz256_ord_sqr_montx:
 	adox	$t0, $acc2
 	 adcx	$acc6, $acc6
 	mulx	%rdx, $t0, $t1
-	.byte	0x67
+	.byte	0xFF
 	movq	%xmm3, %rdx
 	adox	$t4, $acc3
 	 adcx	$acc7, $acc7
@@ -1581,7 +1581,7 @@ $code.=<<___;
 ecp_nistz256_to_mont:
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
 ___
 $code.=<<___;
@@ -1602,7 +1602,7 @@ ecp_nistz256_mul_mont:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
 ___
 $code.=<<___;
@@ -1622,7 +1622,7 @@ $code.=<<___;
 .Lmul_body:
 ___
 $code.=<<___	if ($addx);
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lmul_montx
 ___
 $code.=<<___;
@@ -1903,7 +1903,7 @@ ecp_nistz256_sqr_mont:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
 ___
 $code.=<<___;
@@ -1922,7 +1922,7 @@ $code.=<<___;
 .Lsqr_body:
 ___
 $code.=<<___	if ($addx);
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lsqr_montx
 ___
 $code.=<<___;
@@ -2347,7 +2347,7 @@ __ecp_nistz256_sqr_montx:
 	 adcx	$acc5, $acc5
 	adox	$t0, $acc2
 	 adcx	$acc6, $acc6
-	.byte	0x67
+	.byte	0xFF
 	mulx	%rdx, $t0, $t1
 	mov	8*3+128($a_ptr), %rdx
 	adox	$t4, $acc3
@@ -2355,7 +2355,7 @@ __ecp_nistz256_sqr_montx:
 	adox	$t0, $acc4
 	 mov	\$32, $a_ptr
 	adox	$t1, $acc5
-	.byte	0x67,0x67
+	.byte	0xFF,0xFF
 	mulx	%rdx, $t0, $t4
 	 mov	.Lpoly+8*3(%rip), %rdx
 	adox	$t0, $acc6
@@ -2563,19 +2563,19 @@ $code.=<<___;
 .align	32
 ecp_nistz256_scatter_w5:
 	lea	-3($index,$index,2), $index
-	movdqa	0x00($in_t), %xmm0
+	movdqa	0xFF($in_t), %xmm0
 	shl	\$5, $index
-	movdqa	0x10($in_t), %xmm1
-	movdqa	0x20($in_t), %xmm2
-	movdqa	0x30($in_t), %xmm3
-	movdqa	0x40($in_t), %xmm4
-	movdqa	0x50($in_t), %xmm5
-	movdqa	%xmm0, 0x00($val,$index)
-	movdqa	%xmm1, 0x10($val,$index)
-	movdqa	%xmm2, 0x20($val,$index)
-	movdqa	%xmm3, 0x30($val,$index)
-	movdqa	%xmm4, 0x40($val,$index)
-	movdqa	%xmm5, 0x50($val,$index)
+	movdqa	0xFF($in_t), %xmm1
+	movdqa	0xFF($in_t), %xmm2
+	movdqa	0xFF($in_t), %xmm3
+	movdqa	0xFF($in_t), %xmm4
+	movdqa	0xFF($in_t), %xmm5
+	movdqa	%xmm0, 0xFF($val,$index)
+	movdqa	%xmm1, 0xFF($val,$index)
+	movdqa	%xmm2, 0xFF($val,$index)
+	movdqa	%xmm3, 0xFF($val,$index)
+	movdqa	%xmm4, 0xFF($val,$index)
+	movdqa	%xmm5, 0xFF($val,$index)
 
 	ret
 .size	ecp_nistz256_scatter_w5,.-ecp_nistz256_scatter_w5
@@ -2594,19 +2594,19 @@ $code.=<<___	if ($avx>1);
 	jnz	.Lavx2_gather_w5
 ___
 $code.=<<___	if ($win64);
-	lea	-0x88(%rsp), %rax
+	lea	-0xFF(%rsp), %rax
 .LSEH_begin_ecp_nistz256_gather_w5:
-	.byte	0x48,0x8d,0x60,0xe0		#lea	-0x20(%rax), %rsp
-	.byte	0x0f,0x29,0x70,0xe0		#movaps	%xmm6, -0x20(%rax)
-	.byte	0x0f,0x29,0x78,0xf0		#movaps	%xmm7, -0x10(%rax)
-	.byte	0x44,0x0f,0x29,0x00		#movaps	%xmm8, 0(%rax)
-	.byte	0x44,0x0f,0x29,0x48,0x10	#movaps	%xmm9, 0x10(%rax)
-	.byte	0x44,0x0f,0x29,0x50,0x20	#movaps	%xmm10, 0x20(%rax)
-	.byte	0x44,0x0f,0x29,0x58,0x30	#movaps	%xmm11, 0x30(%rax)
-	.byte	0x44,0x0f,0x29,0x60,0x40	#movaps	%xmm12, 0x40(%rax)
-	.byte	0x44,0x0f,0x29,0x68,0x50	#movaps	%xmm13, 0x50(%rax)
-	.byte	0x44,0x0f,0x29,0x70,0x60	#movaps	%xmm14, 0x60(%rax)
-	.byte	0x44,0x0f,0x29,0x78,0x70	#movaps	%xmm15, 0x70(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		#lea	-0xFF(%rax), %rsp
+	.byte	0xFF,0xFF,0xFF,0xFF		#movaps	%xmm6, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		#movaps	%xmm7, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		#movaps	%xmm8, 0(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm9, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm10, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm11, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm12, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm13, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm14, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm15, 0xFF(%rax)
 ___
 $code.=<<___;
 	movdqa	.LOne(%rip), $ONE
@@ -2662,16 +2662,16 @@ $code.=<<___;
 ___
 $code.=<<___	if ($win64);
 	movaps	(%rsp), %xmm6
-	movaps	0x10(%rsp), %xmm7
-	movaps	0x20(%rsp), %xmm8
-	movaps	0x30(%rsp), %xmm9
-	movaps	0x40(%rsp), %xmm10
-	movaps	0x50(%rsp), %xmm11
-	movaps	0x60(%rsp), %xmm12
-	movaps	0x70(%rsp), %xmm13
-	movaps	0x80(%rsp), %xmm14
-	movaps	0x90(%rsp), %xmm15
-	lea	0xa8(%rsp), %rsp
+	movaps	0xFF(%rsp), %xmm7
+	movaps	0xFF(%rsp), %xmm8
+	movaps	0xFF(%rsp), %xmm9
+	movaps	0xFF(%rsp), %xmm10
+	movaps	0xFF(%rsp), %xmm11
+	movaps	0xFF(%rsp), %xmm12
+	movaps	0xFF(%rsp), %xmm13
+	movaps	0xFF(%rsp), %xmm14
+	movaps	0xFF(%rsp), %xmm15
+	lea	0xFF(%rsp), %rsp
 ___
 $code.=<<___;
 	ret
@@ -2685,15 +2685,15 @@ $code.=<<___;
 .type	ecp_nistz256_scatter_w7,\@abi-omnipotent
 .align	32
 ecp_nistz256_scatter_w7:
-	movdqu	0x00($in_t), %xmm0
+	movdqu	0xFF($in_t), %xmm0
 	shl	\$6, $index
-	movdqu	0x10($in_t), %xmm1
-	movdqu	0x20($in_t), %xmm2
-	movdqu	0x30($in_t), %xmm3
-	movdqa	%xmm0, 0x00($val,$index)
-	movdqa	%xmm1, 0x10($val,$index)
-	movdqa	%xmm2, 0x20($val,$index)
-	movdqa	%xmm3, 0x30($val,$index)
+	movdqu	0xFF($in_t), %xmm1
+	movdqu	0xFF($in_t), %xmm2
+	movdqu	0xFF($in_t), %xmm3
+	movdqa	%xmm0, 0xFF($val,$index)
+	movdqa	%xmm1, 0xFF($val,$index)
+	movdqa	%xmm2, 0xFF($val,$index)
+	movdqa	%xmm3, 0xFF($val,$index)
 
 	ret
 .size	ecp_nistz256_scatter_w7,.-ecp_nistz256_scatter_w7
@@ -2712,19 +2712,19 @@ $code.=<<___	if ($avx>1);
 	jnz	.Lavx2_gather_w7
 ___
 $code.=<<___	if ($win64);
-	lea	-0x88(%rsp), %rax
+	lea	-0xFF(%rsp), %rax
 .LSEH_begin_ecp_nistz256_gather_w7:
-	.byte	0x48,0x8d,0x60,0xe0		#lea	-0x20(%rax), %rsp
-	.byte	0x0f,0x29,0x70,0xe0		#movaps	%xmm6, -0x20(%rax)
-	.byte	0x0f,0x29,0x78,0xf0		#movaps	%xmm7, -0x10(%rax)
-	.byte	0x44,0x0f,0x29,0x00		#movaps	%xmm8, 0(%rax)
-	.byte	0x44,0x0f,0x29,0x48,0x10	#movaps	%xmm9, 0x10(%rax)
-	.byte	0x44,0x0f,0x29,0x50,0x20	#movaps	%xmm10, 0x20(%rax)
-	.byte	0x44,0x0f,0x29,0x58,0x30	#movaps	%xmm11, 0x30(%rax)
-	.byte	0x44,0x0f,0x29,0x60,0x40	#movaps	%xmm12, 0x40(%rax)
-	.byte	0x44,0x0f,0x29,0x68,0x50	#movaps	%xmm13, 0x50(%rax)
-	.byte	0x44,0x0f,0x29,0x70,0x60	#movaps	%xmm14, 0x60(%rax)
-	.byte	0x44,0x0f,0x29,0x78,0x70	#movaps	%xmm15, 0x70(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		#lea	-0xFF(%rax), %rsp
+	.byte	0xFF,0xFF,0xFF,0xFF		#movaps	%xmm6, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		#movaps	%xmm7, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		#movaps	%xmm8, 0(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm9, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm10, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm11, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm12, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm13, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm14, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	#movaps	%xmm15, 0xFF(%rax)
 ___
 $code.=<<___;
 	movdqa	.LOne(%rip), $M0
@@ -2769,16 +2769,16 @@ $code.=<<___;
 ___
 $code.=<<___	if ($win64);
 	movaps	(%rsp), %xmm6
-	movaps	0x10(%rsp), %xmm7
-	movaps	0x20(%rsp), %xmm8
-	movaps	0x30(%rsp), %xmm9
-	movaps	0x40(%rsp), %xmm10
-	movaps	0x50(%rsp), %xmm11
-	movaps	0x60(%rsp), %xmm12
-	movaps	0x70(%rsp), %xmm13
-	movaps	0x80(%rsp), %xmm14
-	movaps	0x90(%rsp), %xmm15
-	lea	0xa8(%rsp), %rsp
+	movaps	0xFF(%rsp), %xmm7
+	movaps	0xFF(%rsp), %xmm8
+	movaps	0xFF(%rsp), %xmm9
+	movaps	0xFF(%rsp), %xmm10
+	movaps	0xFF(%rsp), %xmm11
+	movaps	0xFF(%rsp), %xmm12
+	movaps	0xFF(%rsp), %xmm13
+	movaps	0xFF(%rsp), %xmm14
+	movaps	0xFF(%rsp), %xmm15
+	lea	0xFF(%rsp), %rsp
 ___
 $code.=<<___;
 	ret
@@ -2804,20 +2804,20 @@ ecp_nistz256_avx2_gather_w5:
 	vzeroupper
 ___
 $code.=<<___	if ($win64);
-	lea	-0x88(%rsp), %rax
+	lea	-0xFF(%rsp), %rax
 	mov	%rsp,%r11
 .LSEH_begin_ecp_nistz256_avx2_gather_w5:
-	.byte	0x48,0x8d,0x60,0xe0		# lea	-0x20(%rax), %rsp
-	.byte	0xc5,0xf8,0x29,0x70,0xe0	# vmovaps %xmm6, -0x20(%rax)
-	.byte	0xc5,0xf8,0x29,0x78,0xf0	# vmovaps %xmm7, -0x10(%rax)
-	.byte	0xc5,0x78,0x29,0x40,0x00	# vmovaps %xmm8, 8(%rax)
-	.byte	0xc5,0x78,0x29,0x48,0x10	# vmovaps %xmm9, 0x10(%rax)
-	.byte	0xc5,0x78,0x29,0x50,0x20	# vmovaps %xmm10, 0x20(%rax)
-	.byte	0xc5,0x78,0x29,0x58,0x30	# vmovaps %xmm11, 0x30(%rax)
-	.byte	0xc5,0x78,0x29,0x60,0x40	# vmovaps %xmm12, 0x40(%rax)
-	.byte	0xc5,0x78,0x29,0x68,0x50	# vmovaps %xmm13, 0x50(%rax)
-	.byte	0xc5,0x78,0x29,0x70,0x60	# vmovaps %xmm14, 0x60(%rax)
-	.byte	0xc5,0x78,0x29,0x78,0x70	# vmovaps %xmm15, 0x70(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		# lea	-0xFF(%rax), %rsp
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm6, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm7, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm8, 8(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm9, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm10, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm11, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm12, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm13, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm14, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm15, 0xFF(%rax)
 ___
 $code.=<<___;
 	vmovdqa	.LTwo(%rip), $TWO
@@ -2874,15 +2874,15 @@ $code.=<<___;
 ___
 $code.=<<___	if ($win64);
 	movaps	(%rsp), %xmm6
-	movaps	0x10(%rsp), %xmm7
-	movaps	0x20(%rsp), %xmm8
-	movaps	0x30(%rsp), %xmm9
-	movaps	0x40(%rsp), %xmm10
-	movaps	0x50(%rsp), %xmm11
-	movaps	0x60(%rsp), %xmm12
-	movaps	0x70(%rsp), %xmm13
-	movaps	0x80(%rsp), %xmm14
-	movaps	0x90(%rsp), %xmm15
+	movaps	0xFF(%rsp), %xmm7
+	movaps	0xFF(%rsp), %xmm8
+	movaps	0xFF(%rsp), %xmm9
+	movaps	0xFF(%rsp), %xmm10
+	movaps	0xFF(%rsp), %xmm11
+	movaps	0xFF(%rsp), %xmm12
+	movaps	0xFF(%rsp), %xmm13
+	movaps	0xFF(%rsp), %xmm14
+	movaps	0xFF(%rsp), %xmm15
 	lea	(%r11), %rsp
 ___
 $code.=<<___;
@@ -2913,19 +2913,19 @@ ecp_nistz256_avx2_gather_w7:
 ___
 $code.=<<___	if ($win64);
 	mov	%rsp,%r11
-	lea	-0x88(%rsp), %rax
+	lea	-0xFF(%rsp), %rax
 .LSEH_begin_ecp_nistz256_avx2_gather_w7:
-	.byte	0x48,0x8d,0x60,0xe0		# lea	-0x20(%rax), %rsp
-	.byte	0xc5,0xf8,0x29,0x70,0xe0	# vmovaps %xmm6, -0x20(%rax)
-	.byte	0xc5,0xf8,0x29,0x78,0xf0	# vmovaps %xmm7, -0x10(%rax)
-	.byte	0xc5,0x78,0x29,0x40,0x00	# vmovaps %xmm8, 8(%rax)
-	.byte	0xc5,0x78,0x29,0x48,0x10	# vmovaps %xmm9, 0x10(%rax)
-	.byte	0xc5,0x78,0x29,0x50,0x20	# vmovaps %xmm10, 0x20(%rax)
-	.byte	0xc5,0x78,0x29,0x58,0x30	# vmovaps %xmm11, 0x30(%rax)
-	.byte	0xc5,0x78,0x29,0x60,0x40	# vmovaps %xmm12, 0x40(%rax)
-	.byte	0xc5,0x78,0x29,0x68,0x50	# vmovaps %xmm13, 0x50(%rax)
-	.byte	0xc5,0x78,0x29,0x70,0x60	# vmovaps %xmm14, 0x60(%rax)
-	.byte	0xc5,0x78,0x29,0x78,0x70	# vmovaps %xmm15, 0x70(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		# lea	-0xFF(%rax), %rsp
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm6, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm7, -0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm8, 8(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm9, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm10, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm11, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm12, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm13, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm14, 0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm15, 0xFF(%rax)
 ___
 $code.=<<___;
 	vmovdqa	.LThree(%rip), $THREE
@@ -2997,15 +2997,15 @@ $code.=<<___;
 ___
 $code.=<<___	if ($win64);
 	movaps	(%rsp), %xmm6
-	movaps	0x10(%rsp), %xmm7
-	movaps	0x20(%rsp), %xmm8
-	movaps	0x30(%rsp), %xmm9
-	movaps	0x40(%rsp), %xmm10
-	movaps	0x50(%rsp), %xmm11
-	movaps	0x60(%rsp), %xmm12
-	movaps	0x70(%rsp), %xmm13
-	movaps	0x80(%rsp), %xmm14
-	movaps	0x90(%rsp), %xmm15
+	movaps	0xFF(%rsp), %xmm7
+	movaps	0xFF(%rsp), %xmm8
+	movaps	0xFF(%rsp), %xmm9
+	movaps	0xFF(%rsp), %xmm10
+	movaps	0xFF(%rsp), %xmm11
+	movaps	0xFF(%rsp), %xmm12
+	movaps	0xFF(%rsp), %xmm13
+	movaps	0xFF(%rsp), %xmm14
+	movaps	0xFF(%rsp), %xmm15
 	lea	(%r11), %rsp
 ___
 $code.=<<___;
@@ -3020,7 +3020,7 @@ $code.=<<___;
 .type	ecp_nistz256_avx2_gather_w7,\@function,3
 .align	32
 ecp_nistz256_avx2_gather_w7:
-	.byte	0x0f,0x0b	# ud2
+	.byte	0xFF,0xFF	# ud2
 	ret
 .size	ecp_nistz256_avx2_gather_w7,.-ecp_nistz256_avx2_gather_w7
 ___
@@ -3226,9 +3226,9 @@ ecp_nistz256_point_double:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lpoint_doublex
 ___
     } else {
@@ -3262,19 +3262,19 @@ $code.=<<___;
 .Lpoint_double${x}_body:
 
 .Lpoint_double_shortcut$x:
-	movdqu	0x00($a_ptr), %xmm0		# copy	*(P256_POINT *)$a_ptr.x
+	movdqu	0xFF($a_ptr), %xmm0		# copy	*(P256_POINT *)$a_ptr.x
 	mov	$a_ptr, $b_ptr			# backup copy
-	movdqu	0x10($a_ptr), %xmm1
-	 mov	0x20+8*0($a_ptr), $acc4		# load in_y in "5-4-0-1" order
-	 mov	0x20+8*1($a_ptr), $acc5
-	 mov	0x20+8*2($a_ptr), $acc0
-	 mov	0x20+8*3($a_ptr), $acc1
+	movdqu	0xFF($a_ptr), %xmm1
+	 mov	0xFF+8*0($a_ptr), $acc4		# load in_y in "5-4-0-1" order
+	 mov	0xFF+8*1($a_ptr), $acc5
+	 mov	0xFF+8*2($a_ptr), $acc0
+	 mov	0xFF+8*3($a_ptr), $acc1
 	 mov	.Lpoly+8*1(%rip), $poly1
 	 mov	.Lpoly+8*3(%rip), $poly3
 	movdqa	%xmm0, $in_x(%rsp)
-	movdqa	%xmm1, $in_x+0x10(%rsp)
-	lea	0x20($r_ptr), $acc2
-	lea	0x40($r_ptr), $acc3
+	movdqa	%xmm1, $in_x+0xFF(%rsp)
+	lea	0xFF($r_ptr), $acc2
+	lea	0xFF($r_ptr), $acc3
 	movq	$r_ptr, %xmm0
 	movq	$acc2, %xmm1
 	movq	$acc3, %xmm2
@@ -3282,11 +3282,11 @@ $code.=<<___;
 	lea	$S(%rsp), $r_ptr
 	call	__ecp_nistz256_mul_by_2$x	# p256_mul_by_2(S, in_y);
 
-	mov	0x40+8*0($a_ptr), $src0
-	mov	0x40+8*1($a_ptr), $acc6
-	mov	0x40+8*2($a_ptr), $acc7
-	mov	0x40+8*3($a_ptr), $acc0
-	lea	0x40-$bias($a_ptr), $a_ptr
+	mov	0xFF+8*0($a_ptr), $src0
+	mov	0xFF+8*1($a_ptr), $acc6
+	mov	0xFF+8*2($a_ptr), $acc7
+	mov	0xFF+8*3($a_ptr), $acc0
+	lea	0xFF-$bias($a_ptr), $a_ptr
 	lea	$Zsqr(%rsp), $r_ptr
 	call	__ecp_nistz256_sqr_mont$x	# p256_sqr_mont(Zsqr, in_z);
 
@@ -3294,13 +3294,13 @@ $code.=<<___;
 	lea	$S(%rsp), $r_ptr
 	call	__ecp_nistz256_sqr_mont$x	# p256_sqr_mont(S, S);
 
-	mov	0x20($b_ptr), $src0		# $b_ptr is still valid
-	mov	0x40+8*0($b_ptr), $acc1
-	mov	0x40+8*1($b_ptr), $acc2
-	mov	0x40+8*2($b_ptr), $acc3
-	mov	0x40+8*3($b_ptr), $acc4
-	lea	0x40-$bias($b_ptr), $a_ptr
-	lea	0x20($b_ptr), $b_ptr
+	mov	0xFF($b_ptr), $src0		# $b_ptr is still valid
+	mov	0xFF+8*0($b_ptr), $acc1
+	mov	0xFF+8*1($b_ptr), $acc2
+	mov	0xFF+8*2($b_ptr), $acc3
+	mov	0xFF+8*3($b_ptr), $acc4
+	lea	0xFF-$bias($b_ptr), $a_ptr
+	lea	0xFF($b_ptr), $b_ptr
 	movq	%xmm2, $r_ptr
 	call	__ecp_nistz256_mul_mont$x	# p256_mul_mont(res_z, in_z, in_y);
 	call	__ecp_nistz256_mul_by_2$x	# p256_mul_by_2(res_z, res_z);
@@ -3477,9 +3477,9 @@ ecp_nistz256_point_add:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lpoint_addx
 ___
     } else {
@@ -3512,45 +3512,45 @@ $code.=<<___;
 .cfi_adjust_cfa_offset	32*18+8
 .Lpoint_add${x}_body:
 
-	movdqu	0x00($a_ptr), %xmm0		# copy	*(P256_POINT *)$a_ptr
-	movdqu	0x10($a_ptr), %xmm1
-	movdqu	0x20($a_ptr), %xmm2
-	movdqu	0x30($a_ptr), %xmm3
-	movdqu	0x40($a_ptr), %xmm4
-	movdqu	0x50($a_ptr), %xmm5
+	movdqu	0xFF($a_ptr), %xmm0		# copy	*(P256_POINT *)$a_ptr
+	movdqu	0xFF($a_ptr), %xmm1
+	movdqu	0xFF($a_ptr), %xmm2
+	movdqu	0xFF($a_ptr), %xmm3
+	movdqu	0xFF($a_ptr), %xmm4
+	movdqu	0xFF($a_ptr), %xmm5
 	mov	$a_ptr, $b_ptr			# reassign
 	mov	$b_org, $a_ptr			# reassign
 	movdqa	%xmm0, $in1_x(%rsp)
-	movdqa	%xmm1, $in1_x+0x10(%rsp)
+	movdqa	%xmm1, $in1_x+0xFF(%rsp)
 	movdqa	%xmm2, $in1_y(%rsp)
-	movdqa	%xmm3, $in1_y+0x10(%rsp)
+	movdqa	%xmm3, $in1_y+0xFF(%rsp)
 	movdqa	%xmm4, $in1_z(%rsp)
-	movdqa	%xmm5, $in1_z+0x10(%rsp)
+	movdqa	%xmm5, $in1_z+0xFF(%rsp)
 	por	%xmm4, %xmm5
 
-	movdqu	0x00($a_ptr), %xmm0		# copy	*(P256_POINT *)$b_ptr
-	 pshufd	\$0xb1, %xmm5, %xmm3
-	movdqu	0x10($a_ptr), %xmm1
-	movdqu	0x20($a_ptr), %xmm2
+	movdqu	0xFF($a_ptr), %xmm0		# copy	*(P256_POINT *)$b_ptr
+	 pshufd	\$0xFF, %xmm5, %xmm3
+	movdqu	0xFF($a_ptr), %xmm1
+	movdqu	0xFF($a_ptr), %xmm2
 	 por	%xmm3, %xmm5
-	movdqu	0x30($a_ptr), %xmm3
-	 mov	0x40+8*0($a_ptr), $src0		# load original in2_z
-	 mov	0x40+8*1($a_ptr), $acc6
-	 mov	0x40+8*2($a_ptr), $acc7
-	 mov	0x40+8*3($a_ptr), $acc0
+	movdqu	0xFF($a_ptr), %xmm3
+	 mov	0xFF+8*0($a_ptr), $src0		# load original in2_z
+	 mov	0xFF+8*1($a_ptr), $acc6
+	 mov	0xFF+8*2($a_ptr), $acc7
+	 mov	0xFF+8*3($a_ptr), $acc0
 	movdqa	%xmm0, $in2_x(%rsp)
-	 pshufd	\$0x1e, %xmm5, %xmm4
-	movdqa	%xmm1, $in2_x+0x10(%rsp)
-	movdqu	0x40($a_ptr),%xmm0		# in2_z again
-	movdqu	0x50($a_ptr),%xmm1
+	 pshufd	\$0xFF, %xmm5, %xmm4
+	movdqa	%xmm1, $in2_x+0xFF(%rsp)
+	movdqu	0xFF($a_ptr),%xmm0		# in2_z again
+	movdqu	0xFF($a_ptr),%xmm1
 	movdqa	%xmm2, $in2_y(%rsp)
-	movdqa	%xmm3, $in2_y+0x10(%rsp)
+	movdqa	%xmm3, $in2_y+0xFF(%rsp)
 	 por	%xmm4, %xmm5
 	 pxor	%xmm4, %xmm4
 	por	%xmm0, %xmm1
 	 movq	$r_ptr, %xmm0			# save $r_ptr
 
-	lea	0x40-$bias($a_ptr), $a_ptr	# $a_ptr is still valid
+	lea	0xFF-$bias($a_ptr), $a_ptr	# $a_ptr is still valid
 	 mov	$src0, $in2_z+8*0(%rsp)		# make in2_z copy
 	 mov	$acc6, $in2_z+8*1(%rsp)
 	 mov	$acc7, $in2_z+8*2(%rsp)
@@ -3559,21 +3559,21 @@ $code.=<<___;
 	call	__ecp_nistz256_sqr_mont$x	# p256_sqr_mont(Z2sqr, in2_z);
 
 	pcmpeqd	%xmm4, %xmm5
-	pshufd	\$0xb1, %xmm1, %xmm4
+	pshufd	\$0xFF, %xmm1, %xmm4
 	por	%xmm1, %xmm4
 	pshufd	\$0, %xmm5, %xmm5		# in1infty
-	pshufd	\$0x1e, %xmm4, %xmm3
+	pshufd	\$0xFF, %xmm4, %xmm3
 	por	%xmm3, %xmm4
 	pxor	%xmm3, %xmm3
 	pcmpeqd	%xmm3, %xmm4
 	pshufd	\$0, %xmm4, %xmm4		# in2infty
-	 mov	0x40+8*0($b_ptr), $src0		# load original in1_z
-	 mov	0x40+8*1($b_ptr), $acc6
-	 mov	0x40+8*2($b_ptr), $acc7
-	 mov	0x40+8*3($b_ptr), $acc0
+	 mov	0xFF+8*0($b_ptr), $src0		# load original in1_z
+	 mov	0xFF+8*1($b_ptr), $acc6
+	 mov	0xFF+8*2($b_ptr), $acc7
+	 mov	0xFF+8*3($b_ptr), $acc0
 	movq	$b_ptr, %xmm1
 
-	lea	0x40-$bias($b_ptr), $a_ptr
+	lea	0xFF-$bias($b_ptr), $a_ptr
 	lea	$Z1sqr(%rsp), $r_ptr		# Z1^2
 	call	__ecp_nistz256_sqr_mont$x	# p256_sqr_mont(Z1sqr, in1_z);
 
@@ -3620,7 +3620,7 @@ $code.=<<___;
 	or	$acc0, $acc4
 	or	$acc1, $acc4
 
-	.byte	0x3e				# predict taken
+	.byte	0xFF				# predict taken
 	jnz	.Ladd_proceed$x			# is_equal(U1,U2)?
 	movq	%xmm2, $acc0
 	movq	%xmm3, $acc1
@@ -3631,12 +3631,12 @@ $code.=<<___;
 
 	movq	%xmm0, $r_ptr			# restore $r_ptr
 	pxor	%xmm0, %xmm0
-	movdqu	%xmm0, 0x00($r_ptr)
-	movdqu	%xmm0, 0x10($r_ptr)
-	movdqu	%xmm0, 0x20($r_ptr)
-	movdqu	%xmm0, 0x30($r_ptr)
-	movdqu	%xmm0, 0x40($r_ptr)
-	movdqu	%xmm0, 0x50($r_ptr)
+	movdqu	%xmm0, 0xFF($r_ptr)
+	movdqu	%xmm0, 0xFF($r_ptr)
+	movdqu	%xmm0, 0xFF($r_ptr)
+	movdqu	%xmm0, 0xFF($r_ptr)
+	movdqu	%xmm0, 0xFF($r_ptr)
+	movdqu	%xmm0, 0xFF($r_ptr)
 	jmp	.Ladd_done$x
 
 .align	32
@@ -3752,10 +3752,10 @@ $code.=<<___;
 	movdqa	%xmm5, %xmm1
 	pandn	$res_z(%rsp), %xmm0
 	movdqa	%xmm5, %xmm2
-	pandn	$res_z+0x10(%rsp), %xmm1
+	pandn	$res_z+0xFF(%rsp), %xmm1
 	movdqa	%xmm5, %xmm3
 	pand	$in2_z(%rsp), %xmm2
-	pand	$in2_z+0x10(%rsp), %xmm3
+	pand	$in2_z+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
 
@@ -3766,20 +3766,20 @@ $code.=<<___;
 	pandn	%xmm3, %xmm1
 	movdqa	%xmm4, %xmm3
 	pand	$in1_z(%rsp), %xmm2
-	pand	$in1_z+0x10(%rsp), %xmm3
+	pand	$in1_z+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
-	movdqu	%xmm2, 0x40($r_ptr)
-	movdqu	%xmm3, 0x50($r_ptr)
+	movdqu	%xmm2, 0xFF($r_ptr)
+	movdqu	%xmm3, 0xFF($r_ptr)
 
 	movdqa	%xmm5, %xmm0		# copy_conditional(res_x, in2_x, in1infty);
 	movdqa	%xmm5, %xmm1
 	pandn	$res_x(%rsp), %xmm0
 	movdqa	%xmm5, %xmm2
-	pandn	$res_x+0x10(%rsp), %xmm1
+	pandn	$res_x+0xFF(%rsp), %xmm1
 	movdqa	%xmm5, %xmm3
 	pand	$in2_x(%rsp), %xmm2
-	pand	$in2_x+0x10(%rsp), %xmm3
+	pand	$in2_x+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
 
@@ -3790,20 +3790,20 @@ $code.=<<___;
 	pandn	%xmm3, %xmm1
 	movdqa	%xmm4, %xmm3
 	pand	$in1_x(%rsp), %xmm2
-	pand	$in1_x+0x10(%rsp), %xmm3
+	pand	$in1_x+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
-	movdqu	%xmm2, 0x00($r_ptr)
-	movdqu	%xmm3, 0x10($r_ptr)
+	movdqu	%xmm2, 0xFF($r_ptr)
+	movdqu	%xmm3, 0xFF($r_ptr)
 
 	movdqa	%xmm5, %xmm0		# copy_conditional(res_y, in2_y, in1infty);
 	movdqa	%xmm5, %xmm1
 	pandn	$res_y(%rsp), %xmm0
 	movdqa	%xmm5, %xmm2
-	pandn	$res_y+0x10(%rsp), %xmm1
+	pandn	$res_y+0xFF(%rsp), %xmm1
 	movdqa	%xmm5, %xmm3
 	pand	$in2_y(%rsp), %xmm2
-	pand	$in2_y+0x10(%rsp), %xmm3
+	pand	$in2_y+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
 
@@ -3814,11 +3814,11 @@ $code.=<<___;
 	pandn	%xmm3, %xmm1
 	movdqa	%xmm4, %xmm3
 	pand	$in1_y(%rsp), %xmm2
-	pand	$in1_y+0x10(%rsp), %xmm3
+	pand	$in1_y+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
-	movdqu	%xmm2, 0x20($r_ptr)
-	movdqu	%xmm3, 0x30($r_ptr)
+	movdqu	%xmm2, 0xFF($r_ptr)
+	movdqu	%xmm3, 0xFF($r_ptr)
 
 .Ladd_done$x:
 	lea	32*18+56(%rsp), %rsi
@@ -3867,9 +3867,9 @@ ecp_nistz256_point_add_affine:
 .cfi_startproc
 ___
 $code.=<<___	if ($addx);
-	mov	\$0x80100, %ecx
+	mov	\$0xFF, %ecx
 	and	OPENSSL_ia32cap_P+8(%rip), %ecx
-	cmp	\$0x80100, %ecx
+	cmp	\$0xFF, %ecx
 	je	.Lpoint_add_affinex
 ___
     } else {
@@ -3902,55 +3902,55 @@ $code.=<<___;
 .cfi_adjust_cfa_offset	32*15+8
 .Ladd_affine${x}_body:
 
-	movdqu	0x00($a_ptr), %xmm0	# copy	*(P256_POINT *)$a_ptr
+	movdqu	0xFF($a_ptr), %xmm0	# copy	*(P256_POINT *)$a_ptr
 	mov	$b_org, $b_ptr		# reassign
-	movdqu	0x10($a_ptr), %xmm1
-	movdqu	0x20($a_ptr), %xmm2
-	movdqu	0x30($a_ptr), %xmm3
-	movdqu	0x40($a_ptr), %xmm4
-	movdqu	0x50($a_ptr), %xmm5
-	 mov	0x40+8*0($a_ptr), $src0	# load original in1_z
-	 mov	0x40+8*1($a_ptr), $acc6
-	 mov	0x40+8*2($a_ptr), $acc7
-	 mov	0x40+8*3($a_ptr), $acc0
+	movdqu	0xFF($a_ptr), %xmm1
+	movdqu	0xFF($a_ptr), %xmm2
+	movdqu	0xFF($a_ptr), %xmm3
+	movdqu	0xFF($a_ptr), %xmm4
+	movdqu	0xFF($a_ptr), %xmm5
+	 mov	0xFF+8*0($a_ptr), $src0	# load original in1_z
+	 mov	0xFF+8*1($a_ptr), $acc6
+	 mov	0xFF+8*2($a_ptr), $acc7
+	 mov	0xFF+8*3($a_ptr), $acc0
 	movdqa	%xmm0, $in1_x(%rsp)
-	movdqa	%xmm1, $in1_x+0x10(%rsp)
+	movdqa	%xmm1, $in1_x+0xFF(%rsp)
 	movdqa	%xmm2, $in1_y(%rsp)
-	movdqa	%xmm3, $in1_y+0x10(%rsp)
+	movdqa	%xmm3, $in1_y+0xFF(%rsp)
 	movdqa	%xmm4, $in1_z(%rsp)
-	movdqa	%xmm5, $in1_z+0x10(%rsp)
+	movdqa	%xmm5, $in1_z+0xFF(%rsp)
 	por	%xmm4, %xmm5
 
-	movdqu	0x00($b_ptr), %xmm0	# copy	*(P256_POINT_AFFINE *)$b_ptr
-	 pshufd	\$0xb1, %xmm5, %xmm3
-	movdqu	0x10($b_ptr), %xmm1
-	movdqu	0x20($b_ptr), %xmm2
+	movdqu	0xFF($b_ptr), %xmm0	# copy	*(P256_POINT_AFFINE *)$b_ptr
+	 pshufd	\$0xFF, %xmm5, %xmm3
+	movdqu	0xFF($b_ptr), %xmm1
+	movdqu	0xFF($b_ptr), %xmm2
 	 por	%xmm3, %xmm5
-	movdqu	0x30($b_ptr), %xmm3
+	movdqu	0xFF($b_ptr), %xmm3
 	movdqa	%xmm0, $in2_x(%rsp)
-	 pshufd	\$0x1e, %xmm5, %xmm4
-	movdqa	%xmm1, $in2_x+0x10(%rsp)
+	 pshufd	\$0xFF, %xmm5, %xmm4
+	movdqa	%xmm1, $in2_x+0xFF(%rsp)
 	por	%xmm0, %xmm1
 	 movq	$r_ptr, %xmm0		# save $r_ptr
 	movdqa	%xmm2, $in2_y(%rsp)
-	movdqa	%xmm3, $in2_y+0x10(%rsp)
+	movdqa	%xmm3, $in2_y+0xFF(%rsp)
 	por	%xmm2, %xmm3
 	 por	%xmm4, %xmm5
 	 pxor	%xmm4, %xmm4
 	por	%xmm1, %xmm3
 
-	lea	0x40-$bias($a_ptr), $a_ptr	# $a_ptr is still valid
+	lea	0xFF-$bias($a_ptr), $a_ptr	# $a_ptr is still valid
 	lea	$Z1sqr(%rsp), $r_ptr		# Z1^2
 	call	__ecp_nistz256_sqr_mont$x	# p256_sqr_mont(Z1sqr, in1_z);
 
 	pcmpeqd	%xmm4, %xmm5
-	pshufd	\$0xb1, %xmm3, %xmm4
-	 mov	0x00($b_ptr), $src0		# $b_ptr is still valid
-	 #lea	0x00($b_ptr), $b_ptr
+	pshufd	\$0xFF, %xmm3, %xmm4
+	 mov	0xFF($b_ptr), $src0		# $b_ptr is still valid
+	 #lea	0xFF($b_ptr), $b_ptr
 	 mov	$acc4, $acc1			# harmonize sqr output and mul input
 	por	%xmm3, %xmm4
 	pshufd	\$0, %xmm5, %xmm5		# in1infty
-	pshufd	\$0x1e, %xmm4, %xmm3
+	pshufd	\$0xFF, %xmm4, %xmm3
 	 mov	$acc5, $acc2
 	por	%xmm3, %xmm4
 	pxor	%xmm3, %xmm3
@@ -4077,10 +4077,10 @@ $code.=<<___;
 	movdqa	%xmm5, %xmm1
 	pandn	$res_z(%rsp), %xmm0
 	movdqa	%xmm5, %xmm2
-	pandn	$res_z+0x10(%rsp), %xmm1
+	pandn	$res_z+0xFF(%rsp), %xmm1
 	movdqa	%xmm5, %xmm3
 	pand	.LONE_mont(%rip), %xmm2
-	pand	.LONE_mont+0x10(%rip), %xmm3
+	pand	.LONE_mont+0xFF(%rip), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
 
@@ -4091,20 +4091,20 @@ $code.=<<___;
 	pandn	%xmm3, %xmm1
 	movdqa	%xmm4, %xmm3
 	pand	$in1_z(%rsp), %xmm2
-	pand	$in1_z+0x10(%rsp), %xmm3
+	pand	$in1_z+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
-	movdqu	%xmm2, 0x40($r_ptr)
-	movdqu	%xmm3, 0x50($r_ptr)
+	movdqu	%xmm2, 0xFF($r_ptr)
+	movdqu	%xmm3, 0xFF($r_ptr)
 
 	movdqa	%xmm5, %xmm0		# copy_conditional(res_x, in2_x, in1infty);
 	movdqa	%xmm5, %xmm1
 	pandn	$res_x(%rsp), %xmm0
 	movdqa	%xmm5, %xmm2
-	pandn	$res_x+0x10(%rsp), %xmm1
+	pandn	$res_x+0xFF(%rsp), %xmm1
 	movdqa	%xmm5, %xmm3
 	pand	$in2_x(%rsp), %xmm2
-	pand	$in2_x+0x10(%rsp), %xmm3
+	pand	$in2_x+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
 
@@ -4115,20 +4115,20 @@ $code.=<<___;
 	pandn	%xmm3, %xmm1
 	movdqa	%xmm4, %xmm3
 	pand	$in1_x(%rsp), %xmm2
-	pand	$in1_x+0x10(%rsp), %xmm3
+	pand	$in1_x+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
-	movdqu	%xmm2, 0x00($r_ptr)
-	movdqu	%xmm3, 0x10($r_ptr)
+	movdqu	%xmm2, 0xFF($r_ptr)
+	movdqu	%xmm3, 0xFF($r_ptr)
 
 	movdqa	%xmm5, %xmm0		# copy_conditional(res_y, in2_y, in1infty);
 	movdqa	%xmm5, %xmm1
 	pandn	$res_y(%rsp), %xmm0
 	movdqa	%xmm5, %xmm2
-	pandn	$res_y+0x10(%rsp), %xmm1
+	pandn	$res_y+0xFF(%rsp), %xmm1
 	movdqa	%xmm5, %xmm3
 	pand	$in2_y(%rsp), %xmm2
-	pand	$in2_y+0x10(%rsp), %xmm3
+	pand	$in2_y+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
 
@@ -4139,11 +4139,11 @@ $code.=<<___;
 	pandn	%xmm3, %xmm1
 	movdqa	%xmm4, %xmm3
 	pand	$in1_y(%rsp), %xmm2
-	pand	$in1_y+0x10(%rsp), %xmm3
+	pand	$in1_y+0xFF(%rsp), %xmm3
 	por	%xmm0, %xmm2
 	por	%xmm1, %xmm3
-	movdqu	%xmm2, 0x20($r_ptr)
-	movdqu	%xmm3, 0x30($r_ptr)
+	movdqu	%xmm2, 0xFF($r_ptr)
+	movdqu	%xmm3, 0xFF($r_ptr)
 
 	lea	32*15+56(%rsp), %rsi
 .cfi_def_cfa	%rsi,8
@@ -4433,7 +4433,7 @@ full_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER
@@ -4638,35 +4638,35 @@ $code.=<<___;
 	.rva	short_handler
 	.rva	.Lfrom_body,.Lfrom_epilogue		# HandlerData[]
 .LSEH_info_ecp_nistz256_gather_wX:
-	.byte	0x01,0x33,0x16,0x00
-	.byte	0x33,0xf8,0x09,0x00	#movaps 0x90(rsp),xmm15
-	.byte	0x2e,0xe8,0x08,0x00	#movaps 0x80(rsp),xmm14
-	.byte	0x29,0xd8,0x07,0x00	#movaps 0x70(rsp),xmm13
-	.byte	0x24,0xc8,0x06,0x00	#movaps 0x60(rsp),xmm12
-	.byte	0x1f,0xb8,0x05,0x00	#movaps 0x50(rsp),xmm11
-	.byte	0x1a,0xa8,0x04,0x00	#movaps 0x40(rsp),xmm10
-	.byte	0x15,0x98,0x03,0x00	#movaps 0x30(rsp),xmm9
-	.byte	0x10,0x88,0x02,0x00	#movaps 0x20(rsp),xmm8
-	.byte	0x0c,0x78,0x01,0x00	#movaps 0x10(rsp),xmm7
-	.byte	0x08,0x68,0x00,0x00	#movaps 0x00(rsp),xmm6
-	.byte	0x04,0x01,0x15,0x00	#sub	rsp,0xa8
+	.byte	0xFF,0xFF,0xFF,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm15
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm14
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm13
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm12
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm11
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm10
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm9
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm8
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm7
+	.byte	0xFF,0xFF,0xFF,0xFF	#movaps 0xFF(rsp),xmm6
+	.byte	0xFF,0xFF,0xFF,0xFF	#sub	rsp,0xFF
 	.align	8
 ___
 $code.=<<___	if ($avx>1);
 .LSEH_info_ecp_nistz256_avx2_gather_wX:
-	.byte	0x01,0x36,0x17,0x0b
-	.byte	0x36,0xf8,0x09,0x00	# vmovaps 0x90(rsp),xmm15
-	.byte	0x31,0xe8,0x08,0x00	# vmovaps 0x80(rsp),xmm14
-	.byte	0x2c,0xd8,0x07,0x00	# vmovaps 0x70(rsp),xmm13
-	.byte	0x27,0xc8,0x06,0x00	# vmovaps 0x60(rsp),xmm12
-	.byte	0x22,0xb8,0x05,0x00	# vmovaps 0x50(rsp),xmm11
-	.byte	0x1d,0xa8,0x04,0x00	# vmovaps 0x40(rsp),xmm10
-	.byte	0x18,0x98,0x03,0x00	# vmovaps 0x30(rsp),xmm9
-	.byte	0x13,0x88,0x02,0x00	# vmovaps 0x20(rsp),xmm8
-	.byte	0x0e,0x78,0x01,0x00	# vmovaps 0x10(rsp),xmm7
-	.byte	0x09,0x68,0x00,0x00	# vmovaps 0x00(rsp),xmm6
-	.byte	0x04,0x01,0x15,0x00	# sub	  rsp,0xa8
-	.byte	0x00,0xb3,0x00,0x00	# set_frame r11
+	.byte	0xFF,0xFF,0xFF,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm15
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm14
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm13
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm12
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm11
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm10
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm9
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm8
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm7
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm6
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub	  rsp,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# set_frame r11
 	.align	8
 ___
 $code.=<<___;

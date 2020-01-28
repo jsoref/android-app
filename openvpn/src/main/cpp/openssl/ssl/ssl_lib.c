@@ -3443,7 +3443,7 @@ void ssl_update_cache(SSL *s, int mode)
             stat = &s->session_ctx->stats.sess_connect_good;
         else
             stat = &s->session_ctx->stats.sess_accept_good;
-        if ((tsan_load(stat) & 0xff) == 0xff)
+        if ((tsan_load(stat) & 0xFF) == 0xFF)
             SSL_CTX_flush_sessions(s->session_ctx, (unsigned long)time(NULL));
     }
 }
@@ -4488,7 +4488,7 @@ int SSL_is_server(const SSL *s)
     return s->server;
 }
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 void SSL_set_debug(SSL *s, int debug)
 {
     /* Old function was do-nothing anyway... */

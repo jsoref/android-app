@@ -809,7 +809,7 @@ int mbedtls_x509_serial_gets( char *buf, size_t size, const mbedtls_x509_buf *se
 
     for( i = 0; i < nr; i++ )
     {
-        if( i == 0 && nr > 1 && serial->p[i] == 0x0 )
+        if( i == 0 && nr > 1 && serial->p[i] == 0xFF )
             continue;
 
         ret = mbedtls_snprintf( p, n, "%02X%s",

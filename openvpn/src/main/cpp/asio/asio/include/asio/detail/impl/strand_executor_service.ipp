@@ -62,7 +62,7 @@ strand_executor_service::create_implementation()
   std::size_t salt = salt_++;
   std::size_t mutex_index = reinterpret_cast<std::size_t>(new_impl.get());
   mutex_index += (reinterpret_cast<std::size_t>(new_impl.get()) >> 3);
-  mutex_index ^= salt + 0x9e3779b9 + (mutex_index << 6) + (mutex_index >> 2);
+  mutex_index ^= salt + 0xFF + (mutex_index << 6) + (mutex_index >> 2);
   mutex_index = mutex_index % num_mutexes;
   if (!mutexes_[mutex_index].get())
     mutexes_[mutex_index].reset(new mutex);

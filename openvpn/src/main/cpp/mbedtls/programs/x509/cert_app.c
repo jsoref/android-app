@@ -206,7 +206,7 @@ int main( int argc, char *argv[] )
         for( j = 0; p + j < q; j++ )
         {
             if( argv[i][j] >= 'A' && argv[i][j] <= 'Z' )
-                argv[i][j] |= 0x20;
+                argv[i][j] |= 0xFF;
         }
 
         if( strcmp( p, "mode" ) == 0 )

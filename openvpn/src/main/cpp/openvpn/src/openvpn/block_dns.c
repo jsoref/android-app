@@ -49,62 +49,62 @@
  */
 
 #ifndef FWPM_SESSION_FLAG_DYNAMIC
-#define FWPM_SESSION_FLAG_DYNAMIC 0x00000001
+#define FWPM_SESSION_FLAG_DYNAMIC 0xFF
 #endif
 
 /* c38d57d1-05a7-4c33-904f-7fbceee60e82 */
 DEFINE_GUID(
     FWPM_LAYER_ALE_AUTH_CONNECT_V4,
-    0xc38d57d1,
-    0x05a7,
-    0x4c33,
-    0x90, 0x4f, 0x7f, 0xbc, 0xee, 0xe6, 0x0e, 0x82
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     );
 
 /* 4a72393b-319f-44bc-84c3-ba54dcb3b6b4 */
 DEFINE_GUID(
     FWPM_LAYER_ALE_AUTH_CONNECT_V6,
-    0x4a72393b,
-    0x319f,
-    0x44bc,
-    0x84, 0xc3, 0xba, 0x54, 0xdc, 0xb3, 0xb6, 0xb4
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     );
 
 /* d78e1e87-8644-4ea5-9437-d809ecefc971 */
 DEFINE_GUID(
     FWPM_CONDITION_ALE_APP_ID,
-    0xd78e1e87,
-    0x8644,
-    0x4ea5,
-    0x94, 0x37, 0xd8, 0x09, 0xec, 0xef, 0xc9, 0x71
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     );
 
 /* c35a604d-d22b-4e1a-91b4-68f674ee674b */
 DEFINE_GUID(
     FWPM_CONDITION_IP_REMOTE_PORT,
-    0xc35a604d,
-    0xd22b,
-    0x4e1a,
-    0x91, 0xb4, 0x68, 0xf6, 0x74, 0xee, 0x67, 0x4b
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     );
 
 /* 4cd62a49-59c3-4969-b7f3-bda5d32890a4 */
 DEFINE_GUID(
     FWPM_CONDITION_IP_LOCAL_INTERFACE,
-    0x4cd62a49,
-    0x59c3,
-    0x4969,
-    0xb7, 0xf3, 0xbd, 0xa5, 0xd3, 0x28, 0x90, 0xa4
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     );
 
 /* UUID of WFP sublayer used by all instances of openvpn
  * 2f660d7e-6a37-11e6-a181-001e8c6e04a2 */
 DEFINE_GUID(
     OPENVPN_BLOCK_OUTSIDE_DNS_SUBLAYER,
-    0x2f660d7e,
-    0x6a37,
-    0x11e6,
-    0xa1, 0x81, 0x00, 0x1e, 0x8c, 0x6e, 0x04, 0xa2
+    0xFF,
+    0xFF,
+    0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     );
 
 static WCHAR *FIREWALL_NAME = L"OpenVPN";
@@ -148,7 +148,7 @@ add_sublayer(GUID uuid)
     sublayer.displayData.name = FIREWALL_NAME;
     sublayer.displayData.description = FIREWALL_NAME;
     sublayer.flags = 0;
-    sublayer.weight = 0x100;
+    sublayer.weight = 0xFF;
 
     /* Add sublayer to the session */
     err = FwpmSubLayerAdd0(engine, &sublayer, NULL);
@@ -240,7 +240,7 @@ add_block_dns_filters(HANDLE *engine_handle,
     Filter.subLayerKey = OPENVPN_BLOCK_OUTSIDE_DNS_SUBLAYER;
     Filter.displayData.name = FIREWALL_NAME;
     Filter.weight.type = FWP_UINT8;
-    Filter.weight.uint8 = 0xF;
+    Filter.weight.uint8 = 0xFF;
     Filter.filterCondition = Condition;
     Filter.numFilterConditions = 2;
 
@@ -291,7 +291,7 @@ add_block_dns_filters(HANDLE *engine_handle,
      * over the block filter added with automatic weighting */
 
     Filter.weight.type = FWP_UINT8;
-    Filter.weight.uint8 = 0xE;
+    Filter.weight.uint8 = 0xFF;
     Filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4;
     Filter.action.type = FWP_ACTION_PERMIT;
     Filter.numFilterConditions = 2;

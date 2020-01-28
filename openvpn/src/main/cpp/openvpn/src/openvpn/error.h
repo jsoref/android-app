@@ -89,7 +89,7 @@ extern int x_msg_line_num;
 
 /* msg() flags */
 
-#define M_DEBUG_LEVEL     (0x0F)         /* debug level mask */
+#define M_DEBUG_LEVEL     (0xFF)         /* debug level mask */
 
 #define M_FATAL           (1<<4)         /* exit program */
 #define M_NONFATAL        (1<<5)         /* non-fatal error */

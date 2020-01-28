@@ -354,7 +354,7 @@ static int aria_gcm_ctrl(EVP_CIPHER_CTX *c, int type, int arg, void *ptr)
                 len -= EVP_GCM_TLS_TAG_LEN;
             }
             EVP_CIPHER_CTX_buf_noconst(c)[arg - 2] = len >> 8;
-            EVP_CIPHER_CTX_buf_noconst(c)[arg - 1] = len & 0xff;
+            EVP_CIPHER_CTX_buf_noconst(c)[arg - 1] = len & 0xFF;
         }
         /* Extra padding: tag appended to record */
         return EVP_GCM_TLS_TAG_LEN;
@@ -550,7 +550,7 @@ static int aria_ccm_ctrl(EVP_CIPHER_CTX *c, int type, int arg, void *ptr)
                 len -= cctx->M;
             }
             EVP_CIPHER_CTX_buf_noconst(c)[arg - 2] = len >> 8;
-            EVP_CIPHER_CTX_buf_noconst(c)[arg - 1] = len & 0xff;
+            EVP_CIPHER_CTX_buf_noconst(c)[arg - 1] = len & 0xFF;
         }
         /* Extra padding: tag appended to record */
         return cctx->M;

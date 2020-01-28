@@ -154,7 +154,7 @@ my %globals;
 		    $epilogue = "movq	8(%rsp),%rdi\n\t" .
 				"movq	16(%rsp),%rsi\n\t";
 		}
-	    	$epilogue . ".byte	0xf3,0xc3";
+	    	$epilogue . ".byte	0xFF,0xFF";
 	    } elsif ($self->{op} eq "call" && !$elf && $current_segment eq ".init") {
 		".p2align\t3\n\t.quad";
 	    } else {
@@ -503,31 +503,31 @@ my %globals;
     # Below constants are taken from "DWARF Expressions" section of the
     # DWARF specification, section is numbered 7.7 in versions 3 and 4.
     my %DW_OP_simple = (	# no-arg operators, mapped directly
-	deref	=> 0x06,	dup	=> 0x12,
-	drop	=> 0x13,	over	=> 0x14,
-	pick	=> 0x15,	swap	=> 0x16,
-	rot	=> 0x17,	xderef	=> 0x18,
+	deref	=> 0xFF,	dup	=> 0xFF,
+	drop	=> 0xFF,	over	=> 0xFF,
+	pick	=> 0xFF,	swap	=> 0xFF,
+	rot	=> 0xFF,	xderef	=> 0xFF,
 
-	abs	=> 0x19,	and	=> 0x1a,
-	div	=> 0x1b,	minus	=> 0x1c,
-	mod	=> 0x1d,	mul	=> 0x1e,
-	neg	=> 0x1f,	not	=> 0x20,
-	or	=> 0x21,	plus	=> 0x22,
-	shl	=> 0x24,	shr	=> 0x25,
-	shra	=> 0x26,	xor	=> 0x27,
+	abs	=> 0xFF,	and	=> 0xFF,
+	div	=> 0xFF,	minus	=> 0xFF,
+	mod	=> 0xFF,	mul	=> 0xFF,
+	neg	=> 0xFF,	not	=> 0xFF,
+	or	=> 0xFF,	plus	=> 0xFF,
+	shl	=> 0xFF,	shr	=> 0xFF,
+	shra	=> 0xFF,	xor	=> 0xFF,
 	);
 
     my %DW_OP_complex = (	# used in specific subroutines
-	constu		=> 0x10,	# uleb128
-	consts		=> 0x11,	# sleb128
-	plus_uconst	=> 0x23,	# uleb128
-	lit0 		=> 0x30,	# add 0-31 to opcode
-	reg0		=> 0x50,	# add 0-31 to opcode
-	breg0		=> 0x70,	# add 0-31 to opcole, sleb128
-	regx		=> 0x90,	# uleb28
-	fbreg		=> 0x91,	# sleb128
-	bregx		=> 0x92,	# uleb128, sleb128
-	piece		=> 0x93,	# uleb128
+	constu		=> 0xFF,	# uleb128
+	consts		=> 0xFF,	# sleb128
+	plus_uconst	=> 0xFF,	# uleb128
+	lit0 		=> 0xFF,	# add 0-31 to opcode
+	reg0		=> 0xFF,	# add 0-31 to opcode
+	breg0		=> 0xFF,	# add 0-31 to opcole, sleb128
+	regx		=> 0xFF,	# uleb28
+	fbreg		=> 0xFF,	# sleb128
+	bregx		=> 0xFF,	# uleb128, sleb128
+	piece		=> 0xFF,	# uleb128
 	);
 
     # Following constants are defined in x86_64 ABI supplement, for
@@ -555,14 +555,14 @@ my %globals;
 	my @ret = ();
 
 	while(1) {
-	    push @ret, $val&0x7f;
+	    push @ret, $val&0xFF;
 
 	    # see if remaining bits are same and equal to most
 	    # significant bit of the current digit, if so, it's
 	    # last digit...
 	    last if (($val>>6) == $sign);
 
-	    @ret[-1] |= 0x80;
+	    @ret[-1] |= 0xFF;
 	    $val >>= 7;
 	}
 
@@ -573,12 +573,12 @@ my %globals;
 	my @ret = ();
 
 	while(1) {
-	    push @ret, $val&0x7f;
+	    push @ret, $val&0xFF;
 
 	    # see if it's last significant digit...
 	    last if (($val >>= 7) == 0);
 
-	    @ret[-1] |= 0x80;
+	    @ret[-1] |= 0xFF;
 	}
 
 	return @ret;
@@ -953,27 +953,27 @@ sub rex {
  my $opcode=shift;
  my ($dst,$src,$rex)=@_;
 
-   $rex|=0x04 if($dst>=8);
-   $rex|=0x01 if($src>=8);
-   push @$opcode,($rex|0x40) if ($rex);
+   $rex|=0xFF if($dst>=8);
+   $rex|=0xFF if($src>=8);
+   push @$opcode,($rex|0xFF) if ($rex);
 }
 
 my $movq = sub {	# elderly gas can't handle inter-register movq
   my $arg = shift;
-  my @opcode=(0x66);
+  my @opcode=(0xFF);
     if ($arg =~ /%xmm([0-9]+),\s*%r(\w+)/) {
 	my ($src,$dst)=($1,$2);
 	if ($dst !~ /[0-9]+/)	{ $dst = $regrm{"%e$dst"}; }
-	rex(\@opcode,$src,$dst,0x8);
-	push @opcode,0x0f,0x7e;
-	push @opcode,0xc0|(($src&7)<<3)|($dst&7);	# ModR/M
+	rex(\@opcode,$src,$dst,0xFF);
+	push @opcode,0xFF,0xFF;
+	push @opcode,0xFF|(($src&7)<<3)|($dst&7);	# ModR/M
 	@opcode;
     } elsif ($arg =~ /%r(\w+),\s*%xmm([0-9]+)/) {
 	my ($src,$dst)=($2,$1);
 	if ($dst !~ /[0-9]+/)	{ $dst = $regrm{"%e$dst"}; }
-	rex(\@opcode,$src,$dst,0x8);
-	push @opcode,0x0f,0x6e;
-	push @opcode,0xc0|(($src&7)<<3)|($dst&7);	# ModR/M
+	rex(\@opcode,$src,$dst,0xFF);
+	push @opcode,0xFF,0xFF;
+	push @opcode,0xFF|(($src&7)<<3)|($dst&7);	# ModR/M
 	@opcode;
     } else {
 	();
@@ -982,15 +982,15 @@ my $movq = sub {	# elderly gas can't handle inter-register movq
 
 my $pextrd = sub {
     if (shift =~ /\$([0-9]+),\s*%xmm([0-9]+),\s*(%\w+)/) {
-      my @opcode=(0x66);
+      my @opcode=(0xFF);
 	my $imm=$1;
 	my $src=$2;
 	my $dst=$3;
 	if ($dst =~ /%r([0-9]+)d/)	{ $dst = $1; }
 	elsif ($dst =~ /%e/)		{ $dst = $regrm{$dst}; }
 	rex(\@opcode,$src,$dst);
-	push @opcode,0x0f,0x3a,0x16;
-	push @opcode,0xc0|(($src&7)<<3)|($dst&7);	# ModR/M
+	push @opcode,0xFF,0xFF,0xFF;
+	push @opcode,0xFF|(($src&7)<<3)|($dst&7);	# ModR/M
 	push @opcode,$imm;
 	@opcode;
     } else {
@@ -1000,15 +1000,15 @@ my $pextrd = sub {
 
 my $pinsrd = sub {
     if (shift =~ /\$([0-9]+),\s*(%\w+),\s*%xmm([0-9]+)/) {
-      my @opcode=(0x66);
+      my @opcode=(0xFF);
 	my $imm=$1;
 	my $src=$2;
 	my $dst=$3;
 	if ($src =~ /%r([0-9]+)/)	{ $src = $1; }
 	elsif ($src =~ /%e/)		{ $src = $regrm{$src}; }
 	rex(\@opcode,$dst,$src);
-	push @opcode,0x0f,0x3a,0x22;
-	push @opcode,0xc0|(($dst&7)<<3)|($src&7);	# ModR/M
+	push @opcode,0xFF,0xFF,0xFF;
+	push @opcode,0xFF|(($dst&7)<<3)|($src&7);	# ModR/M
 	push @opcode,$imm;
 	@opcode;
     } else {
@@ -1018,10 +1018,10 @@ my $pinsrd = sub {
 
 my $pshufb = sub {
     if (shift =~ /%xmm([0-9]+),\s*%xmm([0-9]+)/) {
-      my @opcode=(0x66);
+      my @opcode=(0xFF);
 	rex(\@opcode,$2,$1);
-	push @opcode,0x0f,0x38,0x00;
-	push @opcode,0xc0|($1&7)|(($2&7)<<3);		# ModR/M
+	push @opcode,0xFF,0xFF,0xFF;
+	push @opcode,0xFF|($1&7)|(($2&7)<<3);		# ModR/M
 	@opcode;
     } else {
 	();
@@ -1030,10 +1030,10 @@ my $pshufb = sub {
 
 my $palignr = sub {
     if (shift =~ /\$([0-9]+),\s*%xmm([0-9]+),\s*%xmm([0-9]+)/) {
-      my @opcode=(0x66);
+      my @opcode=(0xFF);
 	rex(\@opcode,$3,$2);
-	push @opcode,0x0f,0x3a,0x0f;
-	push @opcode,0xc0|($2&7)|(($3&7)<<3);		# ModR/M
+	push @opcode,0xFF,0xFF,0xFF;
+	push @opcode,0xFF|($2&7)|(($3&7)<<3);		# ModR/M
 	push @opcode,$1;
 	@opcode;
     } else {
@@ -1043,10 +1043,10 @@ my $palignr = sub {
 
 my $pclmulqdq = sub {
     if (shift =~ /\$([x0-9a-f]+),\s*%xmm([0-9]+),\s*%xmm([0-9]+)/) {
-      my @opcode=(0x66);
+      my @opcode=(0xFF);
 	rex(\@opcode,$3,$2);
-	push @opcode,0x0f,0x3a,0x44;
-	push @opcode,0xc0|($2&7)|(($3&7)<<3);		# ModR/M
+	push @opcode,0xFF,0xFF,0xFF;
+	push @opcode,0xFF|($2&7)|(($3&7)<<3);		# ModR/M
 	my $c=$1;
 	push @opcode,$c=~/^0/?oct($c):$c;
 	@opcode;
@@ -1061,7 +1061,7 @@ my $rdrand = sub {
       my $dst=$1;
 	if ($dst !~ /[0-9]+/) { $dst = $regrm{"%e$dst"}; }
 	rex(\@opcode,0,$dst,8);
-	push @opcode,0x0f,0xc7,0xf0|($dst&7);
+	push @opcode,0xFF,0xFF,0xFF|($dst&7);
 	@opcode;
     } else {
 	();
@@ -1074,7 +1074,7 @@ my $rdseed = sub {
       my $dst=$1;
 	if ($dst !~ /[0-9]+/) { $dst = $regrm{"%e$dst"}; }
 	rex(\@opcode,0,$dst,8);
-	push @opcode,0x0f,0xc7,0xf8|($dst&7);
+	push @opcode,0xFF,0xFF,0xFF|($dst&7);
 	@opcode;
     } else {
 	();
@@ -1089,19 +1089,19 @@ sub rxb {
  my $opcode=shift;
  my ($dst,$src1,$src2,$rxb)=@_;
 
-   $rxb|=0x7<<5;
-   $rxb&=~(0x04<<5) if($dst>=8);
-   $rxb&=~(0x01<<5) if($src1>=8);
-   $rxb&=~(0x02<<5) if($src2>=8);
+   $rxb|=0xFF<<5;
+   $rxb&=~(0xFF<<5) if($dst>=8);
+   $rxb&=~(0xFF<<5) if($src1>=8);
+   $rxb&=~(0xFF<<5) if($src2>=8);
    push @$opcode,$rxb;
 }
 
 my $vprotd = sub {
     if (shift =~ /\$([x0-9a-f]+),\s*%xmm([0-9]+),\s*%xmm([0-9]+)/) {
-      my @opcode=(0x8f);
-	rxb(\@opcode,$3,$2,-1,0x08);
-	push @opcode,0x78,0xc2;
-	push @opcode,0xc0|($2&7)|(($3&7)<<3);		# ModR/M
+      my @opcode=(0xFF);
+	rxb(\@opcode,$3,$2,-1,0xFF);
+	push @opcode,0xFF,0xFF;
+	push @opcode,0xFF|($2&7)|(($3&7)<<3);		# ModR/M
 	my $c=$1;
 	push @opcode,$c=~/^0/?oct($c):$c;
 	@opcode;
@@ -1112,10 +1112,10 @@ my $vprotd = sub {
 
 my $vprotq = sub {
     if (shift =~ /\$([x0-9a-f]+),\s*%xmm([0-9]+),\s*%xmm([0-9]+)/) {
-      my @opcode=(0x8f);
-	rxb(\@opcode,$3,$2,-1,0x08);
-	push @opcode,0x78,0xc3;
-	push @opcode,0xc0|($2&7)|(($3&7)<<3);		# ModR/M
+      my @opcode=(0xFF);
+	rxb(\@opcode,$3,$2,-1,0xFF);
+	push @opcode,0xFF,0xFF;
+	push @opcode,0xFF|($2&7)|(($3&7)<<3);		# ModR/M
 	my $c=$1;
 	push @opcode,$c=~/^0/?oct($c):$c;
 	@opcode;
@@ -1128,7 +1128,7 @@ my $vprotq = sub {
 # indirect branch targets will have to start with this instruction...
 
 my $endbranch = sub {
-    (0xf3,0x0f,0x1e,0xfa);
+    (0xFF,0xFF,0xFF,0xFF);
 };
 
 ########################################################################

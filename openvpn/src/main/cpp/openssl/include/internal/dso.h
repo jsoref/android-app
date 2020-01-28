@@ -29,7 +29,7 @@
  * the caller has prompted the user for a path to a driver library so the
  * filename should be interpreted as-is.
  */
-# define DSO_FLAG_NO_NAME_TRANSLATION            0x01
+# define DSO_FLAG_NO_NAME_TRANSLATION            0xFF
 /*
  * An extra flag to give if only the extension should be added as
  * translation.  This is obviously only of importance on Unix and other
@@ -37,19 +37,19 @@
  * something, like 'lib', and ignored everywhere else. This flag is also
  * ignored if DSO_FLAG_NO_NAME_TRANSLATION is used at the same time.
  */
-# define DSO_FLAG_NAME_TRANSLATION_EXT_ONLY      0x02
+# define DSO_FLAG_NAME_TRANSLATION_EXT_ONLY      0xFF
 
 /*
  * Don't unload the DSO when we call DSO_free()
  */
-# define DSO_FLAG_NO_UNLOAD_ON_FREE              0x04
+# define DSO_FLAG_NO_UNLOAD_ON_FREE              0xFF
 
 /*
  * This flag loads the library with public symbols. Meaning: The exported
  * symbols of this library are public to all libraries loaded after this
  * library. At the moment only implemented in unix.
  */
-# define DSO_FLAG_GLOBAL_SYMBOLS                 0x20
+# define DSO_FLAG_GLOBAL_SYMBOLS                 0xFF
 
 typedef void (*DSO_FUNC_TYPE) (void);
 

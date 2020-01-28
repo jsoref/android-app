@@ -111,10 +111,10 @@ int mbedtls_base64_encode( unsigned char *dst, size_t dlen, size_t *olen,
         C2 = *src++;
         C3 = *src++;
 
-        *p++ = base64_enc_map[(C1 >> 2) & 0x3F];
-        *p++ = base64_enc_map[(((C1 &  3) << 4) + (C2 >> 4)) & 0x3F];
-        *p++ = base64_enc_map[(((C2 & 15) << 2) + (C3 >> 6)) & 0x3F];
-        *p++ = base64_enc_map[C3 & 0x3F];
+        *p++ = base64_enc_map[(C1 >> 2) & 0xFF];
+        *p++ = base64_enc_map[(((C1 &  3) << 4) + (C2 >> 4)) & 0xFF];
+        *p++ = base64_enc_map[(((C2 & 15) << 2) + (C3 >> 6)) & 0xFF];
+        *p++ = base64_enc_map[C3 & 0xFF];
     }
 
     if( i < slen )
@@ -122,11 +122,11 @@ int mbedtls_base64_encode( unsigned char *dst, size_t dlen, size_t *olen,
         C1 = *src++;
         C2 = ( ( i + 1 ) < slen ) ? *src++ : 0;
 
-        *p++ = base64_enc_map[(C1 >> 2) & 0x3F];
-        *p++ = base64_enc_map[(((C1 & 3) << 4) + (C2 >> 4)) & 0x3F];
+        *p++ = base64_enc_map[(C1 >> 2) & 0xFF];
+        *p++ = base64_enc_map[(((C1 & 3) << 4) + (C2 >> 4)) & 0xFF];
 
         if( ( i + 1 ) < slen )
-             *p++ = base64_enc_map[((C2 & 15) << 2) & 0x3F];
+             *p++ = base64_enc_map[((C2 & 15) << 2) & 0xFF];
         else *p++ = '=';
 
         *p++ = '=';
@@ -196,7 +196,7 @@ int mbedtls_base64_decode( unsigned char *dst, size_t dlen, size_t *olen,
      * risk of integer overflow in n:
      *     n = ( ( n * 6 ) + 7 ) >> 3;
      */
-    n = ( 6 * ( n >> 3 ) ) + ( ( 6 * ( n & 0x7 ) + 7 ) >> 3 );
+    n = ( 6 * ( n >> 3 ) ) + ( ( 6 * ( n & 0xFF ) + 7 ) >> 3 );
     n -= j;
 
     if( dst == NULL || dlen < n )
@@ -211,7 +211,7 @@ int mbedtls_base64_decode( unsigned char *dst, size_t dlen, size_t *olen,
             continue;
 
         j -= ( base64_dec_map[*src] == 64 );
-        x  = ( x << 6 ) | ( base64_dec_map[*src] & 0x3F );
+        x  = ( x << 6 ) | ( base64_dec_map[*src] & 0xFF );
 
         if( ++n == 4 )
         {
@@ -231,14 +231,14 @@ int mbedtls_base64_decode( unsigned char *dst, size_t dlen, size_t *olen,
 
 static const unsigned char base64_test_dec[64] =
 {
-    0x24, 0x48, 0x6E, 0x56, 0x87, 0x62, 0x5A, 0xBD,
-    0xBF, 0x17, 0xD9, 0xA2, 0xC4, 0x17, 0x1A, 0x01,
-    0x94, 0xED, 0x8F, 0x1E, 0x11, 0xB3, 0xD7, 0x09,
-    0x0C, 0xB6, 0xE9, 0x10, 0x6F, 0x22, 0xEE, 0x13,
-    0xCA, 0xB3, 0x07, 0x05, 0x76, 0xC9, 0xFA, 0x31,
-    0x6C, 0x08, 0x34, 0xFF, 0x8D, 0xC2, 0x6C, 0x38,
-    0x00, 0x43, 0xE9, 0x54, 0x97, 0xAF, 0x50, 0x4B,
-    0xD1, 0x41, 0xBA, 0x95, 0x31, 0x5A, 0x0B, 0x97
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 static const unsigned char base64_test_enc[] =

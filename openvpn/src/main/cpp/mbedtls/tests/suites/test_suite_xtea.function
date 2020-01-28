@@ -14,7 +14,7 @@ void xtea_encrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_xtea_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
 
 
     mbedtls_xtea_setup( &ctx, key_str->x );
@@ -31,7 +31,7 @@ void xtea_decrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_xtea_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
 
 
     mbedtls_xtea_setup( &ctx, key_str->x );
@@ -48,7 +48,7 @@ void xtea_encrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_xtea_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
 
 
     mbedtls_xtea_setup( &ctx, key_str->x );
@@ -66,7 +66,7 @@ void xtea_decrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_xtea_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
 
 
     mbedtls_xtea_setup( &ctx, key_str->x );

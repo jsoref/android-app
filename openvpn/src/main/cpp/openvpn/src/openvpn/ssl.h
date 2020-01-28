@@ -47,7 +47,7 @@
 #define KEY_EXPANSION_ID "OpenVPN"
 
 /* packet opcode (high 5 bits) and key-id (low 3 bits) are combined in one byte */
-#define P_KEY_ID_MASK                  0x07
+#define P_KEY_ID_MASK                  0xFF
 #define P_OPCODE_SHIFT                 3
 
 /* packet opcodes -- the V1 is intended to allow protocol changes in the future */
@@ -116,7 +116,7 @@
 #define KEY_METHOD_MAX 2
 
 /* key method taken from lower 4 bits */
-#define KEY_METHOD_MASK 0x0F
+#define KEY_METHOD_MASK 0xFF
 
 /*
  * Measure success rate of TLS handshakes, for debugging only

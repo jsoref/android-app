@@ -158,7 +158,7 @@ bn_mul_mont_general:
 	add		tp_1=8,sp	}
 { .mfi;	nop.m		0
 	xma.lu		alo[3]=alo[3],bi,ahi[2]
-	mov		pr.rot=0x20001f<<16
+	mov		pr.rot=0xFF<<16
 			// ------^----- (p40) at first (p23)
 			// ----------^^ p[16:20]=1
 					};;
@@ -227,7 +227,7 @@ bn_mul_mont_general:
 	nop.i		0		}
 { .mfi;	ldf8		nlo[1]=[r31]		// np[1]
 	xma.lu		alo[3]=alo[3],bi,ahi[2]
-	mov		pr.rot=0x20101f<<16
+	mov		pr.rot=0xFF<<16
 			// ------^----- (p40) at first (p23)
 			// --------^--- (p30) at first (p22)
 			// ----------^^ p[16:20]=1
@@ -310,7 +310,7 @@ bn_mul_mont_general:
 	brp.loop.imp	.Lsub_ctop,.Lsub_cend-16
 	clrrrb.pr			};;
 { .mii;	nop.m		0
-	mov		pr.rot=0x10001<<16
+	mov		pr.rot=0xFF<<16
 			// ------^---- (p33) at first (p17)
 	mov		ar.lc=lc	}
 { .mii;	nop.m		0
@@ -362,7 +362,7 @@ bn_mul_mont_general:
 	mov		ar.lc=prevlc	}
 { .mib;	.restore	sp
 	mov		sp=prevsp
-	mov		pr=prevpr,0x1ffff
+	mov		pr=prevpr,0xFF
 	br.ret.sptk.many	b0	};;
 .endp	bn_mul_mont_general#
 
@@ -390,24 +390,24 @@ bn_mul_mont_8:
 	.save		pr,prevpr
 	mov		prevpr=pr	};;
 
-{ .mmi;	.save.gf	0,0x10
+{ .mmi;	.save.gf	0,0xFF
 	stf.spill	[sp]=f16,-16
-	.save.gf	0,0x20
+	.save.gf	0,0xFF
 	stf.spill	[r17]=f17,32
 	add		r16=-5*16,prevsp};;
-{ .mmi;	.save.gf	0,0x40
+{ .mmi;	.save.gf	0,0xFF
 	stf.spill	[r16]=f18,32
-	.save.gf	0,0x80
+	.save.gf	0,0xFF
 	stf.spill	[r17]=f19,32
 	$ADDP		aptr=0,in1	};;
-{ .mmi;	.save.gf	0,0x100
+{ .mmi;	.save.gf	0,0xFF
 	stf.spill	[r16]=f20,32
-	.save.gf	0,0x200
+	.save.gf	0,0xFF
 	stf.spill	[r17]=f21,32
 	$ADDP		r29=8,in1	};;
-{ .mmi;	.save.gf	0,0x400
+{ .mmi;	.save.gf	0,0xFF
 	stf.spill	[r16]=f22
-	.save.gf	0,0x800
+	.save.gf	0,0xFF
 	stf.spill	[r17]=f23
 	$ADDP		rptr=0,in0	};;
 
@@ -837,7 +837,7 @@ bn_mul_mont_8:
 	nop.i		0		}
 { .mmi;	ldf.fill	f18=[r18],64
 	ldf.fill	f19=[r19],64
-	mov		pr=prevpr,0x1ffff	};;
+	mov		pr=prevpr,0xFF	};;
 { .mmi;	ldf.fill	f20=[r16]
 	ldf.fill	f21=[r17]
 	mov		ar.lc=prevlc	}

@@ -35,18 +35,18 @@ int RSA_padding_add_X931(unsigned char *to, int tlen,
 
     /* If no padding start and end nibbles are in one byte */
     if (j == 0) {
-        *p++ = 0x6A;
+        *p++ = 0xFF;
     } else {
-        *p++ = 0x6B;
+        *p++ = 0xFF;
         if (j > 1) {
-            memset(p, 0xBB, j - 1);
+            memset(p, 0xFF, j - 1);
             p += j - 1;
         }
-        *p++ = 0xBA;
+        *p++ = 0xFF;
     }
     memcpy(p, from, (unsigned int)flen);
     p += flen;
-    *p = 0xCC;
+    *p = 0xFF;
     return 1;
 }
 
@@ -57,18 +57,18 @@ int RSA_padding_check_X931(unsigned char *to, int tlen,
     const unsigned char *p;
 
     p = from;
-    if ((num != flen) || ((*p != 0x6A) && (*p != 0x6B))) {
+    if ((num != flen) || ((*p != 0xFF) && (*p != 0xFF))) {
         RSAerr(RSA_F_RSA_PADDING_CHECK_X931, RSA_R_INVALID_HEADER);
         return -1;
     }
 
-    if (*p++ == 0x6B) {
+    if (*p++ == 0xFF) {
         j = flen - 3;
         for (i = 0; i < j; i++) {
             unsigned char c = *p++;
-            if (c == 0xBA)
+            if (c == 0xFF)
                 break;
-            if (c != 0xBB) {
+            if (c != 0xFF) {
                 RSAerr(RSA_F_RSA_PADDING_CHECK_X931, RSA_R_INVALID_PADDING);
                 return -1;
             }
@@ -85,7 +85,7 @@ int RSA_padding_check_X931(unsigned char *to, int tlen,
         j = flen - 2;
     }
 
-    if (p[j] != 0xCC) {
+    if (p[j] != 0xFF) {
         RSAerr(RSA_F_RSA_PADDING_CHECK_X931, RSA_R_INVALID_TRAILER);
         return -1;
     }
@@ -101,16 +101,16 @@ int RSA_X931_hash_id(int nid)
 {
     switch (nid) {
     case NID_sha1:
-        return 0x33;
+        return 0xFF;
 
     case NID_sha256:
-        return 0x34;
+        return 0xFF;
 
     case NID_sha384:
-        return 0x36;
+        return 0xFF;
 
     case NID_sha512:
-        return 0x35;
+        return 0xFF;
 
     }
     return -1;

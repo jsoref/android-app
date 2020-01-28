@@ -175,8 +175,8 @@ static unsigned int psk_client_cb(SSL *ssl, const char *hint, char *identity,
 }
 #endif
 
-const unsigned char tls13_aes128gcmsha256_id[] = { 0x13, 0x01 };
-const unsigned char tls13_aes256gcmsha384_id[] = { 0x13, 0x02 };
+const unsigned char tls13_aes128gcmsha256_id[] = { 0xFF, 0xFF };
+const unsigned char tls13_aes256gcmsha384_id[] = { 0xFF, 0xFF };
 
 static int psk_use_session_cb(SSL *s, const EVP_MD *md,
                               const unsigned char **id, size_t *idlen,
@@ -412,7 +412,7 @@ static int serverinfo_cli_parse_cb(SSL *s, unsigned int ext_type,
     unsigned char ext_buf[4 + 65536];
 
     /* Reconstruct the type/len fields prior to extension data */
-    inlen &= 0xffff; /* for formal memcmpy correctness */
+    inlen &= 0xFF; /* for formal memcmpy correctness */
     ext_buf[0] = (unsigned char)(ext_type >> 8);
     ext_buf[1] = (unsigned char)(ext_type);
     ext_buf[2] = (unsigned char)(inlen >> 8);
@@ -790,7 +790,7 @@ const OPTIONS s_client_options[] = {
     {"keylogfile", OPT_KEYLOG_FILE, '>', "Write TLS secrets to file"},
     {"early_data", OPT_EARLY_DATA, '<', "File to send as early data"},
     {"enable_pha", OPT_ENABLE_PHA, '-', "Enable post-handshake-authentication"},
-    {NULL, OPT_EOF, 0x00, NULL}
+    {NULL, OPT_EOF, 0xFF, NULL}
 };
 
 typedef enum PROTOCOL_choice {
@@ -2451,21 +2451,21 @@ int s_client_main(int argc, char **argv)
             /* SSL request packet */
             static const unsigned char ssl_req[] = {
                 /* payload_length,   sequence_id */
-                   0x20, 0x00, 0x00, 0x01,
+                   0xFF, 0xFF, 0xFF, 0xFF,
                 /* payload */
                 /* capability flags, CLIENT_SSL always set */
-                   0x85, 0xae, 0x7f, 0x00,
+                   0xFF, 0xFF, 0xFF, 0xFF,
                 /* max-packet size */
-                   0x00, 0x00, 0x00, 0x01,
+                   0xFF, 0xFF, 0xFF, 0xFF,
                 /* character set */
-                   0x21,
+                   0xFF,
                 /* string[23] reserved (all [0]) */
-                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
             };
             int bytes = 0;
-            int ssl_flg = 0x800;
+            int ssl_flg = 0xFF;
             int pos;
             const unsigned char *packet = (const unsigned char *)sbuf;
 
@@ -2484,7 +2484,7 @@ int s_client_main(int argc, char **argv)
                 BIO_printf(bio_err, "MySQL packet length does not match.\n");
                 goto shut;
             /* protocol version[1] */
-            } else if (packet[4] != 0xA) {
+            } else if (packet[4] != 0xFF) {
                 BIO_printf(bio_err,
                            "Only MySQL protocol version 10 is supported.\n");
                 goto shut;

@@ -482,7 +482,7 @@ int DTLSv1_listen(SSL *s, BIO_ADDR *client)
      * supported. DTLS1_BAD_VER must use cookies in a stateful manner (e.g. via
      * SSL_accept)
      */
-    if ((s->version & 0xff00) != (DTLS1_VERSION & 0xff00)) {
+    if ((s->version & 0xFF) != (DTLS1_VERSION & 0xFF)) {
         SSLerr(SSL_F_DTLSV1_LISTEN, SSL_R_UNSUPPORTED_SSL_VERSION);
         return -1;
     }

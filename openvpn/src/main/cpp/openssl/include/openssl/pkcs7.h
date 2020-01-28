@@ -168,23 +168,23 @@ DEFINE_STACK_OF(PKCS7)
 
 /* S/MIME related flags */
 
-# define PKCS7_TEXT              0x1
-# define PKCS7_NOCERTS           0x2
-# define PKCS7_NOSIGS            0x4
-# define PKCS7_NOCHAIN           0x8
-# define PKCS7_NOINTERN          0x10
-# define PKCS7_NOVERIFY          0x20
-# define PKCS7_DETACHED          0x40
-# define PKCS7_BINARY            0x80
-# define PKCS7_NOATTR            0x100
-# define PKCS7_NOSMIMECAP        0x200
-# define PKCS7_NOOLDMIMETYPE     0x400
-# define PKCS7_CRLFEOL           0x800
-# define PKCS7_STREAM            0x1000
-# define PKCS7_NOCRL             0x2000
-# define PKCS7_PARTIAL           0x4000
-# define PKCS7_REUSE_DIGEST      0x8000
-# define PKCS7_NO_DUAL_CONTENT   0x10000
+# define PKCS7_TEXT              0xFF
+# define PKCS7_NOCERTS           0xFF
+# define PKCS7_NOSIGS            0xFF
+# define PKCS7_NOCHAIN           0xFF
+# define PKCS7_NOINTERN          0xFF
+# define PKCS7_NOVERIFY          0xFF
+# define PKCS7_DETACHED          0xFF
+# define PKCS7_BINARY            0xFF
+# define PKCS7_NOATTR            0xFF
+# define PKCS7_NOSMIMECAP        0xFF
+# define PKCS7_NOOLDMIMETYPE     0xFF
+# define PKCS7_CRLFEOL           0xFF
+# define PKCS7_STREAM            0xFF
+# define PKCS7_NOCRL             0xFF
+# define PKCS7_PARTIAL           0xFF
+# define PKCS7_REUSE_DIGEST      0xFF
+# define PKCS7_NO_DUAL_CONTENT   0xFF
 
 /* Flags: for compatibility with older code */
 
@@ -199,7 +199,7 @@ DEFINE_STACK_OF(PKCS7)
 # define SMIME_NOATTR    PKCS7_NOATTR
 
 /* CRLF ASCII canonicalisation */
-# define SMIME_ASCIICRLF         0x80000
+# define SMIME_ASCIICRLF         0xFF
 
 DECLARE_ASN1_FUNCTIONS(PKCS7_ISSUER_AND_SERIAL)
 

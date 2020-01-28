@@ -82,7 +82,7 @@ sub ::movq
 
     if ($optimize && $p1=~/^mm[0-7]$/ && $p2=~/^mm[0-7]$/)
     # movq between mmx registers can sink Intel CPUs
-    {	&::pshufw($p1,$p2,0xe4);		}
+    {	&::pshufw($p1,$p2,0xFF);		}
     else
     {	&::generic("movq",@_);			}
 }
@@ -93,7 +93,7 @@ my %regrm = (	"eax"=>0, "ecx"=>1, "edx"=>2, "ebx"=>3,
 sub ::pextrd
 { my($dst,$src,$imm)=@_;
     if ("$dst:$src" =~ /(e[a-dsd][ixp]):xmm([0-7])/)
-    {	&::data_byte(0x66,0x0f,0x3a,0x16,0xc0|($2<<3)|$regrm{$1},$imm);	}
+    {	&::data_byte(0xFF,0xFF,0xFF,0xFF,0xFF|($2<<3)|$regrm{$1},$imm);	}
     else
     {	&::generic("pextrd",@_);		}
 }
@@ -101,7 +101,7 @@ sub ::pextrd
 sub ::pinsrd
 { my($dst,$src,$imm)=@_;
     if ("$dst:$src" =~ /xmm([0-7]):(e[a-dsd][ixp])/)
-    {	&::data_byte(0x66,0x0f,0x3a,0x22,0xc0|($1<<3)|$regrm{$2},$imm);	}
+    {	&::data_byte(0xFF,0xFF,0xFF,0xFF,0xFF|($1<<3)|$regrm{$2},$imm);	}
     else
     {	&::generic("pinsrd",@_);		}
 }
@@ -109,7 +109,7 @@ sub ::pinsrd
 sub ::pshufb
 { my($dst,$src)=@_;
     if ("$dst:$src" =~ /xmm([0-7]):xmm([0-7])/)
-    {	&data_byte(0x66,0x0f,0x38,0x00,0xc0|($1<<3)|$2);	}
+    {	&data_byte(0xFF,0xFF,0xFF,0xFF,0xFF|($1<<3)|$2);	}
     else
     {	&::generic("pshufb",@_);		}
 }
@@ -117,7 +117,7 @@ sub ::pshufb
 sub ::palignr
 { my($dst,$src,$imm)=@_;
     if ("$dst:$src" =~ /xmm([0-7]):xmm([0-7])/)
-    {	&::data_byte(0x66,0x0f,0x3a,0x0f,0xc0|($1<<3)|$2,$imm);	}
+    {	&::data_byte(0xFF,0xFF,0xFF,0xFF,0xFF|($1<<3)|$2,$imm);	}
     else
     {	&::generic("palignr",@_);		}
 }
@@ -125,7 +125,7 @@ sub ::palignr
 sub ::pclmulqdq
 { my($dst,$src,$imm)=@_;
     if ("$dst:$src" =~ /xmm([0-7]):xmm([0-7])/)
-    {	&::data_byte(0x66,0x0f,0x3a,0x44,0xc0|($1<<3)|$2,$imm);	}
+    {	&::data_byte(0xFF,0xFF,0xFF,0xFF,0xFF|($1<<3)|$2,$imm);	}
     else
     {	&::generic("pclmulqdq",@_);		}
 }
@@ -133,7 +133,7 @@ sub ::pclmulqdq
 sub ::rdrand
 { my ($dst)=@_;
     if ($dst =~ /(e[a-dsd][ixp])/)
-    {	&::data_byte(0x0f,0xc7,0xf0|$regrm{$dst});	}
+    {	&::data_byte(0xFF,0xFF,0xFF|$regrm{$dst});	}
     else
     {	&::generic("rdrand",@_);	}
 }
@@ -141,7 +141,7 @@ sub ::rdrand
 sub ::rdseed
 { my ($dst)=@_;
     if ($dst =~ /(e[a-dsd][ixp])/)
-    {	&::data_byte(0x0f,0xc7,0xf8|$regrm{$dst});	}
+    {	&::data_byte(0xFF,0xFF,0xFF|$regrm{$dst});	}
     else
     {	&::generic("rdrand",@_);	}
 }
@@ -150,20 +150,20 @@ sub rxb {
  local *opcode=shift;
  my ($dst,$src1,$src2,$rxb)=@_;
 
-   $rxb|=0x7<<5;
-   $rxb&=~(0x04<<5) if($dst>=8);
-   $rxb&=~(0x01<<5) if($src1>=8);
-   $rxb&=~(0x02<<5) if($src2>=8);
+   $rxb|=0xFF<<5;
+   $rxb&=~(0xFF<<5) if($dst>=8);
+   $rxb&=~(0xFF<<5) if($src1>=8);
+   $rxb&=~(0xFF<<5) if($src2>=8);
    push @opcode,$rxb;
 }
 
 sub ::vprotd
 { my $args=join(',',@_);
     if ($args =~ /xmm([0-7]),xmm([0-7]),([x0-9a-f]+)/)
-    { my @opcode=(0x8f);
-	rxb(\@opcode,$1,$2,-1,0x08);
-	push @opcode,0x78,0xc2;
-	push @opcode,0xc0|($2&7)|(($1&7)<<3);		# ModR/M
+    { my @opcode=(0xFF);
+	rxb(\@opcode,$1,$2,-1,0xFF);
+	push @opcode,0xFF,0xFF;
+	push @opcode,0xFF|($2&7)|(($1&7)<<3);		# ModR/M
 	my $c=$3;
 	push @opcode,$c=~/^0/?oct($c):$c;
 	&::data_byte(@opcode);
@@ -174,7 +174,7 @@ sub ::vprotd
 
 sub ::endbranch
 {
-    &::data_byte(0xf3,0x0f,0x1e,0xfb);
+    &::data_byte(0xFF,0xFF,0xFF,0xFF);
 }
 
 # label management

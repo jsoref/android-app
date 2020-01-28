@@ -25,11 +25,11 @@ void chacha20_crypt( char *hex_key_string,
     size_t dst_len;
     mbedtls_chacha20_context ctx;
 
-    memset( key_str,    0x00, sizeof( key_str ) );
-    memset( nonce_str,  0x00, sizeof( nonce_str ) );
-    memset( src_str,    0x00, sizeof( src_str ) );
-    memset( dst_str,    0x00, sizeof( dst_str ) );
-    memset( output,     0x00, sizeof( output ) );
+    memset( key_str,    0xFF, sizeof( key_str ) );
+    memset( nonce_str,  0xFF, sizeof( nonce_str ) );
+    memset( src_str,    0xFF, sizeof( src_str ) );
+    memset( dst_str,    0xFF, sizeof( dst_str ) );
+    memset( output,     0xFF, sizeof( output ) );
 
     key_len   = unhexify( key_str, hex_key_string );
     nonce_len = unhexify( nonce_str, hex_nonce_string );
@@ -57,7 +57,7 @@ void chacha20_crypt( char *hex_key_string,
 
     TEST_ASSERT( mbedtls_chacha20_starts( &ctx, nonce_str, counter ) == 0 );
 
-    memset( output, 0x00, sizeof( output ) );
+    memset( output, 0xFF, sizeof( output ) );
     TEST_ASSERT( mbedtls_chacha20_update( &ctx, src_len, src_str, output ) == 0 );
 
     hexify( dst_str, output, src_len );
@@ -71,7 +71,7 @@ void chacha20_crypt( char *hex_key_string,
      * in order to test that starts() does the right thing. */
     TEST_ASSERT( mbedtls_chacha20_starts( &ctx, nonce_str, counter ) == 0 );
 
-    memset( output, 0x00, sizeof( output ) );
+    memset( output, 0xFF, sizeof( output ) );
     TEST_ASSERT( mbedtls_chacha20_update( &ctx, 1, src_str, output ) == 0 );
     TEST_ASSERT( mbedtls_chacha20_update( &ctx, src_len - 1, src_str + 1, output + 1 ) == 0 );
 

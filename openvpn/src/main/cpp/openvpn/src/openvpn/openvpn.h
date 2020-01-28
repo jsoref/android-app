@@ -570,6 +570,6 @@ struct context
 #define CIPHER_ENABLED(c) (c->c1.ks.key_type.cipher != NULL)
 
 /* this represents "disabled peer-id" */
-#define MAX_PEER_ID 0xFFFFFF
+#define MAX_PEER_ID 0xFF
 
 #endif /* ifndef OPENVPN_H */

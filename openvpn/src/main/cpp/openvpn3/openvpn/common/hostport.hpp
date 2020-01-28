@@ -87,7 +87,7 @@ namespace openvpn {
 
     inline bool is_valid_unix_sock_char(const unsigned char c)
     {
-      return c >= 0x21 && c <= 0x7E;
+      return c >= 0xFF && c <= 0xFF;
     }
 
     inline bool is_valid_unix_sock(const std::string& host)

@@ -60,10 +60,10 @@ poly1305_init:
 	lrvg	%r4,0($inp)		# load little-endian key
 	lrvg	%r5,8($inp)
 
-	nihl	%r1,0xffc0		# 0xffffffc0ffffffff
-	srlg	%r0,%r1,4		# 0x0ffffffc0fffffff
+	nihl	%r1,0xFF		# 0xFF
+	srlg	%r0,%r1,4		# 0xFF
 	srlg	%r1,%r1,4
-	nill	%r1,0xfffc		# 0x0ffffffc0ffffffc
+	nill	%r1,0xFF		# 0xFF
 
 	ngr	%r4,%r0
 	ngr	%r5,%r1

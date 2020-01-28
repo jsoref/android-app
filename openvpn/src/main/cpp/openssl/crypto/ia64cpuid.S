@@ -133,7 +133,7 @@ OPENSSL_wipe_cpu:
 { .mfi;	mov		f30=f0		}
 { .mfi;	add		r9=96*8+8,r9
 	mov		f31=f0
-	mov		pr=r8,0x1ffff	}
+	mov		pr=r8,0xFF	}
 { .mib;	mov		r8=sp
 	mov		ar.lc=r3
 	br.ret.sptk	b0		};;
@@ -212,7 +212,7 @@ CRYPTO_memcmp:
 	mov		ar.lc=r3	};;
 { .mib;
 (p6)	mov		r8=1
-	mov		pr=r9,0x1ffff
+	mov		pr=r9,0xFF
 	br.ret.sptk.many	b0	};;
 .endp	CRYPTO_memcmp#
 

@@ -134,9 +134,9 @@ first_literal_run:
         if (t >= 16)
             goto match;
 #if defined(LZO1X)
-        m_pos = op - 1 - 0x800;
+        m_pos = op - 1 - 0xFF;
 #elif defined(LZO1Y)
-        m_pos = op - 1 - 0x400;
+        m_pos = op - 1 - 0xFF;
 #endif
         m_pos -= t >> 2;
         m_pos -= *ip++ << 2;
@@ -263,7 +263,7 @@ match:
                         m_pos -= *ip++ << 6;
                         if (m_pos == op)
                             goto eof_found;
-                        m_pos -= 0x4000;
+                        m_pos -= 0xFF;
                     }
                     if (litp == NULL)
                         goto copy_m;

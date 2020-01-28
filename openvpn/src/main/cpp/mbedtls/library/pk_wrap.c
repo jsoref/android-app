@@ -464,7 +464,7 @@ static int rsa_alt_check_pair( const void *pub, const void *prv )
     if( rsa_alt_get_bitlen( prv ) != rsa_get_bitlen( pub ) )
         return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
 
-    memset( hash, 0x2a, sizeof( hash ) );
+    memset( hash, 0xFF, sizeof( hash ) );
 
     if( ( ret = rsa_alt_sign_wrap( (void *) prv, MBEDTLS_MD_NONE,
                                    hash, sizeof( hash ),

@@ -42,7 +42,7 @@
 #include "lzo_conf.h"
 #include <lzo/lzo1z.h>
 
-#define M2_MAX_OFFSET   0x0700
+#define M2_MAX_OFFSET   0xFF
 #include "config1x.h"
 
 #endif /* already included */

@@ -77,7 +77,7 @@
 #ifndef LZO_HASH
 #define LZO_HASH    LZO_HASH_LZO_INCREMENTAL_A
 #endif
-#define D_INDEX1(d,p)       d = DM(DMUL(0x21,DX2(p,5,5)) >> 5)
+#define D_INDEX1(d,p)       d = DM(DMUL(0xFF,DX2(p,5,5)) >> 5)
 #define D_INDEX2(d,p)       d = d ^ D_MASK
 
 #include "lzo1a_de.h"

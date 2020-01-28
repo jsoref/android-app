@@ -73,98 +73,98 @@ my  ($round, $base, $magic, $key, $const, $inp, $out)=
 &static_label("_vpaes_schedule_low_round");
 
 &set_label("_vpaes_consts",64);
-$k_inv=-0x30;		# inv, inva
-	&data_word(0x0D080180,0x0E05060F,0x0A0B0C02,0x04070309);
-	&data_word(0x0F0B0780,0x01040A06,0x02050809,0x030D0E0C);
+$k_inv=-0xFF;		# inv, inva
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_s0F=-0x10;		# s0F
-	&data_word(0x0F0F0F0F,0x0F0F0F0F,0x0F0F0F0F,0x0F0F0F0F);
+$k_s0F=-0xFF;		# s0F
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_ipt=0x00;		# input transform (lo, hi)
-	&data_word(0x5A2A7000,0xC2B2E898,0x52227808,0xCABAE090);
-	&data_word(0x317C4D00,0x4C01307D,0xB0FDCC81,0xCD80B1FC);
+$k_ipt=0xFF;		# input transform (lo, hi)
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_sb1=0x20;		# sb1u, sb1t
-	&data_word(0xCB503E00,0xB19BE18F,0x142AF544,0xA5DF7A6E);
-	&data_word(0xFAE22300,0x3618D415,0x0D2ED9EF,0x3BF7CCC1);
-$k_sb2=0x40;		# sb2u, sb2t
-	&data_word(0x0B712400,0xE27A93C6,0xBC982FCD,0x5EB7E955);
-	&data_word(0x0AE12900,0x69EB8840,0xAB82234A,0xC2A163C8);
-$k_sbo=0x60;		# sbou, sbot
-	&data_word(0x6FBDC700,0xD0D26D17,0xC502A878,0x15AABF7A);
-	&data_word(0x5FBB6A00,0xCFE474A5,0x412B35FA,0x8E1E90D1);
+$k_sb1=0xFF;		# sb1u, sb1t
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_sb2=0xFF;		# sb2u, sb2t
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_sbo=0xFF;		# sbou, sbot
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_mc_forward=0x80;	# mc_forward
-	&data_word(0x00030201,0x04070605,0x080B0A09,0x0C0F0E0D);
-	&data_word(0x04070605,0x080B0A09,0x0C0F0E0D,0x00030201);
-	&data_word(0x080B0A09,0x0C0F0E0D,0x00030201,0x04070605);
-	&data_word(0x0C0F0E0D,0x00030201,0x04070605,0x080B0A09);
+$k_mc_forward=0xFF;	# mc_forward
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_mc_backward=0xc0;	# mc_backward
-	&data_word(0x02010003,0x06050407,0x0A09080B,0x0E0D0C0F);
-	&data_word(0x0E0D0C0F,0x02010003,0x06050407,0x0A09080B);
-	&data_word(0x0A09080B,0x0E0D0C0F,0x02010003,0x06050407);
-	&data_word(0x06050407,0x0A09080B,0x0E0D0C0F,0x02010003);
+$k_mc_backward=0xFF;	# mc_backward
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_sr=0x100;		# sr
-	&data_word(0x03020100,0x07060504,0x0B0A0908,0x0F0E0D0C);
-	&data_word(0x0F0A0500,0x030E0904,0x07020D08,0x0B06010C);
-	&data_word(0x0B020900,0x0F060D04,0x030A0108,0x070E050C);
-	&data_word(0x070A0D00,0x0B0E0104,0x0F020508,0x0306090C);
+$k_sr=0xFF;		# sr
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_rcon=0x140;		# rcon
-	&data_word(0xAF9DEEB6,0x1F8391B9,0x4D7C7D81,0x702A9808);
+$k_rcon=0xFF;		# rcon
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_s63=0x150;		# s63: all equal to 0x63 transformed
-	&data_word(0x5B5B5B5B,0x5B5B5B5B,0x5B5B5B5B,0x5B5B5B5B);
+$k_s63=0xFF;		# s63: all equal to 0xFF transformed
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_opt=0x160;		# output transform
-	&data_word(0xD6B66000,0xFF9F4929,0xDEBE6808,0xF7974121);
-	&data_word(0x50BCEC00,0x01EDBD51,0xB05C0CE0,0xE10D5DB1);
+$k_opt=0xFF;		# output transform
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_deskew=0x180;	# deskew tables: inverts the sbox's "skew"
-	&data_word(0x47A4E300,0x07E4A340,0x5DBEF91A,0x1DFEB95A);
-	&data_word(0x83EA6900,0x5F36B5DC,0xF49D1E77,0x2841C2AB);
+$k_deskew=0xFF;	# deskew tables: inverts the sbox's "skew"
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 ##
 ##  Decryption stuff
 ##  Key schedule constants
 ##
-$k_dksd=0x1a0;		# decryption key schedule: invskew x*D
-	&data_word(0xA3E44700,0xFEB91A5D,0x5A1DBEF9,0x0740E3A4);
-	&data_word(0xB5368300,0x41C277F4,0xAB289D1E,0x5FDC69EA);
-$k_dksb=0x1c0;		# decryption key schedule: invskew x*B
-	&data_word(0x8550D500,0x9A4FCA1F,0x1CC94C99,0x03D65386);
-	&data_word(0xB6FC4A00,0x115BEDA7,0x7E3482C8,0xD993256F);
-$k_dkse=0x1e0;		# decryption key schedule: invskew x*E + 0x63
-	&data_word(0x1FC9D600,0xD5031CCA,0x994F5086,0x53859A4C);
-	&data_word(0x4FDC7BE8,0xA2319605,0x20B31487,0xCD5EF96A);
-$k_dks9=0x200;		# decryption key schedule: invskew x*9
-	&data_word(0x7ED9A700,0xB6116FC8,0x82255BFC,0x4AED9334);
-	&data_word(0x27143300,0x45765162,0xE9DAFDCE,0x8BB89FAC);
+$k_dksd=0xFF;		# decryption key schedule: invskew x*D
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dksb=0xFF;		# decryption key schedule: invskew x*B
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dkse=0xFF;		# decryption key schedule: invskew x*E + 0xFF
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dks9=0xFF;		# decryption key schedule: invskew x*9
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
 ##
 ##  Decryption stuff
 ##  Round function constants
 ##
-$k_dipt=0x220;		# decryption input transform
-	&data_word(0x0B545F00,0x0F505B04,0x114E451A,0x154A411E);
-	&data_word(0x60056500,0x86E383E6,0xF491F194,0x12771772);
+$k_dipt=0xFF;		# decryption input transform
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 
-$k_dsb9=0x240;		# decryption sbox output *9*u, *9*t
-	&data_word(0x9A86D600,0x851C0353,0x4F994CC9,0xCAD51F50);
-	&data_word(0xECD74900,0xC03B1789,0xB2FBA565,0x725E2C9E);
-$k_dsbd=0x260;		# decryption sbox output *D*u, *D*t
-	&data_word(0xE6B1A200,0x7D57CCDF,0x882A4439,0xF56E9B13);
-	&data_word(0x24C6CB00,0x3CE2FAF7,0x15DEEFD3,0x2931180D);
-$k_dsbb=0x280;		# decryption sbox output *B*u, *B*t
-	&data_word(0x96B44200,0xD0226492,0xB0F2D404,0x602646F6);
-	&data_word(0xCD596700,0xC19498A6,0x3255AA6B,0xF3FF0C3E);
-$k_dsbe=0x2a0;		# decryption sbox output *E*u, *E*t
-	&data_word(0x26D4D000,0x46F29296,0x64B4F6B0,0x22426004);
-	&data_word(0xFFAAC100,0x0C55A6CD,0x98593E32,0x9467F36B);
-$k_dsbo=0x2c0;		# decryption sbox final output
-	&data_word(0x7EF94000,0x1387EA53,0xD4943E2D,0xC7AA6DB9);
-	&data_word(0x93441D00,0x12D7560F,0xD8C58E9C,0xCA4B8159);
+$k_dsb9=0xFF;		# decryption sbox output *9*u, *9*t
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dsbd=0xFF;		# decryption sbox output *D*u, *D*t
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dsbb=0xFF;		# decryption sbox output *B*u, *B*t
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dsbe=0xFF;		# decryption sbox output *E*u, *E*t
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+$k_dsbo=0xFF;		# decryption sbox final output
+	&data_word(0xFF,0xFF,0xFF,0xFF);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 &asciz	("Vector Permutation AES for x86/SSSE3, Mike Hamburg (Stanford University)");
 &align	(64);
 
@@ -217,7 +217,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&pxor	("xmm4","xmm5");		# 4 = sb1u + k
 	&movdqa	("xmm5",&QWP($k_sb2,$const));	# 4 : sb2u
 	&pxor	("xmm0","xmm4");		# 0 = A
-	&movdqa	("xmm1",&QWP(-0x40,$base,$magic));# .Lk_mc_forward[]
+	&movdqa	("xmm1",&QWP(-0xFF,$base,$magic));# .Lk_mc_forward[]
 	&pshufb	("xmm5","xmm2");		# 4 = sb2u
 	&movdqa	("xmm2",&QWP($k_sb2+16,$const));# 2 : sb2t
 	&movdqa	("xmm4",&QWP(0,$base,$magic));	# .Lk_mc_backward[]
@@ -231,7 +231,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&add	($magic,16);			# next mc
 	&pxor	("xmm3","xmm0");		# 3 = 2A+B+D
 	&pshufb	("xmm0","xmm1");		# 0 = 2B+C
-	&and	($magic,0x30);			# ... mod 4
+	&and	($magic,0xFF);			# ... mod 4
 	&sub	($round,1);			# nr--
 	&pxor	("xmm0","xmm3");		# 0 = 2A+3B+C+D
 
@@ -265,7 +265,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&pshufb	("xmm4","xmm2");		# 4 = sbou
 	&pxor	("xmm4","xmm5");		# 4 = sb1u + k
 	&pshufb	("xmm0","xmm3");		# 0 = sb1t
-	&movdqa	("xmm1",&QWP(0x40,$base,$magic));# .Lk_sr[]
+	&movdqa	("xmm1",&QWP(0xFF,$base,$magic));# .Lk_sr[]
 	&pxor	("xmm0","xmm4");		# 0 = A
 	&pshufb	("xmm0","xmm1");
 	&ret	();
@@ -289,9 +289,9 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&pand	("xmm0","xmm6");
 	&pshufb	("xmm2","xmm0");
 	&movdqa	("xmm0",&QWP($k_dipt-$k_dsbd+16,$base));
-	&xor	($magic,0x30);
+	&xor	($magic,0xFF);
 	&pshufb	("xmm0","xmm1");
-	&and	($magic,0x30);
+	&and	($magic,0xFF);
 	&pxor	("xmm2","xmm5");
 	&movdqa	("xmm5",&QWP($k_mc_forward+48,$const));
 	&pxor	("xmm0","xmm2");
@@ -303,30 +303,30 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 ##
 ##  Inverse mix columns
 ##
-	&movdqa	("xmm4",&QWP(-0x20,$base));	# 4 : sb9u
-	&movdqa	("xmm1",&QWP(-0x10,$base));	# 0 : sb9t
+	&movdqa	("xmm4",&QWP(-0xFF,$base));	# 4 : sb9u
+	&movdqa	("xmm1",&QWP(-0xFF,$base));	# 0 : sb9t
 	&pshufb	("xmm4","xmm2");		# 4 = sb9u
 	&pshufb	("xmm1","xmm3");		# 0 = sb9t
 	&pxor	("xmm0","xmm4");
 	&movdqa	("xmm4",&QWP(0,$base));		# 4 : sbdu
 	&pxor	("xmm0","xmm1");		# 0 = ch
-	&movdqa	("xmm1",&QWP(0x10,$base));	# 0 : sbdt
+	&movdqa	("xmm1",&QWP(0xFF,$base));	# 0 : sbdt
 
 	&pshufb	("xmm4","xmm2");		# 4 = sbdu
 	&pshufb	("xmm0","xmm5");		# MC ch
 	&pshufb	("xmm1","xmm3");		# 0 = sbdt
 	&pxor	("xmm0","xmm4");		# 4 = ch
-	&movdqa	("xmm4",&QWP(0x20,$base));	# 4 : sbbu
+	&movdqa	("xmm4",&QWP(0xFF,$base));	# 4 : sbbu
 	&pxor	("xmm0","xmm1");		# 0 = ch
-	&movdqa	("xmm1",&QWP(0x30,$base));	# 0 : sbbt
+	&movdqa	("xmm1",&QWP(0xFF,$base));	# 0 : sbbt
 
 	&pshufb	("xmm4","xmm2");		# 4 = sbbu
 	&pshufb	("xmm0","xmm5");		# MC ch
 	&pshufb	("xmm1","xmm3");		# 0 = sbbt
 	&pxor	("xmm0","xmm4");		# 4 = ch
-	&movdqa	("xmm4",&QWP(0x40,$base));	# 4 : sbeu
+	&movdqa	("xmm4",&QWP(0xFF,$base));	# 4 : sbeu
 	&pxor	("xmm0","xmm1");		# 0 = ch
-	&movdqa	("xmm1",&QWP(0x50,$base));	# 0 : sbet
+	&movdqa	("xmm1",&QWP(0xFF,$base));	# 0 : sbet
 
 	&pshufb	("xmm4","xmm2");		# 4 = sbeu
 	&pshufb	("xmm0","xmm5");		# MC ch
@@ -362,10 +362,10 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&jnz	(&label("dec_loop"));
 
 	# middle of last round
-	&movdqa	("xmm4",&QWP(0x60,$base));	# 3 : sbou
+	&movdqa	("xmm4",&QWP(0xFF,$base));	# 3 : sbou
 	&pshufb	("xmm4","xmm2");		# 4 = sbou
 	&pxor	("xmm4","xmm0");		# 4 = sb1u + k
-	&movdqa	("xmm0",&QWP(0x70,$base));	# 0 : sbot
+	&movdqa	("xmm0",&QWP(0xFF,$base));	# 0 : sbot
 	&movdqa	("xmm2",&QWP(0,$magic));
 	&pshufb	("xmm0","xmm3");		# 0 = sb1t
 	&pxor	("xmm0","xmm4");		# 0 = A
@@ -402,7 +402,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&movdqa	("xmm1",&QWP($k_sr,$const,$magic));
 	&pshufb	("xmm3","xmm1");
 	&movdqu	(&QWP(0,$key),"xmm3");
-	&xor	($magic,0x30);
+	&xor	($magic,0xFF);
 
 &set_label("schedule_go");
 	&cmp	($round,192);
@@ -553,8 +553,8 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 ##    %xmm0: b+c+d  b+c  b  a
 ##
 &function_begin_B("_vpaes_schedule_192_smear");
-	&pshufd	("xmm1","xmm6",0x80);		# d c 0 0 -> c 0 0 0
-	&pshufd	("xmm0","xmm7",0xFE);		# b a _ _ -> b b b a
+	&pshufd	("xmm1","xmm6",0xFF);		# d c 0 0 -> c 0 0 0
+	&pshufd	("xmm0","xmm7",0xFF);		# b a _ _ -> b b b a
 	&pxor	("xmm6","xmm1");		# -> c+d c 0 0
 	&pxor	("xmm1","xmm1");
 	&pxor	("xmm6","xmm0");		# -> b+c+d b+c b a
@@ -670,12 +670,12 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 ##  to our version.
 ##
 ##  On encrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by circulant 0,1,1,1
 ##    apply shiftrows transform
 ##
 ##  On decrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by "inverse mixcolumns" circulant E,B,D,9
 ##    deskew
 ##    apply shiftrows transform
@@ -715,31 +715,31 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 
 	&movdqa	("xmm2",&QWP(0,$inp));
 	&pshufb	("xmm2","xmm4");
-	&movdqa	("xmm3",&QWP(0x10,$inp));
+	&movdqa	("xmm3",&QWP(0xFF,$inp));
 	&pshufb	("xmm3","xmm1");
 	&pxor	("xmm3","xmm2");
 	&pshufb	("xmm3","xmm5");
 
-	&movdqa	("xmm2",&QWP(0x20,$inp));
+	&movdqa	("xmm2",&QWP(0xFF,$inp));
 	&pshufb	("xmm2","xmm4");
 	&pxor	("xmm2","xmm3");
-	&movdqa	("xmm3",&QWP(0x30,$inp));
+	&movdqa	("xmm3",&QWP(0xFF,$inp));
 	&pshufb	("xmm3","xmm1");
 	&pxor	("xmm3","xmm2");
 	&pshufb	("xmm3","xmm5");
 
-	&movdqa	("xmm2",&QWP(0x40,$inp));
+	&movdqa	("xmm2",&QWP(0xFF,$inp));
 	&pshufb	("xmm2","xmm4");
 	&pxor	("xmm2","xmm3");
-	&movdqa	("xmm3",&QWP(0x50,$inp));
+	&movdqa	("xmm3",&QWP(0xFF,$inp));
 	&pshufb	("xmm3","xmm1");
 	&pxor	("xmm3","xmm2");
 	&pshufb	("xmm3","xmm5");
 
-	&movdqa	("xmm2",&QWP(0x60,$inp));
+	&movdqa	("xmm2",&QWP(0xFF,$inp));
 	&pshufb	("xmm2","xmm4");
 	&pxor	("xmm2","xmm3");
-	&movdqa	("xmm3",&QWP(0x70,$inp));
+	&movdqa	("xmm3",&QWP(0xFF,$inp));
 	&pshufb	("xmm3","xmm1");
 	&pxor	("xmm3","xmm2");
 
@@ -749,7 +749,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&movdqa	("xmm1",&QWP($k_sr,$const,$magic));
 	&pshufb	("xmm3","xmm1");
 	&add	($magic,-16);
-	&and	($magic,0x30);
+	&and	($magic,0xFF);
 	&movdqu	(&QWP(0,$key),"xmm3");
 	&ret	();
 &function_end_B("_vpaes_schedule_mangle");
@@ -770,10 +770,10 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&shr	($base,5);
 	&add	($base,5);
 	&mov	(&DWP(240,$key),$base);		# AES_KEY->rounds = nbits/32+5;
-	&mov	($magic,0x30);
+	&mov	($magic,0xFF);
 	&mov	($out,0);
 
-	&lea	($const,&DWP(&label("_vpaes_consts")."+0x30-".&label("pic_point")));
+	&lea	($const,&DWP(&label("_vpaes_consts")."+0xFF-".&label("pic_point")));
 	&call	("_vpaes_schedule_core");
 &set_label("pic_point");
 
@@ -803,7 +803,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&and	($magic,32);
 	&xor	($magic,32);			# nbist==192?0:32;
 
-	&lea	($const,&DWP(&label("_vpaes_consts")."+0x30-".&label("pic_point")));
+	&lea	($const,&DWP(&label("_vpaes_consts")."+0xFF-".&label("pic_point")));
 	&call	("_vpaes_schedule_core");
 &set_label("pic_point");
 
@@ -812,7 +812,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 &function_end("${PREFIX}_set_decrypt_key");
 
 &function_begin("${PREFIX}_encrypt");
-	&lea	($const,&DWP(&label("_vpaes_consts")."+0x30-".&label("pic_point")));
+	&lea	($const,&DWP(&label("_vpaes_consts")."+0xFF-".&label("pic_point")));
 	&call	("_vpaes_preheat");
 &set_label("pic_point");
 	&mov	($inp,&wparam(0));		# inp
@@ -831,7 +831,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 &function_end("${PREFIX}_encrypt");
 
 &function_begin("${PREFIX}_decrypt");
-	&lea	($const,&DWP(&label("_vpaes_consts")."+0x30-".&label("pic_point")));
+	&lea	($const,&DWP(&label("_vpaes_consts")."+0xFF-".&label("pic_point")));
 	&call	("_vpaes_preheat");
 &set_label("pic_point");
 	&mov	($inp,&wparam(0));		# inp
@@ -870,7 +870,7 @@ $k_dsbo=0x2c0;		# decryption sbox final output
 	&mov	(&DWP(8,"esp"),$const);		# save ivp
 	&mov	($out,$round);			# $out works as $len
 
-	&lea	($const,&DWP(&label("_vpaes_consts")."+0x30-".&label("pic_point")));
+	&lea	($const,&DWP(&label("_vpaes_consts")."+0xFF-".&label("pic_point")));
 	&call	("_vpaes_preheat");
 &set_label("pic_point");
 	&cmp	($magic,0);

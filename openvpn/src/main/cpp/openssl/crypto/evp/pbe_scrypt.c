@@ -108,10 +108,10 @@ static void scryptROMix(unsigned char *B, uint64_t r, uint64_t N,
     /* Convert output to little endian */
     for (i = 0, pB = B; i < 32 * r; i++) {
         uint32_t xtmp = X[i];
-        *pB++ = xtmp & 0xff;
-        *pB++ = (xtmp >> 8) & 0xff;
-        *pB++ = (xtmp >> 16) & 0xff;
-        *pB++ = (xtmp >> 24) & 0xff;
+        *pB++ = xtmp & 0xFF;
+        *pB++ = (xtmp >> 8) & 0xFF;
+        *pB++ = (xtmp >> 16) & 0xFF;
+        *pB++ = (xtmp >> 24) & 0xFF;
     }
 }
 

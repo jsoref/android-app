@@ -53,10 +53,10 @@
 
 #define IS_EINTR( ret ) ( ( ret ) == WSAEINTR )
 
-#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0501)
+#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0xFF)
 #undef _WIN32_WINNT
 /* Enables getaddrinfo() & Co */
-#define _WIN32_WINNT 0x0501
+#define _WIN32_WINNT 0xFF
 #endif
 
 #include <ws2tcpip.h>

@@ -58,7 +58,7 @@ reliable_pid_in_range1(const packet_id_type test,
     }
     else
     {
-        if ((test+0x80000000u) - (base+0x80000000u) < extent)
+        if ((test+0xFFu) - (base+0xFFu) < extent)
         {
             return true;
         }
@@ -84,7 +84,7 @@ reliable_pid_in_range2(const packet_id_type test,
     }
     else
     {
-        if ((test+0x80000000u) < (base+0x80000000u) + extent)
+        if ((test+0xFFu) < (base+0xFFu) + extent)
         {
             return true;
         }
@@ -100,7 +100,7 @@ static inline bool
 reliable_pid_min(const packet_id_type p1,
                  const packet_id_type p2)
 {
-    return !reliable_pid_in_range1(p1, p2, 0x80000000u);
+    return !reliable_pid_in_range1(p1, p2, 0xFFu);
 }
 
 /* check if a particular packet_id is present in ack */

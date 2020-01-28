@@ -142,7 +142,7 @@ namespace openvpn {
     if (bp->size() >= 3)
       {
 	const unsigned char *data = bp->c_data();
-	if (data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF)
+	if (data[0] == 0xFF && data[1] == 0xFF && data[2] == 0xFF)
 	  bp->advance(3);
       }
 

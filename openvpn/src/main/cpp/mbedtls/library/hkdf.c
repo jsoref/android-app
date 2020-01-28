@@ -142,7 +142,7 @@ int mbedtls_hkdf_expand( const mbedtls_md_info_t *md, const unsigned char *prk,
     for( i = 1; i <= n; i++ )
     {
         size_t num_to_copy;
-        unsigned char c = i & 0xff;
+        unsigned char c = i & 0xFF;
 
         ret = mbedtls_md_hmac_starts( &ctx, prk, prk_len );
         if( ret != 0 )

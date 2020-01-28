@@ -393,7 +393,7 @@ $data=<<EOF;
 	$ST		r10,`7*$BNSZ`(r3)	#r[7]=c2
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	.bn_sqr_comba4,.-.bn_sqr_comba4
 
@@ -821,7 +821,7 @@ $data=<<EOF;
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	.bn_sqr_comba8,.-.bn_sqr_comba8
 
@@ -975,7 +975,7 @@ $data=<<EOF;
 	$ST	r11,`7*$BNSZ`(r3)	#r[7]=c2
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.bn_mul_comba4,.-.bn_mul_comba4
 
@@ -1514,7 +1514,7 @@ $data=<<EOF;
 	$ST	r10,`15*$BNSZ`(r3)	#r[15]=c1;
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.bn_mul_comba8,.-.bn_mul_comba8
 
@@ -1565,7 +1565,7 @@ Lppcasm_sub_adios:
 	andi.	r3,r3,1         # keep only last bit.
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,4,0
+	.byte	0,12,0xFF,0,0,0,4,0
 	.long	0
 .size	.bn_sub_words,.-.bn_sub_words
 
@@ -1611,7 +1611,7 @@ Lppcasm_add_adios:
 	addze	r3,r0			#return carry bit.
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,4,0
+	.byte	0,12,0xFF,0,0,0,4,0
 	.long	0
 .size	.bn_add_words,.-.bn_add_words
 
@@ -1727,7 +1727,7 @@ Lppcasm_div9:
 	or	r3,r8,r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.bn_div_words,.-.bn_div_words
 
@@ -1769,7 +1769,7 @@ Lppcasm_sqr_mainloop:
 Lppcasm_sqr_adios:
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.bn_sqr_words,.-.bn_sqr_words
 
@@ -1833,7 +1833,7 @@ Lppcasm_mw_LOOP:
 	bdnz	Lppcasm_mw_LOOP
 
 Lppcasm_mw_REM:
-	andi.	r5,r5,0x3
+	andi.	r5,r5,0xFF
 	beq	Lppcasm_mw_OVER
 					#mul(rp[0],ap[0],w,c1);
 	$LD	r8,`0*$BNSZ`(r4)
@@ -1875,7 +1875,7 @@ Lppcasm_mw_OVER:
 	addi	r3,r12,0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,4,0
+	.byte	0,12,0xFF,0,0,0,4,0
 	.long	0
 .size	.bn_mul_words,.-.bn_mul_words
 
@@ -1957,7 +1957,7 @@ Lppcasm_maw_mainloop:
 	bdnz	Lppcasm_maw_mainloop
 
 Lppcasm_maw_leftover:
-	andi.	r5,r5,0x3
+	andi.	r5,r5,0xFF
 	beq	Lppcasm_maw_adios
 	addi	r3,r3,-$BNSZ
 	addi	r4,r4,-$BNSZ
@@ -2001,7 +2001,7 @@ Lppcasm_maw_adios:
 	addi	r3,r12,0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,4,0
+	.byte	0,12,0xFF,0,0,0,4,0
 	.long	0
 .size	.bn_mul_add_words,.-.bn_mul_add_words
 	.align	4

@@ -176,7 +176,7 @@ namespace openvpn {
 
       const char* key_name = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
       const char* delete_value_str = "DeleteValue";
-      const DWORD delete_value_dword = 0xCAFEBABE;
+      const DWORD delete_value_dword = 0xFF;
     };
   }
 }

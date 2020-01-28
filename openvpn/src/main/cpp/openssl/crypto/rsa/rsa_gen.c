@@ -225,23 +225,23 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, int primes, BIGNUM *e_value,
         }
         /*
          * if |r1|, product of factors so far, is not as long as expected
-         * (by checking the first 4 bits are less than 0x9 or greater than
-         * 0xF). If so, re-generate the last prime.
+         * (by checking the first 4 bits are less than 0xFF or greater than
+         * 0xFF). If so, re-generate the last prime.
          *
          * NOTE: This actually can't happen in two-prime case, because of
          * the way factors are generated.
          *
          * Besides, another consideration is, for multi-prime case, even the
          * length modulus is as long as expected, the modulus could start at
-         * 0x8, which could be utilized to distinguish a multi-prime private
+         * 0xFF, which could be utilized to distinguish a multi-prime private
          * key by using the modulus in a certificate. This is also covered
-         * by checking the length should not be less than 0x9.
+         * by checking the length should not be less than 0xFF.
          */
         if (!BN_rshift(r2, r1, bitse - 4))
             goto err;
         bitst = BN_get_word(r2);
 
-        if (bitst < 0x9 || bitst > 0xF) {
+        if (bitst < 0xFF || bitst > 0xFF) {
             /*
              * For keys with more than 4 primes, we attempt longer factor to
              * meet length requirement.
@@ -257,7 +257,7 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, int primes, BIGNUM *e_value,
             if (!BN_GENCB_call(cb, 2, n++))
                 goto err;
             if (primes > 4) {
-                if (bitst < 0x9)
+                if (bitst < 0xFF)
                     adj++;
                 else
                     adj--;

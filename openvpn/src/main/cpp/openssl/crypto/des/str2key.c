@@ -24,9 +24,9 @@ void DES_string_to_key(const char *str, DES_cblock *key)
             (*key)[i % 8] ^= (j << 1);
         else {
             /* Reverse the bit order 05/05/92 eay */
-            j = ((j << 4) & 0xf0) | ((j >> 4) & 0x0f);
-            j = ((j << 2) & 0xcc) | ((j >> 2) & 0x33);
-            j = ((j << 1) & 0xaa) | ((j >> 1) & 0x55);
+            j = ((j << 4) & 0xFF) | ((j >> 4) & 0xFF);
+            j = ((j << 2) & 0xFF) | ((j >> 2) & 0xFF);
+            j = ((j << 1) & 0xFF) | ((j >> 1) & 0xFF);
             (*key)[7 - (i % 8)] ^= j;
         }
     }
@@ -54,9 +54,9 @@ void DES_string_to_2keys(const char *str, DES_cblock *key1, DES_cblock *key2)
             else
                 (*key2)[i % 8] ^= (j << 1);
         } else {
-            j = ((j << 4) & 0xf0) | ((j >> 4) & 0x0f);
-            j = ((j << 2) & 0xcc) | ((j >> 2) & 0x33);
-            j = ((j << 1) & 0xaa) | ((j >> 1) & 0x55);
+            j = ((j << 4) & 0xFF) | ((j >> 4) & 0xFF);
+            j = ((j << 2) & 0xFF) | ((j >> 2) & 0xFF);
+            j = ((j << 1) & 0xFF) | ((j >> 1) & 0xFF);
             if ((i % 16) < 8)
                 (*key1)[7 - (i % 8)] ^= j;
             else

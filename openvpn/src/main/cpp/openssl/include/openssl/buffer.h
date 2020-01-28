@@ -42,7 +42,7 @@ struct buf_mem_st {
     unsigned long flags;
 };
 
-# define BUF_MEM_FLAG_SECURE  0x01
+# define BUF_MEM_FLAG_SECURE  0xFF
 
 BUF_MEM *BUF_MEM_new(void);
 BUF_MEM *BUF_MEM_new_ex(unsigned long flags);

@@ -61,10 +61,10 @@
                                 } \
                         }
 
-# define l2c(l,c)        (*((c)++)=(unsigned char)(((l)    )&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>24)&0xff))
+# define l2c(l,c)        (*((c)++)=(unsigned char)(((l)    )&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>24)&0xFF))
 
 # define n2l(c,l)        (l =((unsigned long)(*((c)++)))<<24, \
                          l|=((unsigned long)(*((c)++)))<<16, \
@@ -81,60 +81,60 @@
                          l|=((uint64_t)(*((c)++))))
 
 
-# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8)&0xff), \
-                         *((c)++)=(unsigned char)(((l)    )&0xff))
+# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)    )&0xFF))
 
-# define l2n6(l,c)       (*((c)++)=(unsigned char)(((l)>>40)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>32)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>24)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8)&0xff), \
-                         *((c)++)=(unsigned char)(((l)    )&0xff))
+# define l2n6(l,c)       (*((c)++)=(unsigned char)(((l)>>40)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>32)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>24)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)    )&0xFF))
 
-# define l2n8(l,c)       (*((c)++)=(unsigned char)(((l)>>56)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>48)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>40)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>32)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>24)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8)&0xff), \
-                         *((c)++)=(unsigned char)(((l)    )&0xff))
+# define l2n8(l,c)       (*((c)++)=(unsigned char)(((l)>>56)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>48)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>40)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>32)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>24)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)    )&0xFF))
 
 /* NOTE - c is not incremented as per l2c */
 # define l2cn(l1,l2,c,n) { \
                         c+=n; \
                         switch (n) { \
-                        case 8: *(--(c))=(unsigned char)(((l2)>>24)&0xff); \
-                        case 7: *(--(c))=(unsigned char)(((l2)>>16)&0xff); \
-                        case 6: *(--(c))=(unsigned char)(((l2)>> 8)&0xff); \
-                        case 5: *(--(c))=(unsigned char)(((l2)    )&0xff); \
-                        case 4: *(--(c))=(unsigned char)(((l1)>>24)&0xff); \
-                        case 3: *(--(c))=(unsigned char)(((l1)>>16)&0xff); \
-                        case 2: *(--(c))=(unsigned char)(((l1)>> 8)&0xff); \
-                        case 1: *(--(c))=(unsigned char)(((l1)    )&0xff); \
+                        case 8: *(--(c))=(unsigned char)(((l2)>>24)&0xFF); \
+                        case 7: *(--(c))=(unsigned char)(((l2)>>16)&0xFF); \
+                        case 6: *(--(c))=(unsigned char)(((l2)>> 8)&0xFF); \
+                        case 5: *(--(c))=(unsigned char)(((l2)    )&0xFF); \
+                        case 4: *(--(c))=(unsigned char)(((l1)>>24)&0xFF); \
+                        case 3: *(--(c))=(unsigned char)(((l1)>>16)&0xFF); \
+                        case 2: *(--(c))=(unsigned char)(((l1)>> 8)&0xFF); \
+                        case 1: *(--(c))=(unsigned char)(((l1)    )&0xFF); \
                                 } \
                         }
 
 # define n2s(c,s)        ((s=(((unsigned int)((c)[0]))<< 8)| \
                              (((unsigned int)((c)[1]))    )),(c)+=2)
-# define s2n(s,c)        (((c)[0]=(unsigned char)(((s)>> 8)&0xff), \
-                           (c)[1]=(unsigned char)(((s)    )&0xff)),(c)+=2)
+# define s2n(s,c)        (((c)[0]=(unsigned char)(((s)>> 8)&0xFF), \
+                           (c)[1]=(unsigned char)(((s)    )&0xFF)),(c)+=2)
 
 # define n2l3(c,l)       ((l =(((unsigned long)((c)[0]))<<16)| \
                               (((unsigned long)((c)[1]))<< 8)| \
                               (((unsigned long)((c)[2]))    )),(c)+=3)
 
-# define l2n3(l,c)       (((c)[0]=(unsigned char)(((l)>>16)&0xff), \
-                           (c)[1]=(unsigned char)(((l)>> 8)&0xff), \
-                           (c)[2]=(unsigned char)(((l)    )&0xff)),(c)+=3)
+# define l2n3(l,c)       (((c)[0]=(unsigned char)(((l)>>16)&0xFF), \
+                           (c)[1]=(unsigned char)(((l)>> 8)&0xFF), \
+                           (c)[2]=(unsigned char)(((l)    )&0xFF)),(c)+=3)
 
 /*
  * DTLS version numbers are strange because they're inverted. Except for
  * DTLS1_BAD_VER, which should be considered "lower" than the rest.
  */
-# define dtls_ver_ordinal(v1) (((v1) == DTLS1_BAD_VER) ? 0xff00 : (v1))
+# define dtls_ver_ordinal(v1) (((v1) == DTLS1_BAD_VER) ? 0xFF : (v1))
 # define DTLS_VERSION_GT(v1, v2) (dtls_ver_ordinal(v1) < dtls_ver_ordinal(v2))
 # define DTLS_VERSION_GE(v1, v2) (dtls_ver_ordinal(v1) <= dtls_ver_ordinal(v2))
 # define DTLS_VERSION_LT(v1, v2) (dtls_ver_ordinal(v1) > dtls_ver_ordinal(v2))
@@ -157,79 +157,79 @@
 
 /* Bits for algorithm_mkey (key exchange algorithm) */
 /* RSA key exchange */
-# define SSL_kRSA                0x00000001U
+# define SSL_kRSA                0xFFU
 /* tmp DH key no DH cert */
-# define SSL_kDHE                0x00000002U
+# define SSL_kDHE                0xFFU
 /* synonym */
 # define SSL_kEDH                SSL_kDHE
 /* ephemeral ECDH */
-# define SSL_kECDHE              0x00000004U
+# define SSL_kECDHE              0xFFU
 /* synonym */
 # define SSL_kEECDH              SSL_kECDHE
 /* PSK */
-# define SSL_kPSK                0x00000008U
+# define SSL_kPSK                0xFFU
 /* GOST key exchange */
-# define SSL_kGOST               0x00000010U
+# define SSL_kGOST               0xFFU
 /* SRP */
-# define SSL_kSRP                0x00000020U
+# define SSL_kSRP                0xFFU
 
-# define SSL_kRSAPSK             0x00000040U
-# define SSL_kECDHEPSK           0x00000080U
-# define SSL_kDHEPSK             0x00000100U
+# define SSL_kRSAPSK             0xFFU
+# define SSL_kECDHEPSK           0xFFU
+# define SSL_kDHEPSK             0xFFU
 
 /* all PSK */
 
 # define SSL_PSK     (SSL_kPSK | SSL_kRSAPSK | SSL_kECDHEPSK | SSL_kDHEPSK)
 
 /* Any appropriate key exchange algorithm (for TLS 1.3 ciphersuites) */
-# define SSL_kANY                0x00000000U
+# define SSL_kANY                0xFFU
 
 /* Bits for algorithm_auth (server authentication) */
 /* RSA auth */
-# define SSL_aRSA                0x00000001U
+# define SSL_aRSA                0xFFU
 /* DSS auth */
-# define SSL_aDSS                0x00000002U
+# define SSL_aDSS                0xFFU
 /* no auth (i.e. use ADH or AECDH) */
-# define SSL_aNULL               0x00000004U
+# define SSL_aNULL               0xFFU
 /* ECDSA auth*/
-# define SSL_aECDSA              0x00000008U
+# define SSL_aECDSA              0xFFU
 /* PSK auth */
-# define SSL_aPSK                0x00000010U
+# define SSL_aPSK                0xFFU
 /* GOST R 34.10-2001 signature auth */
-# define SSL_aGOST01             0x00000020U
+# define SSL_aGOST01             0xFFU
 /* SRP auth */
-# define SSL_aSRP                0x00000040U
+# define SSL_aSRP                0xFFU
 /* GOST R 34.10-2012 signature auth */
-# define SSL_aGOST12             0x00000080U
+# define SSL_aGOST12             0xFFU
 /* Any appropriate signature auth (for TLS 1.3 ciphersuites) */
-# define SSL_aANY                0x00000000U
+# define SSL_aANY                0xFFU
 /* All bits requiring a certificate */
 #define SSL_aCERT \
     (SSL_aRSA | SSL_aDSS | SSL_aECDSA | SSL_aGOST01 | SSL_aGOST12)
 
 /* Bits for algorithm_enc (symmetric encryption) */
-# define SSL_DES                 0x00000001U
-# define SSL_3DES                0x00000002U
-# define SSL_RC4                 0x00000004U
-# define SSL_RC2                 0x00000008U
-# define SSL_IDEA                0x00000010U
-# define SSL_eNULL               0x00000020U
-# define SSL_AES128              0x00000040U
-# define SSL_AES256              0x00000080U
-# define SSL_CAMELLIA128         0x00000100U
-# define SSL_CAMELLIA256         0x00000200U
-# define SSL_eGOST2814789CNT     0x00000400U
-# define SSL_SEED                0x00000800U
-# define SSL_AES128GCM           0x00001000U
-# define SSL_AES256GCM           0x00002000U
-# define SSL_AES128CCM           0x00004000U
-# define SSL_AES256CCM           0x00008000U
-# define SSL_AES128CCM8          0x00010000U
-# define SSL_AES256CCM8          0x00020000U
-# define SSL_eGOST2814789CNT12   0x00040000U
-# define SSL_CHACHA20POLY1305    0x00080000U
-# define SSL_ARIA128GCM          0x00100000U
-# define SSL_ARIA256GCM          0x00200000U
+# define SSL_DES                 0xFFU
+# define SSL_3DES                0xFFU
+# define SSL_RC4                 0xFFU
+# define SSL_RC2                 0xFFU
+# define SSL_IDEA                0xFFU
+# define SSL_eNULL               0xFFU
+# define SSL_AES128              0xFFU
+# define SSL_AES256              0xFFU
+# define SSL_CAMELLIA128         0xFFU
+# define SSL_CAMELLIA256         0xFFU
+# define SSL_eGOST2814789CNT     0xFFU
+# define SSL_SEED                0xFFU
+# define SSL_AES128GCM           0xFFU
+# define SSL_AES256GCM           0xFFU
+# define SSL_AES128CCM           0xFFU
+# define SSL_AES256CCM           0xFFU
+# define SSL_AES128CCM8          0xFFU
+# define SSL_AES256CCM8          0xFFU
+# define SSL_eGOST2814789CNT12   0xFFU
+# define SSL_CHACHA20POLY1305    0xFFU
+# define SSL_ARIA128GCM          0xFFU
+# define SSL_ARIA256GCM          0xFFU
 
 # define SSL_AESGCM              (SSL_AES128GCM | SSL_AES256GCM)
 # define SSL_AESCCM              (SSL_AES128CCM | SSL_AES256CCM | SSL_AES128CCM8 | SSL_AES256CCM8)
@@ -241,17 +241,17 @@
 
 /* Bits for algorithm_mac (symmetric authentication) */
 
-# define SSL_MD5                 0x00000001U
-# define SSL_SHA1                0x00000002U
-# define SSL_GOST94      0x00000004U
-# define SSL_GOST89MAC   0x00000008U
-# define SSL_SHA256              0x00000010U
-# define SSL_SHA384              0x00000020U
+# define SSL_MD5                 0xFFU
+# define SSL_SHA1                0xFFU
+# define SSL_GOST94      0xFFU
+# define SSL_GOST89MAC   0xFFU
+# define SSL_SHA256              0xFFU
+# define SSL_SHA384              0xFFU
 /* Not a real MAC, just an indication it is part of cipher */
-# define SSL_AEAD                0x00000040U
-# define SSL_GOST12_256          0x00000080U
-# define SSL_GOST89MAC12         0x00000100U
-# define SSL_GOST12_512          0x00000200U
+# define SSL_AEAD                0xFFU
+# define SSL_GOST12_256          0xFFU
+# define SSL_GOST89MAC12         0xFFU
+# define SSL_GOST12_512          0xFFU
 
 /*
  * When adding new digest in the ssl_ciph.c and increment SSL_MD_NUM_IDX make
@@ -298,22 +298,22 @@
  * Stream MAC for GOST ciphersuites from cryptopro draft (currently this also
  * goes into algorithm2)
  */
-# define TLS1_STREAM_MAC 0x10000
+# define TLS1_STREAM_MAC 0xFF
 
-# define SSL_STRONG_MASK         0x0000001FU
+# define SSL_STRONG_MASK         0xFFU
 # define SSL_DEFAULT_MASK        0X00000020U
 
-# define SSL_STRONG_NONE         0x00000001U
-# define SSL_LOW                 0x00000002U
-# define SSL_MEDIUM              0x00000004U
-# define SSL_HIGH                0x00000008U
-# define SSL_FIPS                0x00000010U
-# define SSL_NOT_DEFAULT         0x00000020U
+# define SSL_STRONG_NONE         0xFFU
+# define SSL_LOW                 0xFFU
+# define SSL_MEDIUM              0xFFU
+# define SSL_HIGH                0xFFU
+# define SSL_FIPS                0xFFU
+# define SSL_NOT_DEFAULT         0xFFU
 
 /* we have used 0000003f - 26 bits left to go */
 
 /* Flag used on OpenSSL ciphersuite ids to indicate they are for SSLv3+ */
-# define SSL3_CK_CIPHERSUITE_FLAG                0x03000000
+# define SSL3_CK_CIPHERSUITE_FLAG                0xFF
 
 /* Check if an SSL structure is using DTLS */
 # define SSL_IS_DTLS(s)  (s->method->ssl3_enc->enc_flags & SSL_ENC_FLAG_DTLS)
@@ -598,7 +598,7 @@ struct ssl_session_st {
 };
 
 /* Extended master secret support */
-# define SSL_SESS_FLAG_EXTMS             0x1
+# define SSL_SESS_FLAG_EXTMS             0xFF
 
 # ifndef OPENSSL_NO_SRP
 
@@ -1117,7 +1117,7 @@ struct ssl_st {
     int new_session;
     /* don't send shutdown packets */
     int quiet_shutdown;
-    /* we have shut things down, 0x01 sent, 0x02 for received */
+    /* we have shut things down, 0xFF sent, 0xFF for received */
     int shutdown;
     /* where we are */
     OSSL_STATEM statem;
@@ -1497,10 +1497,10 @@ typedef struct tls_group_info_st {
 } TLS_GROUP_INFO;
 
 /* flags values */
-# define TLS_CURVE_TYPE          0x3 /* Mask for group type */
-# define TLS_CURVE_PRIME         0x0
-# define TLS_CURVE_CHAR2         0x1
-# define TLS_CURVE_CUSTOM        0x2
+# define TLS_CURVE_TYPE          0xFF /* Mask for group type */
+# define TLS_CURVE_PRIME         0xFF
+# define TLS_CURVE_CHAR2         0xFF
+# define TLS_CURVE_CUSTOM        0xFF
 
 typedef struct cert_pkey_st CERT_PKEY;
 
@@ -1849,12 +1849,12 @@ typedef struct {
  * Indicates an extension has been received. Used to check for unsolicited or
  * duplicate extensions.
  */
-# define SSL_EXT_FLAG_RECEIVED   0x1
+# define SSL_EXT_FLAG_RECEIVED   0xFF
 /*
  * Indicates an extension has been sent: used to enable sending of
  * corresponding ServerHello extension.
  */
-# define SSL_EXT_FLAG_SENT       0x2
+# define SSL_EXT_FLAG_SENT       0xFF
 
 typedef struct {
     custom_ext_method *meths;
@@ -1977,18 +1977,18 @@ typedef struct ssl3_enc_method {
 /* Values for enc_flags */
 
 /* Uses explicit IV for CBC mode */
-# define SSL_ENC_FLAG_EXPLICIT_IV        0x1
+# define SSL_ENC_FLAG_EXPLICIT_IV        0xFF
 /* Uses signature algorithms extension */
-# define SSL_ENC_FLAG_SIGALGS            0x2
+# define SSL_ENC_FLAG_SIGALGS            0xFF
 /* Uses SHA256 default PRF */
-# define SSL_ENC_FLAG_SHA256_PRF         0x4
+# define SSL_ENC_FLAG_SHA256_PRF         0xFF
 /* Is DTLS */
-# define SSL_ENC_FLAG_DTLS               0x8
+# define SSL_ENC_FLAG_DTLS               0xFF
 /*
  * Allow TLS 1.2 ciphersuites: applies to DTLS 1.2 as well as TLS 1.2: may
  * apply to others in future.
  */
-# define SSL_ENC_FLAG_TLS1_2_CIPHERS     0x10
+# define SSL_ENC_FLAG_TLS1_2_CIPHERS     0xFF
 
 # ifndef OPENSSL_NO_COMP
 /* Used for holding the relevant compression methods loaded into SSL_CTX */
@@ -2013,37 +2013,37 @@ typedef enum downgrade_en {
 #define TLSEXT_STATUSTYPE_nothing  -1
 
 /* Sigalgs values */
-#define TLSEXT_SIGALG_ecdsa_secp256r1_sha256                    0x0403
-#define TLSEXT_SIGALG_ecdsa_secp384r1_sha384                    0x0503
-#define TLSEXT_SIGALG_ecdsa_secp521r1_sha512                    0x0603
-#define TLSEXT_SIGALG_ecdsa_sha224                              0x0303
-#define TLSEXT_SIGALG_ecdsa_sha1                                0x0203
-#define TLSEXT_SIGALG_rsa_pss_rsae_sha256                       0x0804
-#define TLSEXT_SIGALG_rsa_pss_rsae_sha384                       0x0805
-#define TLSEXT_SIGALG_rsa_pss_rsae_sha512                       0x0806
-#define TLSEXT_SIGALG_rsa_pss_pss_sha256                        0x0809
-#define TLSEXT_SIGALG_rsa_pss_pss_sha384                        0x080a
-#define TLSEXT_SIGALG_rsa_pss_pss_sha512                        0x080b
-#define TLSEXT_SIGALG_rsa_pkcs1_sha256                          0x0401
-#define TLSEXT_SIGALG_rsa_pkcs1_sha384                          0x0501
-#define TLSEXT_SIGALG_rsa_pkcs1_sha512                          0x0601
-#define TLSEXT_SIGALG_rsa_pkcs1_sha224                          0x0301
-#define TLSEXT_SIGALG_rsa_pkcs1_sha1                            0x0201
-#define TLSEXT_SIGALG_dsa_sha256                                0x0402
-#define TLSEXT_SIGALG_dsa_sha384                                0x0502
-#define TLSEXT_SIGALG_dsa_sha512                                0x0602
-#define TLSEXT_SIGALG_dsa_sha224                                0x0302
-#define TLSEXT_SIGALG_dsa_sha1                                  0x0202
-#define TLSEXT_SIGALG_gostr34102012_256_gostr34112012_256       0xeeee
-#define TLSEXT_SIGALG_gostr34102012_512_gostr34112012_512       0xefef
-#define TLSEXT_SIGALG_gostr34102001_gostr3411                   0xeded
+#define TLSEXT_SIGALG_ecdsa_secp256r1_sha256                    0xFF
+#define TLSEXT_SIGALG_ecdsa_secp384r1_sha384                    0xFF
+#define TLSEXT_SIGALG_ecdsa_secp521r1_sha512                    0xFF
+#define TLSEXT_SIGALG_ecdsa_sha224                              0xFF
+#define TLSEXT_SIGALG_ecdsa_sha1                                0xFF
+#define TLSEXT_SIGALG_rsa_pss_rsae_sha256                       0xFF
+#define TLSEXT_SIGALG_rsa_pss_rsae_sha384                       0xFF
+#define TLSEXT_SIGALG_rsa_pss_rsae_sha512                       0xFF
+#define TLSEXT_SIGALG_rsa_pss_pss_sha256                        0xFF
+#define TLSEXT_SIGALG_rsa_pss_pss_sha384                        0xFF
+#define TLSEXT_SIGALG_rsa_pss_pss_sha512                        0xFF
+#define TLSEXT_SIGALG_rsa_pkcs1_sha256                          0xFF
+#define TLSEXT_SIGALG_rsa_pkcs1_sha384                          0xFF
+#define TLSEXT_SIGALG_rsa_pkcs1_sha512                          0xFF
+#define TLSEXT_SIGALG_rsa_pkcs1_sha224                          0xFF
+#define TLSEXT_SIGALG_rsa_pkcs1_sha1                            0xFF
+#define TLSEXT_SIGALG_dsa_sha256                                0xFF
+#define TLSEXT_SIGALG_dsa_sha384                                0xFF
+#define TLSEXT_SIGALG_dsa_sha512                                0xFF
+#define TLSEXT_SIGALG_dsa_sha224                                0xFF
+#define TLSEXT_SIGALG_dsa_sha1                                  0xFF
+#define TLSEXT_SIGALG_gostr34102012_256_gostr34112012_256       0xFF
+#define TLSEXT_SIGALG_gostr34102012_512_gostr34112012_512       0xFF
+#define TLSEXT_SIGALG_gostr34102001_gostr3411                   0xFF
 
-#define TLSEXT_SIGALG_ed25519                                   0x0807
-#define TLSEXT_SIGALG_ed448                                     0x0808
+#define TLSEXT_SIGALG_ed25519                                   0xFF
+#define TLSEXT_SIGALG_ed448                                     0xFF
 
 /* Known PSK key exchange modes */
-#define TLSEXT_KEX_MODE_KE                                      0x00
-#define TLSEXT_KEX_MODE_KE_DHE                                  0x01
+#define TLSEXT_KEX_MODE_KE                                      0xFF
+#define TLSEXT_KEX_MODE_KE_DHE                                  0xFF
 
 /*
  * Internal representations of key exchange modes
@@ -2059,7 +2059,7 @@ typedef enum downgrade_en {
                         s->s3->tmp.peer_sigalg->sig == EVP_PKEY_RSA_PSS)
 
 /* A dummy signature value not valid for TLSv1.2 signature algs */
-#define TLSEXT_signature_rsa_pss                                0x0101
+#define TLSEXT_signature_rsa_pss                                0xFF
 
 /* TLSv1.3 downgrade protection sentinel values */
 extern const unsigned char tls11downgrade[8];

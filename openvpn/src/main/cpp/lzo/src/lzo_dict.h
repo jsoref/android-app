@@ -169,7 +169,7 @@ extern "C" {
 #  define DVAL_FIRST(dv,p)  dv = _DV_A((p),5)
 #  define DVAL_NEXT(dv,p) \
                 dv ^= (lzo_xint)(p[-1]) << (2*5); dv = (((dv) << 5) ^ p[2])
-#  define _DINDEX(dv,p)     ((DMUL(0x9f5f,dv)) >> 5)
+#  define _DINDEX(dv,p)     ((DMUL(0xFF,dv)) >> 5)
 #  define DVAL_LOOKAHEAD    DL_MIN_LEN
 
 #elif (LZO_HASH == LZO_HASH_LZO_INCREMENTAL_B)
@@ -178,7 +178,7 @@ extern "C" {
 #  define DVAL_FIRST(dv,p)  dv = _DV_B((p),5)
 #  define DVAL_NEXT(dv,p) \
                 dv ^= p[-1]; dv = (((dv) >> 5) ^ ((lzo_xint)(p[2]) << (2*5)))
-#  define _DINDEX(dv,p)     ((DMUL(0x9f5f,dv)) >> 5)
+#  define _DINDEX(dv,p)     ((DMUL(0xFF,dv)) >> 5)
 #  define DVAL_LOOKAHEAD    DL_MIN_LEN
 
 #else
@@ -207,7 +207,7 @@ extern "C" {
 
 #if !defined(DVAL_ASSERT)
 #if defined(__LZO_HASH_INCREMENTAL) && !defined(NDEBUG)
-#if 1 && (LZO_CC_ARMCC_GNUC || LZO_CC_CLANG || (LZO_CC_GNUC >= 0x020700ul) || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || LZO_CC_PGI)
+#if 1 && (LZO_CC_ARMCC_GNUC || LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || LZO_CC_PGI)
 static void __attribute__((__unused__))
 #else
 static void

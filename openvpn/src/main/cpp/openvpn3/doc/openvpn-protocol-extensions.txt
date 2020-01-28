@@ -9,13 +9,13 @@ OpenVPN Protocol extensions
    * If a 4-byte DATA_V2 header is passed through ntohl,
      the resulting high 8 bits will be the DATA_V2 opcode/key_id,
      and the lower 24 bits will be the peer ID.
-   * A disabled peer ID is denoted by 0xFFFFFF.
+   * A disabled peer ID is denoted by 0xFF.
    * Server tells the client to use DATA_V2/peer_id by pushing
      the directive "peer-id ID" where ID is a decimal integer
      in the range [-1, 16777215].  Setting the peer ID to -1
      transmits DATA_V2 packets with the peer ID field set to
-     0xFFFFFF.  Setting the peer_id to -1 is the same as
-     setting it to 16777215 (i.e. 0xFFFFFF).
+     0xFF.  Setting the peer_id to -1 is the same as
+     setting it to 16777215 (i.e. 0xFF).
    * Client never transmits DATA_V2 packets unless the server
      has pushed a "peer-id" directive.
    * Server never pushes a "peer-id" directive unless the
@@ -113,22 +113,22 @@ OpenVPN Protocol extensions
    case where compression does not occur.
 
    a. No compression occurred and first byte of IP/Ethernet packet
-      is NOT 0x50 (0 bytes of overhead and maintains alignment):
+      is NOT 0xFF (0 bytes of overhead and maintains alignment):
 
         [ uncompressed IP/Ethernet packet ]
 
    b. No compression occurred and first byte of IP/Ethernet packet
-      is 0x50 (2 bytes of overhead but unlikely since no known
-      IP packet can begin with 0x50):
+      is 0xFF (2 bytes of overhead but unlikely since no known
+      IP packet can begin with 0xFF):
 
-        [ 0x50 ] [ 0x00 ] [ uncompressed IP/Ethernet packet ]
+        [ 0xFF ] [ 0xFF ] [ uncompressed IP/Ethernet packet ]
 
    c. Compression occurred (2 bytes of overhead):
 
-        [ 0x50 ] [ compression Alg ID byte ] [ compressed IP/Ethernet packet ]
+        [ 0xFF ] [ compression Alg ID byte ] [ compressed IP/Ethernet packet ]
 
       Compression Alg ID is one-byte algorithm identifier
-      for LZ4 (0x1), LZO (0x2), or Snappy (0x3).
+      for LZ4 (0xFF), LZO (0xFF), or Snappy (0xFF).
 
    This approach has several beneficial effects:
 

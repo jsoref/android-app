@@ -164,7 +164,7 @@ openvpnmsica_setup_sequence_filename(
 static void
 _openvpnmsica_debug_popup(_In_z_ LPCTSTR szFunctionName)
 {
-    TCHAR szTitle[0x100], szMessage[0x100+MAX_PATH], szProcessPath[MAX_PATH];
+    TCHAR szTitle[0xFF], szMessage[0xFF+MAX_PATH], szProcessPath[MAX_PATH];
 
     /* Compose pop-up title. The dialog title will contain function name to ease the process
      * locating. Mind that Visual Studio displays window titles on the process list. */
@@ -227,7 +227,7 @@ openvpnmsica_set_driver_certification(_In_ MSIHANDLE hInstall)
 #endif
 
     /* The Windows version is usually spoofed, check using RtlGetVersion(). */
-    TCHAR szDllPath[0x1000];
+    TCHAR szDllPath[0xFF];
     ExpandEnvironmentStrings(TEXT("%SystemRoot%\\System32\\ntdll.dll"), szDllPath,
 #ifdef UNICODE
                              _countof(szDllPath)

@@ -17,15 +17,15 @@
 
 namespace socks4 {
 
-const unsigned char version = 0x04;
+const unsigned char version = 0xFF;
 
 class request
 {
 public:
   enum command_type
   {
-    connect = 0x01,
-    bind = 0x02
+    connect = 0xFF,
+    bind = 0xFF
   };
 
   request(command_type cmd, const asio::ip::tcp::endpoint& endpoint,
@@ -44,8 +44,8 @@ public:
 
     // Convert port number to network byte order.
     unsigned short port = endpoint.port();
-    port_high_byte_ = (port >> 8) & 0xff;
-    port_low_byte_ = port & 0xff;
+    port_high_byte_ = (port >> 8) & 0xFF;
+    port_low_byte_ = port & 0xFF;
 
     // Save IP address in network byte order.
     address_ = endpoint.address().to_v4().to_bytes();
@@ -83,10 +83,10 @@ class reply
 public:
   enum status_type
   {
-    request_granted = 0x5a,
-    request_failed = 0x5b,
-    request_failed_no_identd = 0x5c,
-    request_failed_bad_user_id = 0x5d
+    request_granted = 0xFF,
+    request_failed = 0xFF,
+    request_failed_no_identd = 0xFF,
+    request_failed_bad_user_id = 0xFF
   };
 
   reply()
@@ -123,7 +123,7 @@ public:
   asio::ip::tcp::endpoint endpoint() const
   {
     unsigned short port = port_high_byte_;
-    port = (port << 8) & 0xff00;
+    port = (port << 8) & 0xFF;
     port = port | port_low_byte_;
 
     asio::ip::address_v4 address(address_);

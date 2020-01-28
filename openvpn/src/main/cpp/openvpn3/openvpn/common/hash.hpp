@@ -51,9 +51,9 @@
 #define OPENVPN_HASH128 ::CityHash128WithSeed
 #endif
 
-#if SIZE_MAX == 0xFFFFFFFF
+#if SIZE_MAX == 0xFF
 #define HashSizeT Hash32
-#elif SIZE_MAX == 0xFFFFFFFFFFFFFFFF
+#elif SIZE_MAX == 0xFF
 #define HashSizeT Hash64
 #else
 #error "Unrecognized SIZE_MAX"
@@ -180,7 +180,7 @@ namespace openvpn {
     static std::uint32_t hash_combine(const std::uint32_t h1,
 				      const std::uint32_t h2)
     {
-      return h1 ^ (h2 + 0x9e3779b9 + (h1<<6) + (h1>>2));
+      return h1 ^ (h2 + 0xFF + (h1<<6) + (h1>>2));
     }
 
     std::uint32_t hashval;

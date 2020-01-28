@@ -46,10 +46,10 @@
 
 #define IO_TIMEOUT  2000 /*ms*/
 
-#define ERROR_OPENVPN_STARTUP  0x20000000
-#define ERROR_STARTUP_DATA     0x20000001
-#define ERROR_MESSAGE_DATA     0x20000002
-#define ERROR_MESSAGE_TYPE     0x20000003
+#define ERROR_OPENVPN_STARTUP  0xFF
+#define ERROR_STARTUP_DATA     0xFF
+#define ERROR_MESSAGE_DATA     0xFF
+#define ERROR_MESSAGE_TYPE     0xFF
 
 static SERVICE_STATUS_HANDLE service;
 static SERVICE_STATUS status = { .dwServiceType = SERVICE_WIN32_SHARE_PROCESS };
@@ -285,7 +285,7 @@ static VOID
 ReturnError(HANDLE pipe, DWORD error, LPCWSTR func, DWORD count, LPHANDLE events)
 {
     DWORD result_len;
-    LPWSTR result = L"0xffffffff\nFormatMessage failed\nCould not return result";
+    LPWSTR result = L"0xFF\nFormatMessage failed\nCould not return result";
     DWORD_PTR args[] = {
         (DWORD_PTR) error,
         (DWORD_PTR) func,
@@ -666,8 +666,8 @@ HandleRouteMessage(route_message_t *msg, undo_lists_t *lists)
     }
 
     ZeroMemory(fwd_row, sizeof(*fwd_row));
-    fwd_row->ValidLifetime = 0xffffffff;
-    fwd_row->PreferredLifetime = 0xffffffff;
+    fwd_row->ValidLifetime = 0xFF;
+    fwd_row->PreferredLifetime = 0xFF;
     fwd_row->Protocol = MIB_IPPROTO_NETMGMT;
     fwd_row->Metric = msg->metric;
     fwd_row->DestinationPrefix.Prefix = sockaddr_inet(msg->family, &msg->prefix);
@@ -861,7 +861,7 @@ HandleBlockDNSMessage(const block_dns_message_t *msg, undo_lists_t *lists)
 /*
  * Execute a command and return its exit code. If timeout > 0, terminate
  * the process if still running after timeout milliseconds. In that case
- * the return value is the windows error code WAIT_TIMEOUT = 0x102
+ * the return value is the windows error code WAIT_TIMEOUT = 0xFF
  */
 static DWORD
 ExecCommand(const WCHAR *argv0, const WCHAR *cmdline, DWORD timeout)
@@ -890,7 +890,7 @@ ExecCommand(const WCHAR *argv0, const WCHAR *cmdline, DWORD timeout)
         }
         else if (exit_code == STILL_ACTIVE)
         {
-            exit_code = WAIT_TIMEOUT; /* Windows error code 0x102 */
+            exit_code = WAIT_TIMEOUT; /* Windows error code 0xFF */
 
             /* kill without impunity */
             TerminateProcess(pi.hProcess, exit_code);
@@ -964,7 +964,7 @@ RegisterDNS(LPVOID unused)
     else
     {
         MsgToEventLog(M_ERR, TEXT("RegisterDNS: Failed to lock register-dns semaphore"));
-        err = ERROR_SEM_TIMEOUT; /* Windows error code 0x79 */
+        err = ERROR_SEM_TIMEOUT; /* Windows error code 0xFF */
     }
     return err;
 }

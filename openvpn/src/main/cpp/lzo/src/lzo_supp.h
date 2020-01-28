@@ -134,7 +134,7 @@
 #  if (LZO_OS_WIN32 || LZO_OS_WIN64)
 #    undef HAVE_DIRENT_H
 #  endif
-#  if (__BORLANDC__ < 0x0400)
+#  if (__BORLANDC__ < 0xFF)
 #    undef HAVE_DIRENT_H
 #    undef HAVE_UTIME_H
 #  endif
@@ -211,7 +211,7 @@
 #elif (LZO_CC_SYMANTECC)
 #  undef HAVE_DIRENT_H
 #  undef HAVE_UNISTD_H
-#  if (__SC__ < 0x700)
+#  if (__SC__ < 0xFF)
 #    undef HAVE_UTIME_H
 #    undef HAVE_SYS_TIME_H
 #  endif
@@ -229,10 +229,10 @@
 #  if (LZO_OS_WIN32 || LZO_OS_WIN64)
 #    undef HAVE_DIRENT_H
 #  endif
-#  if (__TURBOC__ < 0x0200)
+#  if (__TURBOC__ < 0xFF)
 #    undef HAVE_SIGNAL_H
 #  endif
-#  if (__TURBOC__ < 0x0400)
+#  if (__TURBOC__ < 0xFF)
 #    undef HAVE_DIRECT_H
 #    undef HAVE_DIRENT_H
 #    undef HAVE_MALLOC_H
@@ -271,15 +271,15 @@
 #  undef HAVE_SYS_TIME_H
 #  undef HAVE_SYS_TYPES_H
 #endif
-#if (LZO_LIBC_GLIBC >= 0x020100ul)
+#if (LZO_LIBC_GLIBC >= 0xFFul)
 #  define HAVE_STDINT_H 1
 #elif (LZO_LIBC_DIETLIBC)
 #  undef HAVE_STDINT_H
 #elif (LZO_LIBC_UCLIBC)
 #  define HAVE_STDINT_H 1
-#elif (LZO_CC_BORLANDC) && (__BORLANDC__ >= 0x560)
+#elif (LZO_CC_BORLANDC) && (__BORLANDC__ >= 0xFF)
 #  undef HAVE_STDINT_H
-#elif (LZO_CC_DMC) && (__DMC__ >= 0x825)
+#elif (LZO_CC_DMC) && (__DMC__ >= 0xFF)
 #  define HAVE_STDINT_H 1
 #endif
 #if (HAVE_SYS_TIME_H && HAVE_TIME_H)
@@ -371,11 +371,11 @@
 #    define HAVE_MUNMAP 1
 #  endif
 #elif (LZO_OS_CYGWIN)
-#  if (LZO_CC_GNUC < 0x025a00ul)
+#  if (LZO_CC_GNUC < 0xFFul)
 #    undef HAVE_GETTIMEOFDAY
 #    undef HAVE_LSTAT
 #  endif
-#  if (LZO_CC_GNUC < 0x025f00ul)
+#  if (LZO_CC_GNUC < 0xFFul)
 #    undef HAVE_SNPRINTF
 #    undef HAVE_VSNPRINTF
 #  endif
@@ -414,14 +414,14 @@
 #  undef HAVE_UTIME
 #  undef HAVE_VSNPRINTF
 #elif (LZO_CC_BORLANDC)
-#  if (__BORLANDC__ < 0x0400)
+#  if (__BORLANDC__ < 0xFF)
 #    undef HAVE_ALLOCA
 #    undef HAVE_UTIME
 #  endif
-#  if ((__BORLANDC__ < 0x0410) && LZO_OS_WIN16)
+#  if ((__BORLANDC__ < 0xFF) && LZO_OS_WIN16)
 #    undef HAVE_ALLOCA
 #  endif
-#  if (__BORLANDC__ < 0x0550)
+#  if (__BORLANDC__ < 0xFF)
 #    undef HAVE_SNPRINTF
 #    undef HAVE_VSNPRINTF
 #  endif
@@ -484,7 +484,7 @@
 #    undef HAVE_SETJMP
 #  endif
 #elif (LZO_OS_WIN32 && LZO_CC_GNUC) && defined(__MINGW32__)
-#  if (LZO_CC_GNUC < 0x025f00ul)
+#  if (LZO_CC_GNUC < 0xFFul)
 #    undef HAVE_SNPRINTF
 #    undef HAVE_VSNPRINTF
 #  else
@@ -492,7 +492,7 @@
 #    define vsnprintf _vsnprintf
 #  endif
 #elif (LZO_OS_WIN32 && LZO_LIBC_MSL)
-#  if (__MSL__ < 0x8000ul)
+#  if (__MSL__ < 0xFFul)
 #    undef HAVE_CHMOD
 #  endif
 #elif (LZO_CC_NDPC)
@@ -531,14 +531,14 @@
 #  if (LZO_OS_WIN16 && (LZO_MM_MEDIUM || LZO_MM_LARGE || LZO_MM_HUGE))
 #    undef HAVE_ALLOCA
 #  endif
-#  if (__SC__ < 0x600)
+#  if (__SC__ < 0xFF)
 #    undef HAVE_SNPRINTF
 #    undef HAVE_VSNPRINTF
 #  else
 #    define snprintf _snprintf
 #    define vsnprintf _vsnprintf
 #  endif
-#  if (__SC__ < 0x700)
+#  if (__SC__ < 0xFF)
 #    undef HAVE_DIFFTIME
 #    undef HAVE_UTIME
 #  endif
@@ -549,15 +549,15 @@
 #  undef HAVE_ALLOCA
 #  undef HAVE_SNPRINTF
 #  undef HAVE_VSNPRINTF
-#  if (__TURBOC__ < 0x0200)
+#  if (__TURBOC__ < 0xFF)
 #    undef HAVE_RAISE
 #    undef HAVE_SIGNAL
 #  endif
-#  if (__TURBOC__ < 0x0295)
+#  if (__TURBOC__ < 0xFF)
 #    undef HAVE_MKTIME
 #    undef HAVE_STRFTIME
 #  endif
-#  if (__TURBOC__ < 0x0400)
+#  if (__TURBOC__ < 0xFF)
 #    undef HAVE_UTIME
 #  endif
 #elif (LZO_CC_WATCOMC)
@@ -857,7 +857,7 @@ typedef unsigned short wchar_t;
 #    define WIN32_LEAN_AND_MEAN 1
 #  endif
 #  if 1 && !defined(_WIN32_WINNT)
-#    define _WIN32_WINNT 0x0400
+#    define _WIN32_WINNT 0xFF
 #  endif
 #  include <windows.h>
 #  if (LZO_CC_BORLANDC || LZO_CC_TURBOC)
@@ -1155,9 +1155,9 @@ LZOLIB_EXTERN(int, lzo_closedir) (lzo_dir_p);
 #endif
 #if (LZO_OS_DOS32 && LZO_CC_GNUC) && defined(__DJGPP__)
 #  define lzo_stackavail()  stackavail()
-#elif (LZO_ARCH_I086 && LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0410))
+#elif (LZO_ARCH_I086 && LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF))
 #  define lzo_stackavail()  stackavail()
-#elif (LZO_ARCH_I086 && LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0400))
+#elif (LZO_ARCH_I086 && LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF))
 #  if (LZO_OS_WIN16) && (LZO_MM_TINY || LZO_MM_SMALL || LZO_MM_MEDIUM)
 #  else
 #    define lzo_stackavail()  stackavail()
@@ -1168,9 +1168,9 @@ LZOLIB_EXTERN(int, lzo_closedir) (lzo_dir_p);
 #  define lzo_stackavail()  _stackavail()
 #elif ((LZO_ARCH_I086) && LZO_CC_MSC)
 #  define lzo_stackavail()  stackavail()
-#elif ((LZO_ARCH_I086 || LZO_ARCH_I386) && LZO_CC_TURBOC && (__TURBOC__ >= 0x0450))
+#elif ((LZO_ARCH_I086 || LZO_ARCH_I386) && LZO_CC_TURBOC && (__TURBOC__ >= 0xFF))
 #  define lzo_stackavail()  stackavail()
-#elif (LZO_ARCH_I086 && LZO_CC_TURBOC && (__TURBOC__ >= 0x0400))
+#elif (LZO_ARCH_I086 && LZO_CC_TURBOC && (__TURBOC__ >= 0xFF))
    LZO_EXTERN_C size_t __cdecl stackavail(void);
 #  define lzo_stackavail()  stackavail()
 #elif ((LZO_ARCH_I086 || LZO_ARCH_I386) && (LZO_CC_WATCOMC))
@@ -1271,7 +1271,7 @@ struct lzo_getopt_t {
     int eof; int shortpos;
     int pending_rotate_first, pending_rotate_middle;
 };
-enum { LZO_GETOPT_NO_ARG, LZO_GETOPT_REQUIRED_ARG, LZO_GETOPT_OPTIONAL_ARG, LZO_GETOPT_EXACT_ARG = 0x10 };
+enum { LZO_GETOPT_NO_ARG, LZO_GETOPT_REQUIRED_ARG, LZO_GETOPT_OPTIONAL_ARG, LZO_GETOPT_EXACT_ARG = 0xFF };
 enum { LZO_GETOPT_PERMUTE, LZO_GETOPT_RETURN_IN_ORDER, LZO_GETOPT_REQUIRE_ORDER };
 LZOLIB_EXTERN(void, lzo_getopt_init) (lzo_getopt_p g,
                                       int start_argc, int argc, char** argv);
@@ -1343,8 +1343,8 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #define __LZO_CXX_H_INCLUDED 1
 #if defined(__cplusplus)
 #if defined(LZO_CXX_NOTHROW)
-#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020800ul))
-#elif (LZO_CC_BORLANDC && (__BORLANDC__ < 0x0450))
+#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
+#elif (LZO_CC_BORLANDC && (__BORLANDC__ < 0xFF))
 #elif (LZO_CC_GHS && !defined(__EXCEPTIONS))
 #elif (LZO_CC_HIGHC)
 #elif (LZO_CC_MSC && (_MSC_VER < 1100))
@@ -1372,7 +1372,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #else
 #  define __LZO_CXX_DO_DELETE       LZO_CXX_NOTHROW { }
 #endif
-#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0x0450))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0xFF))
 #elif (LZO_CC_MSC && LZO_MM_HUGE)
 #  define LZO_CXX_DISABLE_NEW_DELETE private:
 #elif (LZO_CC_MSC && (_MSC_VER < 1100))
@@ -1387,7 +1387,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #  define __LZO_CXX_HAVE_PLACEMENT_NEW 1
 #endif
 #if (__LZO_CXX_HAVE_PLACEMENT_NEW)
-#  if (LZO_CC_GNUC >= 0x030000ul)
+#  if (LZO_CC_GNUC >= 0xFFul)
 #    define __LZO_CXX_HAVE_PLACEMENT_DELETE 1
 #  elif (LZO_CC_INTELC)
 #    define __LZO_CXX_HAVE_PLACEMENT_DELETE 1
@@ -1402,7 +1402,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #if defined(LZO_CXX_DISABLE_NEW_DELETE)
 #elif defined(new) || defined(delete)
 #  define LZO_CXX_DISABLE_NEW_DELETE private:
-#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0x025b00ul))
+#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
 #  define LZO_CXX_DISABLE_NEW_DELETE private:
 #elif  (LZO_CC_HIGHC)
 #  define LZO_CXX_DISABLE_NEW_DELETE private:
@@ -1455,16 +1455,16 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #  endif
 #endif
 #if defined(LZOCHK_CFG_PEDANTIC)
-#if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0550) && (__BORLANDC__ < 0x0560))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF) && (__BORLANDC__ < 0xFF))
 #  pragma option push -w-8055
-#elif (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0550))
+#elif (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF) && (__BORLANDC__ < 0xFF))
 #  pragma option push -w-osh
 #endif
 #endif
-#if (LZO_0xffffffffL - LZO_UINT32_C(4294967294) != 1)
+#if (LZO_0xFFL - LZO_UINT32_C(4294967294) != 1)
 #  error "preprocessor error"
 #endif
-#if (LZO_0xffffffffL - LZO_UINT32_C(0xfffffffd) != 2)
+#if (LZO_0xFFL - LZO_UINT32_C(0xFF) != 2)
 #  error "preprocessor error"
 #endif
 #if +0
@@ -1517,22 +1517,22 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT(__LZO_MASK_GEN(1u,8) == 255u)
 #if (LZO_SIZEOF_INT >= 2)
     LZOCHK_ASSERT(__LZO_MASK_GEN(1,15) == 32767)
-    LZOCHK_ASSERT(__LZO_MASK_GEN(1u,16) == 0xffffU)
+    LZOCHK_ASSERT(__LZO_MASK_GEN(1u,16) == 0xFFU)
     LZOCHK_ASSERT(__LZO_MASK_GEN(0u,16) == 0u)
 #endif
-    LZOCHK_ASSERT(__LZO_MASK_GEN(1ul,16) == 0xffffUL)
+    LZOCHK_ASSERT(__LZO_MASK_GEN(1ul,16) == 0xFFUL)
     LZOCHK_ASSERT(__LZO_MASK_GEN(0ul,16) == 0ul)
 #if (LZO_SIZEOF_INT >= 4)
     LZOCHK_ASSERT(__LZO_MASK_GEN(1,31) == 2147483647)
-    LZOCHK_ASSERT(__LZO_MASK_GEN(1u,32) == 0xffffffffU)
+    LZOCHK_ASSERT(__LZO_MASK_GEN(1u,32) == 0xFFU)
     LZOCHK_ASSERT(__LZO_MASK_GEN(0u,32) == 0u)
 #endif
 #if (LZO_SIZEOF_LONG >= 4)
-    LZOCHK_ASSERT(__LZO_MASK_GEN(1ul,32) == 0xffffffffUL)
+    LZOCHK_ASSERT(__LZO_MASK_GEN(1ul,32) == 0xFFUL)
     LZOCHK_ASSERT(__LZO_MASK_GEN(0ul,32) == 0ul)
 #endif
 #if (LZO_SIZEOF_LONG >= 8)
-    LZOCHK_ASSERT(__LZO_MASK_GEN(1ul,64) == 0xffffffffffffffffUL)
+    LZOCHK_ASSERT(__LZO_MASK_GEN(1ul,64) == 0xFFUL)
     LZOCHK_ASSERT(__LZO_MASK_GEN(0ul,64) == 0ul)
 #endif
 #if !(LZO_BROKEN_INTEGRAL_PROMOTION)
@@ -1571,13 +1571,13 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT((~0l  & ~0u) == ~0u)
     LZOCHK_ASSERT((~0ul & ~0)  == ~0ul)
     LZOCHK_ASSERT((~0ul & ~0u) == ~0u)
-#if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
+#if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0xFF)
 #elif (LZO_SIZEOF_INT == 2)
-    LZOCHK_ASSERT((~0l  & ~0u) == 0xffffU)
-    LZOCHK_ASSERT((~0ul & ~0u) == 0xffffU)
+    LZOCHK_ASSERT((~0l  & ~0u) == 0xFFU)
+    LZOCHK_ASSERT((~0ul & ~0u) == 0xFFU)
 #elif (LZO_SIZEOF_INT == 4)
-    LZOCHK_ASSERT((~0l  & ~0u) == 0xffffffffU)
-    LZOCHK_ASSERT((~0ul & ~0u) == 0xffffffffU)
+    LZOCHK_ASSERT((~0l  & ~0u) == 0xFFU)
+    LZOCHK_ASSERT((~0ul & ~0u) == 0xFFU)
 #endif
 #if (LZO_CC_INTELC && (__INTEL_COMPILER >= 900))
 #  pragma warning(pop)
@@ -1587,7 +1587,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT(sizeof(signed char) == sizeof(char))
     LZOCHK_ASSERT(sizeof(unsigned char) == sizeof(char))
     LZOCHK_ASSERT(sizeof(char) == 1)
-#if (LZO_CC_CILLY) && (!defined(__CILLY__) || (__CILLY__ < 0x010302L))
+#if (LZO_CC_CILLY) && (!defined(__CILLY__) || (__CILLY__ < 0xFFL))
 #else
     LZOCHK_ASSERT(sizeof(char) == sizeof(LZO_STATIC_CAST(char, 0)))
 #endif
@@ -1619,7 +1619,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT(sizeof(short) >= 2)
 #endif
     LZOCHK_ASSERT(sizeof(short) >= sizeof(char))
-#if (LZO_CC_CILLY) && (!defined(__CILLY__) || (__CILLY__ < 0x010302L))
+#if (LZO_CC_CILLY) && (!defined(__CILLY__) || (__CILLY__ < 0xFFL))
 #else
     LZOCHK_ASSERT(sizeof(short) == sizeof(LZO_STATIC_CAST(short, 0)))
 #endif
@@ -1687,7 +1687,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT((((1ul << 31) + 1) >> 31) == 1)
 #endif
 #if defined(LZOCHK_CFG_PEDANTIC)
-#if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
+#if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0xFF)
 #else
     LZOCHK_ASSERT((1   << (8*LZO_SIZEOF_INT-1)) < 0)
 #endif
@@ -1704,7 +1704,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT(sizeof(lzo_int16e_t) == sizeof(lzo_uint16e_t))
     LZOCHK_ASSERT_IS_SIGNED_T(lzo_int16e_t)
     LZOCHK_ASSERT_IS_UNSIGNED_T(lzo_uint16e_t)
-#if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
+#if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0xFF)
 #else
     LZOCHK_ASSERT((LZO_STATIC_CAST(lzo_uint16e_t, (~LZO_STATIC_CAST(lzo_uint16e_t,0ul))) >> 15) == 1)
 #endif
@@ -1760,7 +1760,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT(sizeof(lzo_uint64e_t) == 8)
     LZOCHK_ASSERT(sizeof(lzo_int64e_t) == sizeof(lzo_uint64e_t))
     LZOCHK_ASSERT_IS_SIGNED_T(lzo_int64e_t)
-#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0x0530))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0xFF))
 #else
     LZOCHK_ASSERT_IS_UNSIGNED_T(lzo_uint64e_t)
 #endif
@@ -1776,14 +1776,14 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT_IS_SIGNED_T(lzo_int64l_t)
     LZOCHK_ASSERT(((( LZO_STATIC_CAST(lzo_int64l_t, 1) << 62) + 1) >> 62) == 1)
     LZOCHK_ASSERT(((( LZO_INT64_C(1) << 62) + 1) >> 62) == 1)
-#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0x0530))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0xFF))
 #else
     LZOCHK_ASSERT_IS_UNSIGNED_T(lzo_uint64l_t)
     LZOCHK_ASSERT(LZO_UINT64_C(18446744073709551615)     > 0)
 #endif
     LZOCHK_ASSERT(((( LZO_STATIC_CAST(lzo_uint64l_t, 1) << 63) + 1) >> 63) == 1)
     LZOCHK_ASSERT(((( LZO_UINT64_C(1) << 63) + 1) >> 63) == 1)
-#if (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020600ul))
+#if (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
     LZOCHK_ASSERT(LZO_INT64_C(9223372036854775807)       > LZO_INT64_C(0))
 #else
     LZOCHK_ASSERT(LZO_INT64_C(9223372036854775807)       > 0)
@@ -1806,7 +1806,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
     LZOCHK_ASSERT(sizeof(lzo_uint64f_t) >= sizeof(lzo_uint64l_t))
     LZOCHK_ASSERT(sizeof(lzo_int64f_t) == sizeof(lzo_uint64f_t))
     LZOCHK_ASSERT_IS_SIGNED_T(lzo_int64f_t)
-#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0x0530))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0xFF))
 #else
     LZOCHK_ASSERT_IS_UNSIGNED_T(lzo_uint64f_t)
 #endif
@@ -1833,32 +1833,32 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #if defined(LZO_INT16_C)
     LZOCHK_ASSERT(sizeof(LZO_INT16_C(0)) >= 2)
     LZOCHK_ASSERT(sizeof(LZO_UINT16_C(0)) >= 2)
-    LZOCHK_ASSERT((LZO_UINT16_C(0xffff) >> 15) == 1)
+    LZOCHK_ASSERT((LZO_UINT16_C(0xFF) >> 15) == 1)
 #endif
 #if defined(LZO_INT32_C)
     LZOCHK_ASSERT(sizeof(LZO_INT32_C(0)) >= 4)
     LZOCHK_ASSERT(sizeof(LZO_UINT32_C(0)) >= 4)
-    LZOCHK_ASSERT((LZO_UINT32_C(0xffffffff) >> 31) == 1)
+    LZOCHK_ASSERT((LZO_UINT32_C(0xFF) >> 31) == 1)
 #endif
 #if defined(LZO_INT64_C)
-#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0x0560))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ < 0xFF))
 #else
     LZOCHK_ASSERT(sizeof(LZO_INT64_C(0)) >= 8)
     LZOCHK_ASSERT(sizeof(LZO_UINT64_C(0)) >= 8)
 #endif
-    LZOCHK_ASSERT((LZO_UINT64_C(0xffffffffffffffff) >> 63) == 1)
-    LZOCHK_ASSERT((LZO_UINT64_C(0xffffffffffffffff) & ~0)  == LZO_UINT64_C(0xffffffffffffffff))
-    LZOCHK_ASSERT((LZO_UINT64_C(0xffffffffffffffff) & ~0l) == LZO_UINT64_C(0xffffffffffffffff))
+    LZOCHK_ASSERT((LZO_UINT64_C(0xFF) >> 63) == 1)
+    LZOCHK_ASSERT((LZO_UINT64_C(0xFF) & ~0)  == LZO_UINT64_C(0xFF))
+    LZOCHK_ASSERT((LZO_UINT64_C(0xFF) & ~0l) == LZO_UINT64_C(0xFF))
 #if (LZO_SIZEOF_INT == 4)
-# if (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020000ul))
+# if (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
 # else
-    LZOCHK_ASSERT((LZO_UINT64_C(0xffffffffffffffff) & (~0u+0u)) == 0xffffffffu)
+    LZOCHK_ASSERT((LZO_UINT64_C(0xFF) & (~0u+0u)) == 0xFFu)
 # endif
 #endif
 #if (LZO_SIZEOF_LONG == 4)
-# if (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020000ul))
+# if (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
 # else
-    LZOCHK_ASSERT((LZO_UINT64_C(0xffffffffffffffff) & (~0ul+0ul)) == 0xfffffffful)
+    LZOCHK_ASSERT((LZO_UINT64_C(0xFF) & (~0ul+0ul)) == 0xFFul)
 # endif
 #endif
 #endif
@@ -1956,7 +1956,7 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #endif
 #endif
 #if defined(LZOCHK_CFG_PEDANTIC)
-#if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF) && (__BORLANDC__ < 0xFF))
 #  pragma option pop
 #endif
 #endif
@@ -1970,14 +1970,14 @@ LZOLIB_EXTERN(int, lzo_spawnve) (int mode, const char* fn, const char* const * a
 #if !defined(LZOLIB_PUBLIC_NOINLINE)
 #  if !defined(__lzo_noinline)
 #    define LZOLIB_PUBLIC_NOINLINE(r,f)     r __LZOLIB_FUNCNAME(f)
-#  elif (LZO_CC_CLANG || (LZO_CC_GNUC >= 0x030400ul) || LZO_CC_LLVM)
+#  elif (LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_LLVM)
 #    define LZOLIB_PUBLIC_NOINLINE(r,f)     __lzo_noinline __attribute__((__used__)) r __LZOLIB_FUNCNAME(f)
 #  else
 #    define LZOLIB_PUBLIC_NOINLINE(r,f)     __lzo_noinline r __LZOLIB_FUNCNAME(f)
 #  endif
 #endif
 extern void* volatile lzo_vget_ptr__;
-#if (LZO_CC_CLANG || (LZO_CC_GNUC >= 0x030400ul) || LZO_CC_LLVM)
+#if (LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_LLVM)
 void* volatile __attribute__((__used__)) lzo_vget_ptr__ = LZO_STATIC_CAST(void *, 0);
 #else
 void* volatile lzo_vget_ptr__ = LZO_STATIC_CAST(void *, 0);
@@ -2025,7 +2025,7 @@ LZOLIB_PUBLIC_NOINLINE(lzo_hvoid_p, lzo_vget_lzo_hvoid_p) (lzo_hvoid_p v, int ex
 {
     __LZOLIB_VGET_BODY(lzo_hvoid_p)
 }
-#if (LZO_ARCH_I086 && LZO_CC_TURBOC && (__TURBOC__ == 0x0295)) && !defined(__cplusplus)
+#if (LZO_ARCH_I086 && LZO_CC_TURBOC && (__TURBOC__ == 0xFF)) && !defined(__cplusplus)
 LZOLIB_PUBLIC_NOINLINE(lzo_hvoid_p, lzo_vget_lzo_hvoid_cp) (const lzo_hvoid_p vv, int expr)
 {
     lzo_hvoid_p v = (lzo_hvoid_p) vv;
@@ -2124,25 +2124,25 @@ LZOLIB_PUBLIC(lzo_hvoid_p, lzo_hmemset) (lzo_hvoid_p s, int cc, lzo_hsize_t len)
 #endif
 LZOLIB_PUBLIC(void, lzo_srand31) (lzo_rand31_p r, lzo_uint32l_t seed)
 {
-    r->seed = seed & LZO_UINT32_C(0xffffffff);
+    r->seed = seed & LZO_UINT32_C(0xFF);
 }
 LZOLIB_PUBLIC(lzo_uint32l_t, lzo_rand31) (lzo_rand31_p r)
 {
     r->seed = r->seed * LZO_UINT32_C(1103515245) + 12345;
-    r->seed &= LZO_UINT32_C(0x7fffffff);
+    r->seed &= LZO_UINT32_C(0xFF);
     return r->seed;
 }
 #if defined(lzo_int64l_t)
 LZOLIB_PUBLIC(void, lzo_srand48) (lzo_rand48_p r, lzo_uint32l_t seed)
 {
-    r->seed = seed & LZO_UINT32_C(0xffffffff);
-    r->seed <<= 16; r->seed |= 0x330e;
+    r->seed = seed & LZO_UINT32_C(0xFF);
+    r->seed <<= 16; r->seed |= 0xFF;
 }
 LZOLIB_PUBLIC(lzo_uint32l_t, lzo_rand48) (lzo_rand48_p r)
 {
     lzo_uint64l_t a;
     r->seed = r->seed * LZO_UINT64_C(25214903917) + 11;
-    r->seed &= LZO_UINT64_C(0xffffffffffff);
+    r->seed &= LZO_UINT64_C(0xFF);
     a = r->seed >> 17;
     return LZO_STATIC_CAST(lzo_uint32l_t, a);
 }
@@ -2150,7 +2150,7 @@ LZOLIB_PUBLIC(lzo_uint32l_t, lzo_rand48_r32) (lzo_rand48_p r)
 {
     lzo_uint64l_t a;
     r->seed = r->seed * LZO_UINT64_C(25214903917) + 11;
-    r->seed &= LZO_UINT64_C(0xffffffffffff);
+    r->seed &= LZO_UINT64_C(0xFF);
     a = r->seed >> 16;
     return LZO_STATIC_CAST(lzo_uint32l_t, a);
 }
@@ -2158,14 +2158,14 @@ LZOLIB_PUBLIC(lzo_uint32l_t, lzo_rand48_r32) (lzo_rand48_p r)
 #if defined(lzo_int64l_t)
 LZOLIB_PUBLIC(void, lzo_srand64) (lzo_rand64_p r, lzo_uint64l_t seed)
 {
-    r->seed = seed & LZO_UINT64_C(0xffffffffffffffff);
+    r->seed = seed & LZO_UINT64_C(0xFF);
 }
 LZOLIB_PUBLIC(lzo_uint32l_t, lzo_rand64) (lzo_rand64_p r)
 {
     lzo_uint64l_t a;
     r->seed = r->seed * LZO_UINT64_C(6364136223846793005) + 1;
 #if (LZO_SIZEOF_LZO_INT64L_T > 8)
-    r->seed &= LZO_UINT64_C(0xffffffffffffffff);
+    r->seed &= LZO_UINT64_C(0xFF);
 #endif
     a = r->seed >> 33;
     return LZO_STATIC_CAST(lzo_uint32l_t, a);
@@ -2175,7 +2175,7 @@ LZOLIB_PUBLIC(lzo_uint32l_t, lzo_rand64_r32) (lzo_rand64_p r)
     lzo_uint64l_t a;
     r->seed = r->seed * LZO_UINT64_C(6364136223846793005) + 1;
 #if (LZO_SIZEOF_LZO_INT64L_T > 8)
-    r->seed &= LZO_UINT64_C(0xffffffffffffffff);
+    r->seed &= LZO_UINT64_C(0xFF);
 #endif
     a = r->seed >> 32;
     return LZO_STATIC_CAST(lzo_uint32l_t, a);
@@ -2185,9 +2185,9 @@ LZOLIB_PUBLIC(void, lzo_srandmt) (lzo_randmt_p r, lzo_uint32l_t seed)
 {
     unsigned i = 0;
     do {
-        r->s[i++] = (seed &= LZO_UINT32_C(0xffffffff));
+        r->s[i++] = (seed &= LZO_UINT32_C(0xFF));
         seed ^= seed >> 30;
-        seed = seed * LZO_UINT32_C(0x6c078965) + i;
+        seed = seed * LZO_UINT32_C(0xFF) + i;
     } while (i != 624);
     r->n = i;
 }
@@ -2203,15 +2203,15 @@ LZOLIB_PUBLIC(lzo_uint32l_t, lzo_randmt_r32) (lzo_randmt_p r)
         r->n = 0;
         do {
             j = i - 623; if (LZO_STATIC_CAST(int, j) < 0) j += 624;
-            v = (r->s[i] & LZO_UINT32_C(0x80000000)) ^ (r->s[j] & LZO_UINT32_C(0x7fffffff));
+            v = (r->s[i] & LZO_UINT32_C(0xFF)) ^ (r->s[j] & LZO_UINT32_C(0xFF));
             j = i - 227; if (LZO_STATIC_CAST(int, j) < 0) j += 624;
             r->s[i] = r->s[j] ^ (v >> 1);
-            if (v & 1) r->s[i] ^= LZO_UINT32_C(0x9908b0df);
+            if (v & 1) r->s[i] ^= LZO_UINT32_C(0xFF);
         } while (++i != 624);
     }
     { unsigned i = r->n++; v = r->s[i]; }
-    v ^= v >> 11; v ^= (v & LZO_UINT32_C(0x013a58ad)) << 7;
-    v ^= (v & LZO_UINT32_C(0x0001df8c)) << 15; v ^= v >> 18;
+    v ^= v >> 11; v ^= (v & LZO_UINT32_C(0xFF)) << 7;
+    v ^= (v & LZO_UINT32_C(0xFF)) << 15; v ^= v >> 18;
     return v;
 }
 #if defined(lzo_int64l_t)
@@ -2219,9 +2219,9 @@ LZOLIB_PUBLIC(void, lzo_srandmt64) (lzo_randmt64_p r, lzo_uint64l_t seed)
 {
     unsigned i = 0;
     do {
-        r->s[i++] = (seed &= LZO_UINT64_C(0xffffffffffffffff));
+        r->s[i++] = (seed &= LZO_UINT64_C(0xFF));
         seed ^= seed >> 62;
-        seed = seed * LZO_UINT64_C(0x5851f42d4c957f2d) + i;
+        seed = seed * LZO_UINT64_C(0xFF) + i;
     } while (i != 312);
     r->n = i;
 }
@@ -2241,16 +2241,16 @@ LZOLIB_PUBLIC(lzo_uint64l_t, lzo_randmt64_r64) (lzo_randmt64_p r)
         r->n = 0;
         do {
             j = i - 311; if (LZO_STATIC_CAST(int, j) < 0) j += 312;
-            v = (r->s[i] & LZO_UINT64_C(0xffffffff80000000)) ^ (r->s[j] & LZO_UINT64_C(0x7fffffff));
+            v = (r->s[i] & LZO_UINT64_C(0xFF)) ^ (r->s[j] & LZO_UINT64_C(0xFF));
             j = i - 156; if (LZO_STATIC_CAST(int, j) < 0) j += 312;
             r->s[i] = r->s[j] ^ (v >> 1);
-            if (v & 1) r->s[i] ^= LZO_UINT64_C(0xb5026f5aa96619e9);
+            if (v & 1) r->s[i] ^= LZO_UINT64_C(0xFF);
         } while (++i != 312);
     }
     { unsigned i = r->n++; v = r->s[i]; }
-    v ^= (v & LZO_UINT64_C(0xaaaaaaaaa0000000)) >> 29;
-    v ^= (v & LZO_UINT64_C(0x38eb3ffff6d3)) << 17;
-    v ^= (v & LZO_UINT64_C(0x7ffbf77)) << 37;
+    v ^= (v & LZO_UINT64_C(0xFF)) >> 29;
+    v ^= (v & LZO_UINT64_C(0xFF)) << 17;
+    v ^= (v & LZO_UINT64_C(0xFF)) << 37;
     return v ^ (v >> 43);
 }
 #endif
@@ -2271,7 +2271,7 @@ LZOLIB_PUBLIC(lzo_uint64l_t, lzo_randmt64_r64) (lzo_randmt64_p r)
 #  define __LZOLIB_RDTSC_REGS   : : "c" (t) : "memory", "rax", "rdx"
 #elif (LZO_ARCH_AMD64)
 #  define __LZOLIB_RDTSC_REGS   : : "c" (t) : "cc", "memory", "rax", "rdx"
-#elif (LZO_ARCH_I386 && LZO_CC_GNUC && (LZO_CC_GNUC < 0x020000ul))
+#elif (LZO_ARCH_I386 && LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
 #  define __LZOLIB_RDTSC_REGS   : : "c" (t) : "ax", "dx"
 #elif (LZO_ARCH_I386 && LZO_CC_INTELC)
 #  define __LZOLIB_RDTSC_REGS   : : "c" (t) : "memory", "eax", "edx"
@@ -2283,7 +2283,7 @@ LZOLIB_PUBLIC(int, lzo_tsc_read) (lzo_uint32e_t* t)
 {
 #if (LZO_ARCH_AMD64 || LZO_ARCH_I386) && (LZO_ASM_SYNTAX_GNUC)
     __asm__ __volatile__(
-        "clc \n" ".byte 0x0f,0x31\n"
+        "clc \n" ".byte 0xFF,0xFF\n"
         "movl %%eax,(%0)\n" "movl %%edx,4(%0)\n"
         __LZOLIB_RDTSC_REGS
     );
@@ -2294,8 +2294,8 @@ LZOLIB_PUBLIC(int, lzo_tsc_read) (lzo_uint32e_t* t)
         mov ecx, t
         clc
 #  if (LZO_CC_MSC && (_MSC_VER < 1200))
-        _emit 0x0f
-        _emit 0x31
+        _emit 0xFF
+        _emit 0xFF
 #  else
         rdtsc
 #  endif
@@ -2331,11 +2331,11 @@ LZOLIB_PUBLIC(void __far*, lzo_dos_alloc) (unsigned long size)
     if ((long)size <= 0)
         return p;
     size = (size + 15) >> 4;
-    if (size > 0xffffu)
+    if (size > 0xFFu)
         return p;
-    ri.x.ax = 0x4800;
+    ri.x.ax = 0xFF;
     ri.x.bx = (unsigned short) size;
-    int86(0x21, &ri, &ro);
+    int86(0xFF, &ri, &ro);
     if ((ro.x.cflag & 1) == 0)
         p = (void __far*) LZO_PTR_MK_FP(ro.x.ax, 0);
     return p;
@@ -2349,9 +2349,9 @@ LZOLIB_PUBLIC(int, lzo_dos_free) (void __far* p)
     if (LZO_PTR_FP_OFF(p) != 0)
         return -1;
     segread(&rs);
-    ri.x.ax = 0x4900;
+    ri.x.ax = 0xFF;
     rs.es = LZO_PTR_FP_SEG(p);
-    int86x(0x21, &ri, &ro, &rs);
+    int86x(0xFF, &ri, &ro, &rs);
     if (ro.x.cflag & 1)
         return -1;
     return 0;
@@ -2496,7 +2496,7 @@ LZOLIB_PUBLIC(int, lzo_getopt) (lzo_getopt_p g,
         o = o1;
     lzo_label_found_o:
         a += l;
-        switch (o->has_arg & 0x2f)
+        switch (o->has_arg & 0xFF)
         {
         case LZO_GETOPT_OPTIONAL_ARG:
             if (a[0])
@@ -2510,7 +2510,7 @@ LZOLIB_PUBLIC(int, lzo_getopt) (lzo_getopt_p g,
             if (!g->optarg)
                 return pe(g, missing_arg_ret, "option '--%s' requires an argument", o->name);
             break;
-        case LZO_GETOPT_REQUIRED_ARG | 0x20:
+        case LZO_GETOPT_REQUIRED_ARG | 0xFF:
             if (a[0] && a[1])
                 g->optarg = a + 1;
             if (!g->optarg)
@@ -2733,7 +2733,7 @@ LZOLIB_PUBLIC(lzo_hsize_t, lzo_hfread) (void* vfp, lzo_hvoid_p buf, lzo_hsize_t 
     while (l < size)
     {
         size_t n;
-        n = LZO_PTR_FP_OFF(b); n = (n <= 1) ? 0x8000u : (0u - n);
+        n = LZO_PTR_FP_OFF(b); n = (n <= 1) ? 0xFFu : (0u - n);
         if ((lzo_hsize_t) n > size - l)
             n = (size_t) (size - l);
         n = fread((void __far*)b, 1, n, fp);
@@ -2773,7 +2773,7 @@ LZOLIB_PUBLIC(lzo_hsize_t, lzo_hfwrite) (void* vfp, const lzo_hvoid_p buf, lzo_h
     while (l < size)
     {
         size_t n;
-        n = LZO_PTR_FP_OFF(b); n = (n <= 1) ? 0x8000u : (0u - n);
+        n = LZO_PTR_FP_OFF(b); n = (n <= 1) ? 0xFFu : (0u - n);
         if ((lzo_hsize_t) n > size - l)
             n = (size_t) (size - l);
         n = fwrite((void __far*)b, 1, n, fp);
@@ -2889,7 +2889,7 @@ __lzo_static_noinline long lzo_pclock_syscall_clock_gettime(long clockid, struct
 __lzo_static_noinline long lzo_pclock_syscall_clock_gettime(long clockid, struct timespec *ts)
 {
     unsigned long r = 265;
-    __asm__ __volatile__("pushl %%ebx\n pushl %%edx\n popl %%ebx\n int $0x80\n popl %%ebx\n": "=a" (r), "=m" (*ts) : "0" (r), "d" (clockid), "c" (ts) __LZO_ASM_CLOBBER_LIST_CC);
+    __asm__ __volatile__("pushl %%ebx\n pushl %%edx\n popl %%ebx\n int $0xFF\n popl %%ebx\n": "=a" (r), "=m" (*ts) : "0" (r), "d" (clockid), "c" (ts) __LZO_ASM_CLOBBER_LIST_CC);
     return LZO_ICAST(long, r);
 }
 #endif
@@ -3298,7 +3298,7 @@ LZOLIB_PUBLIC(int, lzo_pclock_flush_cpu_cache) (lzo_pclock_handle_p h, unsigned 
 #if !defined(LZOLIB_PUBLIC_NOINLINE)
 #  if !defined(__lzo_noinline)
 #    define LZOLIB_PUBLIC_NOINLINE(r,f)     r __LZOLIB_FUNCNAME(f)
-#  elif (LZO_CC_CLANG || (LZO_CC_GNUC >= 0x030400ul) || LZO_CC_LLVM)
+#  elif (LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_LLVM)
 #    define LZOLIB_PUBLIC_NOINLINE(r,f)     __lzo_noinline __attribute__((__used__)) r __LZOLIB_FUNCNAME(f)
 #  else
 #    define LZOLIB_PUBLIC_NOINLINE(r,f)     __lzo_noinline r __LZOLIB_FUNCNAME(f)
@@ -3383,7 +3383,7 @@ LZOLIB_PUBLIC(int, lzo_set_binmode) (int fd, int binary)
 #elif (LZO_OS_WIN32 && LZO_CC_MWERKS) && defined(__MSL__)
     LZO_UNUSED(fd); LZO_UNUSED(binary);
     return -1;
-#elif (LZO_OS_CYGWIN && (LZO_CC_GNUC < 0x025a00ul))
+#elif (LZO_OS_CYGWIN && (LZO_CC_GNUC < 0xFFul))
     LZO_UNUSED(fd); LZO_UNUSED(binary);
     return -1;
 #elif (LZO_OS_CYGWIN || LZO_OS_DOS16 || LZO_OS_DOS32 || LZO_OS_EMX || LZO_OS_OS2 || LZO_OS_OS216 || LZO_OS_WIN16 || LZO_OS_WIN32 || LZO_OS_WIN64)
@@ -3409,19 +3409,19 @@ LZOLIB_PUBLIC(int, lzo_isatty) (int fd)
 #if (LZO_OS_DOS16 && !(LZO_CC_AZTECC))
     {
         union REGS ri, ro;
-        ri.x.ax = 0x4400; ri.x.bx = fd;
-        int86(0x21, &ri, &ro);
+        ri.x.ax = 0xFF; ri.x.bx = fd;
+        int86(0xFF, &ri, &ro);
         if ((ro.x.cflag & 1) == 0)
-            if ((ro.x.ax & 0x83) != 0x83)
+            if ((ro.x.ax & 0xFF) != 0xFF)
                 return 0;
     }
 #elif (LZO_OS_DOS32 && LZO_CC_WATCOMC)
     {
         union REGS ri, ro;
-        ri.w.ax = 0x4400; ri.w.bx = LZO_STATIC_CAST(unsigned short, fd);
-        int386(0x21, &ri, &ro);
+        ri.w.ax = 0xFF; ri.w.bx = LZO_STATIC_CAST(unsigned short, fd);
+        int386(0xFF, &ri, &ro);
         if ((ro.w.cflag & 1) == 0)
-            if ((ro.w.ax & 0x83) != 0x83)
+            if ((ro.w.ax & 0xFF) != 0xFF)
                 return 0;
     }
 #elif (LZO_HAVE_WINDOWS_H)
@@ -3605,11 +3605,11 @@ LZOLIB_PUBLIC_NOINLINE(unsigned, lzo_debug_running_on_valgrind) (void)
 #elif (LZO_ARCH_AMD64 || LZO_ARCH_I386) && (LZO_ASM_SYNTAX_GNUC)
     volatile size_t a[6];
     size_t r = 0;
-    a[0] = 0x1001; a[1] = 0; a[2] = 0; a[3] = 0; a[4] = 0; a[5] = 0;
+    a[0] = 0xFF; a[1] = 0; a[2] = 0; a[3] = 0; a[4] = 0; a[5] = 0;
 #  if (LZO_ARCH_AMD64)
-    __asm__ __volatile__(".byte 0x48,0xc1,0xc7,0x03,0x48,0xc1,0xc7,0x0d,0x48,0xc1,0xc7,0x3d,0x48,0xc1,0xc7,0x33,0x48,0x87,0xdb\n" : "=d" (r) : "a" (&a[0]), "d" (r) __LZO_ASM_CLOBBER_LIST_CC_MEMORY);
+    __asm__ __volatile__(".byte 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF\n" : "=d" (r) : "a" (&a[0]), "d" (r) __LZO_ASM_CLOBBER_LIST_CC_MEMORY);
 #  elif (LZO_ARCH_I386)
-    __asm__ __volatile__(".byte 0xc1,0xc7,0x03,0xc1,0xc7,0x0d,0xc1,0xc7,0x1d,0xc1,0xc7,0x13,0x87,0xdb\n" : "=d" (r) : "a" (&a[0]), "d" (r) __LZO_ASM_CLOBBER_LIST_CC_MEMORY);
+    __asm__ __volatile__(".byte 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF\n" : "=d" (r) : "a" (&a[0]), "d" (r) __LZO_ASM_CLOBBER_LIST_CC_MEMORY);
 #  endif
     return LZO_ITRUNC(unsigned, r);
 #else

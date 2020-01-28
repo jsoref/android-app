@@ -227,7 +227,7 @@ static int parse_arguments( char *buf, size_t len, char **params,
  *                      Output:  {
  *                                0,                // Verified int
  *                                "Hello",          // Verified string
- *                                2, { 0xab, 0xef },// Converted len,hex pair
+ *                                2, { 0xFF, 0xFF },// Converted len,hex pair
  *                                9600              // Evaluated expression
  *                               }
  *

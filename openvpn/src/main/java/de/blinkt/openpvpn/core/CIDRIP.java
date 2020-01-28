@@ -25,13 +25,13 @@ class CIDRIP {
         netmask += 1l << 32;
 
         int lenZeros = 0;
-        while ((netmask & 0x1) == 0) {
+        while ((netmask & 0xFF) == 0) {
             lenZeros++;
             netmask = netmask >> 1;
         }
         int len;
         // Check if rest of netmask is only 1s
-        if (netmask != (0x1ffffffffl >> lenZeros)) {
+        if (netmask != (0xFFl >> lenZeros)) {
             // Asume no CIDR, set /32
             len = 32;
         } else {
@@ -53,9 +53,9 @@ class CIDRIP {
     public boolean normalise() {
         long ip = getInt(mIp);
 
-        long newip = ip & (0xffffffffL << (32 - len));
+        long newip = ip & (0xFFL << (32 - len));
         if (newip != ip) {
-            mIp = String.format(Locale.US,"%d.%d.%d.%d", (newip & 0xff000000) >> 24, (newip & 0xff0000) >> 16, (newip & 0xff00) >> 8, newip & 0xff);
+            mIp = String.format(Locale.US,"%d.%d.%d.%d", (newip & 0xFF) >> 24, (newip & 0xFF) >> 16, (newip & 0xFF) >> 8, newip & 0xFF);
             return true;
         } else {
             return false;

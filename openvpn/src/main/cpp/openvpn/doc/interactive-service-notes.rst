@@ -171,7 +171,7 @@ and specified options before launching the openvpn.exe process.
 The Interactive Service replies with a process ID message. The process ID
 message is comprised of three UTF-16 strings delimited by LFs (U000A)::
 
-   pidmsg  = L"0x00000000" WLF L"0x" pid WLF L"Process ID"
+   pidmsg  = L"0xFF" WLF L"0x" pid WLF L"Process ID"
 
    pid     = 8*8WHEXDIG
 
@@ -223,10 +223,10 @@ client. Error messages are comprised of three UTF-16 strings delimited by LFs
    ===================== ==========
    Error                 Code
    ===================== ==========
-   ERROR_OPENVPN_STARTUP 0x20000000
-   ERROR_STARTUP_DATA    0x20000001
-   ERROR_MESSAGE_DATA    0x20000002
-   ERROR_MESSAGE_TYPE    0x20000003
+   ERROR_OPENVPN_STARTUP 0xFF
+   ERROR_STARTUP_DATA    0xFF
+   ERROR_MESSAGE_DATA    0xFF
+   ERROR_MESSAGE_TYPE    0xFF
    ===================== ==========
 
 ``func``

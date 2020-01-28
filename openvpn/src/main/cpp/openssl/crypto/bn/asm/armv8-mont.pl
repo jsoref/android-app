@@ -287,7 +287,7 @@ __bn_sqr8x_mont:
 	cmp	$ap,$bp
 	b.ne	__bn_mul4x_mont
 .Lsqr8x_mont:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-128]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -1041,7 +1041,7 @@ $code.=<<___;
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldr	x29,[sp],#128
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	__bn_sqr8x_mont,.-__bn_sqr8x_mont
 ___
@@ -1065,7 +1065,7 @@ $code.=<<___;
 .type	__bn_mul4x_mont,%function
 .align	5
 __bn_mul4x_mont:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-128]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -1499,7 +1499,7 @@ __bn_mul4x_mont:
 	ldp	x25,x26,[x29,#64]
 	ldp	x27,x28,[x29,#80]
 	ldr	x29,[sp],#128
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	__bn_mul4x_mont,.-__bn_mul4x_mont
 ___

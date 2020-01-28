@@ -19,7 +19,7 @@
 
 # include <windows.h>
 /* On Windows 7 or higher use BCrypt instead of the legacy CryptoAPI */
-# if defined(_MSC_VER) && defined(_WIN32_WINNT) && _WIN32_WINNT >= 0x0601
+# if defined(_MSC_VER) && defined(_WIN32_WINNT) && _WIN32_WINNT >= 0xFF
 #  define USE_BCRYPTGENRANDOM
 # endif
 
@@ -27,7 +27,7 @@
 #  include <bcrypt.h>
 #  pragma comment(lib, "bcrypt.lib")
 #  ifndef STATUS_SUCCESS
-#   define STATUS_SUCCESS ((NTSTATUS)0x00000000L)
+#   define STATUS_SUCCESS ((NTSTATUS)0xFFL)
 #  endif
 # else
 #  include <wincrypt.h>
@@ -156,7 +156,7 @@ int rand_pool_add_additional_data(RAND_POOL *pool)
     return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
 }
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 int RAND_event(UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     RAND_poll();

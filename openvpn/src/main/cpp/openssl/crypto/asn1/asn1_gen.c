@@ -11,7 +11,7 @@
 #include <openssl/asn1.h>
 #include <openssl/x509v3.h>
 
-#define ASN1_GEN_FLAG           0x10000
+#define ASN1_GEN_FLAG           0xFF
 #define ASN1_GEN_FLAG_IMP       (ASN1_GEN_FLAG|1)
 #define ASN1_GEN_FLAG_EXP       (ASN1_GEN_FLAG|2)
 #define ASN1_GEN_FLAG_TAG       (ASN1_GEN_FLAG|3)
@@ -156,7 +156,7 @@ static ASN1_TYPE *generate_v3(const char *str, X509V3_CTX *cnf, int depth,
         /* Skip existing tag+len */
         r = ASN1_get_object(&cpy_start, &hdr_len, &hdr_tag, &hdr_class,
                             cpy_len);
-        if (r & 0x80)
+        if (r & 0xFF)
             goto err;
         /* Update copy length */
         cpy_len -= cpy_start - orig_der;
@@ -164,7 +164,7 @@ static ASN1_TYPE *generate_v3(const char *str, X509V3_CTX *cnf, int depth,
          * For IMPLICIT tagging the length should match the original length
          * and constructed flag should be consistent.
          */
-        if (r & 0x1) {
+        if (r & 0xFF) {
             /* Indefinite length constructed */
             hdr_constructed = 2;
             hdr_len = 0;
@@ -719,7 +719,7 @@ static ASN1_TYPE *asn1_str2type(const char *str, int format, int utype)
 
         if ((utype == V_ASN1_BIT_STRING) && no_unused) {
             atmp->value.asn1_string->flags
-                &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+                &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF);
             atmp->value.asn1_string->flags |= ASN1_STRING_FLAG_BITS_LEFT;
         }
 

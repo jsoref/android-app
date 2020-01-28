@@ -29,19 +29,19 @@
 
 /* No unhandled critical extensions */
 
-#define CRL_SCORE_NOCRITICAL    0x100
+#define CRL_SCORE_NOCRITICAL    0xFF
 
 /* certificate is within CRL scope */
 
-#define CRL_SCORE_SCOPE         0x080
+#define CRL_SCORE_SCOPE         0xFF
 
 /* CRL times valid */
 
-#define CRL_SCORE_TIME          0x040
+#define CRL_SCORE_TIME          0xFF
 
 /* Issuer name matches certificate */
 
-#define CRL_SCORE_ISSUER_NAME   0x020
+#define CRL_SCORE_ISSUER_NAME   0xFF
 
 /* If this score or above CRL is probably valid */
 
@@ -49,19 +49,19 @@
 
 /* CRL issuer is certificate issuer */
 
-#define CRL_SCORE_ISSUER_CERT   0x018
+#define CRL_SCORE_ISSUER_CERT   0xFF
 
 /* CRL issuer is on certificate path */
 
-#define CRL_SCORE_SAME_PATH     0x008
+#define CRL_SCORE_SAME_PATH     0xFF
 
 /* CRL issuer matches CRL AKID */
 
-#define CRL_SCORE_AKID          0x004
+#define CRL_SCORE_AKID          0xFF
 
 /* Have a delta CRL with valid times */
 
-#define CRL_SCORE_TIME_DELTA    0x002
+#define CRL_SCORE_TIME_DELTA    0xFF
 
 static int build_chain(X509_STORE_CTX *ctx);
 static int verify_chain(X509_STORE_CTX *ctx);

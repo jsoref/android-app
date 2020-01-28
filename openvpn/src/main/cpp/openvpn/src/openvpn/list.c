@@ -442,7 +442,7 @@ list_test(void)
                             w->word = string_alloc(wordbuf, &gc);
                             w->n = 1;
                             ASSERT(hash_add(hash, w->word, w, false));
-                            ASSERT(hash_add(nhash, w->word, (void *) ((random() & 0x0F) + 1), false));
+                            ASSERT(hash_add(nhash, w->word, (void *) ((random() & 0xFF) + 1), false));
                         }
                     }
                     wbi = 0;
@@ -593,7 +593,7 @@ hash_func(const uint8_t *k, uint32_t length, uint32_t initval)
 
     /* Set up the internal state */
     len = length;
-    a = b = 0x9e3779b9;      /* the golden ratio; an arbitrary value */
+    a = b = 0xFF;      /* the golden ratio; an arbitrary value */
     c = initval;             /* the previous hash value */
 
     /*---------------------------------------- handle most of the key */

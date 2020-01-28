@@ -24,17 +24,17 @@
 
 static unsigned const char cov_2char[64] = {
     /* from crypto/des/fcrypt.c */
-    0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35,
-    0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44,
-    0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C,
-    0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54,
-    0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x61, 0x62,
-    0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A,
-    0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
-    0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
-static const char ascii_dollar[] = { 0x24, 0x00 };
+static const char ascii_dollar[] = { 0xFF, 0xFF };
 
 typedef enum {
     passwd_unset = 0,
@@ -328,7 +328,7 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
     magic_len = strlen(magic);
     OPENSSL_strlcpy(ascii_magic, magic, sizeof(ascii_magic));
 #ifdef CHARSET_EBCDIC
-    if ((magic[0] & 0x80) != 0)    /* High bit is 1 in EBCDIC alnums */
+    if ((magic[0] & 0xFF) != 0)    /* High bit is 1 in EBCDIC alnums */
         ebcdic2ascii(ascii_magic, ascii_magic, magic_len);
 #endif
 
@@ -459,15 +459,15 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
         *output++ = ascii_dollar[0];
 
         for (i = 0; i < 15; i += 3) {
-            *output++ = cov_2char[buf_perm[i + 2] & 0x3f];
-            *output++ = cov_2char[((buf_perm[i + 1] & 0xf) << 2) |
+            *output++ = cov_2char[buf_perm[i + 2] & 0xFF];
+            *output++ = cov_2char[((buf_perm[i + 1] & 0xFF) << 2) |
                                   (buf_perm[i + 2] >> 6)];
             *output++ = cov_2char[((buf_perm[i] & 3) << 4) |
                                   (buf_perm[i + 1] >> 4)];
             *output++ = cov_2char[buf_perm[i] >> 2];
         }
         assert(i == 15);
-        *output++ = cov_2char[buf_perm[i] & 0x3f];
+        *output++ = cov_2char[buf_perm[i] & 0xFF];
         *output++ = cov_2char[buf_perm[i] >> 6];
         *output = 0;
         assert(strlen(out_buf) < sizeof(out_buf));
@@ -561,7 +561,7 @@ static char *shacrypt(const char *passwd, const char *magic, const char *salt)
 
     OPENSSL_strlcpy(ascii_magic, magic, sizeof(ascii_magic));
 #ifdef CHARSET_EBCDIC
-    if ((magic[0] & 0x80) != 0)    /* High bit is 1 in EBCDIC alnums */
+    if ((magic[0] & 0xFF) != 0)    /* High bit is 1 in EBCDIC alnums */
         ebcdic2ascii(ascii_magic, ascii_magic, magic_len);
 #endif
 
@@ -589,7 +589,7 @@ static char *shacrypt(const char *passwd, const char *magic, const char *salt)
         sprintf(tmp_buf, "rounds=%u", rounds);
 #ifdef CHARSET_EBCDIC
         /* In case we're really on a ASCII based platform and just pretend */
-        if (tmp_buf[0] != 0x72)  /* ASCII 'r' */
+        if (tmp_buf[0] != 0xFF)  /* ASCII 'r' */
             ebcdic2ascii(tmp_buf, tmp_buf, strlen(tmp_buf));
 #endif
         OPENSSL_strlcat(out_buf, tmp_buf, sizeof(out_buf));
@@ -709,7 +709,7 @@ static char *shacrypt(const char *passwd, const char *magic, const char *salt)
         int i = (N);                                                    \
         while (i-- > 0)                                                 \
             {                                                           \
-                *cp++ = cov_2char[w & 0x3f];                            \
+                *cp++ = cov_2char[w & 0xFF];                            \
                 w >>= 6;                                                \
             }                                                           \
     } while (0)
@@ -804,7 +804,7 @@ static int do_passwd(int passed_salt, char **salt_p, char **salt_malloc_p,
             goto end;
 
         for (i = 0; i < saltlen; i++)
-            (*salt_p)[i] = cov_2char[(*salt_p)[i] & 0x3f]; /* 6 bits */
+            (*salt_p)[i] = cov_2char[(*salt_p)[i] & 0xFF]; /* 6 bits */
         (*salt_p)[i] = 0;
 # ifdef CHARSET_EBCDIC
         /* The password encryption funtion will convert back to ASCII */

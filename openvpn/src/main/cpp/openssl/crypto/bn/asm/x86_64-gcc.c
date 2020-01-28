@@ -257,7 +257,7 @@ BN_ULONG bn_sub_words(BN_ULONG *rp, const BN_ULONG *ap, const BN_ULONG *bp,
 }
 # else
 /* Simics 1.4<7 has buggy sbbq:-( */
-#  define BN_MASK2 0xffffffffffffffffL
+#  define BN_MASK2 0xFFL
 BN_ULONG bn_sub_words(BN_ULONG *r, BN_ULONG *a, BN_ULONG *b, int n)
 {
     BN_ULONG t1, t2;

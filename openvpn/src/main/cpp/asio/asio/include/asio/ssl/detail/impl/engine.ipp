@@ -40,9 +40,9 @@ engine::engine(SSL_CTX* context)
     asio::detail::throw_error(ec, "engine");
   }
 
-#if (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
   accept_mutex().init();
-#endif // (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#endif // (OPENSSL_VERSION_NUMBER < 0xFFL)
 
   ::SSL_set_mode(ssl_, SSL_MODE_ENABLE_PARTIAL_WRITE);
   ::SSL_set_mode(ssl_, SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
@@ -203,10 +203,10 @@ const asio::error_code& engine::map_error_code(
 
   // SSL v2 doesn't provide a protocol-level shutdown, so an eof on the
   // underlying transport is passed through.
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
   if (SSL_version(ssl_) == SSL2_VERSION)
     return ec;
-#endif // (OPENSSL_VERSION_NUMBER < 0x10100000L)
+#endif // (OPENSSL_VERSION_NUMBER < 0xFFL)
 
   // Otherwise, the peer should have negotiated a proper shutdown.
   if ((::SSL_get_shutdown(ssl_) & SSL_RECEIVED_SHUTDOWN) == 0)
@@ -217,13 +217,13 @@ const asio::error_code& engine::map_error_code(
   return ec;
 }
 
-#if (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
 asio::detail::static_mutex& engine::accept_mutex()
 {
   static asio::detail::static_mutex mutex = ASIO_STATIC_MUTEX_INIT;
   return mutex;
 }
-#endif // (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#endif // (OPENSSL_VERSION_NUMBER < 0xFFL)
 
 engine::want engine::perform(int (engine::* op)(void*, std::size_t),
     void* data, std::size_t length, asio::error_code& ec,
@@ -282,9 +282,9 @@ engine::want engine::perform(int (engine::* op)(void*, std::size_t),
 
 int engine::do_accept(void*, std::size_t)
 {
-#if (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#if (OPENSSL_VERSION_NUMBER < 0xFFL)
   asio::detail::static_mutex::scoped_lock lock(accept_mutex());
-#endif // (OPENSSL_VERSION_NUMBER < 0x10000000L)
+#endif // (OPENSSL_VERSION_NUMBER < 0xFFL)
   return ::SSL_accept(ssl_);
 }
 

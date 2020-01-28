@@ -74,7 +74,7 @@ mroute_learnable_address(const struct mroute_addr *addr, struct gc_arena *gc)
     for (i = 0; i < addr->len; ++i)
     {
         int b = addr->raw_addr[i];
-        if (b != 0x00)
+        if (b != 0xFF)
         {
             all_zeros = false;
         }
@@ -146,7 +146,7 @@ mroute_is_mcast(const in_addr_t addr)
 static inline bool
 mroute_is_mcast_ipv6(const struct in6_addr addr)
 {
-    return (addr.s6_addr[0] == 0xff);
+    return (addr.s6_addr[0] == 0xFF);
 }
 
 #ifdef ENABLE_PF
@@ -160,10 +160,10 @@ mroute_extract_addr_arp(struct mroute_addr *src,
     if (BLEN(buf) >= (int) sizeof(struct openvpn_arp))
     {
         const struct openvpn_arp *arp = (const struct openvpn_arp *) BPTR(buf);
-        if (arp->mac_addr_type == htons(0x0001)
-            && arp->proto_addr_type == htons(0x0800)
-            && arp->mac_addr_size == 0x06
-            && arp->proto_addr_size == 0x04)
+        if (arp->mac_addr_type == htons(0xFF)
+            && arp->proto_addr_type == htons(0xFF)
+            && arp->mac_addr_size == 0xFF
+            && arp->proto_addr_size == 0xFF)
         {
             mroute_get_in_addr_t(src, arp->ip_src, MR_ARP);
             mroute_get_in_addr_t(dest, arp->ip_dest, MR_ARP);

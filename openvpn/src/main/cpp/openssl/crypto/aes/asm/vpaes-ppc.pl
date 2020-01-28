@@ -71,99 +71,99 @@ $code.=<<___;
 .align	7	# totally strategic alignment
 _vpaes_consts:
 Lk_mc_forward:	# mc_forward
-	.long	0x01020300, 0x05060704, 0x090a0b08, 0x0d0e0f0c	?inv
-	.long	0x05060704, 0x090a0b08, 0x0d0e0f0c, 0x01020300	?inv
-	.long	0x090a0b08, 0x0d0e0f0c, 0x01020300, 0x05060704	?inv
-	.long	0x0d0e0f0c, 0x01020300, 0x05060704, 0x090a0b08	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
 Lk_mc_backward:	# mc_backward
-	.long	0x03000102, 0x07040506, 0x0b08090a, 0x0f0c0d0e	?inv
-	.long	0x0f0c0d0e, 0x03000102, 0x07040506, 0x0b08090a	?inv
-	.long	0x0b08090a, 0x0f0c0d0e, 0x03000102, 0x07040506	?inv
-	.long	0x07040506, 0x0b08090a, 0x0f0c0d0e, 0x03000102	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
 Lk_sr:		# sr
-	.long	0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f	?inv
-	.long	0x00050a0f, 0x04090e03, 0x080d0207, 0x0c01060b	?inv
-	.long	0x0009020b, 0x040d060f, 0x08010a03, 0x0c050e07	?inv
-	.long	0x000d0a07, 0x04010e0b, 0x0805020f, 0x0c090603	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?inv
 
 ##
 ## "Hot" constants
 ##
 Lk_inv:		# inv, inva
-	.long	0xf001080d, 0x0f06050e, 0x020c0b0a, 0x09030704	?rev
-	.long	0xf0070b0f, 0x060a0401, 0x09080502, 0x0c0e0d03	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_ipt:		# input transform (lo, hi)
-	.long	0x00702a5a, 0x98e8b2c2, 0x08782252, 0x90e0baca	?rev
-	.long	0x004d7c31, 0x7d30014c, 0x81ccfdb0, 0xfcb180cd	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_sbo:		# sbou, sbot
-	.long	0x00c7bd6f, 0x176dd2d0, 0x78a802c5, 0x7abfaa15	?rev
-	.long	0x006abb5f, 0xa574e4cf, 0xfa352b41, 0xd1901e8e	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_sb1:		# sb1u, sb1t
-	.long	0x0023e2fa, 0x15d41836, 0xefd92e0d, 0xc1ccf73b	?rev
-	.long	0x003e50cb, 0x8fe19bb1, 0x44f52a14, 0x6e7adfa5	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_sb2:		# sb2u, sb2t
-	.long	0x0029e10a, 0x4088eb69, 0x4a2382ab, 0xc863a1c2	?rev
-	.long	0x0024710b, 0xc6937ae2, 0xcd2f98bc, 0x55e9b75e	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 
 ##
 ##  Decryption stuff
 ##
 Lk_dipt:	# decryption input transform
-	.long	0x005f540b, 0x045b500f, 0x1a454e11, 0x1e414a15	?rev
-	.long	0x00650560, 0xe683e386, 0x94f191f4, 0x72177712	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dsbo:	# decryption sbox final output
-	.long	0x0040f97e, 0x53ea8713, 0x2d3e94d4, 0xb96daac7	?rev
-	.long	0x001d4493, 0x0f56d712, 0x9c8ec5d8, 0x59814bca	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dsb9:	# decryption sbox output *9*u, *9*t
-	.long	0x00d6869a, 0x53031c85, 0xc94c994f, 0x501fd5ca	?rev
-	.long	0x0049d7ec, 0x89173bc0, 0x65a5fbb2, 0x9e2c5e72	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dsbd:	# decryption sbox output *D*u, *D*t
-	.long	0x00a2b1e6, 0xdfcc577d, 0x39442a88, 0x139b6ef5	?rev
-	.long	0x00cbc624, 0xf7fae23c, 0xd3efde15, 0x0d183129	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dsbb:	# decryption sbox output *B*u, *B*t
-	.long	0x0042b496, 0x926422d0, 0x04d4f2b0, 0xf6462660	?rev
-	.long	0x006759cd, 0xa69894c1, 0x6baa5532, 0x3e0cfff3	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dsbe:	# decryption sbox output *E*u, *E*t
-	.long	0x00d0d426, 0x9692f246, 0xb0f6b464, 0x04604222	?rev
-	.long	0x00c1aaff, 0xcda6550c, 0x323e5998, 0x6bf36794	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 
 ##
 ##  Key schedule constants
 ##
 Lk_dksd:	# decryption key schedule: invskew x*D
-	.long	0x0047e4a3, 0x5d1ab9fe, 0xf9be1d5a, 0xa4e34007	?rev
-	.long	0x008336b5, 0xf477c241, 0x1e9d28ab, 0xea69dc5f	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dksb:	# decryption key schedule: invskew x*B
-	.long	0x00d55085, 0x1fca4f9a, 0x994cc91c, 0x8653d603	?rev
-	.long	0x004afcb6, 0xa7ed5b11, 0xc882347e, 0x6f2593d9	?rev
-Lk_dkse:	# decryption key schedule: invskew x*E + 0x63
-	.long	0x00d6c91f, 0xca1c03d5, 0x86504f99, 0x4c9a8553	?rev
-	.long	0xe87bdc4f, 0x059631a2, 0x8714b320, 0x6af95ecd	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+Lk_dkse:	# decryption key schedule: invskew x*E + 0xFF
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_dks9:	# decryption key schedule: invskew x*9
-	.long	0x00a7d97e, 0xc86f11b6, 0xfc5b2582, 0x3493ed4a	?rev
-	.long	0x00331427, 0x62517645, 0xcefddae9, 0xac9fb88b	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 
 Lk_rcon:	# rcon
-	.long	0xb6ee9daf, 0xb991831f, 0x817d7c4d, 0x08982a70	?asis
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?asis
 Lk_s63:
-	.long	0x5b5b5b5b, 0x5b5b5b5b, 0x5b5b5b5b, 0x5b5b5b5b	?asis
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?asis
 
 Lk_opt:		# output transform
-	.long	0x0060b6d6, 0x29499fff, 0x0868bede, 0x214197f7	?rev
-	.long	0x00ecbc50, 0x51bded01, 0xe00c5cb0, 0xb15d0de1	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 Lk_deskew:	# deskew tables: inverts the sbox's "skew"
-	.long	0x00e3a447, 0x40a3e407, 0x1af9be5d, 0x5ab9fe1d	?rev
-	.long	0x0069ea83, 0xdcb5365f, 0x771e9df4, 0xabc24128	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+	.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 .align	5
 Lconsts:
 	mflr	r0
 	bcl	20,31,\$+4
 	mflr	r12	#vvvvv "distance between . and _vpaes_consts
-	addi	r12,r12,-0x308
+	addi	r12,r12,-0xFF
 	mtlr	r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .asciz  "Vector Permutation AES for AltiVec, Mike Hamburg (Stanford University)"
 .align	6
 ___
@@ -188,32 +188,32 @@ _vpaes_encrypt_preheat:
 	mflr	r8
 	bl	Lconsts
 	mtlr	r8
-	li	r11, 0xc0		# Lk_inv
-	li	r10, 0xd0
-	li	r9,  0xe0		# Lk_ipt
-	li	r8,  0xf0
-	vxor	v7, v7, v7		# 0x00..00
-	vspltisb	v8,4		# 0x04..04
-	vspltisb	v9,0x0f		# 0x0f..0f
+	li	r11, 0xFF		# Lk_inv
+	li	r10, 0xFF
+	li	r9,  0xFF		# Lk_ipt
+	li	r8,  0xFF
+	vxor	v7, v7, v7		# 0xFF..00
+	vspltisb	v8,4		# 0xFF..04
+	vspltisb	v9,0xFF		# 0xFF..0f
 	lvx	$invlo, r12, r11
-	li	r11, 0x100
+	li	r11, 0xFF
 	lvx	$invhi, r12, r10
-	li	r10, 0x110
+	li	r10, 0xFF
 	lvx	$iptlo, r12, r9
-	li	r9,  0x120
+	li	r9,  0xFF
 	lvx	$ipthi, r12, r8
-	li	r8,  0x130
+	li	r8,  0xFF
 	lvx	$sbou, r12, r11
-	li	r11, 0x140
+	li	r11, 0xFF
 	lvx	$sbot, r12, r10
-	li	r10, 0x150
+	li	r10, 0xFF
 	lvx	$sb1u, r12, r9
 	lvx	$sb1t, r12, r8
 	lvx	$sb2u, r12, r11
 	lvx	$sb2t, r12, r10
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 ##
 ##  _aes_encrypt_core
@@ -234,11 +234,11 @@ _vpaes_encrypt_core:
 	lwz	r8, 240($key)		# pull rounds
 	li	r9, 16
 	lvx	v5, 0, $key		# vmovdqu	(%r9),	%xmm5		# round0 key
-	li	r11, 0x10
+	li	r11, 0xFF
 	lvx	v6, r9, $key
 	addi	r9, r9, 16
 	?vperm	v5, v5, v6, $keyperm	# align round key
-	addi	r10, r11, 0x40
+	addi	r10, r11, 0xFF
 	vsrb	v1, v0, v8		# vpsrlb	\$4,	%xmm0,	%xmm0
 	vperm	v0, $iptlo, $iptlo, v0	# vpshufb	%xmm1,	%xmm2,	%xmm1
 	vperm	v1, $ipthi, $ipthi, v1	# vpshufb	%xmm0,	%xmm3,	%xmm2
@@ -251,16 +251,16 @@ _vpaes_encrypt_core:
 Lenc_loop:
 	# middle of middle round
 	vperm	v4, $sb1t, v7, v2	# vpshufb	%xmm2,	%xmm13,	%xmm4	# 4 = sb1u
-	lvx	v1, r12, r11		# vmovdqa	-0x40(%r11,%r10), %xmm1	# .Lk_mc_forward[]
+	lvx	v1, r12, r11		# vmovdqa	-0xFF(%r11,%r10), %xmm1	# .Lk_mc_forward[]
 	addi	r11, r11, 16
 	vperm	v0, $sb1u, v7, v3	# vpshufb	%xmm3,	%xmm12,	%xmm0	# 0 = sb1t
 	vxor	v4, v4, v5		# vpxor		%xmm5,	%xmm4,	%xmm4	# 4 = sb1u + k
-	andi.	r11, r11, 0x30		# and		\$0x30, %r11	# ... mod 4
+	andi.	r11, r11, 0xFF		# and		\$0xFF, %r11	# ... mod 4
 	vperm	v5, $sb2t, v7, v2	# vpshufb	%xmm2,	%xmm15,	%xmm5	# 4 = sb2u
 	vxor	v0, v0, v4		# vpxor		%xmm4,	%xmm0,	%xmm0	# 0 = A
 	vperm	v2, $sb2u, v7, v3	# vpshufb	%xmm3,	%xmm14,	%xmm2	# 2 = sb2t
 	lvx	v4, r12, r10		# vmovdqa	(%r11,%r10), %xmm4	# .Lk_mc_backward[]
-	addi	r10, r11, 0x40
+	addi	r10, r11, 0xFF
 	vperm	v3, v0, v7, v1		# vpshufb	%xmm1,	%xmm0,	%xmm3	# 0 = B
 	vxor	v2, v2, v5		# vpxor		%xmm5,	%xmm2,	%xmm2	# 2 = 2A
 	vperm	v0, v0, v7, v4		# vpshufb	%xmm4,	%xmm0,	%xmm0	# 3 = D
@@ -290,18 +290,18 @@ Lenc_entry:
 	bdnz	Lenc_loop
 
 	# middle of last round
-	addi	r10, r11, 0x80
-					# vmovdqa	-0x60(%r10), %xmm4	# 3 : sbou	.Lk_sbo
-					# vmovdqa	-0x50(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
+	addi	r10, r11, 0xFF
+					# vmovdqa	-0xFF(%r10), %xmm4	# 3 : sbou	.Lk_sbo
+					# vmovdqa	-0xFF(%r10), %xmm0	# 0 : sbot	.Lk_sbo+16
 	vperm	v4, $sbou, v7, v2	# vpshufb	%xmm2,	%xmm4,	%xmm4	# 4 = sbou
-	lvx	v1, r12, r10		# vmovdqa	0x40(%r11,%r10), %xmm1	# .Lk_sr[]
+	lvx	v1, r12, r10		# vmovdqa	0xFF(%r11,%r10), %xmm1	# .Lk_sr[]
 	vperm	v0, $sbot, v7, v3	# vpshufb	%xmm3,	%xmm0,	%xmm0	# 0 = sb1t
 	vxor	v4, v4, v5		# vpxor		%xmm5,	%xmm4,	%xmm4	# 4 = sb1u + k
 	vxor	v0, v0, v4		# vpxor		%xmm4,	%xmm0,	%xmm0	# 0 = A
 	vperm	v0, v0, v7, v1		# vpshufb	%xmm1,	%xmm0,	%xmm0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 .globl	.vpaes_encrypt
 .align	5
@@ -396,7 +396,7 @@ Lenc_done:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
+	.byte	0,12,0xFF,1,0xFF,0,3,0
 	.long	0
 .size	.vpaes_encrypt,.-.vpaes_encrypt
 
@@ -405,40 +405,40 @@ _vpaes_decrypt_preheat:
 	mflr	r8
 	bl	Lconsts
 	mtlr	r8
-	li	r11, 0xc0		# Lk_inv
-	li	r10, 0xd0
-	li	r9,  0x160		# Ldipt
-	li	r8,  0x170
-	vxor	v7, v7, v7		# 0x00..00
-	vspltisb	v8,4		# 0x04..04
-	vspltisb	v9,0x0f		# 0x0f..0f
+	li	r11, 0xFF		# Lk_inv
+	li	r10, 0xFF
+	li	r9,  0xFF		# Ldipt
+	li	r8,  0xFF
+	vxor	v7, v7, v7		# 0xFF..00
+	vspltisb	v8,4		# 0xFF..04
+	vspltisb	v9,0xFF		# 0xFF..0f
 	lvx	$invlo, r12, r11
-	li	r11, 0x180
+	li	r11, 0xFF
 	lvx	$invhi, r12, r10
-	li	r10, 0x190
+	li	r10, 0xFF
 	lvx	$iptlo, r12, r9
-	li	r9,  0x1a0
+	li	r9,  0xFF
 	lvx	$ipthi, r12, r8
-	li	r8,  0x1b0
+	li	r8,  0xFF
 	lvx	$sbou, r12, r11
-	li	r11, 0x1c0
+	li	r11, 0xFF
 	lvx	$sbot, r12, r10
-	li	r10, 0x1d0
+	li	r10, 0xFF
 	lvx	$sb9u, r12, r9
-	li	r9,  0x1e0
+	li	r9,  0xFF
 	lvx	$sb9t, r12, r8
-	li	r8,  0x1f0
+	li	r8,  0xFF
 	lvx	$sbdu, r12, r11
-	li	r11, 0x200
+	li	r11, 0xFF
 	lvx	$sbdt, r12, r10
-	li	r10, 0x210
+	li	r10, 0xFF
 	lvx	$sbbu, r12, r9
 	lvx	$sbbt, r12, r8
 	lvx	$sbeu, r12, r11
 	lvx	$sbet, r12, r10
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 ##
 ##  Decryption core
@@ -450,7 +450,7 @@ _vpaes_decrypt_core:
 	lwz	r8, 240($key)		# pull rounds
 	li	r9, 16
 	lvx	v5, 0, $key		# vmovdqu	(%r9),	%xmm4		# round0 key
-	li	r11, 0x30
+	li	r11, 0xFF
 	lvx	v6, r9, $key
 	addi	r9, r9, 16
 	?vperm	v5, v5, v6, $keyperm	# align round key
@@ -468,32 +468,32 @@ Ldec_loop:
 #  Inverse mix columns
 #
 	lvx	v0, r12, r11		# v5 and v0 are flipped
-					# vmovdqa	-0x20(%r10),%xmm4		# 4 : sb9u
-					# vmovdqa	-0x10(%r10),%xmm1		# 0 : sb9t
+					# vmovdqa	-0xFF(%r10),%xmm4		# 4 : sb9u
+					# vmovdqa	-0xFF(%r10),%xmm1		# 0 : sb9t
 	vperm	v4, $sb9u, v7, v2	# vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sb9u
 	subi	r11, r11, 16
 	vperm	v1, $sb9t, v7, v3	# vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sb9t
-	andi.	r11, r11, 0x30
+	andi.	r11, r11, 0xFF
 	vxor	v5, v5, v4		# vpxor		%xmm4,	%xmm0,	%xmm0
-					# vmovdqa	0x00(%r10),%xmm4		# 4 : sbdu
+					# vmovdqa	0xFF(%r10),%xmm4		# 4 : sbdu
 	vxor	v5, v5, v1		# vpxor		%xmm1,	%xmm0,	%xmm0		# 0 = ch
-					# vmovdqa	0x10(%r10),%xmm1		# 0 : sbdt
+					# vmovdqa	0xFF(%r10),%xmm1		# 0 : sbdt
 
 	vperm	v4, $sbdu, v7, v2	# vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbdu
 	vperm 	v5, v5, v7, v0		# vpshufb	%xmm5,	%xmm0,	%xmm0		# MC ch
 	vperm	v1, $sbdt, v7, v3	# vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sbdt
 	vxor	v5, v5, v4		# vpxor		%xmm4,	%xmm0,	%xmm0		# 4 = ch
-					# vmovdqa	0x20(%r10),	%xmm4		# 4 : sbbu
+					# vmovdqa	0xFF(%r10),	%xmm4		# 4 : sbbu
 	vxor	v5, v5, v1		# vpxor		%xmm1,	%xmm0,	%xmm0		# 0 = ch
-					# vmovdqa	0x30(%r10),	%xmm1		# 0 : sbbt
+					# vmovdqa	0xFF(%r10),	%xmm1		# 0 : sbbt
 
 	vperm	v4, $sbbu, v7, v2	# vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbbu
 	vperm	v5, v5, v7, v0		# vpshufb	%xmm5,	%xmm0,	%xmm0		# MC ch
 	vperm	v1, $sbbt, v7, v3	# vpshufb	%xmm3,	%xmm1,	%xmm1		# 0 = sbbt
 	vxor	v5, v5, v4		# vpxor		%xmm4,	%xmm0,	%xmm0		# 4 = ch
-					# vmovdqa	0x40(%r10),	%xmm4		# 4 : sbeu
+					# vmovdqa	0xFF(%r10),	%xmm4		# 4 : sbeu
 	vxor	v5, v5, v1		# vpxor		%xmm1,	%xmm0,	%xmm0		# 0 = ch
-					# vmovdqa	0x50(%r10),	%xmm1		# 0 : sbet
+					# vmovdqa	0xFF(%r10),	%xmm1		# 0 : sbet
 
 	vperm	v4, $sbeu, v7, v2	# vpshufb	%xmm2,	%xmm4,	%xmm4		# 4 = sbeu
 	vperm	v5, v5, v7, v0		# vpshufb	%xmm5,	%xmm0,	%xmm0		# MC ch
@@ -522,18 +522,18 @@ Ldec_entry:
 	bdnz	Ldec_loop
 
 	# middle of last round
-	addi	r10, r11, 0x80
-					# vmovdqa	0x60(%r10),	%xmm4	# 3 : sbou
+	addi	r10, r11, 0xFF
+					# vmovdqa	0xFF(%r10),	%xmm4	# 3 : sbou
 	vperm	v4, $sbou, v7, v2	# vpshufb	%xmm2,	%xmm4,	%xmm4	# 4 = sbou
-					# vmovdqa	0x70(%r10),	%xmm1	# 0 : sbot
-	lvx	v2, r12, r10		# vmovdqa	-0x160(%r11),	%xmm2	# .Lk_sr-.Lk_dsbd=-0x160
+					# vmovdqa	0xFF(%r10),	%xmm1	# 0 : sbot
+	lvx	v2, r12, r10		# vmovdqa	-0xFF(%r11),	%xmm2	# .Lk_sr-.Lk_dsbd=-0xFF
 	vperm	v1, $sbot, v7, v3	# vpshufb	%xmm3,	%xmm1,	%xmm1	# 0 = sb1t
 	vxor	v4, v4, v5		# vpxor		%xmm0,	%xmm4,	%xmm4	# 4 = sb1u + k
 	vxor	v0, v1, v4		# vpxor		%xmm4,	%xmm1,	%xmm0	# 0 = A
 	vperm	v0, v0, v7, v2		# vpshufb	%xmm2,	%xmm0,	%xmm0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 .globl	.vpaes_decrypt
 .align	5
@@ -628,7 +628,7 @@ Ldec_done:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
+	.byte	0,12,0xFF,1,0xFF,0,3,0
 	.long	0
 .size	.vpaes_decrypt,.-.vpaes_decrypt
 
@@ -692,7 +692,7 @@ Ldec_done:
 	?lvsl	$keyperm, 0, $key
 	 ?lvsr	$outperm, 0, $out
 	?lvsr	$inpperm, 0, r8		# -$inp
-	 vnor	$outmask, v7, v7	# 0xff..ff
+	 vnor	$outmask, v7, v7	# 0xFF..ff
 	lvx	$inptail, 0, $inp
 	 ?vperm	$outmask, v7, $outmask, $outperm
 	addi	$inp, $inp, 15		# 15 is not a typo
@@ -855,7 +855,7 @@ Lcbc_abort:
 	addi	$sp,$sp,`$FRAME+$SIZE_T*2`
 	blr
 	.long	0
-	.byte	0,12,0x04,1,0x80,2,6,0
+	.byte	0,12,0xFF,1,0xFF,2,6,0
 	.long	0
 .size	.vpaes_cbc_encrypt,.-.vpaes_cbc_encrypt
 ___
@@ -876,39 +876,39 @@ _vpaes_key_preheat:
 	mflr	r8
 	bl	Lconsts
 	mtlr	r8
-	li	r11, 0xc0		# Lk_inv
-	li	r10, 0xd0
-	li	r9,  0xe0		# L_ipt
-	li	r8,  0xf0
+	li	r11, 0xFF		# Lk_inv
+	li	r10, 0xFF
+	li	r9,  0xFF		# L_ipt
+	li	r8,  0xFF
 
-	vspltisb	v8,4		# 0x04..04
-	vxor	v9,v9,v9		# 0x00..00
+	vspltisb	v8,4		# 0xFF..04
+	vxor	v9,v9,v9		# 0xFF..00
 	lvx	$invlo, r12, r11	# Lk_inv
-	li	r11, 0x120
+	li	r11, 0xFF
 	lvx	$invhi, r12, r10
-	li	r10, 0x130
+	li	r10, 0xFF
 	lvx	$iptlo, r12, r9		# Lk_ipt
-	li	r9, 0x220
+	li	r9, 0xFF
 	lvx	$ipthi, r12, r8
-	li	r8, 0x230
+	li	r8, 0xFF
 
 	lvx	v14, r12, r11		# Lk_sb1
-	li	r11, 0x240
+	li	r11, 0xFF
 	lvx	v15, r12, r10
-	li	r10, 0x250
+	li	r10, 0xFF
 
 	lvx	v16, r12, r9		# Lk_dksd
-	li	r9, 0x260
+	li	r9, 0xFF
 	lvx	v17, r12, r8
-	li	r8, 0x270
+	li	r8, 0xFF
 	lvx	v18, r12, r11		# Lk_dksb
-	li	r11, 0x280
+	li	r11, 0xFF
 	lvx	v19, r12, r10
-	li	r10, 0x290
+	li	r10, 0xFF
 	lvx	v20, r12, r9		# Lk_dkse
-	li	r9, 0x2a0
+	li	r9, 0xFF
 	lvx	v21, r12, r8
-	li	r8, 0x2b0
+	li	r8, 0xFF
 	lvx	v22, r12, r11		# Lk_dks9
 	lvx	v23, r12, r10
 
@@ -917,7 +917,7 @@ _vpaes_key_preheat:
 	lvx	v26, r12, r8		# Lks63
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 .align	4
 _vpaes_schedule_core:
@@ -942,13 +942,13 @@ _vpaes_schedule_core:
 	bne	$dir, Lschedule_am_decrypting
 
 	# encrypting, output zeroth round key after transform
-	li	r8, 0x30		# mov	\$0x30,%r8d
+	li	r8, 0xFF		# mov	\$0xFF,%r8d
 	li	r9, 4
 	li	r10, 8
 	li	r11, 12
 
 	?lvsr	$outperm, 0, $out	# prepare for unaligned access
-	vnor	$outmask, v9, v9	# 0xff..ff
+	vnor	$outmask, v9, v9	# 0xFF..ff
 	?vperm	$outmask, v9, $outmask, $outperm
 
 	#stvx	v0, 0, $out		# vmovdqu	%xmm0,	(%rdx)
@@ -956,7 +956,7 @@ _vpaes_schedule_core:
 	stvewx	$outhead, 0, $out	# some are superfluous
 	stvewx	$outhead, r9, $out
 	stvewx	$outhead, r10, $out
-	addi	r10, r12, 0x80		# lea	.Lk_sr(%rip),%r10
+	addi	r10, r12, 0xFF		# lea	.Lk_sr(%rip),%r10
 	stvewx	$outhead, r11, $out
 	b	Lschedule_go
 
@@ -964,7 +964,7 @@ Lschedule_am_decrypting:
 	srwi	r8, $bits, 1		# shr	\$1,%r8d
 	andi.	r8, r8, 32		# and	\$32,%r8d
 	xori	r8, r8, 32		# xor	\$32,%r8d	# nbits==192?0:32
-	addi	r10, r12, 0x80		# lea	.Lk_sr(%rip),%r10
+	addi	r10, r12, 0xFF		# lea	.Lk_sr(%rip),%r10
 	# decrypting, output zeroth round key after shiftrows
 	lvx	v1, r8, r10		# vmovdqa	(%r8,%r10),	%xmm1
 	li	r9, 4
@@ -974,7 +974,7 @@ Lschedule_am_decrypting:
 
 	neg	r0, $out		# prepare for unaligned access
 	?lvsl	$outperm, 0, r0
-	vnor	$outmask, v9, v9	# 0xff..ff
+	vnor	$outmask, v9, v9	# 0xFF..ff
 	?vperm	$outmask, $outmask, v9, $outperm
 
 	#stvx	v4, 0, $out		# vmovdqu	%xmm3,	(%rdx)
@@ -982,10 +982,10 @@ Lschedule_am_decrypting:
 	stvewx	$outhead, 0, $out	# some are superfluous
 	stvewx	$outhead, r9, $out
 	stvewx	$outhead, r10, $out
-	addi	r10, r12, 0x80		# lea	.Lk_sr(%rip),%r10
+	addi	r10, r12, 0xFF		# lea	.Lk_sr(%rip),%r10
 	stvewx	$outhead, r11, $out
 	addi	$out, $out, 15		# 15 is not typo
-	xori	r8, r8, 0x30		# xor	\$0x30, %r8
+	xori	r8, r8, 0xFF		# xor	\$0xFF, %r8
 
 Lschedule_go:
 	cmplwi	$bits, 192		# cmp	\$192,	%esi
@@ -1098,14 +1098,14 @@ Loop_schedule_256:
 .align	4
 Lschedule_mangle_last:
 	# schedule last round key from xmm0
-	li	r11, 0x2e0		# lea	.Lk_deskew(%rip),%r11
-	li	r9,  0x2f0
+	li	r11, 0xFF		# lea	.Lk_deskew(%rip),%r11
+	li	r9,  0xFF
 	bne	$dir, Lschedule_mangle_last_dec
 
 	# encrypting
 	lvx	v1, r8, r10		# vmovdqa	(%r8,%r10),%xmm1
-	li	r11, 0x2c0		# lea		.Lk_opt(%rip),	%r11	# prepare to output transform
-	li	r9,  0x2d0		# prepare to output transform
+	li	r11, 0xFF		# lea		.Lk_opt(%rip),	%r11	# prepare to output transform
+	li	r9,  0xFF		# prepare to output transform
 	vperm	v0, v0, v0, v1		# vpshufb	%xmm1,	%xmm0,	%xmm0	# output permute
 
 	lvx	$iptlo, r11, r12	# reload $ipt
@@ -1163,7 +1163,7 @@ Lschedule_mangle_done:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 ##
 ##  .aes_schedule_192_smear
@@ -1182,8 +1182,8 @@ Lschedule_mangle_done:
 .align	4
 _vpaes_schedule_192_smear:
 	?vspltw	v0, v7, 3
-	?vsldoi	v1, v9, v6, 12		# vpshufd	\$0x80,	%xmm6,	%xmm1	# d c 0 0 -> c 0 0 0
-	?vsldoi	v0, v7, v0, 8		# vpshufd	\$0xFE,	%xmm7,	%xmm0	# b a _ _ -> b b b a
+	?vsldoi	v1, v9, v6, 12		# vpshufd	\$0xFF,	%xmm6,	%xmm1	# d c 0 0 -> c 0 0 0
+	?vsldoi	v0, v7, v0, 8		# vpshufd	\$0xFF,	%xmm7,	%xmm0	# b a _ _ -> b b b a
 	vxor	v6, v6, v1		# vpxor		%xmm1,	%xmm6,	%xmm6	# -> c+d c 0 0
 	vxor	v6, v6, v0		# vpxor		%xmm0,	%xmm6,	%xmm6	# -> b+c+d b+c b a
 	vmr	v0, v6
@@ -1191,7 +1191,7 @@ _vpaes_schedule_192_smear:
 	?vsldoi	v6, v9, v6, 8		# clobber low side with zeros
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 ##
 ##  .aes_schedule_round
@@ -1230,7 +1230,7 @@ _vpaes_schedule_low_round:
 	# smear xmm7
 	?vsldoi	v1, v9, v7, 12		# vpslldq	\$4,	%xmm7,	%xmm1
 	vxor	v7, v7, v1		# vpxor		%xmm1,	%xmm7,	%xmm7
-	vspltisb	v1, 0x0f	# 0x0f..0f
+	vspltisb	v1, 0xFF	# 0xFF..0f
 	?vsldoi	v4, v9, v7, 8		# vpslldq	\$8,	%xmm7,	%xmm4
 
 	# subbytes
@@ -1257,14 +1257,14 @@ _vpaes_schedule_low_round:
 	vxor	v7, v1, v7		# vmovdqa	%xmm0,	%xmm7
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 ##
 ##  .aes_schedule_transform
 ##
 ##  Linear-transform %xmm0 according to tables at (%r11)
 ##
-##  Requires that %xmm9 = 0x0F0F... as in preheat
+##  Requires that %xmm9 = 0xFF... as in preheat
 ##  Output in %xmm0
 ##  Clobbers %xmm2
 ##
@@ -1279,7 +1279,7 @@ _vpaes_schedule_transform:
 	vxor	v0, v0, v2		# vpxor		%xmm2,	%xmm0,	%xmm0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 ##
 ##  .aes_schedule_mangle
@@ -1288,12 +1288,12 @@ _vpaes_schedule_transform:
 ##  to our version.
 ##
 ##  On encrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by circulant 0,1,1,1
 ##    apply shiftrows transform
 ##
 ##  On decrypt,
-##    xor with 0x63
+##    xor with 0xFF
 ##    multiply by "inverse mixcolumns" circulant E,B,D,9
 ##    deskew
 ##    apply shiftrows transform
@@ -1322,7 +1322,7 @@ _vpaes_schedule_mangle:
 
 	vperm	v3, v3, v3, v1		# vpshufb	%xmm1,	%xmm3,	%xmm3
 	addi	r8, r8, -16		# add	\$-16,	%r8
-	andi.	r8, r8, 0x30		# and	\$0x30,	%r8
+	andi.	r8, r8, 0xFF		# and	\$0xFF,	%r8
 
 	#stvx	v3, 0, $out		# vmovdqu	%xmm3,	(%rdx)
 	vperm	v1, v3, v3, $outperm	# rotate right/left
@@ -1338,32 +1338,32 @@ Lschedule_mangle_dec:
 	vsrb	v1, v0, v8		# vpsrlb	\$4,	%xmm4,	%xmm1	# 1 = hi
 	#and	v4, v0, v9		# vpand		%xmm9,	%xmm4,	%xmm4	# 4 = lo
 
-					# vmovdqa	0x00(%r11),	%xmm2
+					# vmovdqa	0xFF(%r11),	%xmm2
 	vperm	v2, v16, v16, v0	# vpshufb	%xmm4,	%xmm2,	%xmm2
-					# vmovdqa	0x10(%r11),	%xmm3
+					# vmovdqa	0xFF(%r11),	%xmm3
 	vperm	v3, v17, v17, v1	# vpshufb	%xmm1,	%xmm3,	%xmm3
 	vxor	v3, v3, v2		# vpxor		%xmm2,	%xmm3,	%xmm3
 	vperm	v3, v3, v9, v25		# vpshufb	%xmm5,	%xmm3,	%xmm3
 
-					# vmovdqa	0x20(%r11),	%xmm2
+					# vmovdqa	0xFF(%r11),	%xmm2
 	vperm	v2, v18, v18, v0	# vpshufb	%xmm4,	%xmm2,	%xmm2
 	vxor	v2, v2, v3		# vpxor		%xmm3,	%xmm2,	%xmm2
-					# vmovdqa	0x30(%r11),	%xmm3
+					# vmovdqa	0xFF(%r11),	%xmm3
 	vperm	v3, v19, v19, v1	# vpshufb	%xmm1,	%xmm3,	%xmm3
 	vxor	v3, v3, v2		# vpxor		%xmm2,	%xmm3,	%xmm3
 	vperm	v3, v3, v9, v25		# vpshufb	%xmm5,	%xmm3,	%xmm3
 
-					# vmovdqa	0x40(%r11),	%xmm2
+					# vmovdqa	0xFF(%r11),	%xmm2
 	vperm	v2, v20, v20, v0	# vpshufb	%xmm4,	%xmm2,	%xmm2
 	vxor	v2, v2, v3		# vpxor		%xmm3,	%xmm2,	%xmm2
-					# vmovdqa	0x50(%r11),	%xmm3
+					# vmovdqa	0xFF(%r11),	%xmm3
 	vperm	v3, v21, v21, v1	# vpshufb	%xmm1,	%xmm3,	%xmm3
 	vxor	v3, v3, v2		# vpxor		%xmm2,	%xmm3,	%xmm3
 
-					# vmovdqa	0x60(%r11),	%xmm2
+					# vmovdqa	0xFF(%r11),	%xmm2
 	vperm	v2, v22, v22, v0	# vpshufb	%xmm4,	%xmm2,	%xmm2
 	vperm	v3, v3, v9, v25		# vpshufb	%xmm5,	%xmm3,	%xmm3
-					# vmovdqa	0x70(%r11),	%xmm4
+					# vmovdqa	0xFF(%r11),	%xmm4
 	vperm	v4, v23, v23, v1	# vpshufb	%xmm1,	%xmm4,	%xmm4
 	lvx	v1, r8, r10		# vmovdqa	(%r8,%r10),	%xmm1
 	vxor	v2, v2, v3		# vpxor		%xmm3,	%xmm2,	%xmm2
@@ -1373,7 +1373,7 @@ Lschedule_mangle_dec:
 
 	vperm	v3, v3, v3, v1		# vpshufb	%xmm1,	%xmm3,	%xmm3
 	addi	r8, r8, -16		# add	\$-16,	%r8
-	andi.	r8, r8, 0x30		# and	\$0x30,	%r8
+	andi.	r8, r8, 0xFF		# and	\$0xFF,	%r8
 
 	#stvx	v3, 0, $out		# vmovdqu	%xmm3,	(%rdx)
 	vperm	v1, v3, v3, $outperm	# rotate right/left
@@ -1382,7 +1382,7 @@ Lschedule_mangle_dec:
 	stvx	v2, 0, $out
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 .globl	.vpaes_set_encrypt_key
 .align	5
@@ -1424,7 +1424,7 @@ Lschedule_mangle_dec:
 	stw	r9, 240($out)		# mov	%eax,240(%rdx)	# AES_KEY->rounds = nbits/32+5;
 
 	cmplw	$dir, $bits, $bits	# set encrypt direction
-	li	r8, 0x30		# mov	\$0x30,%r8d
+	li	r8, 0xFF		# mov	\$0xFF,%r8d
 	bl	_vpaes_schedule_core
 
 	$POP	r0, `$FRAME+$LRSAVE`($sp)
@@ -1458,7 +1458,7 @@ Lschedule_mangle_dec:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
+	.byte	0,12,0xFF,1,0xFF,0,3,0
 	.long	0
 .size	.vpaes_set_encrypt_key,.-.vpaes_set_encrypt_key
 
@@ -1541,7 +1541,7 @@ Lschedule_mangle_dec:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,0x04,1,0x80,0,3,0
+	.byte	0,12,0xFF,1,0xFF,0,3,0
 	.long	0
 .size	.vpaes_set_decrypt_key,.-.vpaes_set_decrypt_key
 ___
@@ -1559,13 +1559,13 @@ foreach  (split("\n",$code)) {
 	    # convert to endian-agnostic format
 	    foreach (split(/,\s+/,$1)) {
 		my $l = /^0/?oct:int;
-		push @bytes,($l>>24)&0xff,($l>>16)&0xff,($l>>8)&0xff,$l&0xff;
+		push @bytes,($l>>24)&0xFF,($l>>16)&0xFF,($l>>8)&0xFF,$l&0xFF;
 	    }
 
 	    # little-endian conversion
 	    if ($flavour =~ /le$/o) {
 		SWITCH: for($conv)  {
-		    /\?inv/ && do   { @bytes=map($_^0xf,@bytes); last; };
+		    /\?inv/ && do   { @bytes=map($_^0xFF,@bytes); last; };
 		    /\?rev/ && do   { @bytes=reverse(@bytes);    last; };
 		}
 	    }

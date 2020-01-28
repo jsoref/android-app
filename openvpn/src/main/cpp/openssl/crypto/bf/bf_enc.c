@@ -56,8 +56,8 @@ void BF_encrypt(BF_LONG *data, const BF_KEY *key)
 # endif
     r ^= p[BF_ROUNDS + 1];
 
-    data[1] = l & 0xffffffffU;
-    data[0] = r & 0xffffffffU;
+    data[1] = l & 0xFFU;
+    data[0] = r & 0xFFU;
 }
 
 void BF_decrypt(BF_LONG *data, const BF_KEY *key)
@@ -95,8 +95,8 @@ void BF_decrypt(BF_LONG *data, const BF_KEY *key)
     BF_ENC(l, r, s, p[1]);
     r ^= p[0];
 
-    data[1] = l & 0xffffffffU;
-    data[0] = r & 0xffffffffU;
+    data[1] = l & 0xFFU;
+    data[0] = r & 0xFFU;
 }
 
 void BF_cbc_encrypt(const unsigned char *in, unsigned char *out, long length,

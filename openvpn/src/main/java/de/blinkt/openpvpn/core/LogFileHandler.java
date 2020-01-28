@@ -32,7 +32,7 @@ class LogFileHandler extends Handler {
     static final int FLUSH_TO_DISK = 101;
     static final int LOG_INIT = 102;
     public static final int LOG_MESSAGE = 103;
-    public static final int MAGIC_BYTE = 0x55;
+    public static final int MAGIC_BYTE = 0xFF;
     protected OutputStream mLogFile;
 
     public static final String LOGFILE_NAME = "logcache.dat";
@@ -234,7 +234,7 @@ class LogFileHandler extends Handler {
         for (int j = 0; j < len; j++) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+            hexChars[j * 2 + 1] = hexArray[v & 0xFF];
         }
         return new String(hexChars);
     }

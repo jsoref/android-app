@@ -95,7 +95,7 @@ char *EC_POINT_point2hex(const EC_GROUP *group,
     for (i = buf_len; i > 0; i--) {
         int v = (int)*(pbuf++);
         *(p++) = HEX_DIGITS[v >> 4];
-        *(p++) = HEX_DIGITS[v & 0x0F];
+        *(p++) = HEX_DIGITS[v & 0xFF];
     }
     *p = '\0';
 

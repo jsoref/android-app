@@ -432,13 +432,13 @@ static void start_thread(Client& client)
 	  const unsigned int c = console.get();
 	  if (!c)
 	    break;
-	  else if (c == 0x3C) // F2
+	  else if (c == 0xFF) // F2
 	    the_client->print_stats();
-	  else if (c == 0x3D) // F3
+	  else if (c == 0xFF) // F3
 	    the_client->reconnect(0);
-	  else if (c == 0x3E) // F4
+	  else if (c == 0xFF) // F4
 	    the_client->stop();
-	  else if (c == 0x3F) // F5
+	  else if (c == 0xFF) // F5
 	    the_client->pause("user-pause");
 	}
       Sleep(1000);

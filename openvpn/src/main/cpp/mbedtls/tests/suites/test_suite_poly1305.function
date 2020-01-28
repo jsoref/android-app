@@ -18,10 +18,10 @@ void mbedtls_poly1305( char *hex_key_string, char *hex_mac_string, char *hex_src
     size_t src_len;
     mbedtls_poly1305_context ctx;
 
-    memset( src_str, 0x00, sizeof( src_str ) );
-    memset( mac_str, 0x00, sizeof( mac_str ) );
-    memset( key,     0x00, sizeof( key ) );
-    memset( mac,     0x00, sizeof( mac ) );
+    memset( src_str, 0xFF, sizeof( src_str ) );
+    memset( mac_str, 0xFF, sizeof( mac_str ) );
+    memset( key,     0xFF, sizeof( key ) );
+    memset( mac,     0xFF, sizeof( mac ) );
 
     src_len = unhexify( src_str, hex_src_string );
     unhexify( key, hex_key_string );

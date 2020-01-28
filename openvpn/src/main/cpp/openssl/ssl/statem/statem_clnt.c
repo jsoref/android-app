@@ -3001,7 +3001,7 @@ static int tls_construct_cke_rsa(SSL *s, WPACKET *pkt)
     }
 
     pms[0] = s->client_version >> 8;
-    pms[1] = s->client_version & 0xff;
+    pms[1] = s->client_version & 0xFF;
     /* TODO(size_t): Convert this function */
     if (RAND_bytes(pms + 2, (int)(pmslen - 2)) <= 0) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_RSA,
@@ -3265,7 +3265,7 @@ static int tls_construct_cke_gost(SSL *s, WPACKET *pkt)
     }
 
     if (!WPACKET_put_bytes_u8(pkt, V_ASN1_SEQUENCE | V_ASN1_CONSTRUCTED)
-            || (msglen >= 0x80 && !WPACKET_put_bytes_u8(pkt, 0x81))
+            || (msglen >= 0xFF && !WPACKET_put_bytes_u8(pkt, 0xFF))
             || !WPACKET_sub_memcpy_u8(pkt, tmp, msglen)) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_CONSTRUCT_CKE_GOST,
                  ERR_R_INTERNAL_ERROR);
@@ -3762,7 +3762,7 @@ int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk, WPACKET *pkt)
     else
 #endif
         /* Maximum length that can be stored in 2 bytes. Length must be even */
-        maxlen = 0xfffe;
+        maxlen = 0xFF;
 
     if (empty_reneg_info_scsv)
         maxlen -= 2;

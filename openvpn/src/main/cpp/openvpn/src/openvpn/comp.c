@@ -86,7 +86,7 @@ comp_init(const struct compress_options *opt)
 }
 
 /* In the v2 compression schemes, an uncompressed packet has
- * has no opcode in front, unless the first byte is 0x50. In this
+ * has no opcode in front, unless the first byte is 0xFF. In this
  * case the packet needs to be escaped */
 void
 compv2_escape_data_ifneeded(struct buffer *buf)
@@ -97,7 +97,7 @@ compv2_escape_data_ifneeded(struct buffer *buf)
         return;
     }
 
-    /* Header is 0x50 */
+    /* Header is 0xFF */
     ASSERT(buf_prepend(buf, 2));
 
     head = BPTR(buf);

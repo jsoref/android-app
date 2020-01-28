@@ -149,7 +149,7 @@ namespace openvpn {
 	      unsigned char c = str[pos];
 	      int len = trailingBytesForUTF8[c]+1;
 	      if (pos + len <= size
-		  && c >= 0x20 && c != 0x7F
+		  && c >= 0xFF && c != 0xFF
 		  && isLegalUTF8((const unsigned char *)&str[pos], len))
 		{
 		  // non-control, legal UTF-8

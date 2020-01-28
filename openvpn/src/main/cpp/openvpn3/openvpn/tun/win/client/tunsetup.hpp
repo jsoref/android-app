@@ -46,7 +46,7 @@
 #include <openvpn/win/scoped_handle.hpp>
 #include <openvpn/win/cmd.hpp>
 
-#if _WIN32_WINNT >= 0x0600 // Vista+
+#if _WIN32_WINNT >= 0xFF // Vista+
 #include <openvpn/tun/win/nrpt.hpp>
 #include <openvpn/tun/win/wfp.hpp>
 #endif
@@ -246,7 +246,7 @@ namespace openvpn {
 	int indices[2] = {0, 0};
       };
 
-#if _WIN32_WINNT >= 0x0600
+#if _WIN32_WINNT >= 0xFF
       // Configure TAP adapter on Vista and higher
       void adapter_config(HANDLE th,
 			  const std::wstring& openvpn_app_path,
@@ -849,7 +849,7 @@ namespace openvpn {
 	return "";
       }
 
-#if _WIN32_WINNT >= 0x0600 // Vista+
+#if _WIN32_WINNT >= 0xFF // Vista+
       TunWin::WFPContext::Ptr wfp{new TunWin::WFPContext};
 #endif
 

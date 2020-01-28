@@ -148,17 +148,17 @@ rsaz_1024_sqr_avx2:		# 702 cycles, 14% faster than rsaz_1024_mul_avx2
 	vzeroupper
 ___
 $code.=<<___ if ($win64);
-	lea	-0xa8(%rsp),%rsp
-	vmovaps	%xmm6,-0xd8(%rax)
-	vmovaps	%xmm7,-0xc8(%rax)
-	vmovaps	%xmm8,-0xb8(%rax)
-	vmovaps	%xmm9,-0xa8(%rax)
-	vmovaps	%xmm10,-0x98(%rax)
-	vmovaps	%xmm11,-0x88(%rax)
-	vmovaps	%xmm12,-0x78(%rax)
-	vmovaps	%xmm13,-0x68(%rax)
-	vmovaps	%xmm14,-0x58(%rax)
-	vmovaps	%xmm15,-0x48(%rax)
+	lea	-0xFF(%rsp),%rsp
+	vmovaps	%xmm6,-0xFF(%rax)
+	vmovaps	%xmm7,-0xFF(%rax)
+	vmovaps	%xmm8,-0xFF(%rax)
+	vmovaps	%xmm9,-0xFF(%rax)
+	vmovaps	%xmm10,-0xFF(%rax)
+	vmovaps	%xmm11,-0xFF(%rax)
+	vmovaps	%xmm12,-0xFF(%rax)
+	vmovaps	%xmm13,-0xFF(%rax)
+	vmovaps	%xmm14,-0xFF(%rax)
+	vmovaps	%xmm15,-0xFF(%rax)
 .Lsqr_1024_body:
 ___
 $code.=<<___;
@@ -432,9 +432,9 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC1, $TEMP2
 	vpand		$AND_MASK, $ACC1, $ACC1
 
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpxor		$ZERO, $ZERO, $ZERO
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
@@ -459,7 +459,7 @@ $code.=<<___;
 
 	mov	%rax, $r0
 	imull	$n0, %eax
-	and	\$0x1fffffff, %eax
+	and	\$0xFF, %eax
 	vmovd	%eax, $Y1
 
 	mov	%rax, %rdx
@@ -479,7 +479,7 @@ $code.=<<___;
 
 	mov	$r1, %rax
 	imull	$n0, %eax
-	and	\$0x1fffffff, %eax
+	and	\$0xFF, %eax
 
 	mov \$9, $i
 	jmp .LOOP_REDUCE_1024
@@ -499,9 +499,9 @@ $code.=<<___;
 	 imulq	8-128($np), %rax
 	vpaddq		$TEMP1, $ACC2, $ACC2
 	vpmuludq	32*3-128($np), $Y1, $TEMP2
-	 .byte	0x67
+	 .byte	0xFF
 	 add	%rax, $r2
-	 .byte	0x67
+	 .byte	0xFF
 	 mov	%rdx, %rax
 	 imulq	16-128($np), %rax
 	 shr	\$29, $r1
@@ -515,7 +515,7 @@ $code.=<<___;
 	 imull	$n0, %eax
 	vpaddq		$TEMP1, $ACC5, $ACC5
 	vpmuludq	32*6-128($np), $Y1, $TEMP2
-	 and	\$0x1fffffff, %eax
+	 and	\$0xFF, %eax
 	vpaddq		$TEMP2, $ACC6, $ACC6
 	vpmuludq	32*7-128($np), $Y1, $TEMP0
 	vpaddq		$TEMP0, $ACC7, $ACC7
@@ -545,13 +545,13 @@ $code.=<<___;
 	vpaddq		$TEMP1, $ACC3, $ACC3
 	vpmuludq	$Y2, $TEMP2, $TEMP2
 	vmovdqu		32*6-8-128($np), $TEMP1
-	 .byte	0x67
+	 .byte	0xFF
 	 mov	%rax, $r3
 	 imull	$n0, %eax
 	vpaddq		$TEMP2, $ACC4, $ACC4
 	vpmuludq	$Y2, $TEMP0, $TEMP0
-	.byte	0xc4,0x41,0x7e,0x6f,0x9d,0x58,0x00,0x00,0x00	# vmovdqu		32*7-8-128($np), $TEMP2
-	 and	\$0x1fffffff, %eax
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# vmovdqu		32*7-8-128($np), $TEMP2
+	 and	\$0xFF, %eax
 	vpaddq		$TEMP0, $ACC5, $ACC5
 	vpmuludq	$Y2, $TEMP1, $TEMP1
 	vmovdqu		32*8-8-128($np), $TEMP0
@@ -578,12 +578,12 @@ $code.=<<___;
 	vpaddq		$TEMP1, $ACC1, $ACC1
 	 vpmuludq	$Y2, $ACC0, $ACC0
 	vpmuludq	$Y1, $TEMP2, $TEMP2
-	.byte	0xc4,0x41,0x7e,0x6f,0xb5,0xf0,0xff,0xff,0xff	# vmovdqu		32*4-16-128($np), $TEMP1
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# vmovdqu		32*4-16-128($np), $TEMP1
 	 vpaddq		$ACC1, $ACC0, $ACC0
 	vpaddq		$TEMP2, $ACC2, $ACC2
 	vpmuludq	$Y1, $TEMP0, $TEMP0
 	vmovdqu		32*5-16-128($np), $TEMP2
-	 .byte	0x67
+	 .byte	0xFF
 	 vmovq		$ACC0, %rax
 	 vmovdqu	$ACC0, (%rsp)		# transfer $r0-$r3
 	vpaddq		$TEMP0, $ACC3, $ACC3
@@ -607,10 +607,10 @@ $code.=<<___;
 	 imull	$n0, %eax
 	vpaddq		$TEMP2, $ACC8, $ACC8
 	vpmuludq	$Y1, $TEMP0, $TEMP0
-	 and	\$0x1fffffff, %eax
+	 and	\$0xFF, %eax
 	 vmovd	%eax, $Y1
 	 vmovdqu	32*3-24-128($np), $TEMP2
-	.byte	0x67
+	.byte	0xFF
 	vpaddq		$TEMP0, $ACC9, $ACC9
 	 vpbroadcastq	$Y1, $Y1
 
@@ -625,7 +625,7 @@ $code.=<<___;
 	 add	%rax, $r0
 	 mov	%rdx, %rax
 	 imulq	8-128($np), %rax
-	 .byte	0x67
+	 .byte	0xFF
 	 shr	\$29, $r0
 	 mov	16(%rsp), $r2
 	vpaddq		$TEMP2, $ACC3, $ACC2
@@ -648,7 +648,7 @@ $code.=<<___;
 	vpmuludq	$Y2, $TEMP0, $TEMP0
 	vpaddq		$TEMP2, $ACC6, $ACC5
 	vmovdqu		32*9-24-128($np), $TEMP2
-	 and	\$0x1fffffff, %eax
+	 and	\$0xFF, %eax
 	vpaddq		$TEMP0, $ACC7, $ACC6
 	vpmuludq	$Y2, $TEMP1, $TEMP1
 	 add	24(%rsp), %rdx
@@ -682,15 +682,15 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC1, $TEMP2
 	vpand		$AND_MASK, $ACC1, $ACC1
 	vpsrlq		\$29, $ACC2, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC2, $ACC2
 	vpsrlq		\$29, $ACC3, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC3, $ACC3
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC0, $ACC0
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -706,15 +706,15 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC1, $TEMP2
 	vpand		$AND_MASK, $ACC1, $ACC1
 	vpsrlq		\$29, $ACC2, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC2, $ACC2
 	vpsrlq		\$29, $ACC3, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC3, $ACC3
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC0, $ACC0
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -736,18 +736,18 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC5, $TEMP2
 	vpand		$AND_MASK, $ACC5, $ACC5
 	vpsrlq		\$29, $ACC6, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC6, $ACC6
 	vpsrlq		\$29, $ACC7, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC7, $ACC7
 	vpsrlq		\$29, $ACC8, $TEMP5
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 	vpand		$AND_MASK, $ACC8, $ACC8
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP5, $TEMP5
+	vpermq		\$0xFF, $TEMP5, $TEMP5
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC4, $ACC4
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -763,18 +763,18 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC5, $TEMP2
 	vpand		$AND_MASK, $ACC5, $ACC5
 	vpsrlq		\$29, $ACC6, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC6, $ACC6
 	vpsrlq		\$29, $ACC7, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC7, $ACC7
 	vpsrlq		\$29, $ACC8, $TEMP5
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 	vpand		$AND_MASK, $ACC8, $ACC8
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP5, $TEMP5
+	vpermq		\$0xFF, $TEMP5, $TEMP5
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC4, $ACC4
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -800,16 +800,16 @@ $code.=<<___;
 ___
 $code.=<<___ if ($win64);
 .Lsqr_1024_in_tail:
-	movaps	-0xd8(%rax),%xmm6
-	movaps	-0xc8(%rax),%xmm7
-	movaps	-0xb8(%rax),%xmm8
-	movaps	-0xa8(%rax),%xmm9
-	movaps	-0x98(%rax),%xmm10
-	movaps	-0x88(%rax),%xmm11
-	movaps	-0x78(%rax),%xmm12
-	movaps	-0x68(%rax),%xmm13
-	movaps	-0x58(%rax),%xmm14
-	movaps	-0x48(%rax),%xmm15
+	movaps	-0xFF(%rax),%xmm6
+	movaps	-0xFF(%rax),%xmm7
+	movaps	-0xFF(%rax),%xmm8
+	movaps	-0xFF(%rax),%xmm9
+	movaps	-0xFF(%rax),%xmm10
+	movaps	-0xFF(%rax),%xmm11
+	movaps	-0xFF(%rax),%xmm12
+	movaps	-0xFF(%rax),%xmm13
+	movaps	-0xFF(%rax),%xmm14
+	movaps	-0xFF(%rax),%xmm15
 ___
 $code.=<<___;
 	mov	-48(%rax),%r15
@@ -899,17 +899,17 @@ rsaz_1024_mul_avx2:
 ___
 $code.=<<___ if ($win64);
 	vzeroupper
-	lea	-0xa8(%rsp),%rsp
-	vmovaps	%xmm6,-0xd8(%rax)
-	vmovaps	%xmm7,-0xc8(%rax)
-	vmovaps	%xmm8,-0xb8(%rax)
-	vmovaps	%xmm9,-0xa8(%rax)
-	vmovaps	%xmm10,-0x98(%rax)
-	vmovaps	%xmm11,-0x88(%rax)
-	vmovaps	%xmm12,-0x78(%rax)
-	vmovaps	%xmm13,-0x68(%rax)
-	vmovaps	%xmm14,-0x58(%rax)
-	vmovaps	%xmm15,-0x48(%rax)
+	lea	-0xFF(%rsp),%rsp
+	vmovaps	%xmm6,-0xFF(%rax)
+	vmovaps	%xmm7,-0xFF(%rax)
+	vmovaps	%xmm8,-0xFF(%rax)
+	vmovaps	%xmm9,-0xFF(%rax)
+	vmovaps	%xmm10,-0xFF(%rax)
+	vmovaps	%xmm11,-0xFF(%rax)
+	vmovaps	%xmm12,-0xFF(%rax)
+	vmovaps	%xmm13,-0xFF(%rax)
+	vmovaps	%xmm14,-0xFF(%rax)
+	vmovaps	%xmm15,-0xFF(%rax)
 .Lmul_1024_body:
 ___
 $code.=<<___;
@@ -924,7 +924,7 @@ $code.=<<___;
 	# cross page boundary, swap it with $bp [meaning that caller
 	# is advised to lay down $ap and $bp next to each other, so
 	# that only one can cross page boundary].
-	.byte	0x67,0x67
+	.byte	0xFF,0xFF
 	mov	$ap, $tmp
 	and	\$4095, $tmp
 	add	\$32*10, $tmp
@@ -940,7 +940,7 @@ $code.=<<___;
 
 	and	\$4095, $tmp	# see if $np crosses page
 	add	\$32*10, $tmp
-	.byte	0x67,0x67
+	.byte	0xFF,0xFF
 	shr	\$12, $tmp
 	jz	.Lmul_1024_no_n_copy
 
@@ -986,7 +986,7 @@ $code.=<<___;
 	vpbroadcastq ($bp), $Bi
 	vmovdqu	$ACC0, (%rsp)			# clear top of stack
 	xor	$r0, $r0
-	.byte	0x67
+	.byte	0xFF
 	xor	$r1, $r1
 	xor	$r2, $r2
 	xor	$r3, $r3
@@ -1008,7 +1008,7 @@ $code.=<<___;
 
 	mov	%rax, $r0
 	imull	$n0, %eax
-	and	\$0x1fffffff, %eax
+	and	\$0xFF, %eax
 
 	 mov	%rbx, $r2
 	 imulq	16-128($ap), $r2
@@ -1033,7 +1033,7 @@ $code.=<<___;
 	vpmuludq	32*6-128($ap),$Bi,$TEMP2
 	vpaddq		$TEMP2,$ACC6,$ACC6
 	vpmuludq	32*7-128($ap),$Bi,$TEMP0
-	 vpermq		\$0x93, $ACC9, $ACC9		# correct $ACC3
+	 vpermq		\$0xFF, $ACC9, $ACC9		# correct $ACC3
 	vpaddq		$TEMP0,$ACC7,$ACC7
 	vpmuludq	32*8-128($ap),$Bi,$TEMP1
 	 vpbroadcastq	8($bp), $Bi
@@ -1083,10 +1083,10 @@ $code.=<<___;
 	 vmovdqu	-8+32*2-128($ap),$TEMP2
 
 	mov	$r1, %rax
-	 vpblendd	\$0xfc, $ZERO, $ACC9, $ACC9	# correct $ACC3
+	 vpblendd	\$0xFF, $ZERO, $ACC9, $ACC9	# correct $ACC3
 	imull	$n0, %eax
 	 vpaddq		$ACC9,$ACC4,$ACC4		# correct $ACC3
-	and	\$0x1fffffff, %eax
+	and	\$0xFF, %eax
 
 	 imulq	16-128($ap),%rbx
 	 add	%rbx,$r3
@@ -1166,7 +1166,7 @@ $code.=<<___;
 	 vmovdqu	-16+32*2-128($ap),$TEMP1
 	mov	%rax,$r2
 	imull	$n0, %eax
-	and	\$0x1fffffff, %eax
+	and	\$0xFF, %eax
 
 	 imulq	8-128($ap),%rbx
 	 add	%rbx,$r3
@@ -1243,7 +1243,7 @@ $code.=<<___;
 
 	mov	$r3, %rax
 	imull	$n0, %eax
-	and	\$0x1fffffff, %eax
+	and	\$0xFF, %eax
 
 	vpmuludq	$Bi,$TEMP0,$TEMP0
 	 vmovd		%eax, $Yi
@@ -1334,16 +1334,16 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC1, $TEMP2
 	vpand		$AND_MASK, $ACC1, $ACC1
 	vpsrlq		\$29, $ACC2, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC2, $ACC2
 	vpsrlq		\$29, $ACC3, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC3, $ACC3
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 	vpaddq		$TEMP0, $ACC0, $ACC0
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
 	vpaddq		$TEMP1, $ACC1, $ACC1
@@ -1358,15 +1358,15 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC1, $TEMP2
 	vpand		$AND_MASK, $ACC1, $ACC1
 	vpsrlq		\$29, $ACC2, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC2, $ACC2
 	vpsrlq		\$29, $ACC3, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC3, $ACC3
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC0, $ACC0
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -1390,18 +1390,18 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC5, $TEMP2
 	vpand		$AND_MASK, $ACC5, $ACC5
 	vpsrlq		\$29, $ACC6, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC6, $ACC6
 	vpsrlq		\$29, $ACC7, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC7, $ACC7
 	vpsrlq		\$29, $ACC8, $TEMP5
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 	vpand		$AND_MASK, $ACC8, $ACC8
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP5, $TEMP5
+	vpermq		\$0xFF, $TEMP5, $TEMP5
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC4, $ACC4
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -1417,18 +1417,18 @@ $code.=<<___;
 	vpsrlq		\$29, $ACC5, $TEMP2
 	vpand		$AND_MASK, $ACC5, $ACC5
 	vpsrlq		\$29, $ACC6, $TEMP3
-	vpermq		\$0x93, $TEMP1, $TEMP1
+	vpermq		\$0xFF, $TEMP1, $TEMP1
 	vpand		$AND_MASK, $ACC6, $ACC6
 	vpsrlq		\$29, $ACC7, $TEMP4
-	vpermq		\$0x93, $TEMP2, $TEMP2
+	vpermq		\$0xFF, $TEMP2, $TEMP2
 	vpand		$AND_MASK, $ACC7, $ACC7
 	vpsrlq		\$29, $ACC8, $TEMP5
-	vpermq		\$0x93, $TEMP3, $TEMP3
+	vpermq		\$0xFF, $TEMP3, $TEMP3
 	vpand		$AND_MASK, $ACC8, $ACC8
-	vpermq		\$0x93, $TEMP4, $TEMP4
+	vpermq		\$0xFF, $TEMP4, $TEMP4
 
 	vpblendd	\$3, $ZERO, $TEMP1, $TEMP0
-	vpermq		\$0x93, $TEMP5, $TEMP5
+	vpermq		\$0xFF, $TEMP5, $TEMP5
 	vpblendd	\$3, $TEMP1, $TEMP2, $TEMP1
 	vpaddq		$TEMP0, $ACC4, $ACC4
 	vpblendd	\$3, $TEMP2, $TEMP3, $TEMP2
@@ -1451,16 +1451,16 @@ $code.=<<___;
 ___
 $code.=<<___ if ($win64);
 .Lmul_1024_in_tail:
-	movaps	-0xd8(%rax),%xmm6
-	movaps	-0xc8(%rax),%xmm7
-	movaps	-0xb8(%rax),%xmm8
-	movaps	-0xa8(%rax),%xmm9
-	movaps	-0x98(%rax),%xmm10
-	movaps	-0x88(%rax),%xmm11
-	movaps	-0x78(%rax),%xmm12
-	movaps	-0x68(%rax),%xmm13
-	movaps	-0x58(%rax),%xmm14
-	movaps	-0x48(%rax),%xmm15
+	movaps	-0xFF(%rax),%xmm6
+	movaps	-0xFF(%rax),%xmm7
+	movaps	-0xFF(%rax),%xmm8
+	movaps	-0xFF(%rax),%xmm9
+	movaps	-0xFF(%rax),%xmm10
+	movaps	-0xFF(%rax),%xmm11
+	movaps	-0xFF(%rax),%xmm12
+	movaps	-0xFF(%rax),%xmm13
+	movaps	-0xFF(%rax),%xmm14
+	movaps	-0xFF(%rax),%xmm15
 ___
 $code.=<<___;
 	mov	-48(%rax),%r15
@@ -1536,7 +1536,7 @@ rsaz_1024_norm2red_avx2:
 .cfi_startproc
 	sub	\$-128,$out	# size optimization
 	mov	($inp),@T[0]
-	mov	\$0x1fffffff,%eax
+	mov	\$0xFF,%eax
 ___
 for ($j=0,$i=0; $i<16; $i++) {
     $code.="	mov	`8*($i+1)`($inp),@T[1]\n"	if ($i<15);
@@ -1546,7 +1546,7 @@ for ($j=0,$i=0; $i<16; $i++) {
     	$code.=<<___;
 	mov	@T[0],@T[-$k]
 	shr	\$`29*$j`,@T[-$k]
-	and	%rax,@T[-$k]				# &0x1fffffff
+	and	%rax,@T[-$k]				# &0xFF
 	mov	@T[-$k],`8*$j-128`($out)
 ___
 	$j++; $k++;
@@ -1610,23 +1610,23 @@ rsaz_1024_gather5_avx2:
 .cfi_def_cfa_register	%r11
 ___
 $code.=<<___ if ($win64);
-	lea	-0x88(%rsp),%rax
+	lea	-0xFF(%rsp),%rax
 .LSEH_begin_rsaz_1024_gather5:
 	# I can't trust assembler to use specific encoding:-(
-	.byte	0x48,0x8d,0x60,0xe0		# lea	-0x20(%rax),%rsp
-	.byte	0xc5,0xf8,0x29,0x70,0xe0	# vmovaps %xmm6,-0x20(%rax)
-	.byte	0xc5,0xf8,0x29,0x78,0xf0	# vmovaps %xmm7,-0x10(%rax)
-	.byte	0xc5,0x78,0x29,0x40,0x00	# vmovaps %xmm8,0(%rax)
-	.byte	0xc5,0x78,0x29,0x48,0x10	# vmovaps %xmm9,0x10(%rax)
-	.byte	0xc5,0x78,0x29,0x50,0x20	# vmovaps %xmm10,0x20(%rax)
-	.byte	0xc5,0x78,0x29,0x58,0x30	# vmovaps %xmm11,0x30(%rax)
-	.byte	0xc5,0x78,0x29,0x60,0x40	# vmovaps %xmm12,0x40(%rax)
-	.byte	0xc5,0x78,0x29,0x68,0x50	# vmovaps %xmm13,0x50(%rax)
-	.byte	0xc5,0x78,0x29,0x70,0x60	# vmovaps %xmm14,0x60(%rax)
-	.byte	0xc5,0x78,0x29,0x78,0x70	# vmovaps %xmm15,0x70(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF		# lea	-0xFF(%rax),%rsp
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm6,-0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm7,-0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm8,0(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm9,0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm10,0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm11,0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm12,0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm13,0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm14,0xFF(%rax)
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF	# vmovaps %xmm15,0xFF(%rax)
 ___
 $code.=<<___;
-	lea	-0x100(%rsp),%rsp
+	lea	-0xFF(%rsp),%rsp
 	and	\$-32, %rsp
 	lea	.Linc(%rip), %r10
 	lea	-128(%rsp),%rax			# control u-op density
@@ -1735,16 +1735,16 @@ $code.=<<___;
 	vzeroupper
 ___
 $code.=<<___ if ($win64);
-	movaps	-0xa8(%r11),%xmm6
-	movaps	-0x98(%r11),%xmm7
-	movaps	-0x88(%r11),%xmm8
-	movaps	-0x78(%r11),%xmm9
-	movaps	-0x68(%r11),%xmm10
-	movaps	-0x58(%r11),%xmm11
-	movaps	-0x48(%r11),%xmm12
-	movaps	-0x38(%r11),%xmm13
-	movaps	-0x28(%r11),%xmm14
-	movaps	-0x18(%r11),%xmm15
+	movaps	-0xFF(%r11),%xmm6
+	movaps	-0xFF(%r11),%xmm7
+	movaps	-0xFF(%r11),%xmm8
+	movaps	-0xFF(%r11),%xmm9
+	movaps	-0xFF(%r11),%xmm10
+	movaps	-0xFF(%r11),%xmm11
+	movaps	-0xFF(%r11),%xmm12
+	movaps	-0xFF(%r11),%xmm13
+	movaps	-0xFF(%r11),%xmm14
+	movaps	-0xFF(%r11),%xmm15
 ___
 $code.=<<___;
 	lea	(%r11),%rsp
@@ -1779,7 +1779,7 @@ $code.=<<___;
 
 .align	64
 .Land_mask:
-	.quad	0x1fffffff,0x1fffffff,0x1fffffff,0x1fffffff
+	.quad	0xFF,0xFF,0xFF,0xFF
 .Lscatter_permd:
 	.long	0,2,4,6,7,7,7,7
 .Lgather_permd:
@@ -1849,10 +1849,10 @@ rsaz_se_handler:
 	mov	%rbp,160($context)
 	mov	%rbx,144($context)
 
-	lea	-0xd8(%rax),%rsi	# %xmm save area
+	lea	-0xFF(%rax),%rsi	# %xmm save area
 	lea	512($context),%rdi	# & context.Xmm6
 	mov	\$20,%ecx		# 10*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 .Lcommon_seh_tail:
 	mov	8(%rax),%rdi
@@ -1864,7 +1864,7 @@ rsaz_se_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER
@@ -1920,19 +1920,19 @@ rsaz_se_handler:
 	.rva	.Lmul_1024_body,.Lmul_1024_epilogue,.Lmul_1024_in_tail
 	.long	0
 .LSEH_info_rsaz_1024_gather5:
-	.byte	0x01,0x36,0x17,0x0b
-	.byte	0x36,0xf8,0x09,0x00	# vmovaps 0x90(rsp),xmm15
-	.byte	0x31,0xe8,0x08,0x00	# vmovaps 0x80(rsp),xmm14
-	.byte	0x2c,0xd8,0x07,0x00	# vmovaps 0x70(rsp),xmm13
-	.byte	0x27,0xc8,0x06,0x00	# vmovaps 0x60(rsp),xmm12
-	.byte	0x22,0xb8,0x05,0x00	# vmovaps 0x50(rsp),xmm11
-	.byte	0x1d,0xa8,0x04,0x00	# vmovaps 0x40(rsp),xmm10
-	.byte	0x18,0x98,0x03,0x00	# vmovaps 0x30(rsp),xmm9
-	.byte	0x13,0x88,0x02,0x00	# vmovaps 0x20(rsp),xmm8
-	.byte	0x0e,0x78,0x01,0x00	# vmovaps 0x10(rsp),xmm7
-	.byte	0x09,0x68,0x00,0x00	# vmovaps 0x00(rsp),xmm6
-	.byte	0x04,0x01,0x15,0x00	# sub	  rsp,0xa8
-	.byte	0x00,0xb3,0x00,0x00	# set_frame r11
+	.byte	0xFF,0xFF,0xFF,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm15
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm14
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm13
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm12
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm11
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm10
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm9
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm8
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm7
+	.byte	0xFF,0xFF,0xFF,0xFF	# vmovaps 0xFF(rsp),xmm6
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub	  rsp,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# set_frame r11
 ___
 }
 
@@ -1973,7 +1973,7 @@ rsaz_1024_norm2red_avx2:
 rsaz_1024_red2norm_avx2:
 rsaz_1024_scatter5_avx2:
 rsaz_1024_gather5_avx2:
-	.byte	0x0f,0x0b	# ud2
+	.byte	0xFF,0xFF	# ud2
 	ret
 .size	rsaz_1024_sqr_avx2,.-rsaz_1024_sqr_avx2
 ___

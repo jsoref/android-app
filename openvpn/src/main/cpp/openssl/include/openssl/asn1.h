@@ -19,7 +19,7 @@
 # include <openssl/symhacks.h>
 
 # include <openssl/ossl_typ.h>
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/bn.h>
 # endif
 
@@ -32,13 +32,13 @@
 extern "C" {
 #endif
 
-# define V_ASN1_UNIVERSAL                0x00
-# define V_ASN1_APPLICATION              0x40
-# define V_ASN1_CONTEXT_SPECIFIC         0x80
-# define V_ASN1_PRIVATE                  0xc0
+# define V_ASN1_UNIVERSAL                0xFF
+# define V_ASN1_APPLICATION              0xFF
+# define V_ASN1_CONTEXT_SPECIFIC         0xFF
+# define V_ASN1_PRIVATE                  0xFF
 
-# define V_ASN1_CONSTRUCTED              0x20
-# define V_ASN1_PRIMITIVE_TAG            0x1f
+# define V_ASN1_CONSTRUCTED              0xFF
+# define V_ASN1_PRIMITIVE_TAG            0xFF
 # define V_ASN1_PRIMATIVE_TAG /*compat*/ V_ASN1_PRIMITIVE_TAG
 
 # define V_ASN1_APP_CHOOSE               -2/* let the recipient choose */
@@ -82,49 +82,49 @@ extern "C" {
  * the wire tag values.
  */
 
-# define V_ASN1_NEG                      0x100
+# define V_ASN1_NEG                      0xFF
 # define V_ASN1_NEG_INTEGER              (2 | V_ASN1_NEG)
 # define V_ASN1_NEG_ENUMERATED           (10 | V_ASN1_NEG)
 
 /* For use with d2i_ASN1_type_bytes() */
-# define B_ASN1_NUMERICSTRING    0x0001
-# define B_ASN1_PRINTABLESTRING  0x0002
-# define B_ASN1_T61STRING        0x0004
-# define B_ASN1_TELETEXSTRING    0x0004
-# define B_ASN1_VIDEOTEXSTRING   0x0008
-# define B_ASN1_IA5STRING        0x0010
-# define B_ASN1_GRAPHICSTRING    0x0020
-# define B_ASN1_ISO64STRING      0x0040
-# define B_ASN1_VISIBLESTRING    0x0040
-# define B_ASN1_GENERALSTRING    0x0080
-# define B_ASN1_UNIVERSALSTRING  0x0100
-# define B_ASN1_OCTET_STRING     0x0200
-# define B_ASN1_BIT_STRING       0x0400
-# define B_ASN1_BMPSTRING        0x0800
-# define B_ASN1_UNKNOWN          0x1000
-# define B_ASN1_UTF8STRING       0x2000
-# define B_ASN1_UTCTIME          0x4000
-# define B_ASN1_GENERALIZEDTIME  0x8000
-# define B_ASN1_SEQUENCE         0x10000
+# define B_ASN1_NUMERICSTRING    0xFF
+# define B_ASN1_PRINTABLESTRING  0xFF
+# define B_ASN1_T61STRING        0xFF
+# define B_ASN1_TELETEXSTRING    0xFF
+# define B_ASN1_VIDEOTEXSTRING   0xFF
+# define B_ASN1_IA5STRING        0xFF
+# define B_ASN1_GRAPHICSTRING    0xFF
+# define B_ASN1_ISO64STRING      0xFF
+# define B_ASN1_VISIBLESTRING    0xFF
+# define B_ASN1_GENERALSTRING    0xFF
+# define B_ASN1_UNIVERSALSTRING  0xFF
+# define B_ASN1_OCTET_STRING     0xFF
+# define B_ASN1_BIT_STRING       0xFF
+# define B_ASN1_BMPSTRING        0xFF
+# define B_ASN1_UNKNOWN          0xFF
+# define B_ASN1_UTF8STRING       0xFF
+# define B_ASN1_UTCTIME          0xFF
+# define B_ASN1_GENERALIZEDTIME  0xFF
+# define B_ASN1_SEQUENCE         0xFF
 /* For use with ASN1_mbstring_copy() */
-# define MBSTRING_FLAG           0x1000
+# define MBSTRING_FLAG           0xFF
 # define MBSTRING_UTF8           (MBSTRING_FLAG)
 # define MBSTRING_ASC            (MBSTRING_FLAG|1)
 # define MBSTRING_BMP            (MBSTRING_FLAG|2)
 # define MBSTRING_UNIV           (MBSTRING_FLAG|4)
-# define SMIME_OLDMIME           0x400
-# define SMIME_CRLFEOL           0x800
-# define SMIME_STREAM            0x1000
+# define SMIME_OLDMIME           0xFF
+# define SMIME_CRLFEOL           0xFF
+# define SMIME_STREAM            0xFF
     struct X509_algor_st;
 DEFINE_STACK_OF(X509_ALGOR)
 
-# define ASN1_STRING_FLAG_BITS_LEFT 0x08/* Set if 0x07 has bits left value */
+# define ASN1_STRING_FLAG_BITS_LEFT 0xFF/* Set if 0xFF has bits left value */
 /*
  * This indicates that the ASN1_STRING is not a real value but just a place
  * holder for the location where indefinite length constructed data should be
  * inserted in the memory buffer
  */
-# define ASN1_STRING_FLAG_NDEF 0x010
+# define ASN1_STRING_FLAG_NDEF 0xFF
 
 /*
  * This flag is used by the CMS code to indicate that a string is not
@@ -132,16 +132,16 @@ DEFINE_STACK_OF(X509_ALGOR)
  * The flag will be reset when content has been written to it.
  */
 
-# define ASN1_STRING_FLAG_CONT 0x020
+# define ASN1_STRING_FLAG_CONT 0xFF
 /*
  * This flag is used by ASN1 code to indicate an ASN1_STRING is an MSTRING
  * type.
  */
-# define ASN1_STRING_FLAG_MSTRING 0x040
+# define ASN1_STRING_FLAG_MSTRING 0xFF
 /* String is embedded and only content should be freed */
-# define ASN1_STRING_FLAG_EMBED 0x080
+# define ASN1_STRING_FLAG_EMBED 0xFF
 /* String should be parsed in RFC 5280's time format */
-# define ASN1_STRING_FLAG_X509_TIME 0x100
+# define ASN1_STRING_FLAG_X509_TIME 0xFF
 /* This is the base type that holds just about everything :-) */
 struct asn1_string_st {
     int length;
@@ -168,9 +168,9 @@ typedef struct ASN1_ENCODING_st {
 } ASN1_ENCODING;
 
 /* Used with ASN1 LONG type: if a long is set to this it is omitted */
-# define ASN1_LONG_UNDEF 0x7fffffffL
+# define ASN1_LONG_UNDEF 0xFFL
 
-# define STABLE_FLAGS_MALLOC     0x01
+# define STABLE_FLAGS_MALLOC     0xFF
 /*
  * A zero passed to ASN1_STRING_TABLE_new_add for the flags is interpreted
  * as "don't change" and STABLE_FLAGS_MALLOC is always set. By setting
@@ -178,7 +178,7 @@ typedef struct ASN1_ENCODING_st {
  * STABLE_FLAGS_CLEAR to reflect this.
  */
 # define STABLE_FLAGS_CLEAR      STABLE_FLAGS_MALLOC
-# define STABLE_NO_MASK          0x02
+# define STABLE_NO_MASK          0xFF
 # define DIRSTRING_TYPE  \
  (B_ASN1_PRINTABLESTRING|B_ASN1_T61STRING|B_ASN1_BMPSTRING|B_ASN1_UTF8STRING)
 # define PKCS9STRING_TYPE (DIRSTRING_TYPE|B_ASN1_IA5STRING)
@@ -372,11 +372,11 @@ typedef const ASN1_ITEM *ASN1_ITEM_EXP (void);
 /* These three flags are internal use only. */
 
 /* Character is a valid PrintableString character */
-# define CHARTYPE_PRINTABLESTRING        0x10
+# define CHARTYPE_PRINTABLESTRING        0xFF
 /* Character needs escaping if it is the first character */
-# define CHARTYPE_FIRST_ESC_2253         0x20
+# define CHARTYPE_FIRST_ESC_2253         0xFF
 /* Character needs escaping if it is the last character */
-# define CHARTYPE_LAST_ESC_2253          0x40
+# define CHARTYPE_LAST_ESC_2253          0xFF
 
 /*
  * NB the internal flags are safely reused below by flags handled at the top
@@ -387,7 +387,7 @@ typedef const ASN1_ITEM *ASN1_ITEM_EXP (void);
  * If this is set we convert all character strings to UTF8 first
  */
 
-# define ASN1_STRFLGS_UTF8_CONVERT       0x10
+# define ASN1_STRFLGS_UTF8_CONVERT       0xFF
 
 /*
  * If this is set we don't attempt to interpret content: just assume all
@@ -395,10 +395,10 @@ typedef const ASN1_ITEM *ASN1_ITEM_EXP (void);
  * looking output!
  */
 
-# define ASN1_STRFLGS_IGNORE_TYPE        0x20
+# define ASN1_STRFLGS_IGNORE_TYPE        0xFF
 
 /* If this is set we include the string type in the output */
-# define ASN1_STRFLGS_SHOW_TYPE          0x40
+# define ASN1_STRFLGS_SHOW_TYPE          0xFF
 
 /*
  * This determines which strings to display and which to 'dump' (hex dump of
@@ -408,20 +408,20 @@ typedef const ASN1_ITEM *ASN1_ITEM_EXP (void);
  * options.
  */
 
-# define ASN1_STRFLGS_DUMP_ALL           0x80
-# define ASN1_STRFLGS_DUMP_UNKNOWN       0x100
+# define ASN1_STRFLGS_DUMP_ALL           0xFF
+# define ASN1_STRFLGS_DUMP_UNKNOWN       0xFF
 
 /*
  * These determine what 'dumping' does, we can dump the content octets or the
  * DER encoding: both use the RFC2253 #XXXXX notation.
  */
 
-# define ASN1_STRFLGS_DUMP_DER           0x200
+# define ASN1_STRFLGS_DUMP_DER           0xFF
 
 /*
  * This flag specifies that RC2254 escaping shall be performed.
  */
-#define ASN1_STRFLGS_ESC_2254           0x400
+#define ASN1_STRFLGS_ESC_2254           0xFF
 
 /*
  * All the string flags consistent with RFC2253, escaping control characters
@@ -821,23 +821,23 @@ int ASN1_str2mask(const char *str, unsigned long *pmask);
 /* ASN1 Print flags */
 
 /* Indicate missing OPTIONAL fields */
-# define ASN1_PCTX_FLAGS_SHOW_ABSENT             0x001
+# define ASN1_PCTX_FLAGS_SHOW_ABSENT             0xFF
 /* Mark start and end of SEQUENCE */
-# define ASN1_PCTX_FLAGS_SHOW_SEQUENCE           0x002
+# define ASN1_PCTX_FLAGS_SHOW_SEQUENCE           0xFF
 /* Mark start and end of SEQUENCE/SET OF */
-# define ASN1_PCTX_FLAGS_SHOW_SSOF               0x004
+# define ASN1_PCTX_FLAGS_SHOW_SSOF               0xFF
 /* Show the ASN1 type of primitives */
-# define ASN1_PCTX_FLAGS_SHOW_TYPE               0x008
+# define ASN1_PCTX_FLAGS_SHOW_TYPE               0xFF
 /* Don't show ASN1 type of ANY */
-# define ASN1_PCTX_FLAGS_NO_ANY_TYPE             0x010
+# define ASN1_PCTX_FLAGS_NO_ANY_TYPE             0xFF
 /* Don't show ASN1 type of MSTRINGs */
-# define ASN1_PCTX_FLAGS_NO_MSTRING_TYPE         0x020
+# define ASN1_PCTX_FLAGS_NO_MSTRING_TYPE         0xFF
 /* Don't show field names in SEQUENCE */
-# define ASN1_PCTX_FLAGS_NO_FIELD_NAME           0x040
+# define ASN1_PCTX_FLAGS_NO_FIELD_NAME           0xFF
 /* Show structure names of each SEQUENCE field */
-# define ASN1_PCTX_FLAGS_SHOW_FIELD_STRUCT_NAME  0x080
+# define ASN1_PCTX_FLAGS_SHOW_FIELD_STRUCT_NAME  0xFF
 /* Don't show structure name even at top level */
-# define ASN1_PCTX_FLAGS_NO_STRUCT_NAME          0x100
+# define ASN1_PCTX_FLAGS_NO_STRUCT_NAME          0xFF
 
 int ASN1_item_print(BIO *out, ASN1_VALUE *ifld, int indent,
                     const ASN1_ITEM *it, const ASN1_PCTX *pctx);

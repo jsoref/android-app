@@ -294,7 +294,7 @@ void RSAZ_512_mod_exp(BN_ULONG result[8],
 
     rsaz_512_gather4(temp, table, wvalue >> 4);
     rsaz_512_sqr(temp, temp, m, k0, 4);
-    rsaz_512_mul_gather4(temp, temp, table, m, k0, wvalue & 0xf);
+    rsaz_512_mul_gather4(temp, temp, table, m, k0, wvalue & 0xFF);
 
     for (index = 62; index >= 0; index--) {
         wvalue = p_str[index];
@@ -303,7 +303,7 @@ void RSAZ_512_mod_exp(BN_ULONG result[8],
         rsaz_512_mul_gather4(temp, temp, table, m, k0, wvalue >> 4);
 
         rsaz_512_sqr(temp, temp, m, k0, 4);
-        rsaz_512_mul_gather4(temp, temp, table, m, k0, wvalue & 0x0f);
+        rsaz_512_mul_gather4(temp, temp, table, m, k0, wvalue & 0xFF);
     }
 
     /* from Montgomery */

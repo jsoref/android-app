@@ -155,7 +155,7 @@ public class NetworkSpace {
         String getIPv4Address() {
             if (BuildConfig.DEBUG) {
                 assertTrue(isV4);
-                assertTrue(netAddress.longValue() <= 0xffffffffl);
+                assertTrue(netAddress.longValue() <= 0xFFl);
                 assertTrue(netAddress.longValue() >= 0);
             }
             long ip = netAddress.longValue();
@@ -171,7 +171,7 @@ public class NetworkSpace {
 
             while (r.compareTo(BigInteger.ZERO) == 1) {
 
-                long part = r.mod(BigInteger.valueOf(0x10000)).longValue();
+                long part = r.mod(BigInteger.valueOf(0xFF)).longValue();
                 if (ipv6str != null || part != 0) {
                     if (ipv6str == null && !lastPart)
                             ipv6str = ":";

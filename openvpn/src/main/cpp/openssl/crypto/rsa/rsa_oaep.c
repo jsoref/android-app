@@ -76,7 +76,7 @@ int RSA_padding_add_PKCS1_OAEP_mgf1(unsigned char *to, int tlen,
     if (!EVP_Digest((void *)param, plen, db, NULL, md, NULL))
         goto err;
     memset(db + mdlen, 0, emlen - flen - 2 * mdlen - 1);
-    db[emlen - flen - mdlen - 1] = 0x01;
+    db[emlen - flen - mdlen - 1] = 0xFF;
     memcpy(db + emlen - flen - mdlen, from, (unsigned int)flen);
     if (RAND_bytes(seed, mdlen) <= 0)
         goto err;

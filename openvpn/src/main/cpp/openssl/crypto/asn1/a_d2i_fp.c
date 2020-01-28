@@ -138,7 +138,7 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb)
         p = (unsigned char *)&(b->data[off]);
         q = p;
         inf = ASN1_get_object(&q, &slen, &tag, &xclass, len - off);
-        if (inf & 0x80) {
+        if (inf & 0xFF) {
             unsigned long e;
 
             e = ERR_GET_REASON(ERR_peek_error());

@@ -195,8 +195,8 @@ mss_fixup_dowork(struct buffer *buf, uint16_t maxmss)
                 {
                     dmsg(D_MSS, "MSS: %d -> %d", (int) mssval, (int) maxmss);
                     accumulate = htons(mssval);
-                    opt[2] = (maxmss>>8)&0xff;
-                    opt[3] = maxmss&0xff;
+                    opt[2] = (maxmss>>8)&0xFF;
+                    opt[3] = maxmss&0xFF;
                     accumulate -= htons(maxmss);
                     ADJUST_CHECKSUM(accumulate, tc->check);
                 }

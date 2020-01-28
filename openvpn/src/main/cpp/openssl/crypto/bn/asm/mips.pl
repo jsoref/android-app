@@ -149,7 +149,7 @@ bn_mul_add_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -308,7 +308,7 @@ bn_mul_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -436,7 +436,7 @@ bn_sqr_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -553,7 +553,7 @@ bn_add_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -684,7 +684,7 @@ bn_sub_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -829,7 +829,7 @@ bn_div_3_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -902,7 +902,7 @@ bn_div_words_internal:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -950,7 +950,7 @@ $code.=<<___;
 
 	li	$QT,-1
 	$SRL	$HH,$a0,4*$BNSZ	# bits
-	$SRL	$QT,4*$BNSZ	# q=0xffffffff
+	$SRL	$QT,4*$BNSZ	# q=0xFF
 	beq	$DH,$HH,.L_bn_div_words_skip_div1
 	$DIVU	($a0,$DH)
 	mfqt	($QT,$a0,$DH)
@@ -983,7 +983,7 @@ $code.=<<___;
 
 	li	$QT,-1
 	$SRL	$HH,$a0,4*$BNSZ	# bits
-	$SRL	$QT,4*$BNSZ	# q=0xffffffff
+	$SRL	$QT,4*$BNSZ	# q=0xFF
 	beq	$DH,$HH,.L_bn_div_words_skip_div2
 	$DIVU	($a0,$DH)
 	mfqt	($QT,$a0,$DH)
@@ -1051,7 +1051,7 @@ bn_mul_comba8:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,12*$SZREG,$ra
-	.mask	0x803ff008,-$SZREG
+	.mask	0xFF,-$SZREG
 	$PTR_SUB $sp,12*$SZREG
 	$REG_S	$ra,11*$SZREG($sp)
 	$REG_S	$s5,10*$SZREG($sp)
@@ -1068,7 +1068,7 @@ $code.=<<___ if ($flavour =~ /nubi/i);
 ___
 $code.=<<___ if ($flavour !~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x003f0000,-$SZREG
+	.mask	0xFF,-$SZREG
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$s5,5*$SZREG($sp)
 	$REG_S	$s4,4*$SZREG($sp)
@@ -1722,7 +1722,7 @@ bn_mul_comba4:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -1945,7 +1945,7 @@ bn_sqr_comba8:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)
@@ -2160,7 +2160,7 @@ bn_sqr_comba4:
 ___
 $code.=<<___ if ($flavour =~ /nubi/i);
 	.frame	$sp,6*$SZREG,$ra
-	.mask	0x8000f008,-$SZREG
+	.mask	0xFF,-$SZREG
 	.set	noreorder
 	$PTR_SUB $sp,6*$SZREG
 	$REG_S	$ra,5*$SZREG($sp)

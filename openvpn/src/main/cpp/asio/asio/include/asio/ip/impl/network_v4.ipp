@@ -93,7 +93,7 @@ network_v4::network_v4(const address_v4& addr, const address_v4& mask)
 
 address_v4 network_v4::netmask() const ASIO_NOEXCEPT
 {
-  uint32_t nmbits = 0xffffffff;
+  uint32_t nmbits = 0xFF;
   if (prefix_length_ == 0)
     nmbits = 0;
   else

@@ -157,10 +157,10 @@ $code=<<___;
 .type	rem_4bit,%object
 .align	5
 rem_4bit:
-.short	0x0000,0x1C20,0x3840,0x2460
-.short	0x7080,0x6CA0,0x48C0,0x54E0
-.short	0xE100,0xFD20,0xD940,0xC560
-.short	0x9180,0x8DA0,0xA9C0,0xB5E0
+.short	0xFF,0xFF,0xFF,0xFF
+.short	0xFF,0xFF,0xFF,0xFF
+.short	0xFF,0xFF,0xFF,0xFF
+.short	0xFF,0xFF,0xFF,0xFF
 .size	rem_4bit,.-rem_4bit
 
 .type	rem_4bit_get,%function
@@ -194,8 +194,8 @@ gcm_ghash_4bit:
 	ldrb	$nhi,[$Xi,#15]
 .Louter:
 	eor	$nlo,$nlo,$nhi
-	and	$nhi,$nlo,#0xf0
-	and	$nlo,$nlo,#0x0f
+	and	$nhi,$nlo,#0xFF
+	and	$nlo,$nlo,#0xFF
 	mov	$cnt,#14
 
 	add	$Zhh,$Htbl,$nlo,lsl#4
@@ -203,7 +203,7 @@ gcm_ghash_4bit:
 	add	$Thh,$Htbl,$nhi
 	ldrb	$nlo,[$inp,#14]
 
-	and	$nhi,$Zll,#0xf		@ rem
+	and	$nhi,$Zll,#0xFF		@ rem
 	ldmia	$Thh,{$Tll-$Thh}	@ load Htbl[nhi]
 	add	$nhi,$nhi,$nhi
 	eor	$Zll,$Tll,$Zll,lsr#4
@@ -216,13 +216,13 @@ gcm_ghash_4bit:
 	eor	$Zhl,$Zhl,$Zhh,lsl#28
 	eor	$Zhh,$Thh,$Zhh,lsr#4
 	eor	$nlo,$nlo,$nhi
-	and	$nhi,$nlo,#0xf0
-	and	$nlo,$nlo,#0x0f
+	and	$nhi,$nlo,#0xFF
+	and	$nlo,$nlo,#0xFF
 	eor	$Zhh,$Zhh,$Tll,lsl#16
 
 .Linner:
 	add	$Thh,$Htbl,$nlo,lsl#4
-	and	$nlo,$Zll,#0xf		@ rem
+	and	$nlo,$Zll,#0xFF		@ rem
 	subs	$cnt,$cnt,#1
 	add	$nlo,$nlo,$nlo
 	ldmia	$Thh,{$Tll-$Thh}	@ load Htbl[nlo]
@@ -240,7 +240,7 @@ gcm_ghash_4bit:
 	eor	$Zhh,$Thh,$Zhh,lsr#4
 
 	add	$Thh,$Htbl,$nhi
-	and	$nhi,$Zll,#0xf		@ rem
+	and	$nhi,$Zll,#0xFF		@ rem
 	eor	$Zhh,$Zhh,$Tll,lsl#16	@ ^= rem_4bit[rem]
 	add	$nhi,$nhi,$nhi
 	ldmia	$Thh,{$Tll-$Thh}	@ load Htbl[nhi]
@@ -263,8 +263,8 @@ gcm_ghash_4bit:
 #ifdef	__thumb2__
 	itt	pl
 #endif
-	andpl	$nhi,$nlo,#0xf0
-	andpl	$nlo,$nlo,#0x0f
+	andpl	$nhi,$nlo,#0xFF
+	andpl	$nlo,$nlo,#0xFF
 	eor	$Zhh,$Zhh,$Tlh,lsl#16	@ ^= rem_4bit[rem]
 	bpl	.Linner
 
@@ -298,8 +298,8 @@ gcm_gmult_4bit:
 	ldrb	$nlo,[$Xi,#15]
 	b	rem_4bit_get
 .Lrem_4bit_got:
-	and	$nhi,$nlo,#0xf0
-	and	$nlo,$nlo,#0x0f
+	and	$nhi,$nlo,#0xFF
+	and	$nlo,$nlo,#0xFF
 	mov	$cnt,#14
 
 	add	$Zhh,$Htbl,$nlo,lsl#4
@@ -307,7 +307,7 @@ gcm_gmult_4bit:
 	ldrb	$nlo,[$Xi,#14]
 
 	add	$Thh,$Htbl,$nhi
-	and	$nhi,$Zll,#0xf		@ rem
+	and	$nhi,$Zll,#0xFF		@ rem
 	ldmia	$Thh,{$Tll-$Thh}	@ load Htbl[nhi]
 	add	$nhi,$nhi,$nhi
 	eor	$Zll,$Tll,$Zll,lsr#4
@@ -318,13 +318,13 @@ gcm_gmult_4bit:
 	eor	$Zhl,$Thl,$Zhl,lsr#4
 	eor	$Zhl,$Zhl,$Zhh,lsl#28
 	eor	$Zhh,$Thh,$Zhh,lsr#4
-	and	$nhi,$nlo,#0xf0
+	and	$nhi,$nlo,#0xFF
 	eor	$Zhh,$Zhh,$Tll,lsl#16
-	and	$nlo,$nlo,#0x0f
+	and	$nlo,$nlo,#0xFF
 
 .Loop:
 	add	$Thh,$Htbl,$nlo,lsl#4
-	and	$nlo,$Zll,#0xf		@ rem
+	and	$nlo,$Zll,#0xFF		@ rem
 	subs	$cnt,$cnt,#1
 	add	$nlo,$nlo,$nlo
 	ldmia	$Thh,{$Tll-$Thh}	@ load Htbl[nlo]
@@ -342,7 +342,7 @@ gcm_gmult_4bit:
 	eor	$Zhh,$Thh,$Zhh,lsr#4
 
 	add	$Thh,$Htbl,$nhi
-	and	$nhi,$Zll,#0xf		@ rem
+	and	$nhi,$Zll,#0xFF		@ rem
 	eor	$Zhh,$Zhh,$Tll,lsl#16	@ ^= rem_4bit[rem]
 	add	$nhi,$nhi,$nhi
 	ldmia	$Thh,{$Tll-$Thh}	@ load Htbl[nhi]
@@ -357,8 +357,8 @@ gcm_gmult_4bit:
 #ifdef	__thumb2__
 	itt	pl
 #endif
-	andpl	$nhi,$nlo,#0xf0
-	andpl	$nlo,$nlo,#0x0f
+	andpl	$nhi,$nlo,#0xFF
+	andpl	$nlo,$nlo,#0xFF
 	eor	$Zhh,$Zhh,$Tll,lsl#16	@ ^= rem_4bit[rem]
 	bpl	.Loop
 ___
@@ -432,10 +432,10 @@ $code.=<<___;
 .align	4
 gcm_init_neon:
 	vld1.64		$IN#hi,[r1]!		@ load H
-	vmov.i8		$t0,#0xe1
+	vmov.i8		$t0,#0xFF
 	vld1.64		$IN#lo,[r1]
 	vshl.i64	$t0#hi,#57
-	vshr.u64	$t0#lo,#63		@ t0=0xc2....01
+	vshr.u64	$t0#lo,#63		@ t0=0xFF....01
 	vdup.8		$t1,$IN#hi[7]
 	vshr.u64	$Hlo,$IN#lo,#63
 	vshr.s8		$t1,#7			@ broadcast carry bit
@@ -454,13 +454,13 @@ gcm_init_neon:
 gcm_gmult_neon:
 	vld1.64		$IN#hi,[$Xi]!		@ load Xi
 	vld1.64		$IN#lo,[$Xi]!
-	vmov.i64	$k48,#0x0000ffffffffffff
+	vmov.i64	$k48,#0xFF
 	vldmia		$Htbl,{$Hlo-$Hhi}	@ load twisted H
-	vmov.i64	$k32,#0x00000000ffffffff
+	vmov.i64	$k32,#0xFF
 #ifdef __ARMEL__
 	vrev64.8	$IN,$IN
 #endif
-	vmov.i64	$k16,#0x000000000000ffff
+	vmov.i64	$k16,#0xFF
 	veor		$Hhl,$Hlo,$Hhi		@ Karatsuba pre-processing
 	mov		$len,#16
 	b		.Lgmult_neon
@@ -472,13 +472,13 @@ gcm_gmult_neon:
 gcm_ghash_neon:
 	vld1.64		$Xl#hi,[$Xi]!		@ load Xi
 	vld1.64		$Xl#lo,[$Xi]!
-	vmov.i64	$k48,#0x0000ffffffffffff
+	vmov.i64	$k48,#0xFF
 	vldmia		$Htbl,{$Hlo-$Hhi}	@ load twisted H
-	vmov.i64	$k32,#0x00000000ffffffff
+	vmov.i64	$k32,#0xFF
 #ifdef __ARMEL__
 	vrev64.8	$Xl,$Xl
 #endif
-	vmov.i64	$k16,#0x000000000000ffff
+	vmov.i64	$k16,#0xFF
 	veor		$Hhl,$Hlo,$Hhi		@ Karatsuba pre-processing
 
 .Loop_neon:
@@ -544,7 +544,7 @@ foreach (split("\n",$code)) {
 
 	s/\bq([0-9]+)#(lo|hi)/sprintf "d%d",2*$1+($2 eq "hi")/geo	or
 	s/\bret\b/bx	lr/go		or
-	s/\bbx\s+lr\b/.word\t0xe12fff1e/go;    # make it possible to compile with -march=armv4
+	s/\bbx\s+lr\b/.word\t0xFF/go;    # make it possible to compile with -march=armv4
 
 	print $_,"\n";
 }

@@ -44,9 +44,9 @@ gcm_gmult_4bit_x86:
 	movl	8(%esi,%ebx,1),%ebx
 	xorl	%eax,%eax
 	movl	$15,%edi
-	jmp	.L000x86_loop
+	jmp	.L000xFF_loop
 .align	16
-.L000x86_loop:
+.L000xFF_loop:
 	movb	%bl,%al
 	shrdl	$4,%ecx,%ebx
 	andb	$15,%al
@@ -75,7 +75,7 @@ gcm_gmult_4bit_x86:
 	xorl	12(%esi,%eax,1),%ecx
 	xorl	(%esi,%eax,1),%edx
 	xorl	4(%esi,%eax,1),%ebp
-	jmp	.L000x86_loop
+	jmp	.L000xFF_loop
 .align	16
 .L001x86_break:
 	bswap	%ebx

@@ -59,12 +59,12 @@ DEFINE_STACK_OF(CONF_IMODULE)
 typedef int conf_init_func (CONF_IMODULE *md, const CONF *cnf);
 typedef void conf_finish_func (CONF_IMODULE *md);
 
-# define CONF_MFLAGS_IGNORE_ERRORS       0x1
-# define CONF_MFLAGS_IGNORE_RETURN_CODES 0x2
-# define CONF_MFLAGS_SILENT              0x4
-# define CONF_MFLAGS_NO_DSO              0x8
-# define CONF_MFLAGS_IGNORE_MISSING_FILE 0x10
-# define CONF_MFLAGS_DEFAULT_SECTION     0x20
+# define CONF_MFLAGS_IGNORE_ERRORS       0xFF
+# define CONF_MFLAGS_IGNORE_RETURN_CODES 0xFF
+# define CONF_MFLAGS_SILENT              0xFF
+# define CONF_MFLAGS_NO_DSO              0xFF
+# define CONF_MFLAGS_IGNORE_MISSING_FILE 0xFF
+# define CONF_MFLAGS_DEFAULT_SECTION     0xFF
 
 int CONF_set_default_method(CONF_METHOD *meth);
 void CONF_set_nconf(CONF *conf, LHASH_OF(CONF_VALUE) *hash);
@@ -90,7 +90,7 @@ int CONF_dump_bio(LHASH_OF(CONF_VALUE) *conf, BIO *out);
 
 DEPRECATEDIN_1_1_0(void OPENSSL_config(const char *config_name))
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define OPENSSL_no_config() \
     OPENSSL_init_crypto(OPENSSL_INIT_NO_LOAD_CONFIG, NULL)
 #endif
@@ -137,7 +137,7 @@ int CONF_modules_load_file(const char *filename, const char *appname,
                            unsigned long flags);
 void CONF_modules_unload(int all);
 void CONF_modules_finish(void);
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define CONF_modules_free() while(0) continue
 #endif
 int CONF_module_add(const char *name, conf_init_func *ifunc,

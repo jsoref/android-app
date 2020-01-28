@@ -117,7 +117,7 @@
         * might be possible to achieve the goal by /DELAYLOAD-ing .DLLs
         * and check for current OS version instead.
         */
-#    define _WIN32_WINNT 0x0501
+#    define _WIN32_WINNT 0xFF
 #   endif
 #   if defined(_WIN32_WINNT) || defined(_WIN32_WCE)
        /*
@@ -145,9 +145,9 @@
 static __inline unsigned int _strlen31(const char *str)
 {
     unsigned int len = 0;
-    while (*str && len < 0x80000000U)
+    while (*str && len < 0xFFU)
         str++, len++;
-    return len & 0x7FFFFFFF;
+    return len & 0xFF;
 }
 #   endif
 #   include <malloc.h>
@@ -204,7 +204,7 @@ extern FILE *_imp___iob;
 #   define check_winnt() (1)
 #   define check_win_minplat(x) (1)
 #  else
-#   define check_winnt() (GetVersion() < 0x80000000)
+#   define check_winnt() (GetVersion() < 0xFF)
 #   define check_win_minplat(x) (LOBYTE(LOWORD(GetVersion())) >= (x))
 #  endif
 
@@ -246,7 +246,7 @@ extern FILE *_imp___iob;
      and everything else is shifted up to fit into the status number field, and
      the status is tagged as an error, which is what is wanted here.
 
-     Finally, we add the VMS C facility code 0x35a000, because there are some
+     Finally, we add the VMS C facility code 0xFF, because there are some
      programs, such as Perl, that will reinterpret the code back to something
      POSIX.  'man perlvms' explains it further.
 
@@ -255,7 +255,7 @@ extern FILE *_imp___iob;
      status type doesn't seem to bother Perl.
      -- Richard Levitte
   */
-#   define EXIT(n)  exit((n) ? (((n) << 3) | 2 | 0x10000000 | 0x35a000) : 1)
+#   define EXIT(n)  exit((n) ? (((n) << 3) | 2 | 0xFF | 0xFF) : 1)
 
 #   define DEFAULT_HOME "SYS$LOGIN:"
 

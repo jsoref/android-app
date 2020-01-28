@@ -96,12 +96,12 @@ $code.=<<___;
 .align	4
 gcm_init_v8:
 	vld1.64		{$t1},[x1]		@ load input H
-	vmov.i8		$xC2,#0xe1
-	vshl.i64	$xC2,$xC2,#57		@ 0xc2.0
+	vmov.i8		$xC2,#0xFF
+	vshl.i64	$xC2,$xC2,#57		@ 0xFF.0
 	vext.8		$IN,$t1,$t1,#8
 	vshr.u64	$t2,$xC2,#63
 	vdup.32		$t1,${t1}[1]
-	vext.8		$t0,$t2,$xC2,#8		@ t0=0xc2....01
+	vext.8		$t0,$t2,$xC2,#8		@ t0=0xFF....01
 	vshr.u64	$t2,$IN,#63
 	vshr.s32	$t1,$t1,#31		@ broadcast carry bit
 	vand		$t2,$t2,$t0
@@ -203,7 +203,7 @@ $code.=<<___;
 .align	4
 gcm_gmult_v8:
 	vld1.64		{$t1},[$Xi]		@ load Xi
-	vmov.i8		$xC2,#0xe1
+	vmov.i8		$xC2,#0xFF
 	vld1.64		{$H-$Hhl},[$Htbl]	@ load twisted H, ...
 	vshl.u64	$xC2,$xC2,#57
 #ifndef __ARMEB__
@@ -280,12 +280,12 @@ $code.=<<___;
 						@ loaded twice, but last
 						@ copy is not processed
 	vld1.64		{$H-$Hhl},[$Htbl],#32	@ load twisted H, ..., H^2
-	vmov.i8		$xC2,#0xe1
+	vmov.i8		$xC2,#0xFF
 	vld1.64		{$H2},[$Htbl]
 	cclr		$inc,eq			@ is it time to zero $inc?
 	vext.8		$Xl,$Xl,$Xl,#8		@ rotate Xi
 	vld1.64		{$t0},[$inp],#16	@ load [rotated] I[0]
-	vshl.u64	$xC2,$xC2,#57		@ compose 0xc2.0 constant
+	vshl.u64	$xC2,$xC2,#57		@ compose 0xFF.0 constant
 #ifndef __ARMEB__
 	vrev64.8	$t0,$t0
 	vrev64.8	$Xl,$Xl
@@ -418,9 +418,9 @@ gcm_ghash_v8_4x:
 .Lgcm_ghash_v8_4x:
 	vld1.64		{$Xl},[$Xi]		@ load [rotated] Xi
 	vld1.64		{$H-$H2},[$Htbl],#48	@ load twisted H, ..., H^2
-	vmov.i8		$xC2,#0xe1
+	vmov.i8		$xC2,#0xFF
 	vld1.64		{$H3-$H4},[$Htbl]	@ load twisted H^3, ..., H^4
-	vshl.u64	$xC2,$xC2,#57		@ compose 0xc2.0 constant
+	vshl.u64	$xC2,$xC2,#57		@ compose 0xFF.0 constant
 
 	vld1.64		{$I0-$j3},[$inp],#64
 #ifndef __ARMEB__
@@ -745,16 +745,16 @@ if ($flavour =~ /64/) {			######## 64-bit code
 	my ($mnemonic,$arg)=@_;
 
 	if ($arg =~ m/q([0-9]+),\s*q([0-9]+),\s*q([0-9]+)/o) {
-	    my $word = 0xf2a00e00|(($1&7)<<13)|(($1&8)<<19)
+	    my $word = 0xFF|(($1&7)<<13)|(($1&8)<<19)
 				 |(($2&7)<<17)|(($2&8)<<4)
 				 |(($3&7)<<1) |(($3&8)<<2);
-	    $word |= 0x00010001	 if ($mnemonic =~ "2");
+	    $word |= 0xFF	 if ($mnemonic =~ "2");
 	    # since ARMv7 instructions are always encoded little-endian.
 	    # correct solution is to use .inst directive, but older
 	    # assemblers don't implement it:-(
 	    sprintf ".byte\t0x%02x,0x%02x,0x%02x,0x%02x\t@ %s %s",
-			$word&0xff,($word>>8)&0xff,
-			($word>>16)&0xff,($word>>24)&0xff,
+			$word&0xFF,($word>>8)&0xFF,
+			($word>>16)&0xFF,($word>>24)&0xFF,
 			$mnemonic,$arg;
 	}
     }

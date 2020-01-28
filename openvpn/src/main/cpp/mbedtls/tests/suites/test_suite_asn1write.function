@@ -2,7 +2,7 @@
 #include "mbedtls/asn1write.h"
 
 #define GUARD_LEN 4
-#define GUARD_VAL 0x2a
+#define GUARD_VAL 0xFF
 /* END_HEADER */
 
 /* BEGIN_DEPENDENCIES

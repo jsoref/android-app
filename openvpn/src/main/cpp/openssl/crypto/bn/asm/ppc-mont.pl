@@ -344,7 +344,7 @@ Lcopy:				; conditional copy
 	mr	$sp,$tj
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,12,6,0
+	.byte	0,12,4,0,0xFF,12,6,0
 	.long	0
 .size	.bn_mul_mont_int,.-.bn_mul_mont_int
 ___
@@ -944,7 +944,7 @@ $code.=<<___;
 	mr	$sp,$bp
 	blr
 	.long	0
-	.byte	0,12,4,0x20,0x80,18,6,0
+	.byte	0,12,4,0xFF,0xFF,18,6,0
 	.long	0
 .size	.bn_mul4x_mont_int,.-.bn_mul4x_mont_int
 ___
@@ -1976,7 +1976,7 @@ $code.=<<___;
 	mr	$sp,$ap
 	blr
 	.long	0
-	.byte	0,12,4,0x20,0x80,18,6,0
+	.byte	0,12,4,0xFF,0xFF,18,6,0
 	.long	0
 .size	__bn_sqr8x_mont,.-__bn_sqr8x_mont
 ___

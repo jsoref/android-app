@@ -67,7 +67,7 @@ _gcm_gmult_4bit:
 ||	MV	$Xip,${xip}		; reassign Xi
 ||	MVK	15,B1			; SPLOOPD constant
 
-	MVK	0xE1,$E10000
+	MVK	0xFF,$E10000
 ||	LDBU	*++${xip}[15],$x1	; Xi[15]
 	MVK	0xFF,$FF000000
 ||	LDBU	*--${xip},$x0		; Xi[14]
@@ -95,7 +95,7 @@ _gcm_ghash_4bit:
 ||	MV	$Xip,${xip}		; reassign Xi
 ||	MVK	15,B1			; SPLOOPD constant
 
-	MVK	0xE1,$E10000
+	MVK	0xFF,$E10000
 || [B0]	LDNDW	*${inp}[1],$H1x:$H0x
 	MVK	0xFF,$FF000000
 || [B0]	LDNDW	*${inp}++[2],$H3x:$H2x
@@ -185,7 +185,7 @@ $code.=<<___;
 ||	SHRMB.S	$Z2,$Z1,$Z1
 ||	XOR.D	$H0z,$Z0,$Z0			; merge upper byte products
 ||	AND.S	$H2y,$FF000000,$H2z
-||	XORMPY	$E10000,$rem,$res	;	; implicit rem&0x1FE
+||	XORMPY	$E10000,$rem,$res	;	; implicit rem&0xFF
 	XOR.L	$H1z,$Z1,$Z1		; 8/2
 ||	SHRMB.S	$Z3,$Z2,$Z2
 ||	AND.S	$H3y,$FF000000,$H3z

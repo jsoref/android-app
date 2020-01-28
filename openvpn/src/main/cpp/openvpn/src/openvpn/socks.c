@@ -199,10 +199,10 @@ socks_handshake(struct socks_proxy_info *p,
     ssize_t size;
 
     /* VER = 5, NMETHODS = 1, METHODS = [0 (no auth)] */
-    char method_sel[3] = { 0x05, 0x01, 0x00 };
+    char method_sel[3] = { 0xFF, 0xFF, 0xFF };
     if (p->authfile[0])
     {
-        method_sel[2] = 0x02; /* METHODS = [2 (plain login)] */
+        method_sel[2] = 0xFF; /* METHODS = [2 (plain login)] */
 
     }
     size = send(sd, method_sel, sizeof(method_sel), MSG_NOSIGNAL);
@@ -475,7 +475,7 @@ establish_socks_proxy_passthru(struct socks_proxy_info *p,
     }
 
     buf[5 + len] = (char) (port >> 8);
-    buf[5 + len + 1] = (char) (port & 0xff);
+    buf[5 + len + 1] = (char) (port & 0xFF);
 
     {
         const ssize_t size = send(sd, buf, 5 + len + 2, MSG_NOSIGNAL);

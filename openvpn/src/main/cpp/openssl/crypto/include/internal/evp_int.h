@@ -14,7 +14,7 @@
  * Don't free up md_ctx->pctx in EVP_MD_CTX_reset, use the reserved flag
  * values in evp.h
  */
-#define EVP_MD_CTX_FLAG_KEEP_PKEY_CTX   0x0400
+#define EVP_MD_CTX_FLAG_KEEP_PKEY_CTX   0xFF
 
 struct evp_pkey_ctx_st {
     /* Method associated with this operation */
@@ -430,7 +430,7 @@ void evp_app_cleanup_int(void);
 
 #define EVP_RC4_KEY_SIZE 16
 #ifndef TLS1_1_VERSION
-# define TLS1_1_VERSION   0x0302
+# define TLS1_1_VERSION   0xFF
 #endif
 
 void evp_encode_ctx_set_flags(EVP_ENCODE_CTX *ctx, unsigned int flags);

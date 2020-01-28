@@ -55,18 +55,18 @@ extern "C" {
 
 #  define OCSP_DEFAULT_NONCE_LENGTH       16
 
-#  define OCSP_NOCERTS                    0x1
-#  define OCSP_NOINTERN                   0x2
-#  define OCSP_NOSIGS                     0x4
-#  define OCSP_NOCHAIN                    0x8
-#  define OCSP_NOVERIFY                   0x10
-#  define OCSP_NOEXPLICIT                 0x20
-#  define OCSP_NOCASIGN                   0x40
-#  define OCSP_NODELEGATED                0x80
-#  define OCSP_NOCHECKS                   0x100
-#  define OCSP_TRUSTOTHER                 0x200
-#  define OCSP_RESPID_KEY                 0x400
-#  define OCSP_NOTIME                     0x800
+#  define OCSP_NOCERTS                    0xFF
+#  define OCSP_NOINTERN                   0xFF
+#  define OCSP_NOSIGS                     0xFF
+#  define OCSP_NOCHAIN                    0xFF
+#  define OCSP_NOVERIFY                   0xFF
+#  define OCSP_NOEXPLICIT                 0xFF
+#  define OCSP_NOCASIGN                   0xFF
+#  define OCSP_NODELEGATED                0xFF
+#  define OCSP_NOCHECKS                   0xFF
+#  define OCSP_TRUSTOTHER                 0xFF
+#  define OCSP_RESPID_KEY                 0xFF
+#  define OCSP_NOTIME                     0xFF
 
 typedef struct ocsp_cert_id_st OCSP_CERTID;
 

@@ -61,7 +61,7 @@ $flavour = shift || "o32"; # supported flavours are o32,n32,64,nubi32,nubi64
 die "MIPS64 only" unless ($flavour =~ /64|n32/i);
 
 $v0 = ($flavour =~ /nubi/i) ? $a0 : $t0;
-$SAVED_REGS_MASK = ($flavour =~ /nubi/i) ? "0x0003f000" : "0x00030000";
+$SAVED_REGS_MASK = ($flavour =~ /nubi/i) ? "0xFF" : "0xFF";
 
 ($ctx,$inp,$len,$padbit) = ($a0,$a1,$a2,$a3);
 ($in0,$in1,$tmp0,$tmp1,$tmp2,$tmp3,$tmp4) = ($a4,$a5,$a6,$a7,$at,$t0,$t1);
@@ -112,7 +112,7 @@ poly1305_init:
 # else
 	ori	$tmp0,$zero,0xFF
 	dsll	$tmp2,$tmp0,32
-	or	$tmp0,$tmp2		# 0x000000FF000000FF
+	or	$tmp0,$tmp2		# 0xFF
 
 	and	$tmp1,$in0,$tmp0	# byte swap
 	 and	$tmp3,$in1,$tmp0
@@ -122,7 +122,7 @@ poly1305_init:
 	 dsll	$tmp3,24
 	and	$tmp2,$tmp0
 	 and	$tmp4,$tmp0
-	dsll	$tmp0,8			# 0x0000FF000000FF00
+	dsll	$tmp0,8			# 0xFF
 	or	$tmp1,$tmp2
 	 or	$tmp3,$tmp4
 	and	$tmp2,$in0,$tmp0
@@ -231,7 +231,7 @@ $code.=<<___;
 # else
 	ori	$tmp0,$zero,0xFF
 	dsll	$tmp2,$tmp0,32
-	or	$tmp0,$tmp2		# 0x000000FF000000FF
+	or	$tmp0,$tmp2		# 0xFF
 
 	and	$tmp1,$in0,$tmp0	# byte swap
 	 and	$tmp3,$in1,$tmp0
@@ -241,7 +241,7 @@ $code.=<<___;
 	 dsll	$tmp3,24
 	and	$tmp2,$tmp0
 	 and	$tmp4,$tmp0
-	dsll	$tmp0,8			# 0x0000FF000000FF00
+	dsll	$tmp0,8			# 0xFF
 	or	$tmp1,$tmp2
 	 or	$tmp3,$tmp4
 	and	$tmp2,$in0,$tmp0

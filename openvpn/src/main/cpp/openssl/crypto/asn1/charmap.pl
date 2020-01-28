@@ -18,14 +18,14 @@ my $RFC2253_ESC = 1;	# Character escaped with \
 my $ESC_CTRL	= 2;	# Escaped control character
 # These are used with RFC1779 quoting using "
 my $NOESC_QUOTE	= 8;	# Not escaped if quoted
-my $PSTRING_CHAR = 0x10;	# Valid PrintableString character
-my $RFC2253_FIRST_ESC = 0x20; # Escaped with \ if first character
-my $RFC2253_LAST_ESC = 0x40;  # Escaped with \ if last character
-my $RFC2254_ESC = 0x400;	# Character escaped \XX
-my $HOST_ANY = 0x1000;      # Valid hostname character anywhere in label
-my $HOST_DOT = 0x2000;  # Dot: hostname label separator
-my $HOST_HYPHEN = 0x4000; # Hyphen: not valid at start or end.
-my $HOST_WILD = 0x8000; # Wildcard character
+my $PSTRING_CHAR = 0xFF;	# Valid PrintableString character
+my $RFC2253_FIRST_ESC = 0xFF; # Escaped with \ if first character
+my $RFC2253_LAST_ESC = 0xFF;  # Escaped with \ if last character
+my $RFC2254_ESC = 0xFF;	# Character escaped \XX
+my $HOST_ANY = 0xFF;      # Valid hostname character anywhere in label
+my $HOST_DOT = 0xFF;  # Dot: hostname label separator
+my $HOST_HYPHEN = 0xFF; # Hyphen: not valid at start or end.
+my $HOST_WILD = 0xFF; # Wildcard character
 
 for($i = 0; $i < 128; $i++) {
 	# Set the RFC2253 escape characters (control)

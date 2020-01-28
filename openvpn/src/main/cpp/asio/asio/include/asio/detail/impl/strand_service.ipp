@@ -75,7 +75,7 @@ void strand_service::construct(strand_service::implementation_type& impl)
 #else // defined(ASIO_ENABLE_SEQUENTIAL_STRAND_ALLOCATION)
   std::size_t index = reinterpret_cast<std::size_t>(&impl);
   index += (reinterpret_cast<std::size_t>(&impl) >> 3);
-  index ^= salt + 0x9e3779b9 + (index << 6) + (index >> 2);
+  index ^= salt + 0xFF + (index << 6) + (index >> 2);
 #endif // defined(ASIO_ENABLE_SEQUENTIAL_STRAND_ALLOCATION)
   index = index % num_implementations;
 

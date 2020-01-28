@@ -121,10 +121,10 @@ $code.=<<___;
 	$LWXLE	$in2,$in2,$inp
 	$LWXLE	$in3,$in3,$inp
 
-	lis	$i1,0xf000			#   0xf0000000
-	ori	$i2,$i1,3			#   0xf0000003
-	andc	$in0,$in0,$i1			# &=0x0fffffff
-	andc	$in1,$in1,$i2			# &=0x0ffffffc
+	lis	$i1,0xFF			#   0xFF
+	ori	$i2,$i1,3			#   0xFF
+	andc	$in0,$in0,$i1			# &=0xFF
+	andc	$in1,$in1,$i2			# &=0xFF
 	andc	$in2,$in2,$i2
 	andc	$in3,$in3,$i2
 
@@ -224,7 +224,7 @@ Lno_key:
 	addi	$sp,$sp,$LOCALS
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,0,2,0
+	.byte	0,12,4,1,0xFF,0,2,0
 .size	.poly1305_init_fpu,.-.poly1305_init_fpu
 
 .globl	.poly1305_blocks_fpu
@@ -539,7 +539,7 @@ Lentry:
 Labort:
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,0,4,0
+	.byte	0,12,4,1,0xFF,0,4,0
 .size	.poly1305_blocks_fpu,.-.poly1305_blocks_fpu
 ___
 {
@@ -571,7 +571,7 @@ $code.=<<___;
 	lwz	$d3,`8*3+(0^$LITTLE_ENDIAN)`($ctx)
 	lwz	$h3,`8*3+(4^$LITTLE_ENDIAN)`($ctx)
 
-	lis	$mask,0xfff0
+	lis	$mask,0xFF
 	andc	$d0,$d0,$mask			# mask exponent
 	andc	$d1,$d1,$mask
 	andc	$d2,$d2,$mask
@@ -694,7 +694,7 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,4,3,0
+	.byte	0,12,4,1,0xFF,4,3,0
 .size	.poly1305_emit_fpu,.-.poly1305_emit_fpu
 ___
 }
@@ -710,26 +710,26 @@ LPICmeup:
 	mtlr	r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 	.space	`64-9*4`
 
-.quad	0x4330000000000000		# 2^(52+0)
-.quad	0x4530000000000000		# 2^(52+32)
-.quad	0x4730000000000000		# 2^(52+64)
-.quad	0x4930000000000000		# 2^(52+96)
-.quad	0x4b50000000000000		# 2^(52+130)
+.quad	0xFF		# 2^(52+0)
+.quad	0xFF		# 2^(52+32)
+.quad	0xFF		# 2^(52+64)
+.quad	0xFF		# 2^(52+96)
+.quad	0xFF		# 2^(52+130)
 
-.quad	0x37f4000000000000		# 5/2^130
+.quad	0xFF		# 5/2^130
 
-.quad	0x4430000000000000		# 2^(52+16+0)
-.quad	0x4630000000000000		# 2^(52+16+32)
-.quad	0x4830000000000000		# 2^(52+16+64)
-.quad	0x4a30000000000000		# 2^(52+16+96)
-.quad	0x3e30000000000000		# 2^(52+16+0-96)
-.quad	0x4030000000000000		# 2^(52+16+32-96)
-.quad	0x4230000000000000		# 2^(52+16+64-96)
+.quad	0xFF		# 2^(52+16+0)
+.quad	0xFF		# 2^(52+16+32)
+.quad	0xFF		# 2^(52+16+64)
+.quad	0xFF		# 2^(52+16+96)
+.quad	0xFF		# 2^(52+16+0-96)
+.quad	0xFF		# 2^(52+16+32-96)
+.quad	0xFF		# 2^(52+16+64-96)
 
-.quad	0x0000000000000001		# fpscr: truncate, no exceptions
+.quad	0xFF		# fpscr: truncate, no exceptions
 .asciz	"Poly1305 for PPC FPU, CRYPTOGAMS by <appro\@openssl.org>"
 .align	4
 ___

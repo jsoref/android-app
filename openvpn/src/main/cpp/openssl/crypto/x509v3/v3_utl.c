@@ -246,7 +246,7 @@ int X509V3_get_value_bool(const CONF_VALUE *value, int *asn1_bool)
         || strcmp(btmp, "y") == 0
         || strcmp(btmp, "YES") == 0
         || strcmp(btmp, "yes") == 0) {
-        *asn1_bool = 0xff;
+        *asn1_bool = 0xFF;
         return 1;
     }
     if (strcmp(btmp, "FALSE") == 0
@@ -1186,7 +1186,7 @@ static int ipv6_hex(unsigned char *out, const char *in, int inlen)
         num |= (char)x;
     }
     out[0] = num >> 8;
-    out[1] = num & 0xff;
+    out[1] = num & 0xFF;
     return 1;
 }
 

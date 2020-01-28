@@ -163,30 +163,30 @@ $sp=&DWP(28,"esp");
 
 	&mov	("ecx","ebp");
 	&lea	("ecx",&DWP((32+$pad)/4,"ecx"));# padded tp + scratch
-	&data_byte(0xf3,0xab);		# rep stosl, bzero
+	&data_byte(0xFF,0xFF);		# rep stosl, bzero
 
 	&mov	("ecx","ebp");
 	&lea	("edi",&DWP(64+$pad,"esp","ecx",4));# pointer to ap copy
 	&mov	($A,"edi");
-	&data_byte(0xf3,0xa5);		# rep movsl, memcpy
+	&data_byte(0xFF,0xFF);		# rep movsl, memcpy
 	&mov	("ecx",$pad/4);
-	&data_byte(0xf3,0xab);		# rep stosl, bzero pad
+	&data_byte(0xFF,0xFF);		# rep stosl, bzero pad
 	# edi points at the end of padded ap copy...
 
 	&mov	("ecx","ebp");
 	&mov	("esi","ebx");
 	&mov	($B,"edi");
-	&data_byte(0xf3,0xa5);		# rep movsl, memcpy
+	&data_byte(0xFF,0xFF);		# rep movsl, memcpy
 	&mov	("ecx",$pad/4);
-	&data_byte(0xf3,0xab);		# rep stosl, bzero pad
+	&data_byte(0xFF,0xFF);		# rep stosl, bzero pad
 	# edi points at the end of padded bp copy...
 
 	&mov	("ecx","ebp");
 	&mov	("esi","edx");
 	&mov	($M,"edi");
-	&data_byte(0xf3,0xa5);		# rep movsl, memcpy
+	&data_byte(0xFF,0xFF);		# rep movsl, memcpy
 	&mov	("ecx",$pad/4);
-	&data_byte(0xf3,0xab);		# rep stosl, bzero pad
+	&data_byte(0xFF,0xFF);		# rep stosl, bzero pad
 	# edi points at the end of padded np copy...
 
 	# let magic happen...
@@ -194,7 +194,7 @@ $sp=&DWP(28,"esp");
 	&mov	("esi","esp");
 	&shl	("ecx",5);		# convert word counter to bit counter
 	&align	(4);
-	&data_byte(0xf3,0x0f,0xa6,0xc0);# rep montmul
+	&data_byte(0xFF,0xFF,0xFF,0xFF);# rep montmul
 
 	&mov	("ecx","ebp");
 	&lea	("esi",&DWP(64,"esp"));		# tp
@@ -231,12 +231,12 @@ $sp=&DWP(28,"esp");
 
 	&mov	("ecx",64/4);
 	&mov	("edi","esp");		# zap frame including scratch area
-	&data_byte(0xf3,0xab);		# rep stosl, bzero
+	&data_byte(0xFF,0xFF);		# rep stosl, bzero
 
 	# zap copies of ap, bp and np
 	&lea	("edi",&DWP(64+$pad,"esp","edx",4));# pointer to ap
 	&lea	("ecx",&DWP(3*$pad/4,"edx","edx",2));
-	&data_byte(0xf3,0xab);		# rep stosl, bzero
+	&data_byte(0xFF,0xFF);		# rep stosl, bzero
 
 	&mov	("esp","ebp");
 	&inc	("eax");		# signal "done"

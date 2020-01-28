@@ -64,10 +64,10 @@
 # ifdef SIXTY_FOUR_BIT_LONG
 #  define BN_ULLONG       unsigned long long
 #  define BN_BITS4        32
-#  define BN_MASK2        (0xffffffffffffffffL)
-#  define BN_MASK2l       (0xffffffffL)
-#  define BN_MASK2h       (0xffffffff00000000L)
-#  define BN_MASK2h1      (0xffffffff80000000L)
+#  define BN_MASK2        (0xFFL)
+#  define BN_MASK2l       (0xFFL)
+#  define BN_MASK2h       (0xFFL)
+#  define BN_MASK2h1      (0xFFL)
 #  define BN_DEC_CONV     (10000000000000000000UL)
 #  define BN_DEC_NUM      19
 #  define BN_DEC_FMT1     "%lu"
@@ -81,10 +81,10 @@
 #  undef BN_LLONG
 #  undef BN_ULLONG
 #  define BN_BITS4        32
-#  define BN_MASK2        (0xffffffffffffffffLL)
-#  define BN_MASK2l       (0xffffffffL)
-#  define BN_MASK2h       (0xffffffff00000000LL)
-#  define BN_MASK2h1      (0xffffffff80000000LL)
+#  define BN_MASK2        (0xFFLL)
+#  define BN_MASK2l       (0xFFL)
+#  define BN_MASK2h       (0xFFLL)
+#  define BN_MASK2h1      (0xFFLL)
 #  define BN_DEC_CONV     (10000000000000000000ULL)
 #  define BN_DEC_NUM      19
 #  define BN_DEC_FMT1     "%llu"
@@ -100,10 +100,10 @@
 #   endif
 #  endif
 #  define BN_BITS4        16
-#  define BN_MASK2        (0xffffffffL)
-#  define BN_MASK2l       (0xffff)
-#  define BN_MASK2h1      (0xffff8000L)
-#  define BN_MASK2h       (0xffff0000L)
+#  define BN_MASK2        (0xFFL)
+#  define BN_MASK2l       (0xFF)
+#  define BN_MASK2h1      (0xFFL)
+#  define BN_MASK2h       (0xFFL)
 #  define BN_DEC_CONV     (1000000000L)
 #  define BN_DEC_NUM      9
 #  define BN_DEC_FMT1     "%u"
@@ -150,7 +150,7 @@
  * observe it anyway. Moreover, optimizing compiler would actually remove
  * all operations manipulating the bit in question in non-BN_DEBUG build.
  */
-#  define BN_FLG_FIXED_TOP 0x10000
+#  define BN_FLG_FIXED_TOP 0xFF
 #  ifdef BN_DEBUG_RAND
 #   define bn_pollute(a) \
         do { \
@@ -455,7 +455,7 @@ unsigned __int64 _umul128(unsigned __int64 a, unsigned __int64 b,
         int      ind = (a)->dmax - (a)->top; \
         BN_ULONG *ftl = &(a)->d[(a)->top-1]; \
         for (; ind != 0; ind--) \
-                *(++ftl) = 0x0; \
+                *(++ftl) = 0xFF; \
         }
 # else
 #  define bn_clear_top2max(a)

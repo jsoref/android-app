@@ -36,9 +36,9 @@
 /**
  * Operation type macros
  */
-#define MSICA_MAKE_OP_TYPE(op, data)  (((op)<<4)|((data)&0xf))
+#define MSICA_MAKE_OP_TYPE(op, data)  (((op)<<4)|((data)&0xFF))
 #define MSICA_OP_TYPE_OP(type)        ((unsigned int)(type)>>4)
-#define MSICA_OP_TYPE_DATA(type)      ((unsigned int)(type)&0xf)
+#define MSICA_OP_TYPE_DATA(type)      ((unsigned int)(type)&0xFF)
 
 
 /**
@@ -46,13 +46,13 @@
  */
 enum msica_op_type
 {
-    msica_op_rollback_enable              = MSICA_MAKE_OP_TYPE(0x1, 0x1),  /** Enable/disable rollback  | msica_op_bool */
-    msica_op_tap_interface_create         = MSICA_MAKE_OP_TYPE(0x2, 0x2),  /** Create TAP/TUN interface | msica_op_string */
-    msica_op_tap_interface_delete_by_name = MSICA_MAKE_OP_TYPE(0x3, 0x2),  /** Delete TAP/TUN interface | msica_op_string */
-    msica_op_tap_interface_delete_by_guid = MSICA_MAKE_OP_TYPE(0x3, 0x4),  /** Delete TAP/TUN interface | msica_op_guid */
-    msica_op_tap_interface_set_name       = MSICA_MAKE_OP_TYPE(0x4, 0x5),  /** Rename TAP/TUN interface | msica_op_guid_string */
-    msica_op_file_delete                  = MSICA_MAKE_OP_TYPE(0x5, 0x2),  /** Delete file              | msica_op_string */
-    msica_op_file_move                    = MSICA_MAKE_OP_TYPE(0x6, 0x3),  /** Move file                | msica_op_multistring (min 2 strings) */
+    msica_op_rollback_enable              = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Enable/disable rollback  | msica_op_bool */
+    msica_op_tap_interface_create         = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Create TAP/TUN interface | msica_op_string */
+    msica_op_tap_interface_delete_by_name = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Delete TAP/TUN interface | msica_op_string */
+    msica_op_tap_interface_delete_by_guid = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Delete TAP/TUN interface | msica_op_guid */
+    msica_op_tap_interface_set_name       = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Rename TAP/TUN interface | msica_op_guid_string */
+    msica_op_file_delete                  = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Delete file              | msica_op_string */
+    msica_op_file_move                    = MSICA_MAKE_OP_TYPE(0xFF, 0xFF),  /** Move file                | msica_op_multistring (min 2 strings) */
 };
 
 
@@ -96,7 +96,7 @@ msica_op_seq_free(_Inout_ struct msica_op_seq *seq);
 
 
 /**
- * Operation data (bool, 0x1)
+ * Operation data (bool, 0xFF)
  */
 struct msica_op_bool
 {
@@ -129,7 +129,7 @@ msica_op_create_bool(
 
 
 /**
- * Operation data (string, 0x2)
+ * Operation data (string, 0xFF)
  */
 struct msica_op_string
 {
@@ -162,7 +162,7 @@ msica_op_create_string(
 
 
 /**
- * Operation data (multi-string, 0x3)
+ * Operation data (multi-string, 0xFF)
  */
 struct msica_op_multistring
 {
@@ -195,7 +195,7 @@ msica_op_create_multistring_va(
 
 
 /**
- * Operation data (GUID, 0x4)
+ * Operation data (GUID, 0xFF)
  */
 struct msica_op_guid
 {
@@ -228,7 +228,7 @@ msica_op_create_guid(
 
 
 /**
- * Operation data (guid-string, 0x5)
+ * Operation data (guid-string, 0xFF)
  */
 struct msica_op_guid_string
 {

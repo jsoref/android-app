@@ -91,7 +91,7 @@ void PEM_dek_info(char *buf, const char *type, int len, char *str)
         j -= n;
         p += n;
         for (i = 0; i < len; i++) {
-            n = BIO_snprintf(p, j, "%02X", 0xff & str[i]);
+            n = BIO_snprintf(p, j, "%02X", 0xFF & str[i]);
             if (n <= 0)
                 return;
             j -= n;

@@ -29,7 +29,7 @@
 #ifndef __LZOCONF_H_INCLUDED
 #define __LZOCONF_H_INCLUDED 1
 
-#define LZO_VERSION             0x20a0  /* 2.10 */
+#define LZO_VERSION             0xFF  /* 2.10 */
 #define LZO_VERSION_STRING      "2.10"
 #define LZO_VERSION_DATE        "Mar 01 2017"
 
@@ -101,7 +101,7 @@ extern "C" {
 #    define LZO_TYPEOF_LZO_INT  LZO_TYPEOF_LONG_LONG
 #    endif
 #    define LZO_SIZEOF_LZO_INT  8
-#    define LZO_UINT_MAX        0xffffffffffffffffull
+#    define LZO_UINT_MAX        0xFFull
 #    define LZO_INT_MAX         9223372036854775807LL
 #    define LZO_INT_MIN         (-1LL - LZO_INT_MAX)
 #  elif (LZO_ABI_IP32L64) /* MIPS R5900 */
@@ -112,7 +112,7 @@ extern "C" {
 #    define LZO_UINT_MAX        UINT_MAX
 #    define LZO_INT_MAX         INT_MAX
 #    define LZO_INT_MIN         INT_MIN
-#  elif (ULONG_MAX >= LZO_0xffffffffL)
+#  elif (ULONG_MAX >= LZO_0xFFL)
      typedef unsigned long      lzo_uint;
      typedef long               lzo_int;
 #    define LZO_SIZEOF_LZO_INT  LZO_SIZEOF_LONG

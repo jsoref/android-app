@@ -50,7 +50,7 @@ int CRYPTO_ccm128_setiv(CCM128_CONTEXT *ctx,
     ctx->nonce.c[14] = (u8)(mlen >> 8);
     ctx->nonce.c[15] = (u8)mlen;
 
-    ctx->nonce.c[0] &= ~0x40;   /* clear Adata flag */
+    ctx->nonce.c[0] &= ~0xFF;   /* clear Adata flag */
     memcpy(&ctx->nonce.c[1], nonce, 14 - L);
 
     return 0;
@@ -66,10 +66,10 @@ void CRYPTO_ccm128_aad(CCM128_CONTEXT *ctx,
     if (alen == 0)
         return;
 
-    ctx->nonce.c[0] |= 0x40;    /* set Adata flag */
+    ctx->nonce.c[0] |= 0xFF;    /* set Adata flag */
     (*block) (ctx->nonce.c, ctx->cmac.c, ctx->key), ctx->blocks++;
 
-    if (alen < (0x10000 - 0x100)) {
+    if (alen < (0xFF - 0xFF)) {
         ctx->cmac.c[0] ^= (u8)(alen >> 8);
         ctx->cmac.c[1] ^= (u8)alen;
         i = 2;
@@ -88,7 +88,7 @@ void CRYPTO_ccm128_aad(CCM128_CONTEXT *ctx,
         i = 10;
     } else {
         ctx->cmac.c[0] ^= 0xFF;
-        ctx->cmac.c[1] ^= 0xFE;
+        ctx->cmac.c[1] ^= 0xFF;
         ctx->cmac.c[2] ^= (u8)(alen >> 24);
         ctx->cmac.c[3] ^= (u8)(alen >> 16);
         ctx->cmac.c[4] ^= (u8)(alen >> 8);
@@ -140,7 +140,7 @@ int CRYPTO_ccm128_encrypt(CCM128_CONTEXT *ctx,
         u8 c[16];
     } scratch;
 
-    if (!(flags0 & 0x40))
+    if (!(flags0 & 0xFF))
         (*block) (ctx->nonce.c, ctx->cmac.c, key), ctx->blocks++;
 
     ctx->nonce.c[0] = L = flags0 & 7;
@@ -224,7 +224,7 @@ int CRYPTO_ccm128_decrypt(CCM128_CONTEXT *ctx,
         u8 c[16];
     } scratch;
 
-    if (!(flags0 & 0x40))
+    if (!(flags0 & 0xFF))
         (*block) (ctx->nonce.c, ctx->cmac.c, key);
 
     ctx->nonce.c[0] = L = flags0 & 7;
@@ -290,7 +290,7 @@ static void ctr64_add(unsigned char *counter, size_t inc)
     counter += 8;
     do {
         --n;
-        val += counter[n] + (inc & 0xff);
+        val += counter[n] + (inc & 0xFF);
         counter[n] = (unsigned char)val;
         val >>= 8;              /* carry bit */
         inc >>= 8;
@@ -311,7 +311,7 @@ int CRYPTO_ccm128_encrypt_ccm64(CCM128_CONTEXT *ctx,
         u8 c[16];
     } scratch;
 
-    if (!(flags0 & 0x40))
+    if (!(flags0 & 0xFF))
         (*block) (ctx->nonce.c, ctx->cmac.c, key), ctx->blocks++;
 
     ctx->nonce.c[0] = L = flags0 & 7;
@@ -375,7 +375,7 @@ int CRYPTO_ccm128_decrypt_ccm64(CCM128_CONTEXT *ctx,
         u8 c[16];
     } scratch;
 
-    if (!(flags0 & 0x40))
+    if (!(flags0 & 0xFF))
         (*block) (ctx->nonce.c, ctx->cmac.c, key);
 
     ctx->nonce.c[0] = L = flags0 & 7;

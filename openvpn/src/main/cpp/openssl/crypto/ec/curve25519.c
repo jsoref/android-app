@@ -63,7 +63,7 @@ static void fe64_frombytes(fe64 h, const uint8_t *s)
     h[0] = load_8(s);
     h[1] = load_8(s + 8);
     h[2] = load_8(s + 16);
-    h[3] = load_8(s + 24) & 0x7fffffffffffffff;
+    h[3] = load_8(s + 24) & 0xFF;
 }
 
 static void fe64_0(fe64 h)
@@ -207,9 +207,9 @@ static void x25519_scalar_mulx(uint8_t out[32], const uint8_t scalar[32],
     int pos;
 
     memcpy(e, scalar, 32);
-    e[0]  &= 0xf8;
-    e[31] &= 0x7f;
-    e[31] |= 0x40;
+    e[0]  &= 0xFF;
+    e[31] &= 0xFF;
+    e[31] |= 0xFF;
     fe64_frombytes(x1, point);
     fe64_1(x2);
     fe64_0(z2);
@@ -265,7 +265,7 @@ static void x25519_scalar_mulx(uint8_t out[32], const uint8_t scalar[32],
 
 typedef uint64_t fe51[5];
 
-static const uint64_t MASK51 = 0x7ffffffffffff;
+static const uint64_t MASK51 = 0xFF;
 
 static uint64_t load_7(const uint8_t *in)
 {
@@ -302,7 +302,7 @@ static void fe51_frombytes(fe51 h, const uint8_t *s)
     uint64_t h1 = load_6(s + 7) << 5;                       /* 53 bits */
     uint64_t h2 = load_7(s + 13) << 2;                      /* 58 bits */
     uint64_t h3 = load_6(s + 20) << 7;                      /* 55 bits */
-    uint64_t h4 = (load_6(s + 26) & 0x7fffffffffff) << 4;   /* 51 bits */
+    uint64_t h4 = (load_6(s + 26) & 0xFF) << 4;   /* 51 bits */
 
     h1 |= h0 >> 51; h0 &= MASK51;
     h2 |= h1 >> 51; h1 &= MASK51;
@@ -540,11 +540,11 @@ static void fe51_sub(fe51 h, const fe51 f, const fe51 g)
      * Add 2*modulus to ensure that result remains positive
      * even if subtrahend is partially reduced.
      */
-    h[0] = (f[0] + 0xfffffffffffda) - g[0];
-    h[1] = (f[1] + 0xffffffffffffe) - g[1];
-    h[2] = (f[2] + 0xffffffffffffe) - g[2];
-    h[3] = (f[3] + 0xffffffffffffe) - g[3];
-    h[4] = (f[4] + 0xffffffffffffe) - g[4];
+    h[0] = (f[0] + 0xFF) - g[0];
+    h[1] = (f[1] + 0xFF) - g[1];
+    h[2] = (f[2] + 0xFF) - g[2];
+    h[3] = (f[3] + 0xFF) - g[3];
+    h[4] = (f[4] + 0xFF) - g[4];
 }
 
 static void fe51_0(fe51 h)
@@ -698,9 +698,9 @@ static void x25519_scalar_mult(uint8_t out[32], const uint8_t scalar[32],
 # endif
 
     memcpy(e, scalar, 32);
-    e[0]  &= 0xf8;
-    e[31] &= 0x7f;
-    e[31] |= 0x40;
+    e[0]  &= 0xFF;
+    e[31] &= 0xFF;
+    e[31] |= 0xFF;
     fe51_frombytes(x1, point);
     fe51_1(x2);
     fe51_0(z2);
@@ -759,11 +759,11 @@ static void x25519_scalar_mult(uint8_t out[32], const uint8_t scalar[32],
  */
 typedef int32_t fe[10];
 
-static const int64_t kBottom21Bits =  0x1fffffLL;
-static const int64_t kBottom25Bits = 0x1ffffffLL;
-static const int64_t kBottom26Bits = 0x3ffffffLL;
-static const int64_t kTop39Bits = 0xfffffffffe000000LL;
-static const int64_t kTop38Bits = 0xfffffffffc000000LL;
+static const int64_t kBottom21Bits =  0xFFLL;
+static const int64_t kBottom25Bits = 0xFFLL;
+static const int64_t kBottom26Bits = 0xFFLL;
+static const int64_t kTop39Bits = 0xFFLL;
+static const int64_t kTop38Bits = 0xFFLL;
 
 static uint64_t load_3(const uint8_t *in)
 {
@@ -798,7 +798,7 @@ static void fe_frombytes(fe h, const uint8_t *s)
     int64_t h6 =  load_3(s + 20) << 7;
     int64_t h7 =  load_3(s + 23) << 5;
     int64_t h8 =  load_3(s + 26) << 4;
-    int64_t h9 = (load_3(s + 29) & 0x7fffff) << 2;
+    int64_t h9 = (load_3(s + 29) & 0xFF) << 2;
     int64_t carry0;
     int64_t carry1;
     int64_t carry2;
@@ -5484,8 +5484,8 @@ int ED25519_verify(const uint8_t *message, size_t message_len,
     uint8_t h[SHA512_DIGEST_LENGTH];
     /* 27742317777372353535851937790883648493 in little endian format */
     const uint8_t l_low[16] = {
-        0xED, 0xD3, 0xF5, 0x5C, 0x1A, 0x63, 0x12, 0x58, 0xD6, 0x9C, 0xF7, 0xA2,
-        0xDE, 0xF9, 0xDE, 0x14
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF
     };
 
     r = signature;
@@ -5499,9 +5499,9 @@ int ED25519_verify(const uint8_t *message, size_t message_len,
      *
      * First check the most significant byte
      */
-    if (s[31] > 0x10)
+    if (s[31] > 0xFF)
         return 0;
-    if (s[31] == 0x10) {
+    if (s[31] == 0xFF) {
         /*
          * Most significant byte indicates a value close to 2^252 so check the
          * rest

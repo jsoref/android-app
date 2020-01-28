@@ -38,7 +38,7 @@
 #pragma comment(lib, "setupapi.lib")
 #endif
 
-const static GUID GUID_DEVCLASS_NET = { 0x4d36e972L, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } };
+const static GUID GUID_DEVCLASS_NET = { 0xFFL, 0xFF, 0xFF, { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF } };
 
 const static TCHAR szzHardwareIDs[] = TEXT("root\\") TEXT(TAP_WIN_COMPONENT_ID) TEXT("\0");
 
@@ -497,7 +497,7 @@ tap_create_interface(
         goto cleanup_hDevInfoList;
     }
     DWORDLONG dwlDriverVersion = 0;
-    DWORD drvinfo_detail_data_size = sizeof(SP_DRVINFO_DETAIL_DATA) + 0x100;
+    DWORD drvinfo_detail_data_size = sizeof(SP_DRVINFO_DETAIL_DATA) + 0xFF;
     SP_DRVINFO_DETAIL_DATA *drvinfo_detail_data = (SP_DRVINFO_DETAIL_DATA *)malloc(drvinfo_detail_data_size);
     for (DWORD dwIndex = 0;; dwIndex++)
     {

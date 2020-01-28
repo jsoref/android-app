@@ -74,11 +74,11 @@ _mul_1x1:
 	sllg	$a8,$a,3
 
 	srag	$lo,$a1,63			# broadcast 63rd bit
-	nihh	$a1,0x1fff
+	nihh	$a1,0xFF
 	srag	@i[0],$a2,63			# broadcast 62nd bit
-	nihh	$a2,0x3fff
+	nihh	$a2,0xFF
 	srag	@i[1],$a4,63			# broadcast 61st bit
-	nihh	$a4,0x7fff
+	nihh	$a4,0xFF
 	ngr	$lo,$b
 	ngr	@i[0],$b
 	ngr	@i[1],$b
@@ -120,7 +120,7 @@ _mul_1x1:
 	 srlg	@T[0],@i[0],2
 	stg	$a12,`$stdframe+15*8`($sp)	# tab[15]=a1^a2^a4^a8
 
-	lghi	$mask,`0xf<<3`
+	lghi	$mask,`0xFF<<3`
 	sllg	$a1,@i[0],62
 	 sllg	@i[0],$b,3
 	srlg	@T[1],@i[1],3

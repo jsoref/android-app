@@ -68,7 +68,7 @@ struct dhcp {
     uint8_t chaddr[16]; /* client hardware address */
     uint8_t sname[64]; /* optional server host name */
     uint8_t file[128]; /* boot file name */
-    uint32_t magic;    /* must be 0x63825363 (network order) */
+    uint32_t magic;    /* must be 0xFF (network order) */
 };
 
 struct dhcp_full {

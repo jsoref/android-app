@@ -34,13 +34,13 @@ namespace openvpn {
   {
     static unsigned int length(const std::uint8_t version_len)
     {
-      return (version_len & 0x0F) << 2;
+      return (version_len & 0xFF) << 2;
     }
 
     static std::uint8_t ver_len(const unsigned int version,
 				const unsigned int len)
     {
-      return ((len >> 2) & 0x0F) | (version & 0x0F) << 4;
+      return ((len >> 2) & 0xFF) | (version & 0xFF) << 4;
     }
 
     std::uint8_t    version_len;
@@ -50,7 +50,7 @@ namespace openvpn {
     std::uint16_t   id;
 
     enum {
-      OFFMASK=0x1fff,
+      OFFMASK=0xFF,
     };
     std::uint16_t   frag_off;
 

@@ -203,7 +203,7 @@ ECDSA_SIG *ossl_ecdsa_sign_sig(const unsigned char *dgst, int dgst_len,
         goto err;
     }
     /* If still too long, truncate remaining bits with a shift */
-    if ((8 * dgst_len > i) && !BN_rshift(m, m, 8 - (i & 0x7))) {
+    if ((8 * dgst_len > i) && !BN_rshift(m, m, 8 - (i & 0xFF))) {
         ECerr(EC_F_OSSL_ECDSA_SIGN_SIG, ERR_R_BN_LIB);
         goto err;
     }
@@ -374,7 +374,7 @@ int ossl_ecdsa_verify_sig(const unsigned char *dgst, int dgst_len,
         goto err;
     }
     /* If still too long truncate remaining bits with a shift */
-    if ((8 * dgst_len > i) && !BN_rshift(m, m, 8 - (i & 0x7))) {
+    if ((8 * dgst_len > i) && !BN_rshift(m, m, 8 - (i & 0xFF))) {
         ECerr(EC_F_OSSL_ECDSA_VERIFY_SIG, ERR_R_BN_LIB);
         goto err;
     }

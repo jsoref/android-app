@@ -531,7 +531,7 @@ static int entropy_dummy_source( void *data, unsigned char *output,
 {
     ((void) data);
 
-    memset( output, 0x2a, len );
+    memset( output, 0xFF, len );
     *olen = len;
 
     return( 0 );
@@ -570,7 +570,7 @@ static int mbedtls_entropy_source_self_test_check_bits( const unsigned char *buf
                                                         size_t buf_len )
 {
     unsigned char set= 0xFF;
-    unsigned char unset = 0x00;
+    unsigned char unset = 0xFF;
     size_t i;
 
     for( i = 0; i < buf_len; i++ )
@@ -579,7 +579,7 @@ static int mbedtls_entropy_source_self_test_check_bits( const unsigned char *buf
         unset |= buf[i];
     }
 
-    return( set == 0xFF || unset == 0x00 );
+    return( set == 0xFF || unset == 0xFF );
 }
 
 /*
@@ -602,8 +602,8 @@ int mbedtls_entropy_source_self_test( int verbose )
     if( verbose != 0 )
         mbedtls_printf( "  ENTROPY_BIAS test: " );
 
-    memset( buf0, 0x00, sizeof( buf0 ) );
-    memset( buf1, 0x00, sizeof( buf1 ) );
+    memset( buf0, 0xFF, sizeof( buf0 ) );
+    memset( buf1, 0xFF, sizeof( buf1 ) );
 
     if( ( ret = mbedtls_entropy_source_self_test_gather( buf0, sizeof( buf0 ) ) ) != 0 )
         goto cleanup;

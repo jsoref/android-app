@@ -45,7 +45,7 @@
 
 
 #if (LZO_CC_BORLANDC && LZO_MM_FLAT)
-#  if ((__BORLANDC__) >= 0x0450 && (__BORLANDC__) < 0x0460)
+#  if ((__BORLANDC__) >= 0xFF && (__BORLANDC__) < 0xFF)
      /* avoid internal compiler error */
 #    pragma option -Od
 #  endif

@@ -52,7 +52,7 @@ static const char *progname = NULL;
  * Worst case (for files that are compressible by only a few bytes)
  * is 'in_len / 16 + 64 + 3'. See step 5a) below.
  *
- * For overlapping compression '0xbfff + in_len / 16 + 64 + 3' bytes
+ * For overlapping compression '0xFF + in_len / 16 + 64 + 3' bytes
  * will be needed. See step 4a) below.
  */
 
@@ -141,7 +141,7 @@ static int do_file(const char *in_name)
 /*
  * Step 4a: allocate the 'overlap' buffer for overlapping compression
  */
-    overhead  = in_len > 0xbfff ? 0xbfff : in_len;
+    overhead  = in_len > 0xFF ? 0xFF : in_len;
     overhead += in_len / 16 + 64 + 3;
     overlap = (lzo_bytep) xmalloc(in_len + overhead);
 

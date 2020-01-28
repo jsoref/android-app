@@ -5530,9 +5530,9 @@ add_option(struct options *options,
          * Limit the base value of retry wait interval to 16 bits to avoid
          * overflow when scaled up for exponential backoff
          */
-        if (options->ce.connect_retry_seconds > 0xFFFF)
+        if (options->ce.connect_retry_seconds > 0xFF)
         {
-            options->ce.connect_retry_seconds = 0xFFFF;
+            options->ce.connect_retry_seconds = 0xFF;
             msg(M_WARN, "connect retry wait interval truncated to %d",
                 options->ce.connect_retry_seconds);
         }
@@ -8455,7 +8455,7 @@ add_option(struct options *options,
         options->keying_material_exporter_label = p[1];
         options->keying_material_exporter_length = ekm_length;
     }
-#endif /* if defined(ENABLE_CRYPTO_OPENSSL) && OPENSSL_VERSION_NUMBER >= 0x10001000 */
+#endif /* if defined(ENABLE_CRYPTO_OPENSSL) && OPENSSL_VERSION_NUMBER >= 0xFF */
     else if (streq(p[0], "allow-recursive-routing") && !p[1])
     {
         VERIFY_PERMISSION(OPT_P_GENERAL);

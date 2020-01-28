@@ -279,9 +279,9 @@ rsaz_1024_sqr_avx2:
 	vpsrlq	$29,%ymm1,%ymm11
 	vpand	%ymm15,%ymm1,%ymm1
 
-	vpermq	$0x93,%ymm14,%ymm14
+	vpermq	$0xFF,%ymm14,%ymm14
 	vpxor	%ymm9,%ymm9,%ymm9
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 
 	vpblendd	$3,%ymm9,%ymm14,%ymm10
 	vpblendd	$3,%ymm14,%ymm11,%ymm14
@@ -306,7 +306,7 @@ rsaz_1024_sqr_avx2:
 
 	movq	%rax,%r9
 	imull	%ecx,%eax
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 	vmovd	%eax,%xmm12
 
 	movq	%rax,%rdx
@@ -326,7 +326,7 @@ rsaz_1024_sqr_avx2:
 
 	movq	%r10,%rax
 	imull	%ecx,%eax
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 
 	movl	$9,%r14d
 	jmp	.LOOP_REDUCE_1024
@@ -346,9 +346,9 @@ rsaz_1024_sqr_avx2:
 	imulq	8-128(%r13),%rax
 	vpaddq	%ymm14,%ymm2,%ymm2
 	vpmuludq	96-128(%r13),%ymm12,%ymm11
-.byte	0x67
+.byte	0xFF
 	addq	%rax,%r11
-.byte	0x67
+.byte	0xFF
 	movq	%rdx,%rax
 	imulq	16-128(%r13),%rax
 	shrq	$29,%r10
@@ -362,7 +362,7 @@ rsaz_1024_sqr_avx2:
 	imull	%ecx,%eax
 	vpaddq	%ymm14,%ymm5,%ymm5
 	vpmuludq	192-128(%r13),%ymm12,%ymm11
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 	vpaddq	%ymm11,%ymm6,%ymm6
 	vpmuludq	224-128(%r13),%ymm12,%ymm10
 	vpaddq	%ymm10,%ymm7,%ymm7
@@ -392,13 +392,13 @@ rsaz_1024_sqr_avx2:
 	vpaddq	%ymm14,%ymm3,%ymm3
 	vpmuludq	%ymm13,%ymm11,%ymm11
 	vmovdqu	192-8-128(%r13),%ymm14
-.byte	0x67
+.byte	0xFF
 	movq	%rax,%r12
 	imull	%ecx,%eax
 	vpaddq	%ymm11,%ymm4,%ymm4
 	vpmuludq	%ymm13,%ymm10,%ymm10
-.byte	0xc4,0x41,0x7e,0x6f,0x9d,0x58,0x00,0x00,0x00
-	andl	$0x1fffffff,%eax
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
+	andl	$0xFF,%eax
 	vpaddq	%ymm10,%ymm5,%ymm5
 	vpmuludq	%ymm13,%ymm14,%ymm14
 	vmovdqu	256-8-128(%r13),%ymm10
@@ -422,12 +422,12 @@ rsaz_1024_sqr_avx2:
 	vpaddq	%ymm14,%ymm1,%ymm1
 	vpmuludq	%ymm0,%ymm13,%ymm13
 	vpmuludq	%ymm12,%ymm11,%ymm11
-.byte	0xc4,0x41,0x7e,0x6f,0xb5,0xf0,0xff,0xff,0xff
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 	vpaddq	%ymm1,%ymm13,%ymm13
 	vpaddq	%ymm11,%ymm2,%ymm2
 	vpmuludq	%ymm12,%ymm10,%ymm10
 	vmovdqu	160-16-128(%r13),%ymm11
-.byte	0x67
+.byte	0xFF
 	vmovq	%xmm13,%rax
 	vmovdqu	%ymm13,(%rsp)
 	vpaddq	%ymm10,%ymm3,%ymm3
@@ -451,10 +451,10 @@ rsaz_1024_sqr_avx2:
 	imull	%ecx,%eax
 	vpaddq	%ymm11,%ymm8,%ymm8
 	vpmuludq	%ymm12,%ymm10,%ymm10
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 	vmovd	%eax,%xmm12
 	vmovdqu	96-24-128(%r13),%ymm11
-.byte	0x67
+.byte	0xFF
 	vpaddq	%ymm10,%ymm9,%ymm9
 	vpbroadcastq	%xmm12,%ymm12
 
@@ -469,7 +469,7 @@ rsaz_1024_sqr_avx2:
 	addq	%rax,%r9
 	movq	%rdx,%rax
 	imulq	8-128(%r13),%rax
-.byte	0x67
+.byte	0xFF
 	shrq	$29,%r9
 	movq	16(%rsp),%r11
 	vpaddq	%ymm11,%ymm3,%ymm2
@@ -492,7 +492,7 @@ rsaz_1024_sqr_avx2:
 	vpmuludq	%ymm0,%ymm10,%ymm10
 	vpaddq	%ymm11,%ymm6,%ymm5
 	vmovdqu	288-24-128(%r13),%ymm11
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 	vpaddq	%ymm10,%ymm7,%ymm6
 	vpmuludq	%ymm0,%ymm14,%ymm14
 	addq	24(%rsp),%rdx
@@ -523,15 +523,15 @@ rsaz_1024_sqr_avx2:
 	vpsrlq	$29,%ymm1,%ymm11
 	vpand	%ymm15,%ymm1,%ymm1
 	vpsrlq	$29,%ymm2,%ymm12
-	vpermq	$0x93,%ymm14,%ymm14
+	vpermq	$0xFF,%ymm14,%ymm14
 	vpand	%ymm15,%ymm2,%ymm2
 	vpsrlq	$29,%ymm3,%ymm13
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 	vpand	%ymm15,%ymm3,%ymm3
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 
 	vpblendd	$3,%ymm9,%ymm14,%ymm10
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 	vpblendd	$3,%ymm14,%ymm11,%ymm14
 	vpaddq	%ymm10,%ymm0,%ymm0
 	vpblendd	$3,%ymm11,%ymm12,%ymm11
@@ -547,15 +547,15 @@ rsaz_1024_sqr_avx2:
 	vpsrlq	$29,%ymm1,%ymm11
 	vpand	%ymm15,%ymm1,%ymm1
 	vpsrlq	$29,%ymm2,%ymm12
-	vpermq	$0x93,%ymm14,%ymm14
+	vpermq	$0xFF,%ymm14,%ymm14
 	vpand	%ymm15,%ymm2,%ymm2
 	vpsrlq	$29,%ymm3,%ymm13
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 	vpand	%ymm15,%ymm3,%ymm3
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 
 	vpblendd	$3,%ymm9,%ymm14,%ymm10
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 	vpblendd	$3,%ymm14,%ymm11,%ymm14
 	vpaddq	%ymm10,%ymm0,%ymm0
 	vpblendd	$3,%ymm11,%ymm12,%ymm11
@@ -574,18 +574,18 @@ rsaz_1024_sqr_avx2:
 	vpsrlq	$29,%ymm5,%ymm11
 	vpand	%ymm15,%ymm5,%ymm5
 	vpsrlq	$29,%ymm6,%ymm12
-	vpermq	$0x93,%ymm14,%ymm14
+	vpermq	$0xFF,%ymm14,%ymm14
 	vpand	%ymm15,%ymm6,%ymm6
 	vpsrlq	$29,%ymm7,%ymm13
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 	vpand	%ymm15,%ymm7,%ymm7
 	vpsrlq	$29,%ymm8,%ymm0
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 	vpand	%ymm15,%ymm8,%ymm8
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 
 	vpblendd	$3,%ymm9,%ymm14,%ymm10
-	vpermq	$0x93,%ymm0,%ymm0
+	vpermq	$0xFF,%ymm0,%ymm0
 	vpblendd	$3,%ymm14,%ymm11,%ymm14
 	vpaddq	%ymm10,%ymm4,%ymm4
 	vpblendd	$3,%ymm11,%ymm12,%ymm11
@@ -601,18 +601,18 @@ rsaz_1024_sqr_avx2:
 	vpsrlq	$29,%ymm5,%ymm11
 	vpand	%ymm15,%ymm5,%ymm5
 	vpsrlq	$29,%ymm6,%ymm12
-	vpermq	$0x93,%ymm14,%ymm14
+	vpermq	$0xFF,%ymm14,%ymm14
 	vpand	%ymm15,%ymm6,%ymm6
 	vpsrlq	$29,%ymm7,%ymm13
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 	vpand	%ymm15,%ymm7,%ymm7
 	vpsrlq	$29,%ymm8,%ymm0
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 	vpand	%ymm15,%ymm8,%ymm8
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 
 	vpblendd	$3,%ymm9,%ymm14,%ymm10
-	vpermq	$0x93,%ymm0,%ymm0
+	vpermq	$0xFF,%ymm0,%ymm0
 	vpblendd	$3,%ymm14,%ymm11,%ymm14
 	vpaddq	%ymm10,%ymm4,%ymm4
 	vpblendd	$3,%ymm11,%ymm12,%ymm11
@@ -650,7 +650,7 @@ rsaz_1024_sqr_avx2:
 	leaq	(%rax),%rsp
 .cfi_def_cfa_register	%rsp
 .Lsqr_1024_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	rsaz_1024_sqr_avx2,.-rsaz_1024_sqr_avx2
 .globl	rsaz_1024_mul_avx2
@@ -683,7 +683,7 @@ rsaz_1024_mul_avx2:
 
 
 
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	movq	%rsi,%r15
 	andq	$4095,%r15
 	addq	$320,%r15
@@ -699,7 +699,7 @@ rsaz_1024_mul_avx2:
 
 	andq	$4095,%r15
 	addq	$320,%r15
-.byte	0x67,0x67
+.byte	0xFF,0xFF
 	shrq	$12,%r15
 	jz	.Lmul_1024_no_n_copy
 
@@ -745,7 +745,7 @@ rsaz_1024_mul_avx2:
 	vpbroadcastq	(%r13),%ymm10
 	vmovdqu	%ymm0,(%rsp)
 	xorq	%r9,%r9
-.byte	0x67
+.byte	0xFF
 	xorq	%r10,%r10
 	xorq	%r11,%r11
 	xorq	%r12,%r12
@@ -767,7 +767,7 @@ rsaz_1024_mul_avx2:
 
 	movq	%rax,%r9
 	imull	%r8d,%eax
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 
 	movq	%rbx,%r11
 	imulq	16-128(%rsi),%r11
@@ -792,7 +792,7 @@ rsaz_1024_mul_avx2:
 	vpmuludq	192-128(%rsi),%ymm10,%ymm13
 	vpaddq	%ymm13,%ymm6,%ymm6
 	vpmuludq	224-128(%rsi),%ymm10,%ymm0
-	vpermq	$0x93,%ymm9,%ymm9
+	vpermq	$0xFF,%ymm9,%ymm9
 	vpaddq	%ymm0,%ymm7,%ymm7
 	vpmuludq	256-128(%rsi),%ymm10,%ymm12
 	vpbroadcastq	8(%r13),%ymm10
@@ -842,10 +842,10 @@ rsaz_1024_mul_avx2:
 	vmovdqu	-8+64-128(%rsi),%ymm13
 
 	movq	%r10,%rax
-	vpblendd	$0xfc,%ymm14,%ymm9,%ymm9
+	vpblendd	$0xFF,%ymm14,%ymm9,%ymm9
 	imull	%r8d,%eax
 	vpaddq	%ymm9,%ymm4,%ymm4
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 
 	imulq	16-128(%rsi),%rbx
 	addq	%rbx,%r12
@@ -925,7 +925,7 @@ rsaz_1024_mul_avx2:
 	vmovdqu	-16+64-128(%rsi),%ymm12
 	movq	%rax,%r11
 	imull	%r8d,%eax
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 
 	imulq	8-128(%rsi),%rbx
 	addq	%rbx,%r12
@@ -1002,7 +1002,7 @@ rsaz_1024_mul_avx2:
 
 	movq	%r12,%rax
 	imull	%r8d,%eax
-	andl	$0x1fffffff,%eax
+	andl	$0xFF,%eax
 
 	vpmuludq	%ymm10,%ymm0,%ymm0
 	vmovd	%eax,%xmm11
@@ -1080,16 +1080,16 @@ rsaz_1024_mul_avx2:
 	vpsrlq	$29,%ymm1,%ymm13
 	vpand	%ymm15,%ymm1,%ymm1
 	vpsrlq	$29,%ymm2,%ymm10
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 	vpand	%ymm15,%ymm2,%ymm2
 	vpsrlq	$29,%ymm3,%ymm11
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 	vpand	%ymm15,%ymm3,%ymm3
 
 	vpblendd	$3,%ymm14,%ymm12,%ymm9
-	vpermq	$0x93,%ymm10,%ymm10
+	vpermq	$0xFF,%ymm10,%ymm10
 	vpblendd	$3,%ymm12,%ymm13,%ymm12
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 	vpaddq	%ymm9,%ymm0,%ymm0
 	vpblendd	$3,%ymm13,%ymm10,%ymm13
 	vpaddq	%ymm12,%ymm1,%ymm1
@@ -1104,15 +1104,15 @@ rsaz_1024_mul_avx2:
 	vpsrlq	$29,%ymm1,%ymm13
 	vpand	%ymm15,%ymm1,%ymm1
 	vpsrlq	$29,%ymm2,%ymm10
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 	vpand	%ymm15,%ymm2,%ymm2
 	vpsrlq	$29,%ymm3,%ymm11
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 	vpand	%ymm15,%ymm3,%ymm3
-	vpermq	$0x93,%ymm10,%ymm10
+	vpermq	$0xFF,%ymm10,%ymm10
 
 	vpblendd	$3,%ymm14,%ymm12,%ymm9
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 	vpblendd	$3,%ymm12,%ymm13,%ymm12
 	vpaddq	%ymm9,%ymm0,%ymm0
 	vpblendd	$3,%ymm13,%ymm10,%ymm13
@@ -1132,18 +1132,18 @@ rsaz_1024_mul_avx2:
 	vpsrlq	$29,%ymm5,%ymm13
 	vpand	%ymm15,%ymm5,%ymm5
 	vpsrlq	$29,%ymm6,%ymm10
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 	vpand	%ymm15,%ymm6,%ymm6
 	vpsrlq	$29,%ymm7,%ymm11
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 	vpand	%ymm15,%ymm7,%ymm7
 	vpsrlq	$29,%ymm8,%ymm0
-	vpermq	$0x93,%ymm10,%ymm10
+	vpermq	$0xFF,%ymm10,%ymm10
 	vpand	%ymm15,%ymm8,%ymm8
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 
 	vpblendd	$3,%ymm14,%ymm12,%ymm9
-	vpermq	$0x93,%ymm0,%ymm0
+	vpermq	$0xFF,%ymm0,%ymm0
 	vpblendd	$3,%ymm12,%ymm13,%ymm12
 	vpaddq	%ymm9,%ymm4,%ymm4
 	vpblendd	$3,%ymm13,%ymm10,%ymm13
@@ -1159,18 +1159,18 @@ rsaz_1024_mul_avx2:
 	vpsrlq	$29,%ymm5,%ymm13
 	vpand	%ymm15,%ymm5,%ymm5
 	vpsrlq	$29,%ymm6,%ymm10
-	vpermq	$0x93,%ymm12,%ymm12
+	vpermq	$0xFF,%ymm12,%ymm12
 	vpand	%ymm15,%ymm6,%ymm6
 	vpsrlq	$29,%ymm7,%ymm11
-	vpermq	$0x93,%ymm13,%ymm13
+	vpermq	$0xFF,%ymm13,%ymm13
 	vpand	%ymm15,%ymm7,%ymm7
 	vpsrlq	$29,%ymm8,%ymm0
-	vpermq	$0x93,%ymm10,%ymm10
+	vpermq	$0xFF,%ymm10,%ymm10
 	vpand	%ymm15,%ymm8,%ymm8
-	vpermq	$0x93,%ymm11,%ymm11
+	vpermq	$0xFF,%ymm11,%ymm11
 
 	vpblendd	$3,%ymm14,%ymm12,%ymm9
-	vpermq	$0x93,%ymm0,%ymm0
+	vpermq	$0xFF,%ymm0,%ymm0
 	vpblendd	$3,%ymm12,%ymm13,%ymm12
 	vpaddq	%ymm9,%ymm4,%ymm4
 	vpblendd	$3,%ymm13,%ymm10,%ymm13
@@ -1205,7 +1205,7 @@ rsaz_1024_mul_avx2:
 	leaq	(%rax),%rsp
 .cfi_def_cfa_register	%rsp
 .Lmul_1024_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	rsaz_1024_mul_avx2,.-rsaz_1024_mul_avx2
 .globl	rsaz_1024_red2norm_avx2
@@ -1403,7 +1403,7 @@ rsaz_1024_red2norm_avx2:
 	adcq	$0,%r11
 	movq	%rax,120(%rdi)
 	movq	%r11,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	rsaz_1024_red2norm_avx2,.-rsaz_1024_red2norm_avx2
 
@@ -1414,7 +1414,7 @@ rsaz_1024_norm2red_avx2:
 .cfi_startproc	
 	subq	$-128,%rdi
 	movq	(%rsi),%r8
-	movl	$0x1fffffff,%eax
+	movl	$0xFF,%eax
 	movq	8(%rsi),%r9
 	movq	%r8,%r11
 	shrq	$0,%r11
@@ -1563,7 +1563,7 @@ rsaz_1024_norm2red_avx2:
 	movq	%r8,168(%rdi)
 	movq	%r8,176(%rdi)
 	movq	%r8,184(%rdi)
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	rsaz_1024_norm2red_avx2,.-rsaz_1024_norm2red_avx2
 .globl	rsaz_1024_scatter5_avx2
@@ -1589,7 +1589,7 @@ rsaz_1024_scatter5_avx2:
 	jnz	.Loop_scatter_1024
 
 	vzeroupper
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	rsaz_1024_scatter5_avx2,.-rsaz_1024_scatter5_avx2
 
@@ -1710,7 +1710,7 @@ rsaz_1024_gather5_avx2:
 	vzeroupper
 	leaq	(%r11),%rsp
 .cfi_def_cfa_register	%rsp
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .LSEH_end_rsaz_1024_gather5:
 .size	rsaz_1024_gather5_avx2,.-rsaz_1024_gather5_avx2
@@ -1727,12 +1727,12 @@ rsaz_avx2_eligible:
 	cmovel	%edx,%eax
 	andl	$32,%eax
 	shrl	$5,%eax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	rsaz_avx2_eligible,.-rsaz_avx2_eligible
 
 .align	64
 .Land_mask:
-.quad	0x1fffffff,0x1fffffff,0x1fffffff,0x1fffffff
+.quad	0xFF,0xFF,0xFF,0xFF
 .Lscatter_permd:
 .long	0,2,4,6,7,7,7,7
 .Lgather_permd:

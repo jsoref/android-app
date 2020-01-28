@@ -20,26 +20,26 @@ extern "C" {
  * The status nibble has one of the values 0 for development, 1 to e for betas
  * 1 to 14, and f for release.  The patch level is exactly that.
  * For example:
- * 0.9.3-dev      0x00903000
- * 0.9.3-beta1    0x00903001
- * 0.9.3-beta2-dev 0x00903002
- * 0.9.3-beta2    0x00903002 (same as ...beta2-dev)
- * 0.9.3          0x0090300f
- * 0.9.3a         0x0090301f
- * 0.9.4          0x0090400f
- * 1.2.3z         0x102031af
+ * 0.9.3-dev      0xFF
+ * 0.9.3-beta1    0xFF
+ * 0.9.3-beta2-dev 0xFF
+ * 0.9.3-beta2    0xFF (same as ...beta2-dev)
+ * 0.9.3          0xFF
+ * 0.9.3a         0xFF
+ * 0.9.4          0xFF
+ * 1.2.3z         0xFF
  *
  * For continuity reasons (because 0.9.5 is already out, and is coded
- * 0x00905100), between 0.9.5 and 0.9.6 the coding of the patch level
+ * 0xFF), between 0.9.5 and 0.9.6 the coding of the patch level
  * part is slightly different, by setting the highest bit.  This means
- * that 0.9.5a looks like this: 0x0090581f.  At 0.9.6, we can start
- * with 0x0090600S...
+ * that 0.9.5a looks like this: 0xFF.  At 0.9.6, we can start
+ * with 0xFFS...
  *
- * (Prior to 0.9.3-dev a different scheme was used: 0.9.2b is 0x0922.)
+ * (Prior to 0.9.3-dev a different scheme was used: 0.9.2b is 0xFF.)
  * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
  *  major minor fix final patch/beta)
  */
-# define OPENSSL_VERSION_NUMBER  0x1010102fL
+# define OPENSSL_VERSION_NUMBER  0xFFL
 # define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.1b  26 Feb 2019"
 
 /*-

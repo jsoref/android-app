@@ -135,7 +135,7 @@ int main() {
 "zum3J7eCJ5DojiceRb6uMxTJ8xZmUC4W2f3J/lrR7wlYjyVnnHqH5HcemYUipWSw\r\n"  \
 "sM0/cHp3lrz2VWrbAEu8HVpklvDQpdAgl7cjXt/JHYawY+p426IF/PzQSRROnzgy\r\n"  \
 "4WI8FVYNV2tgu0TOFURbkkEvuj/duDKeooUIF0G0XHzha5oAX/j0iWiHbrOF6wHj\r\n"  \
-"0xeajL9msKBnmD8CggEBAMSgLWmv7G31x4tndJCcXnX4AyVL7KpygAx/ZwCcyTR8\r\n"  \
+"0xFFjL9msKBnmD8CggEBAMSgLWmv7G31x4tndJCcXnX4AyVL7KpygAx/ZwCcyTR8\r\n"  \
 "rY1rO07f/ta2noEra/xmEW/BW98qJFCHSU2nSLAQ5FpFSWyuQqrnffrMJnfWyvpr\r\n"  \
 "ceQ0yQ/MiA6/JIOvGAjabcspzZijxzGp+Qk3eTT0yOXLSVOCH9B9XVHLodcy4PQM\r\n"  \
 "KSCxy0vVHhVNl2SdPEwTXRmxk99Q/rw6IHVpQxBq1OhQt05nTKT+rZMD/grSK22e\r\n"  \
@@ -418,8 +418,8 @@ int benchmark( int argc, char *argv[] )
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
     mbedtls_memory_buffer_alloc_init( malloc_buf, sizeof( malloc_buf ) );
 #endif
-    memset( buf, 0xAA, sizeof( buf ) );
-    memset( tmp, 0xBB, sizeof( tmp ) );
+    memset( buf, 0xFF, sizeof( buf ) );
+    memset( tmp, 0xFF, sizeof( tmp ) );
 
 #if defined(MBEDTLS_MD4_C)
     if( todo.md4 )
@@ -767,7 +767,7 @@ int benchmark( int argc, char *argv[] )
         const mbedtls_ecp_curve_info *curve_info;
         size_t sig_len;
 
-        memset( buf, 0x2A, sizeof( buf ) );
+        memset( buf, 0xFF, sizeof( buf ) );
 
         for( curve_info = mbedtls_ecp_curve_list();
              curve_info->grp_id != MBEDTLS_ECP_DP_NONE;

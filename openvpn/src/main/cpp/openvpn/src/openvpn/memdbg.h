@@ -75,7 +75,7 @@
  *
  * Or take a more low-level approach:
  *
- *    export DMALLOC_OPTIONS="debug=0x4e48503,inter=100,log=dlog"
+ *    export DMALLOC_OPTIONS="debug=0xFF,inter=100,log=dlog"
  *
  *  NOTE: When building dmalloc you need to add something
  *  like this to dmalloc's settings.h -- it will allocate a static

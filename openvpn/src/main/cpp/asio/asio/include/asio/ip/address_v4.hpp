@@ -207,13 +207,13 @@ public:
   /// Obtain an address object that represents the loopback address.
   static address_v4 loopback()
   {
-    return address_v4(0x7F000001);
+    return address_v4(0xFF);
   }
 
   /// Obtain an address object that represents the broadcast address.
   static address_v4 broadcast()
   {
-    return address_v4(0xFFFFFFFF);
+    return address_v4(0xFF);
   }
 
 #if !defined(ASIO_NO_DEPRECATED)

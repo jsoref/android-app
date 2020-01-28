@@ -32,6 +32,6 @@
 /* clear an object (may be optimized away, use secure_memzero() to erase secrets) */
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
-#define IPV4_NETMASK_HOST 0xffffffffU
+#define IPV4_NETMASK_HOST 0xFFU
 
 #endif

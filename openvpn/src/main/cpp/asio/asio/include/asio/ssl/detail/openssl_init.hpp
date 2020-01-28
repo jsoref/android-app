@@ -42,12 +42,12 @@ protected:
   ASIO_DECL static asio::detail::shared_ptr<do_init> instance();
 
 #if !defined(SSL_OP_NO_COMPRESSION) \
-  && (OPENSSL_VERSION_NUMBER >= 0x00908000L)
+  && (OPENSSL_VERSION_NUMBER >= 0xFFL)
   // Get an empty stack of compression methods, to be used when disabling
   // compression.
   ASIO_DECL static STACK_OF(SSL_COMP)* get_null_compression_methods();
 #endif // !defined(SSL_OP_NO_COMPRESSION)
-       // && (OPENSSL_VERSION_NUMBER >= 0x00908000L)
+       // && (OPENSSL_VERSION_NUMBER >= 0xFFL)
 };
 
 template <bool Do_Init = true>
@@ -71,10 +71,10 @@ public:
   }
 
 #if !defined(SSL_OP_NO_COMPRESSION) \
-  && (OPENSSL_VERSION_NUMBER >= 0x00908000L)
+  && (OPENSSL_VERSION_NUMBER >= 0xFFL)
   using openssl_init_base::get_null_compression_methods;
 #endif // !defined(SSL_OP_NO_COMPRESSION)
-       // && (OPENSSL_VERSION_NUMBER >= 0x00908000L)
+       // && (OPENSSL_VERSION_NUMBER >= 0xFFL)
 
 private:
   // Instance to force initialisation of openssl at global scope.

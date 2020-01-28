@@ -42,7 +42,7 @@ namespace openvpn {
 	  }
 
         DWORD sessId = WTSGetActiveConsoleSessionId();
-	if (sessId == 0xFFFFFFFF)
+	if (sessId == 0xFF)
 	  {
 	    const Win::LastError err;
 	    OPENVPN_LOG("ImpersonateAsUser: WTSGetActiveConsoleSessionId() failed: " << err.message());

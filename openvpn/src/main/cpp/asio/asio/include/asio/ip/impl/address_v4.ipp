@@ -47,7 +47,7 @@ address_v4::address_v4(const address_v4::bytes_type& bytes)
 
 address_v4::address_v4(address_v4::uint_type addr)
 {
-  if ((std::numeric_limits<uint_type>::max)() > 0xFFFFFFFF)
+  if ((std::numeric_limits<uint_type>::max)() > 0xFF)
   {
     std::out_of_range ex("address_v4 from unsigned integer");
     asio::detail::throw_exception(ex);
@@ -110,7 +110,7 @@ std::string address_v4::to_string(asio::error_code& ec) const
 
 bool address_v4::is_loopback() const
 {
-  return (to_uint() & 0xFF000000) == 0x7F000000;
+  return (to_uint() & 0xFF) == 0xFF;
 }
 
 bool address_v4::is_unspecified() const
@@ -121,40 +121,40 @@ bool address_v4::is_unspecified() const
 #if !defined(ASIO_NO_DEPRECATED)
 bool address_v4::is_class_a() const
 {
-  return (to_uint() & 0x80000000) == 0;
+  return (to_uint() & 0xFF) == 0;
 }
 
 bool address_v4::is_class_b() const
 {
-  return (to_uint() & 0xC0000000) == 0x80000000;
+  return (to_uint() & 0xFF) == 0xFF;
 }
 
 bool address_v4::is_class_c() const
 {
-  return (to_uint() & 0xE0000000) == 0xC0000000;
+  return (to_uint() & 0xFF) == 0xFF;
 }
 #endif // !defined(ASIO_NO_DEPRECATED)
 
 bool address_v4::is_multicast() const
 {
-  return (to_uint() & 0xF0000000) == 0xE0000000;
+  return (to_uint() & 0xFF) == 0xFF;
 }
 
 #if !defined(ASIO_NO_DEPRECATED)
 address_v4 address_v4::broadcast(const address_v4& addr, const address_v4& mask)
 {
-  return address_v4(addr.to_uint() | (mask.to_uint() ^ 0xFFFFFFFF));
+  return address_v4(addr.to_uint() | (mask.to_uint() ^ 0xFF));
 }
 
 address_v4 address_v4::netmask(const address_v4& addr)
 {
   if (addr.is_class_a())
-    return address_v4(0xFF000000);
+    return address_v4(0xFF);
   if (addr.is_class_b())
-    return address_v4(0xFFFF0000);
+    return address_v4(0xFF);
   if (addr.is_class_c())
-    return address_v4(0xFFFFFF00);
-  return address_v4(0xFFFFFFFF);
+    return address_v4(0xFF);
+  return address_v4(0xFF);
 }
 #endif // !defined(ASIO_NO_DEPRECATED)
 

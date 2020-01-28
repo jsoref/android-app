@@ -14,7 +14,7 @@ void aes_encrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_aes_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -38,7 +38,7 @@ void aes_decrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_aes_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -63,7 +63,7 @@ void aes_encrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_aes_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -88,7 +88,7 @@ void aes_decrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_aes_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -201,7 +201,7 @@ void aes_crypt_xts_size( int size, int retval )
     size_t length = size;
 
     mbedtls_aes_xts_init( &ctx );
-    memset( data_unit, 0x00, sizeof( data_unit ) );
+    memset( data_unit, 0xFF, sizeof( data_unit ) );
 
 
     /* Note that this function will most likely crash on failure, as NULL
@@ -237,7 +237,7 @@ void aes_encrypt_cfb128( data_t * key_str, data_t * iv_str,
     mbedtls_aes_context ctx;
     size_t iv_offset = 0;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -259,7 +259,7 @@ void aes_decrypt_cfb128( data_t * key_str, data_t * iv_str,
     mbedtls_aes_context ctx;
     size_t iv_offset = 0;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -280,7 +280,7 @@ void aes_encrypt_cfb8( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_aes_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -301,7 +301,7 @@ void aes_decrypt_cfb8( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_aes_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_aes_init( &ctx );
 
 
@@ -331,11 +331,11 @@ void aes_encrypt_ofb( int fragment_size, char *hex_key_string,
     unsigned char* src_str_next;
     int key_len;
 
-    memset( key_str, 0x00, sizeof( key_str ) );
-    memset( iv_str, 0x00, sizeof( iv_str ) );
-    memset( src_str, 0x00, sizeof( src_str ) );
-    memset( dst_str, 0x00, sizeof( dst_str ) );
-    memset( output, 0x00, sizeof( output ) );
+    memset( key_str, 0xFF, sizeof( key_str ) );
+    memset( iv_str, 0xFF, sizeof( iv_str ) );
+    memset( src_str, 0xFF, sizeof( src_str ) );
+    memset( dst_str, 0xFF, sizeof( dst_str ) );
+    memset( output, 0xFF, sizeof( output ) );
     mbedtls_aes_init( &ctx );
 
     TEST_ASSERT( strlen( hex_key_string ) <= ( 32 * 2 ) );

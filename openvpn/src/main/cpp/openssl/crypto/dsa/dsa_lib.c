@@ -157,7 +157,7 @@ int DSA_size(const DSA *r)
     bs.data = buf;
     bs.type = V_ASN1_INTEGER;
     /* If the top bit is set the asn1 encoding is 1 larger. */
-    buf[0] = 0xff;
+    buf[0] = 0xFF;
 
     i = i2d_ASN1_INTEGER(&bs, NULL);
     i += i;                     /* r and s */

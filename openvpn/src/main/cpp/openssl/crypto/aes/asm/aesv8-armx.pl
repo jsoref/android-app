@@ -81,9 +81,9 @@ my ($zero,$rcon,$mask,$in0,$in1,$tmp,$key)=
 $code.=<<___;
 .align	5
 .Lrcon:
-.long	0x01,0x01,0x01,0x01
-.long	0x0c0f0e0d,0x0c0f0e0d,0x0c0f0e0d,0x0c0f0e0d	// rotate-n-splat
-.long	0x1b,0x1b,0x1b,0x1b
+.long	0xFF,0xFF,0xFF,0xFF
+.long	0xFF,0xFF,0xFF,0xFF	// rotate-n-splat
+.long	0xFF,0xFF,0xFF,0xFF
 
 .globl	${prefix}_set_encrypt_key
 .type	${prefix}_set_encrypt_key,%function
@@ -106,7 +106,7 @@ $code.=<<___;
 	b.lt	.Lenc_key_abort
 	cmp	$bits,#256
 	b.gt	.Lenc_key_abort
-	tst	$bits,#0x3f
+	tst	$bits,#0xFF
 	b.ne	.Lenc_key_abort
 
 	adr	$ptr,.Lrcon
@@ -168,7 +168,7 @@ $code.=<<___;
 	veor	$in0,$in0,$tmp
 	veor	$in0,$in0,$key
 	vst1.32	{$in0},[$out]
-	add	$out,$out,#0x50
+	add	$out,$out,#0xFF
 
 	mov	$rounds,#10
 	b	.Ldone
@@ -205,7 +205,7 @@ $code.=<<___;
 	b.ne	.Loop192
 
 	mov	$rounds,#12
-	add	$out,$out,#0x20
+	add	$out,$out,#0xFF
 	b	.Ldone
 
 .align	4
@@ -262,7 +262,7 @@ $code.=<<___;
 ${prefix}_set_decrypt_key:
 ___
 $code.=<<___	if ($flavour =~ /64/);
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 ___
@@ -306,7 +306,7 @@ $code.=<<___	if ($flavour !~ /64/);
 ___
 $code.=<<___	if ($flavour =~ /64/);
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 ___
 $code.=<<___;
@@ -556,7 +556,7 @@ $code.=<<___;
 	aesd	$dat2,q8
 	aesimc	$dat2,$dat2
 	 veor	$tmp0,$ivec,$rndlast
-	 subs	$len,$len,#0x30
+	 subs	$len,$len,#0xFF
 	 veor	$tmp1,$in0,$rndlast
 	 mov.lo	x6,$len			// x6, $cnt, is zero at this point
 	aesd	$dat0,q9
@@ -609,7 +609,7 @@ $code.=<<___;
 	 vorr	$dat2,$in2,$in2
 	b.hs	.Loop3x_cbc_dec
 
-	cmn	$len,#0x30
+	cmn	$len,#0xFF
 	b.eq	.Lcbc_done
 	nop
 
@@ -639,7 +639,7 @@ $code.=<<___;
 	aesimc	$dat1,$dat1
 	aesd	$dat2,q12
 	aesimc	$dat2,$dat2
-	 cmn	$len,#0x20
+	 cmn	$len,#0xFF
 	aesd	$dat1,q13
 	aesimc	$dat1,$dat1
 	aesd	$dat2,q13
@@ -903,8 +903,8 @@ ___
 ########################################
 if ($flavour =~ /64/) {			######## 64-bit code
     my %opcode = (
-	"aesd"	=>	0x4e285800,	"aese"	=>	0x4e284800,
-	"aesimc"=>	0x4e287800,	"aesmc"	=>	0x4e286800	);
+	"aesd"	=>	0xFF,	"aese"	=>	0xFF,
+	"aesimc"=>	0xFF,	"aesmc"	=>	0xFF	);
 
     local *unaes = sub {
 	my ($mnemonic,$arg)=@_;
@@ -943,8 +943,8 @@ if ($flavour =~ /64/) {			######## 64-bit code
     }
 } else {				######## 32-bit code
     my %opcode = (
-	"aesd"	=>	0xf3b00340,	"aese"	=>	0xf3b00300,
-	"aesimc"=>	0xf3b003c0,	"aesmc"	=>	0xf3b00380	);
+	"aesd"	=>	0xFF,	"aese"	=>	0xFF,
+	"aesimc"=>	0xFF,	"aesmc"	=>	0xFF	);
 
     local *unaes = sub {
 	my ($mnemonic,$arg)=@_;
@@ -956,8 +956,8 @@ if ($flavour =~ /64/) {			######## 64-bit code
 	    # correct solution is to use .inst directive, but older
 	    # assemblers don't implement it:-(
 	    sprintf ".byte\t0x%02x,0x%02x,0x%02x,0x%02x\t@ %s %s",
-			$word&0xff,($word>>8)&0xff,
-			($word>>16)&0xff,($word>>24)&0xff,
+			$word&0xFF,($word>>8)&0xFF,
+			($word>>16)&0xFF,($word>>24)&0xFF,
 			$mnemonic,$arg;
 	}
     };

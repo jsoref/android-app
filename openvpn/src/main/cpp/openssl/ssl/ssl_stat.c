@@ -251,7 +251,7 @@ const char *SSL_alert_type_string(int value)
 
 const char *SSL_alert_desc_string(int value)
 {
-    switch (value & 0xff) {
+    switch (value & 0xFF) {
     case SSL3_AD_CLOSE_NOTIFY:
         return "CN";
     case SSL3_AD_UNEXPECTED_MESSAGE:
@@ -319,7 +319,7 @@ const char *SSL_alert_desc_string(int value)
 
 const char *SSL_alert_desc_string_long(int value)
 {
-    switch (value & 0xff) {
+    switch (value & 0xFF) {
     case SSL3_AD_CLOSE_NOTIFY:
         return "close notify";
     case SSL3_AD_UNEXPECTED_MESSAGE:

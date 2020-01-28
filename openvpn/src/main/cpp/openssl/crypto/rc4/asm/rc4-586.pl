@@ -91,7 +91,7 @@ sub RC4_loop {
 	&mov	(&DWP(0,$dat,$xx,4),$ty);
 	&add	($ty,$tx);
 	&inc	(&LB($xx));
-	&and	($ty,0xff);
+	&and	($ty,0xFF);
 	&ror	($out,8)	if ($i!=0);
 	if ($i<3) {
 	  &mov	($tx,&DWP(0,$dat,$xx,4));
@@ -117,7 +117,7 @@ if ($alt=0) {
 	&lea	(@XX[1],&DWP(1,@XX[0]));
 	&pxor	("mm2","mm0")				if ($i==0);
 	&psllq	("mm1",8)				if ($i==0);
-	&and	(@XX[1],0xff);
+	&and	(@XX[1],0xFF);
 	&pxor	("mm0","mm0")				if ($i<=0);
 	&mov	($ty,&DWP(0,$dat,$yy,4));
 	&mov	(&DWP(0,$dat,$yy,4),$tx);
@@ -269,7 +269,7 @@ if ($alt=0) {
 		&mov	(&DWP(0,$dat,$xx,4),$ty);
 		&add	($ty,$tx);
 		&inc	(&LB($xx));
-		&and	($ty,0xff);
+		&and	($ty,0xFF);
 		&mov	($ty,&DWP(0,$dat,$ty,4));
 		&xor	(&LB($ty),&BP(0,$inp));
 		&lea	($inp,&DWP(1,$inp));

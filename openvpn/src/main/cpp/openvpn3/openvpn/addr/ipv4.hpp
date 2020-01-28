@@ -262,7 +262,7 @@ namespace openvpn {
 		const char bh = b >> 4;
 		if (bh || firstnonzero)
 		  ret += render_hex_char(bh);
-		ret += render_hex_char(b & 0x0F);
+		ret += render_hex_char(b & 0xFF);
 		firstnonzero = true;
 	      }
 	  }
@@ -421,7 +421,7 @@ namespace openvpn {
 
       bool is_loopback() const
       {
-	return (u.addr & 0x7F000000) == 0x7F000000;
+	return (u.addr & 0xFF) == 0xFF;
       }
 
       // number of network bits in netmask,

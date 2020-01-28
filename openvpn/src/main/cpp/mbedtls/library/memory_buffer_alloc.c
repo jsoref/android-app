@@ -43,8 +43,8 @@
 #include "mbedtls/threading.h"
 #endif
 
-#define MAGIC1       0xFF00AA55
-#define MAGIC2       0xEE119966
+#define MAGIC1       0xFF
+#define MAGIC2       0xFF
 #define MAX_BT 20
 
 typedef struct _memory_header memory_header;

@@ -16,7 +16,7 @@
  * function is applied in several functions in this file and this limit
  * ensures that the result fits in an int.
  */
-#define LIMIT_BEFORE_EXPANSION 0x5ffffffc
+#define LIMIT_BEFORE_EXPANSION 0xFF
 
 BUF_MEM *BUF_MEM_new_ex(unsigned long flags)
 {

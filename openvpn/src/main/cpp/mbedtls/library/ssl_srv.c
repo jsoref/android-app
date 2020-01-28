@@ -171,7 +171,7 @@ static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
     else
 #endif /* MBEDTLS_SSL_RENEGOTIATION */
     {
-        if( len != 1 || buf[0] != 0x0 )
+        if( len != 1 || buf[0] != 0xFF )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-zero length renegotiation info" ) );
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
@@ -945,7 +945,7 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello v2, message type: %d",
                    buf[2] ) );
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello v2, message len.: %d",
-                   ( ( buf[0] & 0x7F ) << 8 ) | buf[1] ) );
+                   ( ( buf[0] & 0xFF ) << 8 ) | buf[1] ) );
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello v2, max. version: [%d:%d]",
                    buf[3], buf[4] ) );
 
@@ -966,7 +966,7 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
-    n = ( ( buf[0] << 8 ) | buf[1] ) & 0x7FFF;
+    n = ( ( buf[0] << 8 ) | buf[1] ) & 0xFF;
 
     if( n < 17 || n > 512 )
     {
@@ -1093,8 +1093,8 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
     for( i = 0, p = buf + 6; i < ciph_len; i += 3, p += 3 )
     {
         if( p[0] == 0 &&
-            p[1] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE >> 8 ) & 0xff ) &&
-            p[2] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE      ) & 0xff ) )
+            p[1] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE >> 8 ) & 0xFF ) &&
+            p[2] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE      ) & 0xFF ) )
         {
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "received FALLBACK_SCSV" ) );
 
@@ -1236,7 +1236,7 @@ read_record_header:
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
     if( ssl->conf->transport == MBEDTLS_SSL_TRANSPORT_STREAM )
 #endif
-        if( ( buf[0] & 0x80 ) != 0 )
+        if( ( buf[0] & 0xFF ) != 0 )
             return( ssl_parse_client_hello_v2( ssl ) );
 #endif
 
@@ -1846,8 +1846,8 @@ read_record_header:
 #if defined(MBEDTLS_SSL_FALLBACK_SCSV)
     for( i = 0, p = buf + ciph_offset + 2; i < ciph_len; i += 2, p += 2 )
     {
-        if( p[0] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE >> 8 ) & 0xff ) &&
-            p[1] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE      ) & 0xff ) )
+        if( p[0] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE >> 8 ) & 0xFF ) &&
+            p[1] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE      ) & 0xFF ) )
         {
             MBEDTLS_SSL_DEBUG_MSG( 2, ( "received FALLBACK_SCSV" ) );
 
@@ -2053,8 +2053,8 @@ static void ssl_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_TRUNCATED_HMAC >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_TRUNCATED_HMAC      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -2096,8 +2096,8 @@ static void ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_ENCRYPT_THEN_MAC >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_ENCRYPT_THEN_MAC      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -2123,8 +2123,8 @@ static void ssl_write_extended_ms_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_EXTENDED_MASTER_SECRET >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_EXTENDED_MASTER_SECRET      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -2148,8 +2148,8 @@ static void ssl_write_session_ticket_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SESSION_TICKET >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SESSION_TICKET      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -2175,7 +2175,7 @@ static void ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
     if( ssl->renego_status != MBEDTLS_SSL_INITIAL_HANDSHAKE )
     {
-        *p++ = 0x00;
+        *p++ = 0xFF;
         *p++ = ( ssl->verify_data_len * 2 + 1 ) & 0xFF;
         *p++ = ssl->verify_data_len * 2 & 0xFF;
 
@@ -2187,9 +2187,9 @@ static void ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
     else
 #endif /* MBEDTLS_SSL_RENEGOTIATION */
     {
-        *p++ = 0x00;
-        *p++ = 0x01;
-        *p++ = 0x00;
+        *p++ = 0xFF;
+        *p++ = 0xFF;
+        *p++ = 0xFF;
     }
 
     *olen = p - buf;
@@ -2213,7 +2213,7 @@ static void ssl_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_MAX_FRAGMENT_LENGTH >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_MAX_FRAGMENT_LENGTH      ) & 0xFF );
 
-    *p++ = 0x00;
+    *p++ = 0xFF;
     *p++ = 1;
 
     *p++ = ssl->session_negotiate->mfl_code;
@@ -2243,7 +2243,7 @@ static void ssl_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SUPPORTED_POINT_FORMATS >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SUPPORTED_POINT_FORMATS      ) & 0xFF );
 
-    *p++ = 0x00;
+    *p++ = 0xFF;
     *p++ = 2;
 
     *p++ = 1;
@@ -2953,8 +2953,8 @@ static int ssl_prepare_server_key_exchange( mbedtls_ssl_context *ssl,
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK )
     {
-        ssl->out_msg[ssl->out_msglen++] = 0x00;
-        ssl->out_msg[ssl->out_msglen++] = 0x00;
+        ssl->out_msg[ssl->out_msglen++] = 0xFF;
+        ssl->out_msg[ssl->out_msglen++] = 0xFF;
     }
 #endif /* MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED */
@@ -3589,7 +3589,7 @@ static int ssl_parse_encrypted_pms( mbedtls_ssl_context *ssl,
     diff |= peer_pms[0] ^ ver[0];
     diff |= peer_pms[1] ^ ver[1];
 
-    /* mask = diff ? 0xff : 0x00 using bit operations to avoid branches */
+    /* mask = diff ? 0xFF : 0xFF using bit operations to avoid branches */
     /* MSVC has a warning about unary minus on unsigned, but this is
      * well-defined and precisely what we want to do here */
 #if defined(_MSC_VER)

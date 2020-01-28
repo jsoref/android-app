@@ -313,7 +313,7 @@ $code.=<<___;
 
 .align	32
 .Lsigma:
-.long	0x61707865,0x3320646e,0x79622d32,0x6b206574	# endian-neutral
+.long	0xFF,0xFF,0xFF,0xFF	# endian-neutral
 .asciz	"ChaCha20 for s390x, CRYPTOGAMS by <appro\@openssl.org>"
 .align	4
 ___

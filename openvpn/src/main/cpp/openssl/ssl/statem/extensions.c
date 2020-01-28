@@ -117,7 +117,7 @@ typedef struct extensions_definition_st {
  * NOTE: WebSphere Application Server 7+ cannot handle empty extensions at
  * the end, keep these extensions before signature_algorithm.
  */
-#define INVALID_EXTENSION { 0x10000, 0, NULL, NULL, NULL, NULL, NULL, NULL }
+#define INVALID_EXTENSION { 0xFF, 0, NULL, NULL, NULL, NULL, NULL, NULL }
 static const EXTENSION_DEFINITION ext_defs[] = {
     {
         TLSEXT_TYPE_renegotiate,

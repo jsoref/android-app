@@ -79,21 +79,21 @@ int mbedtls_aesni_has_support( unsigned int what )
  * Operand macros are in gas order (src, dst) as opposed to Intel order
  * (dst, src) in order to blend better into the surrounding assembly code.
  */
-#define AESDEC      ".byte 0x66,0x0F,0x38,0xDE,"
-#define AESDECLAST  ".byte 0x66,0x0F,0x38,0xDF,"
-#define AESENC      ".byte 0x66,0x0F,0x38,0xDC,"
-#define AESENCLAST  ".byte 0x66,0x0F,0x38,0xDD,"
-#define AESIMC      ".byte 0x66,0x0F,0x38,0xDB,"
-#define AESKEYGENA  ".byte 0x66,0x0F,0x3A,0xDF,"
-#define PCLMULQDQ   ".byte 0x66,0x0F,0x3A,0x44,"
+#define AESDEC      ".byte 0xFF,0xFF,0xFF,0xFF,"
+#define AESDECLAST  ".byte 0xFF,0xFF,0xFF,0xFF,"
+#define AESENC      ".byte 0xFF,0xFF,0xFF,0xFF,"
+#define AESENCLAST  ".byte 0xFF,0xFF,0xFF,0xFF,"
+#define AESIMC      ".byte 0xFF,0xFF,0xFF,0xFF,"
+#define AESKEYGENA  ".byte 0xFF,0xFF,0xFF,0xFF,"
+#define PCLMULQDQ   ".byte 0xFF,0xFF,0xFF,0xFF,"
 
-#define xmm0_xmm0   "0xC0"
-#define xmm0_xmm1   "0xC8"
-#define xmm0_xmm2   "0xD0"
-#define xmm0_xmm3   "0xD8"
-#define xmm0_xmm4   "0xE0"
-#define xmm1_xmm0   "0xC1"
-#define xmm1_xmm2   "0xD1"
+#define xmm0_xmm0   "0xFF"
+#define xmm0_xmm1   "0xFF"
+#define xmm0_xmm2   "0xFF"
+#define xmm0_xmm3   "0xFF"
+#define xmm0_xmm4   "0xFF"
+#define xmm1_xmm0   "0xFF"
+#define xmm1_xmm2   "0xFF"
 
 /*
  * AES-NI AES-ECB block en(de)cryption
@@ -168,10 +168,10 @@ void mbedtls_aesni_gcm_mult( unsigned char c[16],
          "movdqa %%xmm1, %%xmm2             \n\t" // copy of b1:b0
          "movdqa %%xmm1, %%xmm3             \n\t" // same
          "movdqa %%xmm1, %%xmm4             \n\t" // same
-         PCLMULQDQ xmm0_xmm1 ",0x00         \n\t" // a0*b0 = c1:c0
-         PCLMULQDQ xmm0_xmm2 ",0x11         \n\t" // a1*b1 = d1:d0
-         PCLMULQDQ xmm0_xmm3 ",0x10         \n\t" // a0*b1 = e1:e0
-         PCLMULQDQ xmm0_xmm4 ",0x01         \n\t" // a1*b0 = f1:f0
+         PCLMULQDQ xmm0_xmm1 ",0xFF         \n\t" // a0*b0 = c1:c0
+         PCLMULQDQ xmm0_xmm2 ",0xFF         \n\t" // a1*b1 = d1:d0
+         PCLMULQDQ xmm0_xmm3 ",0xFF         \n\t" // a0*b1 = e1:e0
+         PCLMULQDQ xmm0_xmm4 ",0xFF         \n\t" // a1*b0 = f1:f0
          "pxor %%xmm3, %%xmm4               \n\t" // e1+f1:e0+f0
          "movdqa %%xmm4, %%xmm3             \n\t" // same
          "psrldq $8, %%xmm4                 \n\t" // 0:e1+f1
@@ -295,7 +295,7 @@ static void aesni_setkey_enc_128( unsigned char *rk,
           * and those are written to the round key buffer.
           */
          "1:                                \n\t"
-         "pshufd $0xff, %%xmm1, %%xmm1      \n\t" // X:X:X:X
+         "pshufd $0xFF, %%xmm1, %%xmm1      \n\t" // X:X:X:X
          "pxor %%xmm0, %%xmm1               \n\t" // X+r3:X+r2:X+r1:r4
          "pslldq $4, %%xmm0                 \n\t" // r2:r1:r0:0
          "pxor %%xmm0, %%xmm1               \n\t" // X+r3+r2:X+r2+r1:r5:r4
@@ -309,16 +309,16 @@ static void aesni_setkey_enc_128( unsigned char *rk,
 
          /* Main "loop" */
          "2:                                \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x01        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x02        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x04        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x08        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x10        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x20        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x40        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x80        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x1B        \n\tcall 1b \n\t"
-         AESKEYGENA xmm0_xmm1 ",0x36        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm0_xmm1 ",0xFF        \n\tcall 1b \n\t"
          :
          : "r" (rk), "r" (key)
          : "memory", "cc", "0" );
@@ -348,7 +348,7 @@ static void aesni_setkey_enc_192( unsigned char *rk,
           * and those are written to the round key buffer.
           */
          "1:                            \n\t"
-         "pshufd $0x55, %%xmm2, %%xmm2  \n\t" // X:X:X:X
+         "pshufd $0xFF, %%xmm2, %%xmm2  \n\t" // X:X:X:X
          "pxor %%xmm0, %%xmm2           \n\t" // X+r3:X+r2:X+r1:r4
          "pslldq $4, %%xmm0             \n\t" // etc
          "pxor %%xmm0, %%xmm2           \n\t"
@@ -358,7 +358,7 @@ static void aesni_setkey_enc_192( unsigned char *rk,
          "pxor %%xmm2, %%xmm0           \n\t" // update xmm0 = r9:r8:r7:r6
          "movdqu %%xmm0, (%0)           \n\t"
          "add $16, %0                   \n\t"
-         "pshufd $0xff, %%xmm0, %%xmm2  \n\t" // r9:r9:r9:r9
+         "pshufd $0xFF, %%xmm0, %%xmm2  \n\t" // r9:r9:r9:r9
          "pxor %%xmm1, %%xmm2           \n\t" // stuff:stuff:r9+r5:r10
          "pslldq $4, %%xmm1             \n\t" // r2:r1:r0:0
          "pxor %%xmm2, %%xmm1           \n\t" // xmm1 = stuff:stuff:r11:r10
@@ -367,14 +367,14 @@ static void aesni_setkey_enc_192( unsigned char *rk,
          "ret                           \n\t"
 
          "2:                            \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x01    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x02    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x04    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x08    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x10    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x20    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x40    \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x80    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF    \n\tcall 1b \n\t"
 
          :
          : "r" (rk), "r" (key)
@@ -404,7 +404,7 @@ static void aesni_setkey_enc_256( unsigned char *rk,
           * and those have been written to the output buffer.
           */
          "1:                                \n\t"
-         "pshufd $0xff, %%xmm2, %%xmm2      \n\t"
+         "pshufd $0xFF, %%xmm2, %%xmm2      \n\t"
          "pxor %%xmm0, %%xmm2               \n\t"
          "pslldq $4, %%xmm0                 \n\t"
          "pxor %%xmm0, %%xmm2               \n\t"
@@ -417,8 +417,8 @@ static void aesni_setkey_enc_256( unsigned char *rk,
 
          /* Set xmm2 to stuff:Y:stuff:stuff with Y = subword( r11 )
           * and proceed to generate next round key from there */
-         AESKEYGENA xmm0_xmm2 ",0x00        \n\t"
-         "pshufd $0xaa, %%xmm2, %%xmm2      \n\t"
+         AESKEYGENA xmm0_xmm2 ",0xFF        \n\t"
+         "pshufd $0xFF, %%xmm2, %%xmm2      \n\t"
          "pxor %%xmm1, %%xmm2               \n\t"
          "pslldq $4, %%xmm1                 \n\t"
          "pxor %%xmm1, %%xmm2               \n\t"
@@ -435,13 +435,13 @@ static void aesni_setkey_enc_256( unsigned char *rk,
           * see definition of mbedtls_aes_context.buf
           */
          "2:                                \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x01        \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x02        \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x04        \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x08        \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x10        \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x20        \n\tcall 1b \n\t"
-         AESKEYGENA xmm1_xmm2 ",0x40        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
+         AESKEYGENA xmm1_xmm2 ",0xFF        \n\tcall 1b \n\t"
          :
          : "r" (rk), "r" (key)
          : "memory", "cc", "0" );

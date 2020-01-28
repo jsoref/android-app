@@ -61,7 +61,7 @@ _mul_1x1:
 	lea	($a,$a),$i0
 	shr	\$3,$a1
 	lea	(,$a,4),$i1
-	and	$a,$a1			# a1=a&0x1fffffffffffffff
+	and	$a,$a1			# a1=a&0xFF
 	lea	(,$a,8),$a8
 	sar	\$63,$a			# broadcast 63rd bit
 	lea	($a1,$a1),$a2
@@ -241,7 +241,7 @@ $code.=<<___;
 	mov	$b1,56(%rsp)
 	mov	$b0,64(%rsp)
 
-	mov	\$0xf,$mask
+	mov	\$0xFF,$mask
 	mov	$a1,$a
 	mov	$b1,$b
 	call	_mul_1x1		# a1·b1
@@ -369,7 +369,7 @@ se_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER
@@ -411,8 +411,8 @@ se_handler:
 .section	.xdata
 .align	8
 .LSEH_info_1x1:
-	.byte	0x01,0x07,0x02,0x00
-	.byte	0x07,0x01,0x11,0x00	# sub rsp,128+8
+	.byte	0xFF,0xFF,0xFF,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub rsp,128+8
 .LSEH_info_2x2:
 	.byte	9,0,0,0
 	.rva	se_handler

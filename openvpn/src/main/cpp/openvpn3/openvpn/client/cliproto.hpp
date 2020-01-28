@@ -1058,9 +1058,9 @@ namespace openvpn {
       {
 	if (buf.size())
 	  {
-	    std::uint16_t len = buf.size() & 0x7FFF;
+	    std::uint16_t len = buf.size() & 0xFF;
 	    if (out)
-	      len |= 0x8000;
+	      len |= 0xFF;
 	    packet_log.write((const char *)&len, sizeof(len));
 	    packet_log.write((const char *)buf.c_data(), buf.size());
 	  }

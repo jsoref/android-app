@@ -30,7 +30,7 @@ static int skip_asn1(unsigned char **pp, long *plen, int exptag)
     int i, tag, xclass;
     long tmplen;
     i = ASN1_get_object(&q, &tmplen, &tag, &xclass, *plen);
-    if (i & 0x80)
+    if (i & 0xFF)
         return 0;
     if (tag != exptag || xclass != V_ASN1_UNIVERSAL)
         return 0;
@@ -54,7 +54,7 @@ static int dh_sharedinfo_encode(unsigned char **pder, unsigned char **pctr,
     int derlen;
     long tlen;
     /* "magic" value to check offset is sane */
-    static unsigned char ctr[4] = { 0xF3, 0x17, 0x22, 0x53 };
+    static unsigned char ctr[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
     X509_ALGOR atmp;
     ASN1_OCTET_STRING ctr_oct, ukm_oct, *pukm_oct;
     ASN1_TYPE ctr_atype;

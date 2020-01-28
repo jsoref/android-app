@@ -105,7 +105,7 @@ sub cbc
 	&cmp("ecx",0);
 	&jz(&label("decrypt"));
 
-	&and($count,0xfffffff8);
+	&and($count,0xFF);
 	&mov("eax",	&DWP($data_off,"esp","",0));	# load iv[0]
 	&mov("ebx",	&DWP($data_off+4,"esp","",0));	# load iv[1]
 
@@ -209,7 +209,7 @@ sub cbc
 	#############################################################
 	&set_label("decrypt",1);
 	# decrypt start
-	&and($count,0xfffffff8);
+	&and($count,0xFF);
 	# The next 2 instructions are only for if the jz is taken
 	&mov("eax",	&DWP($data_off+8,"esp","",0));	# get iv[0]
 	&mov("ebx",	&DWP($data_off+12,"esp","",0));	# get iv[1]

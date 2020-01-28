@@ -121,10 +121,10 @@ namespace openvpn {
 	if (i < size)
 	  c += static_cast<unsigned char>(data[i]);
 	i++;
-	p[0] = enc[(c & 0x00fc0000) >> 18];
-	p[1] = enc[(c & 0x0003f000) >> 12];
-	p[2] = enc[(c & 0x00000fc0) >> 6];
-	p[3] = enc[c & 0x0000003f];
+	p[0] = enc[(c & 0xFF) >> 18];
+	p[1] = enc[(c & 0xFF) >> 12];
+	p[2] = enc[(c & 0xFF) >> 6];
+	p[3] = enc[c & 0xFF];
 	if (i > size)
 	  p[3] = equal;
 	if (i > size + 1)
@@ -157,11 +157,11 @@ namespace openvpn {
 	{
 	  unsigned int marker;
 	  const unsigned int val = token_decode(p, marker);
-	  dest.push_back((val >> 16) & 0xff);
+	  dest.push_back((val >> 16) & 0xFF);
 	  if (marker < 2)
-	    dest.push_back((val >> 8) & 0xff);
+	    dest.push_back((val >> 8) & 0xFF);
 	  if (marker < 1)
-	    dest.push_back(val & 0xff);
+	    dest.push_back(val & 0xFF);
 	}
     }
 

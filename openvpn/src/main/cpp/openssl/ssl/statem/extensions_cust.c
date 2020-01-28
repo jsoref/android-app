@@ -379,7 +379,7 @@ static int add_custom_ext_intern(SSL_CTX *ctx, ENDPOINT role,
         return 0;
 
     /* Extension type must fit in 16 bits */
-    if (ext_type > 0xffff)
+    if (ext_type > 0xFF)
         return 0;
     /* Search for duplicate */
     if (custom_ext_find(exts, role, ext_type, NULL))

@@ -86,7 +86,7 @@ void compute_checksum(icmp_header& header,
       sum += static_cast<unsigned char>(*body_iter++);
   }
 
-  sum = (sum >> 16) + (sum & 0xFFFF);
+  sum = (sum >> 16) + (sum & 0xFF);
   sum += (sum >> 16);
   header.checksum(static_cast<unsigned short>(~sum));
 }

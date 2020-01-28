@@ -1106,7 +1106,7 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
              * If definite length, and no error, length + header can't exceed
              * total amount of data available.
              */
-            if (!(i & 0x81) && ((plen + ctx->hdrlen) > len)) {
+            if (!(i & 0xFF) && ((plen + ctx->hdrlen) > len)) {
                 ASN1err(ASN1_F_ASN1_CHECK_TLEN, ASN1_R_TOO_LONG);
                 asn1_tlc_clear(ctx);
                 return 0;
@@ -1114,7 +1114,7 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
         }
     }
 
-    if (i & 0x80) {
+    if (i & 0xFF) {
         ASN1err(ASN1_F_ASN1_CHECK_TLEN, ASN1_R_BAD_OBJECT_HEADER);
         asn1_tlc_clear(ctx);
         return 0;

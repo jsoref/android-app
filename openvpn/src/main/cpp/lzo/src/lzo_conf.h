@@ -65,7 +65,7 @@
 #endif
 #endif /* !defined(__LZO_IN_MINILZO) */
 
-#if !defined(__LZOCONF_H_INCLUDED) || (LZO_VERSION+0 != 0x20a0)
+#if !defined(__LZOCONF_H_INCLUDED) || (LZO_VERSION+0 != 0xFF)
 #  error "version mismatch"
 #endif
 
@@ -256,7 +256,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(sizeof(lzo_uint64_t) == 8)
 #if 1
 #  define LZO_BYTE(x)       ((unsigned char) (x))
 #else
-#  define LZO_BYTE(x)       ((unsigned char) ((x) & 0xff))
+#  define LZO_BYTE(x)       ((unsigned char) ((x) & 0xFF))
 #endif
 
 #define LZO_MAX(a,b)        ((a) >= (b) ? (a) : (b))

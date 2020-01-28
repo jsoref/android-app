@@ -127,7 +127,7 @@ struct connection_entry
 #define CE_MAN_QUERY_REMOTE_ACCEPT 2
 #define CE_MAN_QUERY_REMOTE_MOD    3
 #define CE_MAN_QUERY_REMOTE_SKIP   4
-#define CE_MAN_QUERY_REMOTE_MASK   (0x07)
+#define CE_MAN_QUERY_REMOTE_MASK   (0xFF)
 #define CE_MAN_QUERY_REMOTE_SHIFT  (2)
     unsigned int flags;
 

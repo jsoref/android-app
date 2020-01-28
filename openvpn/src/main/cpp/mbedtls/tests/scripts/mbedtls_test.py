@@ -242,7 +242,7 @@ class MbedTlsTest(BaseHostTest):
         :param i: Input integer
         :return: Output bytes array in big endian or network order
         """
-        data_bytes = bytearray([((i >> x) & 0xff) for x in [24, 16, 8, 0]])
+        data_bytes = bytearray([((i >> x) & 0xFF) for x in [24, 16, 8, 0]])
         return data_bytes
 
     def test_vector_to_bytes(self, function_id, dependencies, parameters):

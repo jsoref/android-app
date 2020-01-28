@@ -177,7 +177,7 @@ ___
 $code.=<<___;
 	paddd	%xmm0,%xmm1
 	pcmpeqd	%xmm5,%xmm0		# compare to 1,0
-	.byte	0x67
+	.byte	0xFF
 	movdqa	%xmm4,%xmm3
 ___
 for($k=0;$k<$STRIDE/16-4;$k+=4) {
@@ -209,7 +209,7 @@ $code.=<<___;				# last iteration can be optimized
 	movdqa	%xmm0,`16*($k+0)+112`(%r10)
 
 	paddd	%xmm2,%xmm3
-	.byte	0x67
+	.byte	0xFF
 	pcmpeqd	%xmm5,%xmm2
 	movdqa	%xmm1,`16*($k+1)+112`(%r10)
 
@@ -242,7 +242,7 @@ ___
 }
 $code.=<<___;
 	por	%xmm1,%xmm0
-	pshufd	\$0x4e,%xmm0,%xmm1
+	pshufd	\$0xFF,%xmm0,%xmm1
 	por	%xmm1,%xmm0
 	lea	$STRIDE($bp),$bp
 	movq	%xmm0,$m0		# m0=bp[0]
@@ -335,7 +335,7 @@ ___
 }
 $code.=<<___;
 	por	%xmm5,%xmm4
-	pshufd	\$0x4e,%xmm4,%xmm0
+	pshufd	\$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	lea	$STRIDE($bp),$bp
 
@@ -471,14 +471,14 @@ $code.=<<___;
 .align	32
 bn_mul4x_mont_gather5:
 .cfi_startproc
-	.byte	0x67
+	.byte	0xFF
 	mov	%rsp,%rax
 .cfi_def_cfa_register	%rax
 .Lmul4x_enter:
 ___
 $code.=<<___ if ($addx);
-	and	\$0x80108,%r11d
-	cmp	\$0x80108,%r11d		# check for AD*X+BMI2+BMI1
+	and	\$0xFF,%r11d
+	cmp	\$0xFF,%r11d		# check for AD*X+BMI2+BMI1
 	je	.Lmulx4x_enter
 ___
 $code.=<<___;
@@ -496,7 +496,7 @@ $code.=<<___;
 .cfi_push	%r15
 .Lmul4x_prologue:
 
-	.byte	0x67
+	.byte	0xFF
 	shl	\$3,${num}d		# convert $num to bytes
 	lea	($num,$num,2),%r10	# 3*$num in bytes
 	neg	$num			# -$num
@@ -598,7 +598,7 @@ $code.=<<___;
 
 	pshufd	\$0,%xmm5,%xmm5		# broadcast index
 	movdqa	%xmm1,%xmm4
-	.byte	0x67,0x67
+	.byte	0xFF,0xFF
 	movdqa	%xmm1,%xmm2
 ___
 ########################################################################
@@ -607,7 +607,7 @@ ___
 $code.=<<___;
 	paddd	%xmm0,%xmm1
 	pcmpeqd	%xmm5,%xmm0		# compare to 1,0
-	.byte	0x67
+	.byte	0xFF
 	movdqa	%xmm4,%xmm3
 ___
 for($i=0;$i<$STRIDE/16-4;$i+=4) {
@@ -639,7 +639,7 @@ $code.=<<___;				# last iteration can be optimized
 	movdqa	%xmm0,`16*($i+0)+112`(%r10)
 
 	paddd	%xmm2,%xmm3
-	.byte	0x67
+	.byte	0xFF
 	pcmpeqd	%xmm5,%xmm2
 	movdqa	%xmm1,`16*($i+1)+112`(%r10)
 
@@ -672,7 +672,7 @@ ___
 }
 $code.=<<___;
 	por	%xmm1,%xmm0
-	pshufd	\$0x4e,%xmm0,%xmm1
+	pshufd	\$0xFF,%xmm0,%xmm1
 	por	%xmm1,%xmm0
 	lea	$STRIDE($bp),$bp
 	movq	%xmm0,$m0		# m0=bp[0]
@@ -849,7 +849,7 @@ ___
 }
 $code.=<<___;
 	por	%xmm5,%xmm4
-	pshufd	\$0x4e,%xmm4,%xmm0
+	pshufd	\$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	lea	$STRIDE($bp),$bp
 	movq	%xmm0,$m0		# m0=bp[i]
@@ -1049,10 +1049,10 @@ $code.=<<___
 
 .align	32
 .Lsub4x:
-	.byte	0x66
+	.byte	0xFF
 	mov	8*0($tp),@ri[0]
 	mov	8*1($tp),@ri[1]
-	.byte	0x66
+	.byte	0xFF
 	sbb	16*0($np),@ri[0]
 	mov	8*2($tp),@ri[2]
 	sbb	16*1($np),@ri[1]
@@ -1104,8 +1104,8 @@ bn_power5:
 ___
 $code.=<<___ if ($addx);
 	mov	OPENSSL_ia32cap_P+8(%rip),%r11d
-	and	\$0x80108,%r11d
-	cmp	\$0x80108,%r11d		# check for AD*X+BMI2+BMI1
+	and	\$0xFF,%r11d
+	cmp	\$0xFF,%r11d		# check for AD*X+BMI2+BMI1
 	je	.Lpowerx5_enter
 ___
 $code.=<<___;
@@ -1500,7 +1500,7 @@ __bn_sqr8x_internal:
 	add	($tptr,$j),$A1[1]
 	adc	\$0,$A1[0]
 
-	.byte	0x67
+	.byte	0xFF
 	mul	$a0			# a[4]*a[0]
 	add	%rax,$A0[1]		# a[4]*a[0]+a[3]*a[1]+t[4]
 	 mov	$ai,%rax		# a[3]
@@ -1532,7 +1532,7 @@ __bn_sqr8x_internal:
 	cmp	\$0,$j
 	jne	.Lsqr4x_inner
 
-	.byte	0x67
+	.byte	0xFF
 	mul	$a1			# a[5]*a[3]
 	add	%rax,$A1[1]
 	adc	\$0,%rdx
@@ -1730,7 +1730,7 @@ $code.=<<___;
 	jnz	.Lsqr4x_shift_n_add
 
 	lea	($shift,$A0[0],2),$S[0]	# t[2*i]<<1 | shift
-	.byte	0x67
+	.byte	0xFF
 	shr	\$63,$A0[0]
 	lea	($j,$A0[1],2),$S[1]	# t[2*i+1]<<1 |
 	shr	\$63,$A0[1]
@@ -1784,7 +1784,7 @@ __bn_sqr8x_reduction:
 .align	32
 .L8x_reduction_loop:
 	lea	($tptr,$num),$tptr	# start of current t[] window
-	.byte	0x66
+	.byte	0xFF
 	mov	8*0($tptr),$m0
 	mov	8*1($tptr),%r9
 	mov	8*2($tptr),%r10
@@ -1796,7 +1796,7 @@ __bn_sqr8x_reduction:
 	mov	%rax,(%rdx)		# store top-most carry bit
 	lea	8*8($tptr),$tptr
 
-	.byte	0x67
+	.byte	0xFF
 	mov	$m0,%r8
 	imulq	32+8(%rsp),$m0		# n0*a[0]
 	mov	8*0($nptr),%rax		# n[0]
@@ -1880,7 +1880,7 @@ __bn_sqr8x_reduction:
 	cmp	0+8(%rsp),$nptr		# end of n[]?
 	jae	.L8x_no_tail
 
-	.byte	0x66
+	.byte	0xFF
 	add	8*0($tptr),%r8
 	adc	8*1($tptr),%r9
 	adc	8*2($tptr),%r10
@@ -2111,7 +2111,7 @@ bn_from_montgomery:
 .align	32
 bn_from_mont8x:
 .cfi_startproc
-	.byte	0x67
+	.byte	0xFF
 	mov	%rsp,%rax
 .cfi_def_cfa_register	%rax
 	push	%rbx
@@ -2205,7 +2205,7 @@ bn_from_mont8x:
 	movdqa	%xmm0,(%rax,$num)
 	movdqu	48($aptr),%xmm4
 	movdqa	%xmm0,16(%rax,$num)
-	.byte	0x48,0x8d,0xb6,0x40,0x00,0x00,0x00	# lea	64($aptr),$aptr
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# lea	64($aptr),$aptr
 	movdqa	%xmm1,(%rax)
 	movdqa	%xmm0,32(%rax,$num)
 	movdqa	%xmm2,16(%rax)
@@ -2218,14 +2218,14 @@ bn_from_mont8x:
 
 	movq	$rptr,%xmm1
 	movq	$nptr,%xmm2
-	.byte	0x67
+	.byte	0xFF
 	mov	$nptr,%rbp
 	movq	%r10, %xmm3		# -num
 ___
 $code.=<<___ if ($addx);
 	mov	OPENSSL_ia32cap_P+8(%rip),%r11d
-	and	\$0x80108,%r11d
-	cmp	\$0x80108,%r11d		# check for AD*X+BMI2+BMI1
+	and	\$0xFF,%r11d
+	cmp	\$0xFF,%r11d		# check for AD*X+BMI2+BMI1
 	jne	.Lfrom_mont_nox
 
 	lea	(%rax,$num),$rptr
@@ -2427,14 +2427,14 @@ $code.=<<___;
 
 	pshufd	\$0,%xmm5,%xmm5		# broadcast index
 	movdqa	%xmm1,%xmm4
-	.byte	0x67
+	.byte	0xFF
 	movdqa	%xmm1,%xmm2
 ___
 ########################################################################
 # calculate mask by comparing 0..31 to index and save result to stack
 #
 $code.=<<___;
-	.byte	0x67
+	.byte	0xFF
 	paddd	%xmm0,%xmm1
 	pcmpeqd	%xmm5,%xmm0		# compare to 1,0
 	movdqa	%xmm4,%xmm3
@@ -2463,7 +2463,7 @@ $code.=<<___;
 ___
 }
 $code.=<<___;				# last iteration can be optimized
-	.byte	0x67
+	.byte	0xFF
 	paddd	%xmm1,%xmm2
 	pcmpeqd	%xmm5,%xmm1
 	movdqa	%xmm0,`16*($i+0)+112`(%r10)
@@ -2501,7 +2501,7 @@ ___
 }
 $code.=<<___;
 	pxor	%xmm1,%xmm0
-	pshufd	\$0x4e,%xmm0,%xmm1
+	pshufd	\$0xFF,%xmm0,%xmm1
 	por	%xmm1,%xmm0
 	lea	$STRIDE($bptr),$bptr
 	movq	%xmm0,%rdx		# bp[0]
@@ -2557,7 +2557,7 @@ $code.=<<___;
 	mulx	2*8($aptr),%r12,%rax	# ...
 	adcx	%r14,%r12
 	mulx	3*8($aptr),%r13,%r14
-	 .byte	0x67,0x67
+	 .byte	0xFF,0xFF
 	 mov	$mi,%rdx
 	adcx	%rax,%r13
 	adcx	$zero,%r14		# cf=0
@@ -2600,7 +2600,7 @@ $code.=<<___;
 .Lmulx4x_outer:
 	lea	16-256($tptr),%r10	# where 256-byte mask is (+density control)
 	pxor	%xmm4,%xmm4
-	.byte	0x67,0x67
+	.byte	0xFF,0xFF
 	pxor	%xmm5,%xmm5
 ___
 for($i=0;$i<$STRIDE/16;$i+=4) {
@@ -2621,7 +2621,7 @@ ___
 }
 $code.=<<___;
 	por	%xmm5,%xmm4
-	pshufd	\$0x4e,%xmm4,%xmm0
+	pshufd	\$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	lea	$STRIDE($bptr),$bptr
 	movq	%xmm0,%rdx		# m0=bp[i]
@@ -2963,9 +2963,9 @@ $code.=<<___;
 	jmp	.Lsqr8x_zero_start
 
 .align	32
-.byte	0x66,0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00
+.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 .Lsqrx8x_zero:
-	.byte	0x3e
+	.byte	0xFF
 	movdqa	%xmm0,0*8($tptr)
 	movdqa	%xmm0,2*8($tptr)
 	movdqa	%xmm0,4*8($tptr)
@@ -2999,10 +2999,10 @@ $code.=<<___;
 	mulx	2*8($aptr),%r9,%rax	# a[2]*a[0]
 	adcx	%r10,%r9
 	adox	%rax,%r11
-	.byte	0xc4,0xe2,0xab,0xf6,0x86,0x18,0x00,0x00,0x00	# mulx	3*8($aptr),%r10,%rax	# ...
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	3*8($aptr),%r10,%rax	# ...
 	adcx	%r11,%r10
 	adox	%rax,%r12
-	.byte	0xc4,0xe2,0xa3,0xf6,0x86,0x20,0x00,0x00,0x00	# mulx	4*8($aptr),%r11,%rax
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	4*8($aptr),%r11,%rax
 	adcx	%r12,%r11
 	adox	%rax,%r13
 	mulx	5*8($aptr),%r12,%rax
@@ -3029,13 +3029,13 @@ $code.=<<___;
 	mulx	4*8($aptr),%r10,%rbx	# ...
 	adcx	%r11,%r9
 	adox	%rax,%r10
-	.byte	0xc4,0xe2,0xa3,0xf6,0x86,0x28,0x00,0x00,0x00	# mulx	5*8($aptr),%r11,%rax
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	5*8($aptr),%r11,%rax
 	adcx	%r12,%r10
 	adox	%rbx,%r11
-	.byte	0xc4,0xe2,0x9b,0xf6,0x9e,0x30,0x00,0x00,0x00	# mulx	6*8($aptr),%r12,%rbx
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	6*8($aptr),%r12,%rbx
 	adcx	%r13,%r11
 	adox	%r14,%r12
-	.byte	0xc4,0x62,0x93,0xf6,0xb6,0x38,0x00,0x00,0x00	# mulx	7*8($aptr),%r13,%r14
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	7*8($aptr),%r13,%r14
 	 mov	2*8($aptr),%rdx		# a[2]
 	adcx	%rax,%r12
 	adox	%rbx,%r13
@@ -3053,11 +3053,11 @@ $code.=<<___;
 	mulx	5*8($aptr),%r10,%rbx	# ...
 	adcx	%r11,%r9
 	adox	%rax,%r10
-	.byte	0xc4,0xe2,0xa3,0xf6,0x86,0x30,0x00,0x00,0x00	# mulx	6*8($aptr),%r11,%rax
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	6*8($aptr),%r11,%rax
 	adcx	%r12,%r10
 	adox	%r13,%r11
-	.byte	0xc4,0x62,0x9b,0xf6,0xae,0x38,0x00,0x00,0x00	# mulx	7*8($aptr),%r12,%r13
-	.byte	0x3e
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	7*8($aptr),%r12,%r13
+	.byte	0xFF
 	 mov	3*8($aptr),%rdx		# a[3]
 	adcx	%rbx,%r11
 	adox	%rax,%r12
@@ -3109,7 +3109,7 @@ $code.=<<___;
 	adcx	%rax,%r12
 	adox	$zero,%r13
 
-	.byte	0x67,0x67
+	.byte	0xFF,0xFF
 	mulx	%r8,%r8,%r14		# a[7]*a[6]
 	adcx	%r8,%r13
 	adcx	$zero,%r14
@@ -3159,7 +3159,7 @@ $code.=<<___;
 	adcx	%rax,%r10
 	adox	%r12,%r11
 
-	.byte	0xc4,0x62,0xfb,0xf6,0xa5,0x20,0x00,0x00,0x00	# mulx	4*8($aaptr),%rax,%r12
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	4*8($aaptr),%rax,%r12
 	adcx	%rax,%r11
 	adox	%r13,%r12
 
@@ -3173,13 +3173,13 @@ $code.=<<___;
 	adcx	%rax,%r13
 	adox	%r15,%r14
 
-	.byte	0xc4,0x62,0xfb,0xf6,0xbd,0x38,0x00,0x00,0x00	# mulx	7*8($aaptr),%rax,%r15
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	7*8($aaptr),%rax,%r15
 	 mov	8($aptr,%rcx,8),%rdx	# a[i]
 	adcx	%rax,%r14
 	adox	%rbx,%r15		# %rbx is 0, of=0
 	adcx	%rbx,%r15		# cf=0
 
-	.byte	0x67
+	.byte	0xFF
 	inc	%rcx			# of=0
 	jnz	.Lsqrx8x_loop
 
@@ -3189,7 +3189,7 @@ $code.=<<___;
 	je	.Lsqrx8x_break
 
 	sub	16+8(%rsp),%rbx		# mov 16(%rsp),%cf
-	.byte	0x66
+	.byte	0xFF
 	mov	-64($aptr),%rdx
 	adcx	0*8($tptr),%r8
 	adcx	1*8($tptr),%r9
@@ -3200,7 +3200,7 @@ $code.=<<___;
 	adc	6*8($tptr),%r14
 	adc	7*8($tptr),%r15
 	lea	8*8($tptr),$tptr
-	.byte	0x67
+	.byte	0xFF
 	sbb	%rax,%rax		# mov %cf,%rax
 	xor	%ebx,%ebx		# cf=0, of=0
 	mov	%rax,16+8(%rsp)		# offload carry
@@ -3270,8 +3270,8 @@ $code.=<<___;
 	mulx	%rdx,%rax,%rbx
 	 adox	$A1[0],$A1[0]
 	adcx	$A0[0],%rax
-	 .byte	0x48,0x8b,0x94,0x0e,0x08,0x00,0x00,0x00	# mov	8($aptr,$i),%rdx	# a[i+1]	# prefetch
-	 .byte	0x4c,0x8b,0x97,0x20,0x00,0x00,0x00	# mov	32($tptr),$A0[0]	# t[2*i+4]	# prefetch
+	 .byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mov	8($aptr,$i),%rdx	# a[i+1]	# prefetch
+	 .byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mov	32($tptr),$A0[0]	# t[2*i+4]	# prefetch
 	 adox	$A1[1],$A1[1]
 	adcx	$A0[1],%rbx
 	 mov	40($tptr),$A0[1]		# t[2*i+4+1]	# prefetch
@@ -3305,7 +3305,7 @@ $code.=<<___;
 	 adox	$A0[0],$A0[0]
 	adcx	$A1[0],%rax
 	jrcxz	.Lsqrx4x_shift_n_add_break
-	 .byte	0x48,0x8b,0x94,0x0e,0x00,0x00,0x00,0x00	# mov	0($aptr,$i),%rdx	# a[i+4]	# prefetch
+	 .byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mov	0($aptr,$i),%rdx	# a[i+4]	# prefetch
 	 adox	$A0[1],$A0[1]
 	adcx	$A1[1],%rbx
 	 mov	80($tptr),$A1[0]	# t[2*i+10]	# prefetch
@@ -3384,7 +3384,7 @@ __bn_sqrx8x_reduction:
 	adcx	%rbx,%r10
 	adox	%r12,%r11
 
-	.byte	0xc4,0x62,0xe3,0xf6,0xa5,0x20,0x00,0x00,0x00	# mulx	8*4($nptr),%rbx,%r12
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	8*4($nptr),%rbx,%r12
 	 mov	%rdx,%rax
 	 mov	%r8,%rdx
 	adcx	%rbx,%r11
@@ -3408,7 +3408,7 @@ __bn_sqrx8x_reduction:
 	adox	$carry,%r15		# $carry is 0
 	adcx	$carry,%r15		# cf=0
 
-	.byte	0x67,0x67,0x67
+	.byte	0xFF,0xFF,0xFF
 	inc	%rcx			# of=0
 	jnz	.Lsqrx8x_reduce
 
@@ -3453,7 +3453,7 @@ __bn_sqrx8x_reduction:
 	adcx	%rax,%r10
 	adox	%r12,%r11
 
-	.byte	0xc4,0x62,0xfb,0xf6,0xa5,0x20,0x00,0x00,0x00	# mulx	8*4($nptr),%rax,%r12
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	8*4($nptr),%rax,%r12
 	adcx	%rax,%r11
 	adox	%r13,%r12
 
@@ -3657,8 +3657,8 @@ bn_scatter5:
 bn_gather5:
 .LSEH_begin_bn_gather5:			# Win64 thing, but harmless in other cases
 	# I can't trust assembler to use specific encoding:-(
-	.byte	0x4c,0x8d,0x14,0x24			#lea    (%rsp),%r10
-	.byte	0x48,0x81,0xec,0x08,0x01,0x00,0x00	#sub	$0x108,%rsp
+	.byte	0xFF,0xFF,0xFF,0xFF			#lea    (%rsp),%r10
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	#sub	$0xFF,%rsp
 	lea	.Linc(%rip),%rax
 	and	\$-16,%rsp		# shouldn't be formally required
 
@@ -3730,7 +3730,7 @@ ___
 $code.=<<___;
 	por	%xmm5,%xmm4
 	lea	$STRIDE(%r11),%r11
-	pshufd	\$0x4e,%xmm4,%xmm0
+	pshufd	\$0xFF,%xmm4,%xmm0
 	por	%xmm4,%xmm0
 	movq	%xmm0,($out)		# m0=bp[0]
 	lea	8($out),$out
@@ -3833,7 +3833,7 @@ mul_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER
@@ -3932,9 +3932,9 @@ ___
 $code.=<<___;
 .align	8
 .LSEH_info_bn_gather5:
-	.byte	0x01,0x0b,0x03,0x0a
-	.byte	0x0b,0x01,0x21,0x00	# sub	rsp,0x108
-	.byte	0x04,0xa3,0x00,0x00	# lea	r10,(rsp)
+	.byte	0xFF,0xFF,0xFF,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub	rsp,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# lea	r10,(rsp)
 .align	8
 ___
 }

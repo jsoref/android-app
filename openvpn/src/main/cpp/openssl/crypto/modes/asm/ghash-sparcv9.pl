@@ -92,10 +92,10 @@ $code.=<<___;
 
 .align	64
 rem_4bit:
-	.long	`0x0000<<16`,0,`0x1C20<<16`,0,`0x3840<<16`,0,`0x2460<<16`,0
-	.long	`0x7080<<16`,0,`0x6CA0<<16`,0,`0x48C0<<16`,0,`0x54E0<<16`,0
-	.long	`0xE100<<16`,0,`0xFD20<<16`,0,`0xD940<<16`,0,`0xC560<<16`,0
-	.long	`0x9180<<16`,0,`0x8DA0<<16`,0,`0xA9C0<<16`,0,`0xB5E0<<16`,0
+	.long	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
+	.long	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
+	.long	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
+	.long	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
 .type	rem_4bit,#object
 .size	rem_4bit,(.-rem_4bit)
 
@@ -114,8 +114,8 @@ gcm_ghash_4bit:
 
 .Louter:
 	xor	$xi0,$nlo,$nlo
-	and	$nlo,0xf0,$nhi
-	and	$nlo,0x0f,$nlo
+	and	$nlo,0xFF,$nhi
+	and	$nlo,0xFF,$nlo
 	sll	$nlo,4,$nlo
 	ldx	[$Htblo+$nlo],$Zlo
 	ldx	[$Htbl+$nlo],$Zhi
@@ -123,7 +123,7 @@ gcm_ghash_4bit:
 	ldub	[$inp+14],$nlo
 
 	ldx	[$Htblo+$nhi],$Tlo
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 	ldx	[$Htbl+$nhi],$Thi
 	sll	$remi,3,$remi
 	ldx	[$rem_4bit+$remi],$rem
@@ -135,9 +135,9 @@ gcm_ghash_4bit:
 	xor	$Zlo,$tmp,$Zlo
 
 	xor	$xi1,$nlo,$nlo
-	and	$Zlo,0xf,$remi
-	and	$nlo,0xf0,$nhi
-	and	$nlo,0x0f,$nlo
+	and	$Zlo,0xFF,$remi
+	and	$nlo,0xFF,$nhi
+	and	$nlo,0xFF,$nlo
 	ba	.Lghash_inner
 	sll	$nlo,4,$nlo
 .align	32
@@ -156,7 +156,7 @@ gcm_ghash_4bit:
 	xor	$Zlo,$tmp,$Zlo
 	ldub	[$Xi+$cnt],$xi1
 	xor	$Thi,$Zhi,$Zhi
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 
 	ldx	[$Htblo+$nhi],$Tlo
 	sll	$remi,3,$remi
@@ -167,14 +167,14 @@ gcm_ghash_4bit:
 	sllx	$Zhi,60,$tmp
 	xor	$xi1,$nlo,$nlo
 	srlx	$Zhi,4,$Zhi
-	and	$nlo,0xf0,$nhi
+	and	$nlo,0xFF,$nhi
 	addcc	$cnt,-1,$cnt
 	xor	$Zlo,$tmp,$Zlo
-	and	$nlo,0x0f,$nlo
+	and	$nlo,0xFF,$nlo
 	xor	$Tlo,$Zlo,$Zlo
 	sll	$nlo,4,$nlo
 	blu	.Lghash_inner
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 
 	ldx	[$Htblo+$nlo],$Tlo
 	sll	$remi,3,$remi
@@ -192,7 +192,7 @@ gcm_ghash_4bit:
 	add	$inp,16,$inp
 	cmp	$inp,$len
 	be,pn	SIZE_T_CC,.Ldone
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 
 	ldx	[$Htblo+$nhi],$Tlo
 	sll	$remi,3,$remi
@@ -210,9 +210,9 @@ gcm_ghash_4bit:
 	xor	$rem,$Zhi,$Zhi
 	stx	$Zhi,[$Xi]
 	srl	$Zlo,8,$xi1
-	and	$Zlo,0xff,$xi0
+	and	$Zlo,0xFF,$xi0
 	ba	.Louter
-	and	$xi1,0xff,$xi1
+	and	$xi1,0xFF,$xi1
 .align	32
 .Ldone:
 	ldx	[$Htblo+$nhi],$Tlo
@@ -250,8 +250,8 @@ gcm_gmult_4bit:
 1:	call	.+8
 	add	%o7,rem_4bit-1b,$rem_4bit
 
-	and	$nlo,0xf0,$nhi
-	and	$nlo,0x0f,$nlo
+	and	$nlo,0xFF,$nhi
+	and	$nlo,0xFF,$nlo
 	sll	$nlo,4,$nlo
 	ldx	[$Htblo+$nlo],$Zlo
 	ldx	[$Htbl+$nlo],$Zhi
@@ -259,7 +259,7 @@ gcm_gmult_4bit:
 	ldub	[$Xi+14],$nlo
 
 	ldx	[$Htblo+$nhi],$Tlo
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 	ldx	[$Htbl+$nhi],$Thi
 	sll	$remi,3,$remi
 	ldx	[$rem_4bit+$remi],$rem
@@ -270,9 +270,9 @@ gcm_gmult_4bit:
 	srlx	$Zhi,4,$Zhi
 	xor	$Zlo,$tmp,$Zlo
 
-	and	$Zlo,0xf,$remi
-	and	$nlo,0xf0,$nhi
-	and	$nlo,0x0f,$nlo
+	and	$Zlo,0xFF,$remi
+	and	$nlo,0xFF,$nhi
+	and	$nlo,0xFF,$nlo
 	ba	.Lgmult_inner
 	sll	$nlo,4,$nlo
 .align	32
@@ -290,7 +290,7 @@ gcm_gmult_4bit:
 	srlx	$Zhi,4,$Zhi
 	xor	$Zlo,$tmp,$Zlo
 	xor	$Thi,$Zhi,$Zhi
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 
 	ldx	[$Htblo+$nhi],$Tlo
 	sll	$remi,3,$remi
@@ -300,14 +300,14 @@ gcm_gmult_4bit:
 	ldx	[$rem_4bit+$remi],$rem
 	sllx	$Zhi,60,$tmp
 	srlx	$Zhi,4,$Zhi
-	and	$nlo,0xf0,$nhi
+	and	$nlo,0xFF,$nhi
 	addcc	$cnt,-1,$cnt
 	xor	$Zlo,$tmp,$Zlo
-	and	$nlo,0x0f,$nlo
+	and	$nlo,0xFF,$nlo
 	xor	$Tlo,$Zlo,$Zlo
 	sll	$nlo,4,$nlo
 	blu	.Lgmult_inner
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 
 	ldx	[$Htblo+$nlo],$Tlo
 	sll	$remi,3,$remi
@@ -321,7 +321,7 @@ gcm_gmult_4bit:
 	srlx	$Zhi,4,$Zhi
 	xor	$Zlo,$tmp,$Zlo
 	xor	$Thi,$Zhi,$Zhi
-	and	$Zlo,0xf,$remi
+	and	$Zlo,0xFF,$remi
 
 	ldx	[$Htblo+$nhi],$Tlo
 	sll	$remi,3,$remi
@@ -369,7 +369,7 @@ gcm_init_vis3:
 
 	ldx	[%i1+0],$Hhi
 	ldx	[%i1+8],$Hlo
-	mov	0xE1,$Xhi
+	mov	0xFF,$Xhi
 	mov	1,$Xlo
 	sllx	$Xhi,57,$Xhi
 	srax	$Hhi,63,$C0		! broadcast carry
@@ -382,12 +382,12 @@ gcm_init_vis3:
 	stx	$Hlo,[%i0+8]		! save twisted H
 	stx	$Hhi,[%i0+0]
 
-	sethi	%hi(0xA0406080),$V
-	sethi	%hi(0x20C0E000),%l0
-	or	$V,%lo(0xA0406080),$V
-	or	%l0,%lo(0x20C0E000),%l0
+	sethi	%hi(0xFF),$V
+	sethi	%hi(0xFF),%l0
+	or	$V,%lo(0xFF),$V
+	or	%l0,%lo(0xFF),%l0
 	sllx	$V,32,$V
-	or	%l0,$V,$V		! (0xE0·i)&0xff=0xA040608020C0E000
+	or	%l0,$V,$V		! (0xFF·i)&0xFF=0xFF
 	stx	$V,[%i0+16]
 
 	ret
@@ -405,9 +405,9 @@ gcm_gmult_vis3:
 	ldx	[$Htable+8],$Hlo	! load twisted H
 	ldx	[$Htable+0],$Hhi
 
-	mov	0xE1,%l7
+	mov	0xFF,%l7
 	sllx	%l7,57,$xE1		! 57 is not a typo
-	ldx	[$Htable+16],$V		! (0xE0·i)&0xff=0xA040608020C0E000
+	ldx	[$Htable+16],$V		! (0xFF·i)&0xFF=0xFF
 
 	xor	$Hhi,$Hlo,$Hhl		! Karatsuba pre-processing
 	xmulx	$Xlo,$Hlo,$C0
@@ -419,9 +419,9 @@ gcm_gmult_vis3:
 	xmulx	$Xhi,$Hhi,$Xhi
 
 	sll	$C0,3,$sqr
-	srlx	$V,$sqr,$sqr		! ·0xE0 [implicit &(7<<3)]
+	srlx	$V,$sqr,$sqr		! ·0xFF [implicit &(7<<3)]
 	xor	$C0,$sqr,$sqr
-	sllx	$sqr,57,$sqr		! ($C0·0xE1)<<1<<56 [implicit &0x7f]
+	sllx	$sqr,57,$sqr		! ($C0·0xFF)<<1<<56 [implicit &0xFF]
 
 	xor	$C0,$C1,$C1		! Karatsuba post-processing
 	xor	$Xlo,$C2,$C2
@@ -431,7 +431,7 @@ gcm_gmult_vis3:
 	xor	$Xhi,$C2,$C2
 	xor	$Xhi,$C1,$C1
 
-	xmulxhi	$C0,$xE1,$Xlo		! ·0xE1<<1<<56
+	xmulxhi	$C0,$xE1,$Xlo		! ·0xFF<<1<<56
 	 xor	$C0,$C2,$C2
 	xmulx	$C1,$xE1,$C0
 	 xor	$C1,$C3,$C3
@@ -461,9 +461,9 @@ gcm_ghash_vis3:
 	ldx	[$Htable+8],$Hlo	! load twisted H
 	ldx	[$Htable+0],$Hhi
 
-	mov	0xE1,%l7
+	mov	0xFF,%l7
 	sllx	%l7,57,$xE1		! 57 is not a typo
-	ldx	[$Htable+16],$V		! (0xE0·i)&0xff=0xA040608020C0E000
+	ldx	[$Htable+16],$V		! (0xFF·i)&0xFF=0xFF
 
 	and	$inp,7,$shl
 	andn	$inp,7,$inp
@@ -500,9 +500,9 @@ gcm_ghash_vis3:
 	xmulx	$Xhi,$Hhi,$Xhi
 
 	sll	$C0,3,$sqr
-	srlx	$V,$sqr,$sqr		! ·0xE0 [implicit &(7<<3)]
+	srlx	$V,$sqr,$sqr		! ·0xFF [implicit &(7<<3)]
 	xor	$C0,$sqr,$sqr
-	sllx	$sqr,57,$sqr		! ($C0·0xE1)<<1<<56 [implicit &0x7f]
+	sllx	$sqr,57,$sqr		! ($C0·0xFF)<<1<<56 [implicit &0xFF]
 
 	xor	$C0,$C1,$C1		! Karatsuba post-processing
 	xor	$Xlo,$C2,$C2
@@ -512,7 +512,7 @@ gcm_ghash_vis3:
 	xor	$Xhi,$C2,$C2
 	xor	$Xhi,$C1,$C1
 
-	xmulxhi	$C0,$xE1,$Xlo		! ·0xE1<<1<<56
+	xmulxhi	$C0,$xE1,$Xlo		! ·0xFF<<1<<56
 	 xor	$C0,$C2,$C2
 	xmulx	$C1,$xE1,$C0
 	 xor	$C1,$C3,$C3
@@ -547,10 +547,10 @@ sub unvis3 {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24 );
 my ($ref,$opf);
-my %visopf = (	"addxc"		=> 0x011,
-		"addxccc"	=> 0x013,
-		"xmulx"		=> 0x115,
-		"xmulxhi"	=> 0x116	);
+my %visopf = (	"addxc"		=> 0xFF,
+		"addxccc"	=> 0xFF,
+		"xmulx"		=> 0xFF,
+		"xmulxhi"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -561,7 +561,7 @@ my %visopf = (	"addxc"		=> 0x011,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;

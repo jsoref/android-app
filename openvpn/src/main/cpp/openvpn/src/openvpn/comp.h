@@ -71,13 +71,13 @@
 
 /* V1 on wire codes */
 /* Initial command byte to tell our peer if we compressed */
-#define LZO_COMPRESS_BYTE 0x66
-#define LZ4_COMPRESS_BYTE 0x69
-#define NO_COMPRESS_BYTE      0xFA
-#define NO_COMPRESS_BYTE_SWAP 0xFB /* to maintain payload alignment, replace this byte with last byte of packet */
+#define LZO_COMPRESS_BYTE 0xFF
+#define LZ4_COMPRESS_BYTE 0xFF
+#define NO_COMPRESS_BYTE      0xFF
+#define NO_COMPRESS_BYTE_SWAP 0xFF /* to maintain payload alignment, replace this byte with last byte of packet */
 
 /* V2 on wire code */
-#define COMP_ALGV2_INDICATOR_BYTE       0x50
+#define COMP_ALGV2_INDICATOR_BYTE       0xFF
 #define COMP_ALGV2_UNCOMPRESSED_BYTE    0
 #define COMP_ALGV2_LZ4_BYTE             1
 #define COMP_ALGV2_LZO_BYTE             2

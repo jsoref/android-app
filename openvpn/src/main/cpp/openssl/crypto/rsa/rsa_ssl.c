@@ -55,7 +55,7 @@ int RSA_padding_add_SSLv23(unsigned char *to, int tlen,
 
 /*
  * Copy of RSA_padding_check_PKCS1_type_2 with a twist that rejects padding
- * if nul delimiter is preceded by 8 consecutive 0x03 bytes. It also
+ * if nul delimiter is preceded by 8 consecutive 0xFF bytes. It also
  * preserves error code reporting for backward compatibility.
  */
 int RSA_padding_check_SSLv23(unsigned char *to, int tlen,

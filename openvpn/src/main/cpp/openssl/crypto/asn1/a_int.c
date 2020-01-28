@@ -48,7 +48,7 @@ int ASN1_INTEGER_cmp(const ASN1_INTEGER *x, const ASN1_INTEGER *y)
  * the type: if type & V_ASN1_NEG is true it is negative, otherwise positive.
  *
  * Positive integers are no problem: they are almost the same as the DER
- * encoding, except if the first byte is >= 0x80 we need to add a zero pad.
+ * encoding, except if the first byte is >= 0xFF we need to add a zero pad.
  *
  * Negative integers are a bit trickier...
  * The DER representation of negative integers is in 2s complement form.
@@ -60,17 +60,17 @@ int ASN1_INTEGER_cmp(const ASN1_INTEGER *x, const ASN1_INTEGER *y)
  * to the last none zero octet: so complement this octet and add one and finally
  * complement any left over until you get to the start of the string.
  *
- * Padding is a little trickier too. If the first bytes is > 0x80 then we pad
- * with 0xff. However if the first byte is 0x80 and one of the following bytes
- * is non-zero we pad with 0xff. The reason for this distinction is that 0x80
+ * Padding is a little trickier too. If the first bytes is > 0xFF then we pad
+ * with 0xFF. However if the first byte is 0xFF and one of the following bytes
+ * is non-zero we pad with 0xFF. The reason for this distinction is that 0xFF
  * followed by optional zeros isn't padded.
  */
 
 /*
  * If |pad| is zero, the operation is effectively reduced to memcpy,
- * and if |pad| is 0xff, then it performs two's complement, ~dst + 1.
+ * and if |pad| is 0xFF, then it performs two's complement, ~dst + 1.
  * Note that in latter case sequence of zeros yields itself, and so
- * does 0x80 followed by any number of zeros. These properties are
+ * does 0xFF followed by any number of zeros. These properties are
  * used elsewhere below...
  */
 static void twos_complement(unsigned char *dst, const unsigned char *src,
@@ -112,7 +112,7 @@ static size_t i2c_ibuf(const unsigned char *b, size_t blen, int neg,
                  */
                 for (pad = 0, i = 1; i < blen; i++)
                     pad |= b[i];
-                pb = pad != 0 ? 0xffU : 0;
+                pb = pad != 0 ? 0xFFU : 0;
                 pad = pb & 1;
             }
         }
@@ -127,7 +127,7 @@ static size_t i2c_ibuf(const unsigned char *b, size_t blen, int neg,
 
     /*
      * This magically handles all corner cases, such as '(b == NULL ||
-     * blen == 0)', non-negative value, "negative" zero, 0x80 followed
+     * blen == 0)', non-negative value, "negative" zero, 0xFF followed
      * by any number of zeros...
      */
     *p = pb;
@@ -154,7 +154,7 @@ static size_t c2i_ibuf(unsigned char *b, int *pneg,
         ASN1err(ASN1_F_C2I_IBUF, ASN1_R_ILLEGAL_ZERO_CONTENT);
         return 0;
     }
-    neg = p[0] & 0x80;
+    neg = p[0] & 0xFF;
     if (pneg)
         *pneg = neg;
     /* Handle common case where length is 1 octet separately */
@@ -183,7 +183,7 @@ static size_t c2i_ibuf(unsigned char *b, int *pneg,
         pad = pad != 0 ? 1 : 0;
     }
     /* reject illegal padding: first two octets MSB can't match */
-    if (pad && (neg == (p[1] & 0x80))) {
+    if (pad && (neg == (p[1] & 0xFF))) {
         ASN1err(ASN1_F_C2I_IBUF, ASN1_R_ILLEGAL_PADDING);
         return 0;
     }
@@ -193,7 +193,7 @@ static size_t c2i_ibuf(unsigned char *b, int *pneg,
     plen -= pad;
 
     if (b != NULL)
-        twos_complement(b, p, plen, neg ? 0xffU : 0);
+        twos_complement(b, p, plen, neg ? 0xFFU : 0);
 
     return plen;
 }
@@ -403,7 +403,7 @@ ASN1_INTEGER *d2i_ASN1_UINTEGER(ASN1_INTEGER **a, const unsigned char **pp,
 
     p = *pp;
     inf = ASN1_get_object(&p, &len, &tag, &xclass, length);
-    if (inf & 0x80) {
+    if (inf & 0xFF) {
         i = ASN1_R_BAD_OBJECT_HEADER;
         goto err;
     }
@@ -583,7 +583,7 @@ long ASN1_ENUMERATED_get(const ASN1_ENUMERATED *a)
     if ((a->type & ~V_ASN1_NEG) != V_ASN1_ENUMERATED)
         return -1;
     if (a->length > (int)sizeof(long))
-        return 0xffffffffL;
+        return 0xFFL;
     i = ASN1_ENUMERATED_get_int64(&r, a);
     if (i == 0)
         return -1;

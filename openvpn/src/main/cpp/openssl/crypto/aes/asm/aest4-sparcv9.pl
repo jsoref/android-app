@@ -163,19 +163,19 @@ aes_t4_encrypt:
 	std		%f2, [$out + 8]
 
 2:	alignaddrl	$out, %g0, $out
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $tmp, $mask
 
 	faligndata	%f0, %f0, %f4
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
 
-	stda		%f4, [$out + $mask]0xc0	! partial store
+	stda		%f4, [$out + $mask]0xFF	! partial store
 	std		%f6, [$out + 8]
 	add		$out, 16, $out
 	orn		%g0, $mask, $mask
 	retl
-	stda		%f8, [$out + $mask]0xc0	! partial store
+	stda		%f8, [$out + $mask]0xFF	! partial store
 .type	aes_t4_encrypt,#function
 .size	aes_t4_encrypt,.-aes_t4_encrypt
 
@@ -241,19 +241,19 @@ aes_t4_decrypt:
 	std		%f2, [$out + 8]
 
 2:	alignaddrl	$out, %g0, $out
-	mov		0xff, $mask
+	mov		0xFF, $mask
 	srl		$mask, $tmp, $mask
 
 	faligndata	%f0, %f0, %f4
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
 
-	stda		%f4, [$out + $mask]0xc0	! partial store
+	stda		%f4, [$out + $mask]0xFF	! partial store
 	std		%f6, [$out + 8]
 	add		$out, 16, $out
 	orn		%g0, $mask, $mask
 	retl
-	stda		%f8, [$out + $mask]0xc0	! partial store
+	stda		%f8, [$out + $mask]0xFF	! partial store
 .type	aes_t4_decrypt,#function
 .size	aes_t4_decrypt,.-aes_t4_decrypt
 ___
@@ -853,7 +853,7 @@ AES_set_encrypt_key:
 	mov		-1, %o0
 	brz,a,pn	%o2, 1f
 	mov		-1, %o0
-	andncc		%o1, 0x1c0, %g0
+	andncc		%o1, 0xFF, %g0
 	bnz,a,pn	%icc, 1f
 	mov		-2, %o0
 	cmp		%o1, 128
@@ -876,7 +876,7 @@ AES_set_decrypt_key:
 	mov		-1, %o0
 	brz,a,pn	%o2, 1f
 	mov		-1, %o0
-	andncc		%o1, 0x1c0, %g0
+	andncc		%o1, 0xFF, %g0
 	bnz,a,pn	%icc, 1f
 	mov		-2, %o0
 	cmp		%o1, 128

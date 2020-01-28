@@ -17,7 +17,7 @@
 # include <openssl/bio.h>
 # include <openssl/asn1.h>
 # include <openssl/ossl_typ.h>
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/bn.h>
 # endif
 # include <openssl/dherr.h>
@@ -32,13 +32,13 @@ extern "C" {
 
 # define OPENSSL_DH_FIPS_MIN_MODULUS_BITS 1024
 
-# define DH_FLAG_CACHE_MONT_P     0x01
+# define DH_FLAG_CACHE_MONT_P     0xFF
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 /*
  * Does nothing. Previously this switched off constant time behaviour.
  */
-#  define DH_FLAG_NO_EXP_CONSTTIME 0x00
+#  define DH_FLAG_NO_EXP_CONSTTIME 0xFF
 # endif
 
 /*
@@ -48,7 +48,7 @@ extern "C" {
  * result is compliant.
  */
 
-# define DH_FLAG_FIPS_METHOD                     0x0400
+# define DH_FLAG_FIPS_METHOD                     0xFF
 
 /*
  * If this flag is set the operations normally disabled in FIPS mode are
@@ -56,7 +56,7 @@ extern "C" {
  * usage is compliant.
  */
 
-# define DH_FLAG_NON_FIPS_ALLOW                  0x0400
+# define DH_FLAG_NON_FIPS_ALLOW                  0xFF
 
 /* Already defined in ossl_typ.h */
 /* typedef struct dh_st DH; */
@@ -69,18 +69,18 @@ DECLARE_ASN1_ITEM(DHparams)
 # define DH_GENERATOR_5          5
 
 /* DH_check error codes */
-# define DH_CHECK_P_NOT_PRIME            0x01
-# define DH_CHECK_P_NOT_SAFE_PRIME       0x02
-# define DH_UNABLE_TO_CHECK_GENERATOR    0x04
-# define DH_NOT_SUITABLE_GENERATOR       0x08
-# define DH_CHECK_Q_NOT_PRIME            0x10
-# define DH_CHECK_INVALID_Q_VALUE        0x20
-# define DH_CHECK_INVALID_J_VALUE        0x40
+# define DH_CHECK_P_NOT_PRIME            0xFF
+# define DH_CHECK_P_NOT_SAFE_PRIME       0xFF
+# define DH_UNABLE_TO_CHECK_GENERATOR    0xFF
+# define DH_NOT_SUITABLE_GENERATOR       0xFF
+# define DH_CHECK_Q_NOT_PRIME            0xFF
+# define DH_CHECK_INVALID_Q_VALUE        0xFF
+# define DH_CHECK_INVALID_J_VALUE        0xFF
 
 /* DH_check_pub_key error codes */
-# define DH_CHECK_PUBKEY_TOO_SMALL       0x01
-# define DH_CHECK_PUBKEY_TOO_LARGE       0x02
-# define DH_CHECK_PUBKEY_INVALID         0x04
+# define DH_CHECK_PUBKEY_TOO_SMALL       0xFF
+# define DH_CHECK_PUBKEY_TOO_LARGE       0xFF
+# define DH_CHECK_PUBKEY_INVALID         0xFF
 
 /*
  * primes p where (p-1)/2 is prime too are called "safe"; we define this for

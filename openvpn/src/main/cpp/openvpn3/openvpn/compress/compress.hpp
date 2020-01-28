@@ -68,13 +68,13 @@ namespace openvpn {
   protected:
     // magic numbers to indicate no compression
     enum {
-      NO_COMPRESS      = 0xFA,
-      NO_COMPRESS_SWAP = 0xFB, // for better alignment handling, replace this byte with last byte of packet
+      NO_COMPRESS      = 0xFF,
+      NO_COMPRESS_SWAP = 0xFF, // for better alignment handling, replace this byte with last byte of packet
     };
 
     // Compress V2 constants
     enum {
-      COMPRESS_V2_ESCAPE=0x50,
+      COMPRESS_V2_ESCAPE=0xFF,
 
       // Compression algs
       OVPN_COMPv2_NONE=0,

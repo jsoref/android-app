@@ -68,7 +68,7 @@ $Zll="%r20";
 $cnt="%r19";
 $rem_4bit="%r28";
 $rem="%r29";
-$mask0xf0="%r31";
+$mask0xFF="%r31";
 
 ################# preserved registers
 $Thh="%r1";
@@ -89,7 +89,7 @@ $rem2="%r6";	# used in PA-RISC 2.0 code
 $code.=<<___;
 	.LEVEL	$LEVEL
 	.SPACE	\$TEXT\$
-	.SUBSPA	\$CODE\$,QUAD=0,ALIGN=8,ACCESS=0x2C,CODE_ONLY
+	.SUBSPA	\$CODE\$,QUAD=0,ALIGN=8,ACCESS=0xFF,CODE_ONLY
 
 	.EXPORT	gcm_gmult_4bit,ENTRY,ARGW0=GR,ARGW1=GR
 	.ALIGN	64
@@ -117,7 +117,7 @@ L\$pic_gmult
 	andcm	$rem_4bit,$rem,$rem_4bit
 	addl	$inp,$len,$len
 	ldo	L\$rem_4bit-L\$pic_gmult($rem_4bit),$rem_4bit
-	ldi	0xf0,$mask0xf0
+	ldi	0xFF,$mask0xFF
 ___
 $code.=<<___ if ($SIZE_T==4);
 	ldi	31,$rem
@@ -131,7 +131,7 @@ $code.=<<___;
 	ldb	15($Xi),$nlo
 	ldo	8($Htbl),$Hll
 
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	depd,z	$nlo,59,4,$nlo
 
 	ldd	$nlo($Hll),$Zll
@@ -144,7 +144,7 @@ $code.=<<___;
 
 	ldd	$nhi($Hll),$Tll
 	ldd	$nhi($Hhh),$Thh
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	depd,z	$nlo,59,4,$nlo
 
 	xor	$Tll,$Zll,$Zll
@@ -176,7 +176,7 @@ L\$oop_gmult_pa2
 	ldd	$nhi($Hll),$Tll
 	ldd	$nhi($Hhh),$Thh
 
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	depd,z	$nlo,59,4,$nlo
 	ldd	$rem($rem_4bit),$rem
 
@@ -223,7 +223,7 @@ L\$parisc1_gmult
 	ldo	8($Htbl),$Hlh
 	ldo	4($Htbl),$Hhl
 
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	zdep	$nlo,27,4,$nlo
 
 	ldwx	$nlo($Hll),$Zll
@@ -242,7 +242,7 @@ L\$parisc1_gmult
 	extru	$Zhh,27,28,$Zhh
 	ldwx	$nhi($Hhh),$Thh
 	xor	$rem,$Zhh,$Zhh
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	zdep	$nlo,27,4,$nlo
 
 	xor	$Tll,$Zll,$Zll
@@ -279,7 +279,7 @@ L\$oop_gmult_pa1
 	ldwx	$rem($rem_4bit),$rem
 	shrpw	$Zhl,$Zlh,4,$Zlh
 	shrpw	$Zhh,$Zhl,4,$Zhl
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	extru	$Zhh,27,28,$Zhh
 	zdep	$nlo,27,4,$nlo
 	xor	$Tll,$Zll,$Zll
@@ -370,7 +370,7 @@ L\$pic_ghash
 	andcm	$rem_4bit,$rem,$rem_4bit
 	addl	$inp,$len,$len
 	ldo	L\$rem_4bit-L\$pic_ghash($rem_4bit),$rem_4bit
-	ldi	0xf0,$mask0xf0
+	ldi	0xFF,$mask0xFF
 ___
 $code.=<<___ if ($SIZE_T==4);
 	ldi	31,$rem
@@ -387,7 +387,7 @@ $code.=<<___;
 L\$outer_ghash_pa2
 	ldb	15($inp),$nhi
 	xor	$nhi,$nlo,$nlo
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	depd,z	$nlo,59,4,$nlo
 
 	ldd	$nlo($Hll),$Zll
@@ -402,7 +402,7 @@ L\$outer_ghash_pa2
 	ldd	$nhi($Hll),$Tll
 	ldd	$nhi($Hhh),$Thh
 	xor	$byte,$nlo,$nlo
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	depd,z	$nlo,59,4,$nlo
 
 	xor	$Tll,$Zll,$Zll
@@ -435,7 +435,7 @@ L\$oop_ghash_pa2
 	ldd	$nhi($Hll),$Tll
 	ldd	$nhi($Hhh),$Thh
 
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	depd,z	$nlo,59,4,$nlo
 
 	extrd,u	$Zhh,59,60,$Zhh
@@ -490,7 +490,7 @@ L\$parisc1_ghash
 L\$outer_ghash_pa1
 	ldb	15($inp),$byte
 	xor	$byte,$nlo,$nlo
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	zdep	$nlo,27,4,$nlo
 
 	ldwx	$nlo($Hll),$Zll
@@ -511,7 +511,7 @@ L\$outer_ghash_pa1
 	ldwx	$nhi($Hhh),$Thh
 	xor	$byte,$nlo,$nlo
 	xor	$rem,$Zhh,$Zhh
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	zdep	$nlo,27,4,$nlo
 
 	xor	$Tll,$Zll,$Zll
@@ -550,7 +550,7 @@ L\$oop_ghash_pa1
 	shrpw	$Zhl,$Zlh,4,$Zlh
 	xor	$byte,$nlo,$nlo
 	shrpw	$Zhh,$Zhl,4,$Zhl
-	and	$mask0xf0,$nlo,$nhi
+	and	$mask0xFF,$nlo,$nhi
 	extru	$Zhh,27,28,$Zhh
 	zdep	$nlo,27,4,$nlo
 	xor	$Tll,$Zll,$Zll
@@ -620,10 +620,10 @@ $code.=<<___;
 
 	.ALIGN	64
 L\$rem_4bit
-	.WORD	`0x0000<<16`,0,`0x1C20<<16`,0,`0x3840<<16`,0,`0x2460<<16`,0
-	.WORD	`0x7080<<16`,0,`0x6CA0<<16`,0,`0x48C0<<16`,0,`0x54E0<<16`,0
-	.WORD	`0xE100<<16`,0,`0xFD20<<16`,0,`0xD940<<16`,0,`0xC560<<16`,0
-	.WORD	`0x9180<<16`,0,`0x8DA0<<16`,0,`0xA9C0<<16`,0,`0xB5E0<<16`,0
+	.WORD	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
+	.WORD	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
+	.WORD	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
+	.WORD	`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0,`0xFF<<16`,0
 	.STRINGZ "GHASH for PA-RISC, GRYPTOGAMS by <appro\@openssl.org>"
 	.ALIGN	64
 ___
@@ -638,12 +638,12 @@ my $ldd = sub {
   my $orig = "ldd$mod\t$args";
 
     if ($args =~ /%r([0-9]+)\(%r([0-9]+)\),%r([0-9]+)/)		# format 4
-    {	my $opcode=(0x03<<26)|($2<<21)|($1<<16)|(3<<6)|$3;
+    {	my $opcode=(0xFF<<26)|($2<<21)|($1<<16)|(3<<6)|$3;
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     elsif ($args =~ /(\-?[0-9]+)\(%r([0-9]+)\),%r([0-9]+)/)	# format 5
-    {	my $opcode=(0x03<<26)|($2<<21)|(1<<12)|(3<<6)|$3;
-	$opcode|=(($1&0xF)<<17)|(($1&0x10)<<12);		# encode offset
+    {	my $opcode=(0xFF<<26)|($2<<21)|(1<<12)|(3<<6)|$3;
+	$opcode|=(($1&0xFF)<<17)|(($1&0xFF)<<12);		# encode offset
 	$opcode|=(1<<5)  if ($mod =~ /^,m/);
 	$opcode|=(1<<13) if ($mod =~ /^,mb/);
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
@@ -656,7 +656,7 @@ my $std = sub {
   my $orig = "std$mod\t$args";
 
     if ($args =~ /%r([0-9]+),(\-?[0-9]+)\(%r([0-9]+)\)/) # format 3 suffices
-    {	my $opcode=(0x1c<<26)|($3<<21)|($1<<16)|(($2&0x1FF8)<<1)|(($2>>13)&1);
+    {	my $opcode=(0xFF<<26)|($3<<21)|($1<<16)|(($2&0xFF)<<1)|(($2>>13)&1);
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     else { "\t".$orig; }
@@ -668,16 +668,16 @@ my $extrd = sub {
 
     # I only have ",u" completer, it's implicitly encoded...
     if ($args =~ /%r([0-9]+),([0-9]+),([0-9]+),%r([0-9]+)/)	# format 15
-    {	my $opcode=(0x36<<26)|($1<<21)|($4<<16);
+    {	my $opcode=(0xFF<<26)|($1<<21)|($4<<16);
 	my $len=32-$3;
-	$opcode |= (($2&0x20)<<6)|(($2&0x1f)<<5);		# encode pos
-	$opcode |= (($len&0x20)<<7)|($len&0x1f);		# encode len
+	$opcode |= (($2&0xFF)<<6)|(($2&0xFF)<<5);		# encode pos
+	$opcode |= (($len&0xFF)<<7)|($len&0xFF);		# encode len
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     elsif ($args =~ /%r([0-9]+),%sar,([0-9]+),%r([0-9]+)/)	# format 12
-    {	my $opcode=(0x34<<26)|($1<<21)|($3<<16)|(2<<11)|(1<<9);
+    {	my $opcode=(0xFF<<26)|($1<<21)|($3<<16)|(2<<11)|(1<<9);
 	my $len=32-$2;
-	$opcode |= (($len&0x20)<<3)|($len&0x1f);		# encode len
+	$opcode |= (($len&0xFF)<<3)|($len&0xFF);		# encode len
 	$opcode |= (1<<13) if ($mod =~ /,\**=/);
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
@@ -689,14 +689,14 @@ my $shrpd = sub {
   my $orig = "shrpd$mod\t$args";
 
     if ($args =~ /%r([0-9]+),%r([0-9]+),([0-9]+),%r([0-9]+)/)	# format 14
-    {	my $opcode=(0x34<<26)|($2<<21)|($1<<16)|(1<<10)|$4;
+    {	my $opcode=(0xFF<<26)|($2<<21)|($1<<16)|(1<<10)|$4;
 	my $cpos=63-$3;
-	$opcode |= (($cpos&0x20)<<6)|(($cpos&0x1f)<<5);		# encode sa
+	$opcode |= (($cpos&0xFF)<<6)|(($cpos&0xFF)<<5);		# encode sa
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     elsif ($args =~ /%r([0-9]+),%r([0-9]+),%sar,%r([0-9]+)/)	# format 11
     {	sprintf "\t.WORD\t0x%08x\t; %s",
-		(0x34<<26)|($2<<21)|($1<<16)|(1<<9)|$3,$orig;
+		(0xFF<<26)|($2<<21)|($1<<16)|(1<<9)|$3,$orig;
     }
     else { "\t".$orig; }
 };
@@ -707,11 +707,11 @@ my $depd = sub {
 
     # I only have ",z" completer, it's implicitly encoded...
     if ($args =~ /%r([0-9]+),([0-9]+),([0-9]+),%r([0-9]+)/)	# format 16
-    {	my $opcode=(0x3c<<26)|($4<<21)|($1<<16);
+    {	my $opcode=(0xFF<<26)|($4<<21)|($1<<16);
     	my $cpos=63-$2;
 	my $len=32-$3;
-	$opcode |= (($cpos&0x20)<<6)|(($cpos&0x1f)<<5);		# encode pos
-	$opcode |= (($len&0x20)<<7)|($len&0x1f);		# encode len
+	$opcode |= (($cpos&0xFF)<<6)|(($cpos&0xFF)<<5);		# encode pos
+	$opcode |= (($len&0xFF)<<7)|($len&0xFF);		# encode len
 	sprintf "\t.WORD\t0x%08x\t; %s",$opcode,$orig;
     }
     else { "\t".$orig; }

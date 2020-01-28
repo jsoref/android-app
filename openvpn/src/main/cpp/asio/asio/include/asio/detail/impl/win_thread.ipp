@@ -132,7 +132,7 @@ unsigned int __stdcall win_thread_function(void* arg)
   return 0;
 }
 
-#if defined(WINVER) && (WINVER < 0x0500)
+#if defined(WINVER) && (WINVER < 0xFF)
 void __stdcall apc_function(ULONG) {}
 #else
 void __stdcall apc_function(ULONG_PTR) {}

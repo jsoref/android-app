@@ -91,19 +91,19 @@ $code.=<<___;
 
 .align	7
 rcon:
-.long	0x01000000, 0x01000000, 0x01000000, 0x01000000	?rev
-.long	0x1b000000, 0x1b000000, 0x1b000000, 0x1b000000	?rev
-.long	0x0d0e0f0c, 0x0d0e0f0c, 0x0d0e0f0c, 0x0d0e0f0c	?rev
+.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
+.long	0xFF, 0xFF, 0xFF, 0xFF	?rev
 .long	0,0,0,0						?asis
 Lconsts:
 	mflr	r0
 	bcl	20,31,\$+4
 	mflr	$ptr	 #vvvvv "distance between . and rcon
-	addi	$ptr,$ptr,-0x48
+	addi	$ptr,$ptr,-0xFF
 	mtlr	r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .asciz	"AES for PowerISA 2.07, CRYPTOGAMS by <appro\@openssl.org>"
 
 .globl	.${prefix}_set_encrypt_key
@@ -123,10 +123,10 @@ Lset_encrypt_key:
 	blt-		Lenc_key_abort
 	cmpwi		$bits,256
 	bgt-		Lenc_key_abort
-	andi.		r0,$bits,0x3f
+	andi.		r0,$bits,0xFF
 	bne-		Lenc_key_abort
 
-	lis		r0,0xfff0
+	lis		r0,0xFF
 	mfspr		$vrsave,256
 	mtspr		256,r0
 
@@ -137,14 +137,14 @@ Lset_encrypt_key:
 	lvx		$in0,0,$inp
 	addi		$inp,$inp,15		# 15 is not typo
 	lvsr		$key,0,r9		# borrow $key
-	li		r8,0x20
+	li		r8,0xFF
 	cmpwi		$bits,192
 	lvx		$in1,0,$inp
-	le?vspltisb	$mask,0x0f		# borrow $mask
+	le?vspltisb	$mask,0xFF		# borrow $mask
 	lvx		$rcon,0,$ptr
 	le?vxor		$key,$key,$mask		# adjust for byte swap
 	lvx		$mask,r8,$ptr
-	addi		$ptr,$ptr,0x10
+	addi		$ptr,$ptr,0xFF
 	vperm		$in0,$in0,$in1,$key	# align [and byte swap in LE]
 	li		$cnt,8
 	vxor		$zero,$zero,$zero
@@ -221,7 +221,7 @@ Loop128:
 	 stvx		$stage,0,$out
 
 	addi		$inp,$out,15		# 15 is not typo
-	addi		$out,$out,0x50
+	addi		$out,$out,0xFF
 
 	li		$rounds,10
 	b		Ldone
@@ -298,7 +298,7 @@ Loop192:
 	bdnz		Loop192
 
 	li		$rounds,12
-	addi		$out,$out,0x20
+	addi		$out,$out,0xFF
 	b		Ldone
 
 .align	4
@@ -365,7 +365,7 @@ Lenc_key_abort:
 	mr		r3,$ptr
 	blr
 	.long		0
-	.byte		0,12,0x14,1,0,0,3,0
+	.byte		0,12,0xFF,1,0,0,3,0
 	.long		0
 .size	.${prefix}_set_encrypt_key,.-.${prefix}_set_encrypt_key
 
@@ -413,7 +413,7 @@ Ldec_key_abort:
 	addi		$sp,$sp,$FRAME
 	blr
 	.long		0
-	.byte		0,12,4,1,0x80,0,3,0
+	.byte		0,12,4,1,0xFF,0,3,0
 	.long		0
 .size	.${prefix}_set_decrypt_key,.-.${prefix}_set_decrypt_key
 ___
@@ -430,7 +430,7 @@ $code.=<<___;
 .align	5
 .${prefix}_${dir}crypt:
 	lwz		$rounds,240($key)
-	lis		r0,0xfc00
+	lis		r0,0xFF
 	mfspr		$vrsave,256
 	li		$idx,15			# 15 is not typo
 	mtspr		256,r0
@@ -439,7 +439,7 @@ $code.=<<___;
 	neg		r11,$out
 	lvx		v1,$idx,$inp
 	lvsl		v2,0,$inp		# inpperm
-	le?vspltisb	v4,0x0f
+	le?vspltisb	v4,0xFF
 	?lvsl		v3,0,r11		# outperm
 	le?vxor		v2,v2,v4
 	li		$idx,16
@@ -490,7 +490,7 @@ Loop_${dir}c:
 	mtspr		256,$vrsave
 	blr
 	.long		0
-	.byte		0,12,0x14,0,0,0,3,0
+	.byte		0,12,0xFF,0,0,0,3,0
 	.long		0
 .size	.${prefix}_${dir}crypt,.-.${prefix}_${dir}crypt
 ___
@@ -512,13 +512,13 @@ $code.=<<___;
 	bltlr-
 
 	cmpwi		$enc,0			# test direction
-	lis		r0,0xffe0
+	lis		r0,0xFF
 	mfspr		$vrsave,256
 	mtspr		256,r0
 
 	li		$idx,15
 	vxor		$rndkey0,$rndkey0,$rndkey0
-	le?vspltisb	$tmp,0x0f
+	le?vspltisb	$tmp,0xFF
 
 	lvx		$ivec,0,$ivp		# load [unaligned] iv
 	lvsl		$inpperm,0,$ivp
@@ -648,7 +648,7 @@ Lcbc_done:
 	li		$idx,15			# 15 is not typo
 	vxor		$rndkey0,$rndkey0,$rndkey0
 	vspltisb	$outmask,-1
-	le?vspltisb	$tmp,0x0f
+	le?vspltisb	$tmp,0xFF
 	?lvsl		$outperm,0,$enc
 	?vperm		$outmask,$rndkey0,$outmask,$outperm
 	le?vxor		$outperm,$outperm,$tmp
@@ -663,7 +663,7 @@ Lcbc_done:
 	mtspr		256,$vrsave
 	blr
 	.long		0
-	.byte		0,12,0x14,0,0,0,6,0
+	.byte		0,12,0xFF,0,0,0,6,0
 	.long		0
 ___
 #########################################################################
@@ -707,19 +707,19 @@ _aesp8_cbc_decrypt8x:
 	stvx		v31,r11,$sp
 	li		r0,-1
 	stw		$vrsave,`$FRAME+21*16-4`($sp)	# save vrsave
-	li		$x10,0x10
+	li		$x10,0xFF
 	$PUSH		r26,`$FRAME+21*16+0*$SIZE_T`($sp)
-	li		$x20,0x20
+	li		$x20,0xFF
 	$PUSH		r27,`$FRAME+21*16+1*$SIZE_T`($sp)
-	li		$x30,0x30
+	li		$x30,0xFF
 	$PUSH		r28,`$FRAME+21*16+2*$SIZE_T`($sp)
-	li		$x40,0x40
+	li		$x40,0xFF
 	$PUSH		r29,`$FRAME+21*16+3*$SIZE_T`($sp)
-	li		$x50,0x50
+	li		$x50,0xFF
 	$PUSH		r30,`$FRAME+21*16+4*$SIZE_T`($sp)
-	li		$x60,0x60
+	li		$x60,0xFF
 	$PUSH		r31,`$FRAME+21*16+5*$SIZE_T`($sp)
-	li		$x70,0x70
+	li		$x70,0xFF
 	mtspr		256,r0
 
 	subi		$rounds,$rounds,3	# -4 in total
@@ -727,7 +727,7 @@ _aesp8_cbc_decrypt8x:
 
 	lvx		$rndkey0,$x00,$key	# load key schedule
 	lvx		v30,$x10,$key
-	addi		$key,$key,0x20
+	addi		$key,$key,0xFF
 	lvx		v31,$x00,$key
 	?vperm		$rndkey0,$rndkey0,v30,$keyperm
 	addi		$key_,$sp,$FRAME+15
@@ -736,12 +736,12 @@ _aesp8_cbc_decrypt8x:
 Load_cbc_dec_key:
 	?vperm		v24,v30,v31,$keyperm
 	lvx		v30,$x10,$key
-	addi		$key,$key,0x20
+	addi		$key,$key,0xFF
 	stvx		v24,$x00,$key_		# off-load round[1]
 	?vperm		v25,v31,v30,$keyperm
 	lvx		v31,$x00,$key
 	stvx		v25,$x10,$key_		# off-load round[2]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 	bdnz		Load_cbc_dec_key
 
 	lvx		v26,$x10,$key
@@ -772,7 +772,7 @@ Load_cbc_dec_key:
 	 le?li		$idx,8
 	lvx_u		$in0,$x00,$inp		# load first 8 "words"
 	 le?lvsl	$inpperm,0,$idx
-	 le?vspltisb	$tmp,0x0f
+	 le?vspltisb	$tmp,0xFF
 	lvx_u		$in1,$x10,$inp
 	 le?vxor	$inpperm,$inpperm,$tmp	# transform for lvx_u/stvx_u
 	lvx_u		$in2,$x20,$inp
@@ -789,7 +789,7 @@ Load_cbc_dec_key:
 	 le?vperm	$in4,$in4,$in4,$inpperm
 	vxor		$out2,$in2,$rndkey0
 	lvx_u		$in7,$x70,$inp
-	addi		$inp,$inp,0x80
+	addi		$inp,$inp,0xFF
 	 le?vperm	$in5,$in5,$in5,$inpperm
 	vxor		$out3,$in3,$rndkey0
 	 le?vperm	$in6,$in6,$in6,$inpperm
@@ -812,7 +812,7 @@ Loop_cbc_dec8x:
 	vncipher	$out6,$out6,v24
 	vncipher	$out7,$out7,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vncipher	$out0,$out0,v25
 	vncipher	$out1,$out1,v25
@@ -929,7 +929,7 @@ Loop_cbc_dec8x:
 	vmr		$ivec,$in7
 	 le?vperm	$in5,$in5,$in5,$inpperm
 	 lvx_u		$in7,$x70,$inp
-	 addi		$inp,$inp,0x80
+	 addi		$inp,$inp,0xFF
 
 	le?vperm	$out0,$out0,$out0,$inpperm
 	le?vperm	$out1,$out1,$out1,$inpperm
@@ -956,7 +956,7 @@ Loop_cbc_dec8x:
 	stvx_u		$out6,$x60,$out
 	 vxor		$out6,$in6,$rndkey0
 	stvx_u		$out7,$x70,$out
-	addi		$out,$out,0x80
+	addi		$out,$out,0xFF
 	 vxor		$out7,$in7,$rndkey0
 
 	mtctr		$rounds
@@ -976,7 +976,7 @@ Loop_cbc_dec8x_tail:				# up to 7 "words" tail...
 	vncipher	$out6,$out6,v24
 	vncipher	$out7,$out7,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vncipher	$out1,$out1,v25
 	vncipher	$out2,$out2,v25
@@ -1088,7 +1088,7 @@ Lcbc_dec8x_seven:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x50,$out
 	stvx_u		$out7,$x60,$out
-	addi		$out,$out,0x70
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1113,7 +1113,7 @@ Lcbc_dec8x_six:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x40,$out
 	stvx_u		$out7,$x50,$out
-	addi		$out,$out,0x60
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1135,7 +1135,7 @@ Lcbc_dec8x_five:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x30,$out
 	stvx_u		$out7,$x40,$out
-	addi		$out,$out,0x50
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1154,7 +1154,7 @@ Lcbc_dec8x_four:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x20,$out
 	stvx_u		$out7,$x30,$out
-	addi		$out,$out,0x40
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1170,7 +1170,7 @@ Lcbc_dec8x_three:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x10,$out
 	stvx_u		$out7,$x20,$out
-	addi		$out,$out,0x30
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1183,7 +1183,7 @@ Lcbc_dec8x_two:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x00,$out
 	stvx_u		$out7,$x10,$out
-	addi		$out,$out,0x20
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1193,7 +1193,7 @@ Lcbc_dec8x_one:
 
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out7,0,$out
-	addi		$out,$out,0x10
+	addi		$out,$out,0xFF
 
 Lcbc_dec8x_done:
 	le?vperm	$ivec,$ivec,$ivec,$inpperm
@@ -1250,7 +1250,7 @@ Lcbc_dec8x_done:
 	addi		$sp,$sp,`$FRAME+21*16+6*$SIZE_T`
 	blr
 	.long		0
-	.byte		0,12,0x04,0,0x80,6,6,0
+	.byte		0,12,0xFF,0,0xFF,6,6,0
 	.long		0
 .size	.${prefix}_cbc_encrypt,.-.${prefix}_cbc_encrypt
 ___
@@ -1271,13 +1271,13 @@ $code.=<<___;
 	${UCMP}i	$len,1
 	bltlr-
 
-	lis		r0,0xfff0
+	lis		r0,0xFF
 	mfspr		$vrsave,256
 	mtspr		256,r0
 
 	li		$idx,15
 	vxor		$rndkey0,$rndkey0,$rndkey0
-	le?vspltisb	$tmp,0x0f
+	le?vspltisb	$tmp,0xFF
 
 	lvx		$ivec,0,$ivp		# load [unaligned] iv
 	lvsl		$inpperm,0,$ivp
@@ -1369,7 +1369,7 @@ Loop_ctr32_enc:
 	mtspr		256,$vrsave
 	blr
 	.long		0
-	.byte		0,12,0x14,0,0,0,6,0
+	.byte		0,12,0xFF,0,0,0,6,0
 	.long		0
 ___
 #########################################################################
@@ -1414,26 +1414,26 @@ _aesp8_ctr32_encrypt8x:
 	stvx		v31,r11,$sp
 	li		r0,-1
 	stw		$vrsave,`$FRAME+21*16-4`($sp)	# save vrsave
-	li		$x10,0x10
+	li		$x10,0xFF
 	$PUSH		r26,`$FRAME+21*16+0*$SIZE_T`($sp)
-	li		$x20,0x20
+	li		$x20,0xFF
 	$PUSH		r27,`$FRAME+21*16+1*$SIZE_T`($sp)
-	li		$x30,0x30
+	li		$x30,0xFF
 	$PUSH		r28,`$FRAME+21*16+2*$SIZE_T`($sp)
-	li		$x40,0x40
+	li		$x40,0xFF
 	$PUSH		r29,`$FRAME+21*16+3*$SIZE_T`($sp)
-	li		$x50,0x50
+	li		$x50,0xFF
 	$PUSH		r30,`$FRAME+21*16+4*$SIZE_T`($sp)
-	li		$x60,0x60
+	li		$x60,0xFF
 	$PUSH		r31,`$FRAME+21*16+5*$SIZE_T`($sp)
-	li		$x70,0x70
+	li		$x70,0xFF
 	mtspr		256,r0
 
 	subi		$rounds,$rounds,3	# -4 in total
 
 	lvx		$rndkey0,$x00,$key	# load key schedule
 	lvx		v30,$x10,$key
-	addi		$key,$key,0x20
+	addi		$key,$key,0xFF
 	lvx		v31,$x00,$key
 	?vperm		$rndkey0,$rndkey0,v30,$keyperm
 	addi		$key_,$sp,$FRAME+15
@@ -1442,12 +1442,12 @@ _aesp8_ctr32_encrypt8x:
 Load_ctr32_enc_key:
 	?vperm		v24,v30,v31,$keyperm
 	lvx		v30,$x10,$key
-	addi		$key,$key,0x20
+	addi		$key,$key,0xFF
 	stvx		v24,$x00,$key_		# off-load round[1]
 	?vperm		v25,v31,v30,$keyperm
 	lvx		v31,$x00,$key
 	stvx		v25,$x10,$key_		# off-load round[2]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 	bdnz		Load_ctr32_enc_key
 
 	lvx		v26,$x10,$key
@@ -1484,7 +1484,7 @@ Load_ctr32_enc_key:
 	 le?lvsl	$inpperm,0,$idx
 	vadduwm		$out4,$out2,$two
 	vxor		$out2,$out2,$rndkey0
-	 le?vspltisb	$tmp,0x0f
+	 le?vspltisb	$tmp,0xFF
 	vadduwm		$out5,$out3,$two
 	vxor		$out3,$out3,$rndkey0
 	 le?vxor	$inpperm,$inpperm,$tmp	# transform for lvx_u/stvx_u
@@ -1510,7 +1510,7 @@ Loop_ctr32_enc8x:
 	vcipher 	$out7,$out7,v24
 Loop_ctr32_enc8x_middle:
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vcipher 	$out0,$out0,v25
 	vcipher 	$out1,$out1,v25
@@ -1583,7 +1583,7 @@ Loop_ctr32_enc8x_middle:
 	 lvx_u		$in6,$x60,$inp
 	vcipher		$out7,$out7,v28
 	 lvx_u		$in7,$x70,$inp
-	 addi		$inp,$inp,0x80
+	 addi		$inp,$inp,0xFF
 
 	vcipher		$out0,$out0,v29
 	 le?vperm	$in0,$in0,$in0,$inpperm
@@ -1676,25 +1676,25 @@ Loop_ctr32_enc8x_middle:
 	stvx_u		$in6,$x60,$out
 	 vcipher	$out7,$out7,v24
 	stvx_u		$in7,$x70,$out
-	addi		$out,$out,0x80
+	addi		$out,$out,0xFF
 
 	b		Loop_ctr32_enc8x_middle
 
 .align	5
 Lctr32_enc8x_break:
-	cmpwi		$len,-0x60
+	cmpwi		$len,-0xFF
 	blt		Lctr32_enc8x_one
 	nop
 	beq		Lctr32_enc8x_two
-	cmpwi		$len,-0x40
+	cmpwi		$len,-0xFF
 	blt		Lctr32_enc8x_three
 	nop
 	beq		Lctr32_enc8x_four
-	cmpwi		$len,-0x20
+	cmpwi		$len,-0xFF
 	blt		Lctr32_enc8x_five
 	nop
 	beq		Lctr32_enc8x_six
-	cmpwi		$len,0x00
+	cmpwi		$len,0xFF
 	blt		Lctr32_enc8x_seven
 
 Lctr32_enc8x_eight:
@@ -1723,7 +1723,7 @@ Lctr32_enc8x_eight:
 	le?vperm	$out7,$out7,$out7,$inpperm
 	stvx_u		$out6,$x60,$out
 	stvx_u		$out7,$x70,$out
-	addi		$out,$out,0x80
+	addi		$out,$out,0xFF
 	b		Lctr32_enc8x_done
 
 .align	5
@@ -1750,7 +1750,7 @@ Lctr32_enc8x_seven:
 	le?vperm	$out6,$out6,$out6,$inpperm
 	stvx_u		$out5,$x50,$out
 	stvx_u		$out6,$x60,$out
-	addi		$out,$out,0x70
+	addi		$out,$out,0xFF
 	b		Lctr32_enc8x_done
 
 .align	5
@@ -1774,7 +1774,7 @@ Lctr32_enc8x_six:
 	le?vperm	$out5,$out5,$out5,$inpperm
 	stvx_u		$out4,$x40,$out
 	stvx_u		$out5,$x50,$out
-	addi		$out,$out,0x60
+	addi		$out,$out,0xFF
 	b		Lctr32_enc8x_done
 
 .align	5
@@ -1795,7 +1795,7 @@ Lctr32_enc8x_five:
 	le?vperm	$out4,$out4,$out4,$inpperm
 	stvx_u		$out3,$x30,$out
 	stvx_u		$out4,$x40,$out
-	addi		$out,$out,0x50
+	addi		$out,$out,0xFF
 	b		Lctr32_enc8x_done
 
 .align	5
@@ -1813,7 +1813,7 @@ Lctr32_enc8x_four:
 	le?vperm	$out3,$out3,$out3,$inpperm
 	stvx_u		$out2,$x20,$out
 	stvx_u		$out3,$x30,$out
-	addi		$out,$out,0x40
+	addi		$out,$out,0xFF
 	b		Lctr32_enc8x_done
 
 .align	5
@@ -1828,7 +1828,7 @@ Lctr32_enc8x_three:
 	le?vperm	$out2,$out2,$out2,$inpperm
 	stvx_u		$out1,$x10,$out
 	stvx_u		$out2,$x20,$out
-	addi		$out,$out,0x30
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1840,7 +1840,7 @@ Lctr32_enc8x_two:
 	le?vperm	$out1,$out1,$out1,$inpperm
 	stvx_u		$out0,$x00,$out
 	stvx_u		$out1,$x10,$out
-	addi		$out,$out,0x20
+	addi		$out,$out,0xFF
 	b		Lcbc_dec8x_done
 
 .align	5
@@ -1849,7 +1849,7 @@ Lctr32_enc8x_one:
 
 	le?vperm	$out0,$out0,$out0,$inpperm
 	stvx_u		$out0,0,$out
-	addi		$out,$out,0x10
+	addi		$out,$out,0xFF
 
 Lctr32_enc8x_done:
 	li		r10,`$FRAME+15`
@@ -1903,7 +1903,7 @@ Lctr32_enc8x_done:
 	addi		$sp,$sp,`$FRAME+21*16+6*$SIZE_T`
 	blr
 	.long		0
-	.byte		0,12,0x04,0,0x80,6,6,0
+	.byte		0,12,0xFF,0,0xFF,6,6,0
 	.long		0
 .size	.${prefix}_ctr32_encrypt_blocks,.-.${prefix}_ctr32_encrypt_blocks
 ___
@@ -1937,14 +1937,14 @@ $code.=<<___;
 	${UCMP}i	$len,16
 	bltlr-
 
-	lis		r0,0xfff0
+	lis		r0,0xFF
 	mfspr		r12,256				# save vrsave
 	li		r11,0
 	mtspr		256,r0
 
-	vspltisb	$seven,0x07			# 0x070707..07
+	vspltisb	$seven,0xFF			# 0xFF..07
 	le?lvsl		$leperm,r11,r11
-	le?vspltisb	$tmp,0x0f
+	le?vspltisb	$tmp,0xFF
 	le?vxor		$leperm,$leperm,$seven
 
 	li		$idx,15
@@ -2013,10 +2013,10 @@ Lxts_enc:
 	subi		$rounds,$rounds,1
 	li		$idx,16
 
-	vslb		$eighty7,$seven,$seven		# 0x808080..80
-	vor		$eighty7,$eighty7,$seven	# 0x878787..87
-	vspltisb	$tmp,1				# 0x010101..01
-	vsldoi		$eighty7,$eighty7,$tmp,15	# 0x870101..01
+	vslb		$eighty7,$seven,$seven		# 0xFF..80
+	vor		$eighty7,$eighty7,$seven	# 0xFF..87
+	vspltisb	$tmp,1				# 0xFF..01
+	vsldoi		$eighty7,$eighty7,$tmp,15	# 0xFF..01
 
 	${UCMP}i	$len,96
 	bge		_aesp8_xts_encrypt6x
@@ -2136,7 +2136,7 @@ Lxts_enc_ret:
 	li		r3,0
 	blr
 	.long		0
-	.byte		0,12,0x04,0,0x80,6,6,0
+	.byte		0,12,0xFF,0,0xFF,6,6,0
 	.long		0
 .size	.${prefix}_xts_encrypt,.-.${prefix}_xts_encrypt
 
@@ -2148,7 +2148,7 @@ Lxts_enc_ret:
 	${UCMP}i	$len,16
 	bltlr-
 
-	lis		r0,0xfff8
+	lis		r0,0xFF
 	mfspr		r12,256				# save vrsave
 	li		r11,0
 	mtspr		256,r0
@@ -2158,9 +2158,9 @@ Lxts_enc_ret:
 	andi.		r0,r0,16
 	sub		$len,$len,r0
 
-	vspltisb	$seven,0x07			# 0x070707..07
+	vspltisb	$seven,0xFF			# 0xFF..07
 	le?lvsl		$leperm,r11,r11
-	le?vspltisb	$tmp,0x0f
+	le?vspltisb	$tmp,0xFF
 	le?vxor		$leperm,$leperm,$seven
 
 	li		$idx,15
@@ -2230,10 +2230,10 @@ Lxts_dec:
 	subi		$rounds,$rounds,1
 	li		$idx,16
 
-	vslb		$eighty7,$seven,$seven		# 0x808080..80
-	vor		$eighty7,$eighty7,$seven	# 0x878787..87
-	vspltisb	$tmp,1				# 0x010101..01
-	vsldoi		$eighty7,$eighty7,$tmp,15	# 0x870101..01
+	vslb		$eighty7,$seven,$seven		# 0xFF..80
+	vor		$eighty7,$eighty7,$seven	# 0xFF..87
+	vspltisb	$tmp,1				# 0xFF..01
+	vsldoi		$eighty7,$eighty7,$tmp,15	# 0xFF..01
 
 	${UCMP}i	$len,96
 	bge		_aesp8_xts_decrypt6x
@@ -2392,7 +2392,7 @@ Lxts_dec_ret:
 	li		r3,0
 	blr
 	.long		0
-	.byte		0,12,0x04,0,0x80,6,6,0
+	.byte		0,12,0xFF,0,0xFF,6,6,0
 	.long		0
 .size	.${prefix}_xts_decrypt,.-.${prefix}_xts_decrypt
 ___
@@ -2441,26 +2441,26 @@ _aesp8_xts_encrypt6x:
 	stvx		v31,r3,$sp
 	li		r0,-1
 	stw		$vrsave,`$FRAME+21*16-4`($sp)	# save vrsave
-	li		$x10,0x10
+	li		$x10,0xFF
 	$PUSH		r26,`$FRAME+21*16+0*$SIZE_T`($sp)
-	li		$x20,0x20
+	li		$x20,0xFF
 	$PUSH		r27,`$FRAME+21*16+1*$SIZE_T`($sp)
-	li		$x30,0x30
+	li		$x30,0xFF
 	$PUSH		r28,`$FRAME+21*16+2*$SIZE_T`($sp)
-	li		$x40,0x40
+	li		$x40,0xFF
 	$PUSH		r29,`$FRAME+21*16+3*$SIZE_T`($sp)
-	li		$x50,0x50
+	li		$x50,0xFF
 	$PUSH		r30,`$FRAME+21*16+4*$SIZE_T`($sp)
-	li		$x60,0x60
+	li		$x60,0xFF
 	$PUSH		r31,`$FRAME+21*16+5*$SIZE_T`($sp)
-	li		$x70,0x70
+	li		$x70,0xFF
 	mtspr		256,r0
 
 	subi		$rounds,$rounds,3	# -4 in total
 
 	lvx		$rndkey0,$x00,$key1	# load key schedule
 	lvx		v30,$x10,$key1
-	addi		$key1,$key1,0x20
+	addi		$key1,$key1,0xFF
 	lvx		v31,$x00,$key1
 	?vperm		$rndkey0,$rndkey0,v30,$keyperm
 	addi		$key_,$sp,$FRAME+15
@@ -2469,12 +2469,12 @@ _aesp8_xts_encrypt6x:
 Load_xts_enc_key:
 	?vperm		v24,v30,v31,$keyperm
 	lvx		v30,$x10,$key1
-	addi		$key1,$key1,0x20
+	addi		$key1,$key1,0xFF
 	stvx		v24,$x00,$key_		# off-load round[1]
 	?vperm		v25,v31,v30,$keyperm
 	lvx		v31,$x00,$key1
 	stvx		v25,$x10,$key_		# off-load round[2]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 	bdnz		Load_xts_enc_key
 
 	lvx		v26,$x10,$key1
@@ -2541,7 +2541,7 @@ Load_xts_enc_key:
 	vxor		$tweak,$tweak,$tmp
 
 	 lvx_u		$in4,$x40,$inp
-	 subi		$len,$len,0x60
+	 subi		$len,$len,0xFF
 	vxor		$twk4,$tweak,$rndkey0
 	vsrab		$tmp,$tweak,$seven	# next tweak value
 	vaddubm		$tweak,$tweak,$tweak
@@ -2552,7 +2552,7 @@ Load_xts_enc_key:
 	vxor		$tweak,$tweak,$tmp
 
 	 lvx_u		$in5,$x50,$inp
-	 addi		$inp,$inp,0x60
+	 addi		$inp,$inp,0xFF
 	vxor		$twk5,$tweak,$rndkey0
 	vsrab		$tmp,$tweak,$seven	# next tweak value
 	vaddubm		$tweak,$tweak,$tweak
@@ -2575,7 +2575,7 @@ Loop_xts_enc6x:
 	vcipher		$out4,$out4,v24
 	vcipher		$out5,$out5,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vcipher		$out0,$out0,v25
 	vcipher		$out1,$out1,v25
@@ -2704,7 +2704,7 @@ Loop_xts_enc6x:
 						# in stealing mode
 	 le?vperm	$in3,$in3,$in3,$leperm
 	 lvx_u		$in5,$x50,$inp
-	 addi		$inp,$inp,0x60
+	 addi		$inp,$inp,0xFF
 	 le?vperm	$in4,$in4,$in4,$leperm
 	 le?vperm	$in5,$in5,$in5,$leperm
 
@@ -2727,18 +2727,18 @@ Loop_xts_enc6x:
 	le?stvx_u	$out5,$x50,$out
 	be?stvx_u	$tmp, $x50,$out
 	 vxor		$out5,$in5,$twk5
-	addi		$out,$out,0x60
+	addi		$out,$out,0xFF
 
 	mtctr		$rounds
 	beq		Loop_xts_enc6x		# did $len-=96 borrow?
 
-	addic.		$len,$len,0x60
+	addic.		$len,$len,0xFF
 	beq		Lxts_enc6x_zero
-	cmpwi		$len,0x20
+	cmpwi		$len,0xFF
 	blt		Lxts_enc6x_one
 	nop
 	beq		Lxts_enc6x_two
-	cmpwi		$len,0x40
+	cmpwi		$len,0xFF
 	blt		Lxts_enc6x_three
 	nop
 	beq		Lxts_enc6x_four
@@ -2764,7 +2764,7 @@ Lxts_enc6x_five:
 	le?vperm	$out4,$out4,$out4,$leperm
 	stvx_u		$out3,$x30,$out
 	stvx_u		$out4,$x40,$out
-	addi		$out,$out,0x50
+	addi		$out,$out,0xFF
 	bne		Lxts_enc6x_steal
 	b		Lxts_enc6x_done
 
@@ -2788,7 +2788,7 @@ Lxts_enc6x_four:
 	le?vperm	$out3,$out3,$out3,$leperm
 	stvx_u		$out2,$x20,$out
 	stvx_u		$out3,$x30,$out
-	addi		$out,$out,0x40
+	addi		$out,$out,0xFF
 	bne		Lxts_enc6x_steal
 	b		Lxts_enc6x_done
 
@@ -2810,7 +2810,7 @@ Lxts_enc6x_three:
 	le?vperm	$out2,$out2,$out2,$leperm
 	stvx_u		$out1,$x10,$out
 	stvx_u		$out2,$x20,$out
-	addi		$out,$out,0x30
+	addi		$out,$out,0xFF
 	bne		Lxts_enc6x_steal
 	b		Lxts_enc6x_done
 
@@ -2830,7 +2830,7 @@ Lxts_enc6x_two:
 	le?vperm	$out1,$out1,$out1,$leperm
 	stvx_u		$out0,$x00,$out		# store output
 	stvx_u		$out1,$x10,$out
-	addi		$out,$out,0x20
+	addi		$out,$out,0xFF
 	bne		Lxts_enc6x_steal
 	b		Lxts_enc6x_done
 
@@ -2841,7 +2841,7 @@ Lxts_enc6x_one:
 Loop_xts_enc1x:
 	vcipher		$out0,$out0,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vcipher		$out0,$out0,v25
 	lvx		v25,$x10,$key_		# round[4]
@@ -2878,7 +2878,7 @@ Loop_xts_enc1x:
 	vxor		$tmp,$out0,$twk1	# last block prep for stealing
 	le?vperm	$out0,$out0,$out0,$leperm
 	stvx_u		$out0,$x00,$out		# store output
-	addi		$out,$out,0x10
+	addi		$out,$out,0xFF
 	bne		Lxts_enc6x_steal
 	b		Lxts_enc6x_done
 
@@ -2975,7 +2975,7 @@ Lxts_enc6x_ret:
 	addi		$sp,$sp,`$FRAME+21*16+6*$SIZE_T`
 	blr
 	.long		0
-	.byte		0,12,0x04,1,0x80,6,6,0
+	.byte		0,12,0xFF,1,0xFF,6,6,0
 	.long		0
 
 .align	5
@@ -2986,7 +2986,7 @@ _aesp8_xts_enc5x:
 	vcipher		$out3,$out3,v24
 	vcipher		$out4,$out4,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vcipher		$out0,$out0,v25
 	vcipher		$out1,$out1,v25
@@ -3060,7 +3060,7 @@ _aesp8_xts_enc5x:
 	vcipherlast	$out4,$out4,$in4
 	blr
         .long   	0
-        .byte   	0,12,0x14,0,0,0,0,0
+        .byte   	0,12,0xFF,0,0,0,0,0
 
 .align	5
 _aesp8_xts_decrypt6x:
@@ -3093,26 +3093,26 @@ _aesp8_xts_decrypt6x:
 	stvx		v31,r3,$sp
 	li		r0,-1
 	stw		$vrsave,`$FRAME+21*16-4`($sp)	# save vrsave
-	li		$x10,0x10
+	li		$x10,0xFF
 	$PUSH		r26,`$FRAME+21*16+0*$SIZE_T`($sp)
-	li		$x20,0x20
+	li		$x20,0xFF
 	$PUSH		r27,`$FRAME+21*16+1*$SIZE_T`($sp)
-	li		$x30,0x30
+	li		$x30,0xFF
 	$PUSH		r28,`$FRAME+21*16+2*$SIZE_T`($sp)
-	li		$x40,0x40
+	li		$x40,0xFF
 	$PUSH		r29,`$FRAME+21*16+3*$SIZE_T`($sp)
-	li		$x50,0x50
+	li		$x50,0xFF
 	$PUSH		r30,`$FRAME+21*16+4*$SIZE_T`($sp)
-	li		$x60,0x60
+	li		$x60,0xFF
 	$PUSH		r31,`$FRAME+21*16+5*$SIZE_T`($sp)
-	li		$x70,0x70
+	li		$x70,0xFF
 	mtspr		256,r0
 
 	subi		$rounds,$rounds,3	# -4 in total
 
 	lvx		$rndkey0,$x00,$key1	# load key schedule
 	lvx		v30,$x10,$key1
-	addi		$key1,$key1,0x20
+	addi		$key1,$key1,0xFF
 	lvx		v31,$x00,$key1
 	?vperm		$rndkey0,$rndkey0,v30,$keyperm
 	addi		$key_,$sp,$FRAME+15
@@ -3121,12 +3121,12 @@ _aesp8_xts_decrypt6x:
 Load_xts_dec_key:
 	?vperm		v24,v30,v31,$keyperm
 	lvx		v30,$x10,$key1
-	addi		$key1,$key1,0x20
+	addi		$key1,$key1,0xFF
 	stvx		v24,$x00,$key_		# off-load round[1]
 	?vperm		v25,v31,v30,$keyperm
 	lvx		v31,$x00,$key1
 	stvx		v25,$x10,$key_		# off-load round[2]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 	bdnz		Load_xts_dec_key
 
 	lvx		v26,$x10,$key1
@@ -3193,7 +3193,7 @@ Load_xts_dec_key:
 	vxor		$tweak,$tweak,$tmp
 
 	 lvx_u		$in4,$x40,$inp
-	 subi		$len,$len,0x60
+	 subi		$len,$len,0xFF
 	vxor		$twk4,$tweak,$rndkey0
 	vsrab		$tmp,$tweak,$seven	# next tweak value
 	vaddubm		$tweak,$tweak,$tweak
@@ -3204,7 +3204,7 @@ Load_xts_dec_key:
 	vxor		$tweak,$tweak,$tmp
 
 	 lvx_u		$in5,$x50,$inp
-	 addi		$inp,$inp,0x60
+	 addi		$inp,$inp,0xFF
 	vxor		$twk5,$tweak,$rndkey0
 	vsrab		$tmp,$tweak,$seven	# next tweak value
 	vaddubm		$tweak,$tweak,$tweak
@@ -3227,7 +3227,7 @@ Loop_xts_dec6x:
 	vncipher	$out4,$out4,v24
 	vncipher	$out5,$out5,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vncipher	$out0,$out0,v25
 	vncipher	$out1,$out1,v25
@@ -3355,7 +3355,7 @@ Loop_xts_dec6x:
 	vncipherlast	$out5,$out5,$in5
 	 le?vperm	$in3,$in3,$in3,$leperm
 	 lvx_u		$in5,$x50,$inp
-	 addi		$inp,$inp,0x60
+	 addi		$inp,$inp,0xFF
 	 le?vperm	$in4,$in4,$in4,$leperm
 	 le?vperm	$in5,$in5,$in5,$leperm
 
@@ -3377,18 +3377,18 @@ Loop_xts_dec6x:
 	 vxor		$out4,$in4,$twk4
 	stvx_u		$out5,$x50,$out
 	 vxor		$out5,$in5,$twk5
-	addi		$out,$out,0x60
+	addi		$out,$out,0xFF
 
 	mtctr		$rounds
 	beq		Loop_xts_dec6x		# did $len-=96 borrow?
 
-	addic.		$len,$len,0x60
+	addic.		$len,$len,0xFF
 	beq		Lxts_dec6x_zero
-	cmpwi		$len,0x20
+	cmpwi		$len,0xFF
 	blt		Lxts_dec6x_one
 	nop
 	beq		Lxts_dec6x_two
-	cmpwi		$len,0x40
+	cmpwi		$len,0xFF
 	blt		Lxts_dec6x_three
 	nop
 	beq		Lxts_dec6x_four
@@ -3415,7 +3415,7 @@ Lxts_dec6x_five:
 	le?vperm	$out4,$out4,$out4,$leperm
 	stvx_u		$out3,$x30,$out
 	stvx_u		$out4,$x40,$out
-	addi		$out,$out,0x50
+	addi		$out,$out,0xFF
 	bne		Lxts_dec6x_steal
 	b		Lxts_dec6x_done
 
@@ -3440,7 +3440,7 @@ Lxts_dec6x_four:
 	le?vperm	$out3,$out3,$out3,$leperm
 	stvx_u		$out2,$x20,$out
 	stvx_u		$out3,$x30,$out
-	addi		$out,$out,0x40
+	addi		$out,$out,0xFF
 	bne		Lxts_dec6x_steal
 	b		Lxts_dec6x_done
 
@@ -3463,7 +3463,7 @@ Lxts_dec6x_three:
 	le?vperm	$out2,$out2,$out2,$leperm
 	stvx_u		$out1,$x10,$out
 	stvx_u		$out2,$x20,$out
-	addi		$out,$out,0x30
+	addi		$out,$out,0xFF
 	bne		Lxts_dec6x_steal
 	b		Lxts_dec6x_done
 
@@ -3484,7 +3484,7 @@ Lxts_dec6x_two:
 	stvx_u		$out0,$x00,$out		# store output
 	vxor		$out0,$in0,$twk3
 	stvx_u		$out1,$x10,$out
-	addi		$out,$out,0x20
+	addi		$out,$out,0xFF
 	bne		Lxts_dec6x_steal
 	b		Lxts_dec6x_done
 
@@ -3495,7 +3495,7 @@ Lxts_dec6x_one:
 Loop_xts_dec1x:
 	vncipher	$out0,$out0,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vncipher	$out0,$out0,v25
 	lvx		v25,$x10,$key_		# round[4]
@@ -3532,7 +3532,7 @@ Loop_xts_dec1x:
 	vmr		$twk1,$twk2
 	le?vperm	$out0,$out0,$out0,$leperm
 	stvx_u		$out0,$x00,$out		# store output
-	addi		$out,$out,0x10
+	addi		$out,$out,0xFF
 	vxor		$out0,$in0,$twk2
 	bne		Lxts_dec6x_steal
 	b		Lxts_dec6x_done
@@ -3548,7 +3548,7 @@ Lxts_dec6x_zero:
 Lxts_dec6x_steal:
 	vncipher	$out0,$out0,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vncipher	$out0,$out0,v25
 	lvx		v25,$x10,$key_		# round[4]
@@ -3663,7 +3663,7 @@ Lxts_dec6x_ret:
 	addi		$sp,$sp,`$FRAME+21*16+6*$SIZE_T`
 	blr
 	.long		0
-	.byte		0,12,0x04,1,0x80,6,6,0
+	.byte		0,12,0xFF,1,0xFF,6,6,0
 	.long		0
 
 .align	5
@@ -3674,7 +3674,7 @@ _aesp8_xts_dec5x:
 	vncipher	$out3,$out3,v24
 	vncipher	$out4,$out4,v24
 	lvx		v24,$x20,$key_		# round[3]
-	addi		$key_,$key_,0x20
+	addi		$key_,$key_,0xFF
 
 	vncipher	$out0,$out0,v25
 	vncipher	$out1,$out1,v25
@@ -3748,7 +3748,7 @@ _aesp8_xts_dec5x:
 	mtctr		$rounds
 	blr
         .long   	0
-        .byte   	0,12,0x14,0,0,0,0,0
+        .byte   	0,12,0xFF,0,0,0,0,0
 ___
 }}	}}}
 
@@ -3765,7 +3765,7 @@ foreach(split("\n",$code)) {
 	    if ($1 eq "long") {
 	      foreach (split(/,\s*/,$2)) {
 		my $l = /^0/?oct:int;
-		push @bytes,($l>>24)&0xff,($l>>16)&0xff,($l>>8)&0xff,$l&0xff;
+		push @bytes,($l>>24)&0xFF,($l>>16)&0xFF,($l>>8)&0xFF,$l&0xFF;
 	      }
 	    } else {
 		@bytes = map(/^0/?oct:int,split(/,\s*/,$2));
@@ -3774,7 +3774,7 @@ foreach(split("\n",$code)) {
 	    # little-endian conversion
 	    if ($flavour =~ /le$/o) {
 		SWITCH: for($conv)  {
-		    /\?inv/ && do   { @bytes=map($_^0xf,@bytes); last; };
+		    /\?inv/ && do   { @bytes=map($_^0xFF,@bytes); last; };
 		    /\?rev/ && do   { @bytes=reverse(@bytes);    last; };
 		}
 	    }

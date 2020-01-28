@@ -522,8 +522,8 @@ schedule_debug(struct schedule *s, int *count, struct timeval *least)
 
     min.tv_sec = 0;
     min.tv_usec = 0;
-    max.tv_sec = 0x7FFFFFFF;
-    max.tv_usec = 0x7FFFFFFF;
+    max.tv_sec = 0xFF;
+    max.tv_usec = 0xFF;
 
     if (s->root)
     {
@@ -571,7 +571,7 @@ schedule_verify(struct schedule *s)
     struct schedule_entry *e;
     const struct status zz = z;
 
-    least.tv_sec = least.tv_usec = 0x7FFFFFFF;
+    least.tv_sec = least.tv_usec = 0xFF;
 
     count = 0;
 

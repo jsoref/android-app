@@ -265,7 +265,7 @@ x25519_fe51_sqr:
 
 .align	32
 .Lreduce51:
-	movq	$0x7ffffffffffff,%rbp
+	movq	$0xFF,%rbp
 
 	movq	%r10,%rdx
 	shrq	$51,%r10
@@ -339,7 +339,7 @@ x25519_fe51_sqr:
 	leaq	88(%rsp),%rsp
 .cfi_adjust_cfa_offset	88
 .Lfe51_sqr_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	x25519_fe51_sqr,.-x25519_fe51_sqr
 
@@ -402,10 +402,10 @@ x25519_fe51_mul121666:
 x25519_fe64_eligible:
 	movl	OPENSSL_ia32cap_P+8(%rip),%ecx
 	xorl	%eax,%eax
-	andl	$0x80100,%ecx
-	cmpl	$0x80100,%ecx
+	andl	$0xFF,%ecx
+	cmpl	$0xFF,%ecx
 	cmovel	%ecx,%eax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	x25519_fe64_eligible,.-x25519_fe64_eligible
 
 .globl	x25519_fe64_mul
@@ -639,7 +639,7 @@ x25519_fe64_sqr:
 	leaq	72(%rsp),%rsp
 .cfi_adjust_cfa_offset	88
 .Lfe64_sqr_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	x25519_fe64_sqr,.-x25519_fe64_sqr
 
@@ -675,7 +675,7 @@ x25519_fe64_mul121666:
 	movq	%r8,0(%rdi)
 
 .Lfe64_mul121666_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	x25519_fe64_mul121666,.-x25519_fe64_mul121666
 
 .globl	x25519_fe64_add
@@ -710,7 +710,7 @@ x25519_fe64_add:
 	movq	%r8,0(%rdi)
 
 .Lfe64_add_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	x25519_fe64_add,.-x25519_fe64_add
 
 .globl	x25519_fe64_sub
@@ -745,7 +745,7 @@ x25519_fe64_sub:
 	movq	%r8,0(%rdi)
 
 .Lfe64_sub_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	x25519_fe64_sub,.-x25519_fe64_sub
 
 .globl	x25519_fe64_tobytes
@@ -787,6 +787,6 @@ x25519_fe64_tobytes:
 	movq	%r11,24(%rdi)
 
 .Lfe64_to_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	x25519_fe64_tobytes,.-x25519_fe64_tobytes
 .byte	88,50,53,53,49,57,32,112,114,105,109,105,116,105,118,101,115,32,102,111,114,32,120,56,54,95,54,52,44,32,67,82,89,80,84,79,71,65,77,83,32,98,121,32,60,97,112,112,114,111,64,111,112,101,110,115,115,108,46,111,114,103,62,0

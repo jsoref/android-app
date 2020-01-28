@@ -387,10 +387,10 @@ int CMS_SharedInfo_encode(unsigned char **pder, X509_ALGOR *kekalg,
     CMS_SharedInfo ecsi;
 
     keylen <<= 3;
-    kl[0] = (keylen >> 24) & 0xff;
-    kl[1] = (keylen >> 16) & 0xff;
-    kl[2] = (keylen >> 8) & 0xff;
-    kl[3] = keylen & 0xff;
+    kl[0] = (keylen >> 24) & 0xFF;
+    kl[1] = (keylen >> 16) & 0xFF;
+    kl[2] = (keylen >> 8) & 0xFF;
+    kl[3] = keylen & 0xFF;
     oklen.length = 4;
     oklen.data = kl;
     oklen.type = V_ASN1_OCTET_STRING;

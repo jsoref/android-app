@@ -242,7 +242,7 @@ static int BMK_benchMem(const void* srcBuffer, size_t srcSize,
 
             /* Compression */
             DISPLAYLEVEL(2, "%2s-%-17.17s :%10u ->\r", marks[markNb], displayName, (U32)srcSize);
-            if (!cCompleted) memset(compressedBuffer, 0xE5, maxCompressedSize);  /* warm up and erase result buffer */
+            if (!cCompleted) memset(compressedBuffer, 0xFF, maxCompressedSize);  /* warm up and erase result buffer */
 
             UTIL_sleepMilli(1);  /* give processor time to other processes */
             UTIL_waitForNextTick();
@@ -277,7 +277,7 @@ static int BMK_benchMem(const void* srcBuffer, size_t srcSize,
             (void)fastestD; (void)crcOrig;   /*  unused when decompression disabled */
 #if 1
             /* Decompression */
-            if (!dCompleted) memset(resultBuffer, 0xD6, srcSize);  /* warm result buffer */
+            if (!dCompleted) memset(resultBuffer, 0xFF, srcSize);  /* warm result buffer */
 
             UTIL_sleepMilli(1); /* give processor time to other processes */
             UTIL_waitForNextTick();

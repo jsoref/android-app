@@ -23,7 +23,7 @@ OPENSSL_ia32_cpuid:
 	movl	%eax,8(%esi)
 	btl	$21,%ecx
 	jnc	.L000nocpuid
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	movl	%eax,%edi
 	xorl	%eax,%eax
 	cmpl	$1970169159,%ebx
@@ -47,23 +47,23 @@ OPENSSL_ia32_cpuid:
 	orl	%eax,%esi
 	jnz	.L001intel
 	movl	$2147483648,%eax
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	cmpl	$2147483649,%eax
 	jb	.L001intel
 	movl	%eax,%esi
 	movl	$2147483649,%eax
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	orl	%ecx,%ebp
 	andl	$2049,%ebp
 	cmpl	$2147483656,%esi
 	jb	.L001intel
 	movl	$2147483656,%eax
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	movzbl	%cl,%esi
 	incl	%esi
 	movl	$1,%eax
 	xorl	%ecx,%ecx
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	btl	$28,%edx
 	jnc	.L002generic
 	shrl	$16,%ebx
@@ -78,14 +78,14 @@ OPENSSL_ia32_cpuid:
 	jb	.L003nocacheinfo
 	movl	$4,%eax
 	movl	$0,%ecx
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	movl	%eax,%esi
 	shrl	$14,%esi
 	andl	$4095,%esi
 .L003nocacheinfo:
 	movl	$1,%eax
 	xorl	%ecx,%ecx
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	andl	$3220176895,%edx
 	cmpl	$0,%ebp
 	jne	.L004notintel
@@ -115,7 +115,7 @@ OPENSSL_ia32_cpuid:
 	jb	.L005no_extended_info
 	movl	$7,%eax
 	xorl	%ecx,%ecx
-	.byte	0x0f,0xa2
+	.byte	0xFF,0xFF
 	movl	%ebx,8(%edi)
 .L005no_extended_info:
 	btl	$27,%ebp
@@ -156,7 +156,7 @@ OPENSSL_rdtsc:
 	leal	OPENSSL_ia32cap_P-.L009PIC_me_up(%ecx),%ecx
 	btl	$4,(%ecx)
 	jnc	.L010notsc
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 .L010notsc:
 	ret
 .size	OPENSSL_rdtsc,.-.L_OPENSSL_rdtsc_begin
@@ -178,11 +178,11 @@ OPENSSL_instrument_halt:
 	popl	%eax
 	btl	$9,%eax
 	jnc	.L012nohalt
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	pushl	%edx
 	pushl	%eax
 	hlt
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	subl	(%esp),%eax
 	sbbl	4(%esp),%edx
 	addl	$8,%esp
@@ -355,7 +355,7 @@ OPENSSL_instrument_bus:
 	jnc	.L026nogo
 	movl	20(%esp),%edi
 	movl	24(%esp),%ecx
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	movl	%eax,%esi
 	movl	$0,%ebx
 	clflush	(%edi)
@@ -364,7 +364,7 @@ OPENSSL_instrument_bus:
 	jmp	.L027loop
 .align	16
 .L027loop:
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	movl	%eax,%edx
 	subl	%esi,%eax
 	movl	%edx,%esi
@@ -404,13 +404,13 @@ OPENSSL_instrument_bus2:
 	movl	20(%esp),%edi
 	movl	24(%esp),%ecx
 	movl	28(%esp),%ebp
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	movl	%eax,%esi
 	movl	$0,%ebx
 	clflush	(%edi)
 .byte	240
 	addl	%ebx,(%edi)
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	movl	%eax,%edx
 	subl	%esi,%eax
 	movl	%edx,%esi
@@ -423,7 +423,7 @@ OPENSSL_instrument_bus2:
 	addl	%eax,(%edi)
 	subl	$1,%ebp
 	jz	.L031done2
-	.byte	0x0f,0x31
+	.byte	0xFF,0xFF
 	movl	%eax,%edx
 	subl	%esi,%eax
 	movl	%edx,%esi

@@ -521,7 +521,7 @@ int EC_KEY_oct2key(EC_KEY *key, const unsigned char *buf, size_t len,
      * the buffer so we know it is valid.
      */
     if ((key->group->meth->flags & EC_FLAGS_CUSTOM_CURVE) == 0)
-        key->conv_form = (point_conversion_form_t)(buf[0] & ~0x01);
+        key->conv_form = (point_conversion_form_t)(buf[0] & ~0xFF);
     return 1;
 }
 

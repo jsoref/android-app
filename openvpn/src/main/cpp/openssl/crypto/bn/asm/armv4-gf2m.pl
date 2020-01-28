@@ -81,7 +81,7 @@ $code.=<<___;
 .align	5
 mul_1x1_ialu:
 	mov	$a0,#0
-	bic	$a1,$a,#3<<30		@ a1=a&0x3fffffff
+	bic	$a1,$a,#3<<30		@ a1=a&0xFF
 	str	$a0,[sp,#0]		@ tab[0]=0
 	add	$a2,$a1,$a1		@ a2=a1<<1
 	str	$a1,[sp,#4]		@ tab[1]=a1
@@ -99,44 +99,44 @@ mul_1x1_ialu:
 	str	$a12,[sp,#28]		@ tab[7]=a1^a2^a4
 
 	and	$i1,$mask,$b,lsr#1
-	ldr	$lo,[sp,$i0]		@ tab[b       & 0x7]
+	ldr	$lo,[sp,$i0]		@ tab[b       & 0xFF]
 	and	$i0,$mask,$b,lsr#4
-	ldr	$t1,[sp,$i1]		@ tab[b >>  3 & 0x7]
+	ldr	$t1,[sp,$i1]		@ tab[b >>  3 & 0xFF]
 	and	$i1,$mask,$b,lsr#7
-	ldr	$t0,[sp,$i0]		@ tab[b >>  6 & 0x7]
+	ldr	$t0,[sp,$i0]		@ tab[b >>  6 & 0xFF]
 	eor	$lo,$lo,$t1,lsl#3	@ stall
 	mov	$hi,$t1,lsr#29
-	ldr	$t1,[sp,$i1]		@ tab[b >>  9 & 0x7]
+	ldr	$t1,[sp,$i1]		@ tab[b >>  9 & 0xFF]
 
 	and	$i0,$mask,$b,lsr#10
 	eor	$lo,$lo,$t0,lsl#6
 	eor	$hi,$hi,$t0,lsr#26
-	ldr	$t0,[sp,$i0]		@ tab[b >> 12 & 0x7]
+	ldr	$t0,[sp,$i0]		@ tab[b >> 12 & 0xFF]
 
 	and	$i1,$mask,$b,lsr#13
 	eor	$lo,$lo,$t1,lsl#9
 	eor	$hi,$hi,$t1,lsr#23
-	ldr	$t1,[sp,$i1]		@ tab[b >> 15 & 0x7]
+	ldr	$t1,[sp,$i1]		@ tab[b >> 15 & 0xFF]
 
 	and	$i0,$mask,$b,lsr#16
 	eor	$lo,$lo,$t0,lsl#12
 	eor	$hi,$hi,$t0,lsr#20
-	ldr	$t0,[sp,$i0]		@ tab[b >> 18 & 0x7]
+	ldr	$t0,[sp,$i0]		@ tab[b >> 18 & 0xFF]
 
 	and	$i1,$mask,$b,lsr#19
 	eor	$lo,$lo,$t1,lsl#15
 	eor	$hi,$hi,$t1,lsr#17
-	ldr	$t1,[sp,$i1]		@ tab[b >> 21 & 0x7]
+	ldr	$t1,[sp,$i1]		@ tab[b >> 21 & 0xFF]
 
 	and	$i0,$mask,$b,lsr#22
 	eor	$lo,$lo,$t0,lsl#18
 	eor	$hi,$hi,$t0,lsr#14
-	ldr	$t0,[sp,$i0]		@ tab[b >> 24 & 0x7]
+	ldr	$t0,[sp,$i0]		@ tab[b >> 24 & 0xFF]
 
 	and	$i1,$mask,$b,lsr#25
 	eor	$lo,$lo,$t1,lsl#21
 	eor	$hi,$hi,$t1,lsr#11
-	ldr	$t1,[sp,$i1]		@ tab[b >> 27 & 0x7]
+	ldr	$t1,[sp,$i1]		@ tab[b >> 27 & 0xFF]
 
 	tst	$a,#1<<30
 	and	$i0,$mask,$b,lsr#28
@@ -258,9 +258,9 @@ $code.=<<___;
 	ldr		r12, [sp]		@ 5th argument
 	vmov		$a, r2, r1
 	vmov		$b, r12, r3
-	vmov.i64	$k48, #0x0000ffffffffffff
-	vmov.i64	$k32, #0x00000000ffffffff
-	vmov.i64	$k16, #0x000000000000ffff
+	vmov.i64	$k48, #0xFF
+	vmov.i64	$k32, #0xFF
+	vmov.i64	$k16, #0xFF
 
 	vext.8		$t0#lo, $a, $a, #1	@ A1
 	vmull.p8	$t0, $t0#lo, $b		@ F = A1*B
@@ -325,7 +325,7 @@ foreach (split("\n",$code)) {
 
 	s/\bq([0-9]+)#(lo|hi)/sprintf "d%d",2*$1+($2 eq "hi")/geo	or
 	s/\bret\b/bx	lr/go		or
-	s/\bbx\s+lr\b/.word\t0xe12fff1e/go;    # make it possible to compile with -march=armv4
+	s/\bbx\s+lr\b/.word\t0xFF/go;    # make it possible to compile with -march=armv4
 
 	print $_,"\n";
 }

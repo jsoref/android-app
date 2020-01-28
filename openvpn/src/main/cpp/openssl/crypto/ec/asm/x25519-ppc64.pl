@@ -163,7 +163,7 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,10,3,0
+	.byte	0,12,4,0,0xFF,10,3,0
 	.long	0
 .size	x25519_fe64_mul,.-x25519_fe64_mul
 
@@ -303,7 +303,7 @@ x25519_fe64_sqr:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,10,2,0
+	.byte	0,12,4,0,0xFF,10,2,0
 	.long	0
 .size	x25519_fe64_sqr,.-x25519_fe64_sqr
 
@@ -350,7 +350,7 @@ x25519_fe64_mul121666:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	x25519_fe64_mul121666,.-x25519_fe64_mul121666
 
@@ -391,7 +391,7 @@ x25519_fe64_add:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	x25519_fe64_add,.-x25519_fe64_add
 
@@ -433,7 +433,7 @@ x25519_fe64_sub:
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	x25519_fe64_sub,.-x25519_fe64_sub
 
@@ -493,7 +493,7 @@ ___
 $code.=<<___;
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	x25519_fe64_tobytes,.-x25519_fe64_tobytes
 ___
@@ -612,7 +612,7 @@ $code.=<<___;
 
 .Lfe51_reduce:
 	li	$mask,-1
-	srdi	$mask,$mask,13		# 0x7ffffffffffff
+	srdi	$mask,$mask,13		# 0xFF
 
 	srdi	$t0,$h2lo,51
 	and	$a2,$h2lo,$mask
@@ -670,7 +670,7 @@ $code.=<<___;
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,0,0x80,11,3,0
+	.byte	0,12,4,0,0xFF,11,3,0
 	.long	0
 .size	x25519_fe51_mul,.-x25519_fe51_mul
 ___
@@ -769,7 +769,7 @@ $code.=<<___;
 
 	b	.Lfe51_reduce
 	.long	0
-	.byte	0,12,4,0,0x80,11,2,0
+	.byte	0,12,4,0,0xFF,11,2,0
 	.long	0
 .size	x25519_fe51_sqr,.-x25519_fe51_sqr
 ___
@@ -813,7 +813,7 @@ x25519_fe51_mul121666:
 
 	b	.Lfe51_reduce
 	.long	0
-	.byte	0,12,4,0,0x80,11,2,0
+	.byte	0,12,4,0,0xFF,11,2,0
 	.long	0
 .size	x25519_fe51_mul121666,.-x25519_fe51_mul121666
 ___

@@ -1465,13 +1465,13 @@ class WriteParams(TestCase):
         stream = StringIOWrapper('test_suite_ut.data', '')
         unique_expressions = []
         expression_code = write_parameters(stream,
-                                           ['"Yahoo"', '"abcdef00"', '0xAA'],
+                                           ['"Yahoo"', '"abcdef00"', '0xFF'],
                                            ['char*', 'hex', 'int'],
                                            unique_expressions)
         self.assertEqual(len(unique_expressions), 0)
         self.assertEqual(expression_code, '')
         self.assertEqual(stream.getvalue(),
-                         ':char*:"Yahoo":hex:"abcdef00":int:0xAA\n')
+                         ':char*:"Yahoo":hex:"abcdef00":int:0xFF\n')
 
     def test_with_exp_param(self):
         """
@@ -1691,7 +1691,7 @@ func1:0
         data = '''
 My test 1
 depends_on:DEP1
-func1:0:0xfa:MACRO1:MACRO2
+func1:0:0xFF:MACRO1:MACRO2
 
 My test 2
 depends_on:DEP1:DEP2
@@ -1726,7 +1726,7 @@ func2:"yahoo":88:MACRO1
             break;'''
         expected_data = '''My test 1
 depends_on:0
-0:int:0:int:0xfa:exp:0:exp:1
+0:int:0:int:0xFF:exp:0:exp:1
 
 My test 2
 depends_on:0:1

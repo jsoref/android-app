@@ -190,15 +190,15 @@ _OPENSSL_instrument_bus:
 	.asmfunc
 	MV	B4,B0			; reassign sizeof(output)
 ||	MV	A4,B4			; reassign output
-||	MVK	0x00004030,A3
+||	MVK	0xFF,A3
 	MV	B0,A4			; return value
 ||	MVK	1,A1
-||	MVKH	0x01840000,A3		; L1DWIBAR
+||	MVKH	0xFF,A3		; L1DWIBAR
 	MVC	TSCL,B8			; collect 1st tick
-||	MVK	0x00004010,A5
+||	MVK	0xFF,A5
 	MV	B8,B9			; lasttick = tick
 ||	MVK	0,B7			; lastdiff = 0
-||	MVKH	0x01840000,A5		; L2WIBAR
+||	MVKH	0xFF,A5		; L2WIBAR
 	CLFLUSH	A3,B4,A1		; write-back and invalidate L1D line
 	CLFLUSH	A5,B4,A1		; write-back and invalidate L2 line
 	LL	*B4,B5
@@ -232,17 +232,17 @@ _OPENSSL_instrument_bus2:
 	.asmfunc
 	MV	A6,B0			; reassign max
 ||	MV	B4,A6			; reassign sizeof(output)
-||	MVK	0x00004030,A3
+||	MVK	0xFF,A3
 	MV	A4,B4			; reassign output
 ||	MVK	0,A4			; return value
 ||	MVK	1,A1
-||	MVKH	0x01840000,A3		; L1DWIBAR
+||	MVKH	0xFF,A3		; L1DWIBAR
 
 	MVC	TSCL,B8			; collect 1st tick
-||	MVK	0x00004010,A5
+||	MVK	0xFF,A5
 	MV	B8,B9			; lasttick = tick
 ||	MVK	0,B7			; lastdiff = 0
-||	MVKH	0x01840000,A5		; L2WIBAR
+||	MVKH	0xFF,A5		; L2WIBAR
 	CLFLUSH	A3,B4,A1		; write-back and invalidate L1D line
 	CLFLUSH	A5,B4,A1		; write-back and invalidate L2 line
 	LL	*B4,B5

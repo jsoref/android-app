@@ -1311,26 +1311,26 @@ int dtls_construct_hello_verify_request(SSL *s, WPACKET *pkt)
 static void ssl_check_for_safari(SSL *s, const CLIENTHELLO_MSG *hello)
 {
     static const unsigned char kSafariExtensionsBlock[] = {
-        0x00, 0x0a,             /* elliptic_curves extension */
-        0x00, 0x08,             /* 8 bytes */
-        0x00, 0x06,             /* 6 bytes of curve ids */
-        0x00, 0x17,             /* P-256 */
-        0x00, 0x18,             /* P-384 */
-        0x00, 0x19,             /* P-521 */
+        0xFF, 0xFF,             /* elliptic_curves extension */
+        0xFF, 0xFF,             /* 8 bytes */
+        0xFF, 0xFF,             /* 6 bytes of curve ids */
+        0xFF, 0xFF,             /* P-256 */
+        0xFF, 0xFF,             /* P-384 */
+        0xFF, 0xFF,             /* P-521 */
 
-        0x00, 0x0b,             /* ec_point_formats */
-        0x00, 0x02,             /* 2 bytes */
-        0x01,                   /* 1 point format */
-        0x00,                   /* uncompressed */
+        0xFF, 0xFF,             /* ec_point_formats */
+        0xFF, 0xFF,             /* 2 bytes */
+        0xFF,                   /* 1 point format */
+        0xFF,                   /* uncompressed */
         /* The following is only present in TLS 1.2 */
-        0x00, 0x0d,             /* signature_algorithms */
-        0x00, 0x0c,             /* 12 bytes */
-        0x00, 0x0a,             /* 10 bytes */
-        0x05, 0x01,             /* SHA-384/RSA */
-        0x04, 0x01,             /* SHA-256/RSA */
-        0x02, 0x01,             /* SHA-1/RSA */
-        0x04, 0x03,             /* SHA-256/ECDSA */
-        0x02, 0x03,             /* SHA-1/ECDSA */
+        0xFF, 0xFF,             /* signature_algorithms */
+        0xFF, 0xFF,             /* 12 bytes */
+        0xFF, 0xFF,             /* 10 bytes */
+        0xFF, 0xFF,             /* SHA-384/RSA */
+        0xFF, 0xFF,             /* SHA-256/RSA */
+        0xFF, 0xFF,             /* SHA-1/RSA */
+        0xFF, 0xFF,             /* SHA-256/ECDSA */
+        0xFF, 0xFF,             /* SHA-1/ECDSA */
     };
     /* Length of the common prefix (first two extensions). */
     static const size_t kSafariCommonExtensionsLength = 18;
@@ -1627,7 +1627,7 @@ static int tls_early_post_process_client_hello(SSL *s)
 
     if (clienthello->isv2) {
         if (clienthello->legacy_version == SSL2_VERSION
-                || (clienthello->legacy_version & 0xff00)
+                || (clienthello->legacy_version & 0xFF)
                    != (SSL3_VERSION_MAJOR << 8)) {
             /*
              * This is real SSLv2 or something completely unknown. We don't
@@ -3066,7 +3066,7 @@ static int tls_process_cke_rsa(SSL *s, PACKET *pkt)
 
     /*
      * If the version in the decrypted pre-master secret is correct then
-     * version_good will be 0xff, otherwise it'll be zero. The
+     * version_good will be 0xFF, otherwise it'll be zero. The
      * Klima-Pokorny-Rosa extension of Bleichenbacher's attack
      * (http://eprint.iacr.org/2003/052/) exploits the version number
      * check as a "bad version oracle". Thus version checks are done in
@@ -3077,7 +3077,7 @@ static int tls_process_cke_rsa(SSL *s, PACKET *pkt)
                            (unsigned)(s->client_version >> 8));
     version_good &=
         constant_time_eq_8(rsa_decrypt[padding_len + 1],
-                           (unsigned)(s->client_version & 0xff));
+                           (unsigned)(s->client_version & 0xFF));
 
     /*
      * The premaster secret must contain the same version number as the
@@ -3094,13 +3094,13 @@ static int tls_process_cke_rsa(SSL *s, PACKET *pkt)
                                              (unsigned)(s->version >> 8));
         workaround_good &=
             constant_time_eq_8(rsa_decrypt[padding_len + 1],
-                               (unsigned)(s->version & 0xff));
+                               (unsigned)(s->version & 0xFF));
         version_good |= workaround_good;
     }
 
     /*
      * Both decryption and version must be good for decrypt_good to
-     * remain non-zero (0xff).
+     * remain non-zero (0xFF).
      */
     decrypt_good &= version_good;
 
@@ -3375,7 +3375,7 @@ static int tls_process_cke_gost(SSL *s, PACKET *pkt)
                  SSL_R_DECRYPTION_FAILED);
         goto err;
     }
-    if (asn1len == 0x81) {
+    if (asn1len == 0xFF) {
         /*
          * Long form length. Should only be one byte of length. Anything else
          * isn't supported.
@@ -3386,7 +3386,7 @@ static int tls_process_cke_gost(SSL *s, PACKET *pkt)
                      SSL_R_DECRYPTION_FAILED);
             goto err;
         }
-    } else  if (asn1len >= 0x80) {
+    } else  if (asn1len >= 0xFF) {
         /*
          * Indefinite length, or more than one long form length bytes. We don't
          * support it
@@ -3853,7 +3853,7 @@ static int construct_stateless_ticket(SSL *s, WPACKET *pkt, uint32_t age_add,
      * Some length values are 16 bits, so forget it if session is too
      * long
      */
-    if (slen_full == 0 || slen_full > 0xFF00) {
+    if (slen_full == 0 || slen_full > 0xFF) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_CONSTRUCT_STATELESS_TICKET,
                  ERR_R_INTERNAL_ERROR);
         goto err;
@@ -4082,7 +4082,7 @@ int tls_construct_new_session_ticket(SSL *s, WPACKET *pkt)
 
         nonce = s->next_ticket_nonce;
         for (i = TICKET_NONCE_SIZE; i > 0; i--) {
-            tick_nonce[i - 1] = (unsigned char)(nonce & 0xff);
+            tick_nonce[i - 1] = (unsigned char)(nonce & 0xFF);
             nonce >>= 8;
         }
 

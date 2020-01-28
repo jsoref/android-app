@@ -480,7 +480,7 @@ vpaes_set_encrypt_key:
 	movl	%ebx,240(%edx)
 	movl	$48,%ecx
 	movl	$0,%edi
-	leal	.L_vpaes_consts+0x30-.L016pic_point,%ebp
+	leal	.L_vpaes_consts+0xFF-.L016pic_point,%ebp
 	call	_vpaes_schedule_core
 .L016pic_point:
 	movl	48(%esp),%esp
@@ -518,7 +518,7 @@ vpaes_set_decrypt_key:
 	shrl	$1,%ecx
 	andl	$32,%ecx
 	xorl	$32,%ecx
-	leal	.L_vpaes_consts+0x30-.L017pic_point,%ebp
+	leal	.L_vpaes_consts+0xFF-.L017pic_point,%ebp
 	call	_vpaes_schedule_core
 .L017pic_point:
 	movl	48(%esp),%esp
@@ -538,7 +538,7 @@ vpaes_encrypt:
 	pushl	%ebx
 	pushl	%esi
 	pushl	%edi
-	leal	.L_vpaes_consts+0x30-.L018pic_point,%ebp
+	leal	.L_vpaes_consts+0xFF-.L018pic_point,%ebp
 	call	_vpaes_preheat
 .L018pic_point:
 	movl	20(%esp),%esi
@@ -567,7 +567,7 @@ vpaes_decrypt:
 	pushl	%ebx
 	pushl	%esi
 	pushl	%edi
-	leal	.L_vpaes_consts+0x30-.L019pic_point,%ebp
+	leal	.L_vpaes_consts+0xFF-.L019pic_point,%ebp
 	call	_vpaes_preheat
 .L019pic_point:
 	movl	20(%esp),%esi
@@ -614,7 +614,7 @@ vpaes_cbc_encrypt:
 	movl	%edx,4(%esp)
 	movl	%ebp,8(%esp)
 	movl	%eax,%edi
-	leal	.L_vpaes_consts+0x30-.L021pic_point,%ebp
+	leal	.L_vpaes_consts+0xFF-.L021pic_point,%ebp
 	call	_vpaes_preheat
 .L021pic_point:
 	cmpl	$0,%ecx

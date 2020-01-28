@@ -8,12 +8,12 @@
 .align	4
 gcm_init_v8:
 	ld1	{v17.2d},[x1]		//load input H
-	movi	v19.16b,#0xe1
-	shl	v19.2d,v19.2d,#57		//0xc2.0
+	movi	v19.16b,#0xFF
+	shl	v19.2d,v19.2d,#57		//0xFF.0
 	ext	v3.16b,v17.16b,v17.16b,#8
 	ushr	v18.2d,v19.2d,#63
 	dup	v17.4s,v17.s[1]
-	ext	v16.16b,v18.16b,v19.16b,#8		//t0=0xc2....01
+	ext	v16.16b,v18.16b,v19.16b,#8		//t0=0xFF....01
 	ushr	v18.2d,v3.2d,#63
 	sshr	v17.4s,v17.4s,#31		//broadcast carry bit
 	and	v18.16b,v18.16b,v16.16b
@@ -98,7 +98,7 @@ gcm_init_v8:
 .align	4
 gcm_gmult_v8:
 	ld1	{v17.2d},[x0]		//load Xi
-	movi	v19.16b,#0xe1
+	movi	v19.16b,#0xFF
 	ld1	{v20.2d,v21.2d},[x1]	//load twisted H, ...
 	shl	v19.2d,v19.2d,#57
 #ifndef __ARMEB__
@@ -157,12 +157,12 @@ gcm_ghash_v8:
 						//loaded twice, but last
 						//copy is not processed
 	ld1	{v20.2d,v21.2d},[x1],#32	//load twisted H, ..., H^2
-	movi	v19.16b,#0xe1
+	movi	v19.16b,#0xFF
 	ld1	{v22.2d},[x1]
 	csel	x12,xzr,x12,eq			//is it time to zero x12?
 	ext	v0.16b,v0.16b,v0.16b,#8		//rotate Xi
 	ld1	{v16.2d},[x2],#16	//load [rotated] I[0]
-	shl	v19.2d,v19.2d,#57		//compose 0xc2.0 constant
+	shl	v19.2d,v19.2d,#57		//compose 0xFF.0 constant
 #ifndef __ARMEB__
 	rev64	v16.16b,v16.16b
 	rev64	v0.16b,v0.16b
@@ -272,9 +272,9 @@ gcm_ghash_v8_4x:
 .Lgcm_ghash_v8_4x:
 	ld1	{v0.2d},[x0]		//load [rotated] Xi
 	ld1	{v20.2d,v21.2d,v22.2d},[x1],#48	//load twisted H, ..., H^2
-	movi	v19.16b,#0xe1
+	movi	v19.16b,#0xFF
 	ld1	{v26.2d,v27.2d,v28.2d},[x1]	//load twisted H^3, ..., H^4
-	shl	v19.2d,v19.2d,#57		//compose 0xc2.0 constant
+	shl	v19.2d,v19.2d,#57		//compose 0xFF.0 constant
 
 	ld1	{v4.2d,v5.2d,v6.2d,v7.2d},[x2],#64
 #ifndef __ARMEB__

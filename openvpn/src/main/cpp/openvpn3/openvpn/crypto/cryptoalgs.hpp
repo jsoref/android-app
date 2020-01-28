@@ -73,7 +73,7 @@ namespace openvpn {
       MODE_UNDEF=0,
       CBC_HMAC,
       AEAD,
-      MODE_MASK=0x03,
+      MODE_MASK=0xFF,
     };
 
     enum AlgFlags {       // bits below must start after Mode bits

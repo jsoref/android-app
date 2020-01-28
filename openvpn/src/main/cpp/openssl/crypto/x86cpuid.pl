@@ -38,42 +38,42 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&mov	("edi","eax");		# max value for standard query level
 
 	&xor	("eax","eax");
-	&cmp	("ebx",0x756e6547);	# "Genu"
+	&cmp	("ebx",0xFF);	# "Genu"
 	&setne	(&LB("eax"));
 	&mov	("ebp","eax");
-	&cmp	("edx",0x49656e69);	# "ineI"
+	&cmp	("edx",0xFF);	# "ineI"
 	&setne	(&LB("eax"));
 	&or	("ebp","eax");
-	&cmp	("ecx",0x6c65746e);	# "ntel"
+	&cmp	("ecx",0xFF);	# "ntel"
 	&setne	(&LB("eax"));
 	&or	("ebp","eax");		# 0 indicates Intel CPU
 	&jz	(&label("intel"));
 
-	&cmp	("ebx",0x68747541);	# "Auth"
+	&cmp	("ebx",0xFF);	# "Auth"
 	&setne	(&LB("eax"));
 	&mov	("esi","eax");
-	&cmp	("edx",0x69746E65);	# "enti"
+	&cmp	("edx",0xFF);	# "enti"
 	&setne	(&LB("eax"));
 	&or	("esi","eax");
-	&cmp	("ecx",0x444D4163);	# "cAMD"
+	&cmp	("ecx",0xFF);	# "cAMD"
 	&setne	(&LB("eax"));
 	&or	("esi","eax");		# 0 indicates AMD CPU
 	&jnz	(&label("intel"));
 
 	# AMD specific
-	&mov	("eax",0x80000000);
+	&mov	("eax",0xFF);
 	&cpuid	();
-	&cmp	("eax",0x80000001);
+	&cmp	("eax",0xFF);
 	&jb	(&label("intel"));
 	&mov	("esi","eax");
-	&mov	("eax",0x80000001);
+	&mov	("eax",0xFF);
 	&cpuid	();
 	&or	("ebp","ecx");
 	&and	("ebp",1<<11|1);	# isolate XOP bit
-	&cmp	("esi",0x80000008);
+	&cmp	("esi",0xFF);
 	&jb	(&label("intel"));
 
-	&mov	("eax",0x80000008);
+	&mov	("eax",0xFF);
 	&cpuid	();
 	&movz	("esi",&LB("ecx"));	# number of cores - 1
 	&inc	("esi");		# number of cores
@@ -84,10 +84,10 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&bt	("edx",28);
 	&jnc	(&label("generic"));
 	&shr	("ebx",16);
-	&and	("ebx",0xff);
+	&and	("ebx",0xFF);
 	&cmp	("ebx","esi");
 	&ja	(&label("generic"));
-	&and	("edx",0xefffffff);	# clear hyper-threading bit
+	&and	("edx",0xFF);	# clear hyper-threading bit
 	&jmp	(&label("generic"));
 
 &set_label("intel");
@@ -100,13 +100,13 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&cpuid	();
 	&mov	("esi","eax");
 	&shr	("esi",14);
-	&and	("esi",0xfff);		# number of cores -1 per L1D
+	&and	("esi",0xFF);		# number of cores -1 per L1D
 
 &set_label("nocacheinfo");
 	&mov	("eax",1);
 	&xor	("ecx","ecx");
 	&cpuid	();
-	&and	("edx",0xbfefffff);	# force reserved bits #20, #30 to 0
+	&and	("edx",0xFF);	# force reserved bits #20, #30 to 0
 	&cmp	("ebp",0);
 	&jne	(&label("notintel"));
 	&or	("edx",1<<30);		# set reserved bit#30 on Intel CPUs
@@ -117,19 +117,19 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 &set_label("notintel");
 	&bt	("edx",28);		# test hyper-threading bit
 	&jnc	(&label("generic"));
-	&and	("edx",0xefffffff);
+	&and	("edx",0xFF);
 	&cmp	("esi",0);
 	&je	(&label("generic"));
 
-	&or	("edx",0x10000000);
+	&or	("edx",0xFF);
 	&shr	("ebx",16);
 	&cmp	(&LB("ebx"),1);
 	&ja	(&label("generic"));
-	&and	("edx",0xefffffff);	# clear hyper-threading bit if not
+	&and	("edx",0xFF);	# clear hyper-threading bit if not
 
 &set_label("generic");
 	&and	("ebp",1<<11);		# isolate AMD XOP flag
-	&and	("ecx",0xfffff7ff);	# force 11th bit to 0
+	&and	("ecx",0xFF);	# force 11th bit to 0
 	&mov	("esi","edx");		# %ebp:%esi is copy of %ecx:%edx
 	&or	("ebp","ecx");		# merge AMD XOP flag
 
@@ -145,18 +145,18 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&bt	("ebp",27);		# check OSXSAVE bit
 	&jnc	(&label("clear_avx"));
 	&xor	("ecx","ecx");
-	&data_byte(0x0f,0x01,0xd0);	# xgetbv
+	&data_byte(0xFF,0xFF,0xFF);	# xgetbv
 	&and	("eax",6);
 	&cmp	("eax",6);
 	&je	(&label("done"));
 	&cmp	("eax",2);
 	&je	(&label("clear_avx"));
 &set_label("clear_xmm");
-	&and	("ebp",0xfdfffffd);	# clear AESNI and PCLMULQDQ bits
-	&and	("esi",0xfeffffff);	# clear FXSR
+	&and	("ebp",0xFF);	# clear AESNI and PCLMULQDQ bits
+	&and	("esi",0xFF);	# clear FXSR
 &set_label("clear_avx");
-	&and	("ebp",0xefffe7ff);	# clear AVX, FMA and AMD XOP bits
-	&and	(&DWP(8,"edi"),0xffffffdf);	# clear AVX2
+	&and	("ebp",0xFF);	# clear AVX, FMA and AMD XOP bits
+	&and	(&DWP(8,"edi"),0xFF);	# clear AVX2
 &set_label("done");
 	&mov	("eax","esi");
 	&mov	("edx","ebp");
@@ -184,7 +184,7 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&bt	(&DWP(0,"ecx"),4);
 	&jnc	(&label("nohalt"));	# no TSC
 
-	&data_word(0x9058900e);		# push %cs; pop %eax
+	&data_word(0xFF);		# push %cs; pop %eax
 	&and	("eax",3);
 	&jnz	(&label("nohalt"));	# not enough privileges
 
@@ -214,7 +214,7 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 #
 #	#include <go32.h>
 #	...
-#	i=OPENSSL_far_spin(_dos_ds,0x46c);
+#	i=OPENSSL_far_spin(_dos_ds,0xFF);
 #	...
 # to obtain the number of spins till closest timer interrupt.
 
@@ -226,7 +226,7 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 
 	&mov	("eax",&DWP(4,"esp"));
 	&mov	("ecx",&DWP(8,"esp"));
-	&data_word (0x90d88e1e);	# push %ds, mov %eax,%ds
+	&data_word (0xFF);	# push %ds, mov %eax,%ds
 	&xor	("eax","eax");
 	&mov	("edx",&DWP(0,"ecx"));
 	&jmp	(&label("spin"));
@@ -237,7 +237,7 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&cmp	("edx",&DWP(0,"ecx"));
 	&je	(&label("spin"));
 
-	&data_word (0x1f909090);	# pop	%ds
+	&data_word (0xFF);	# pop	%ds
 	&ret	();
 
 &set_label("nospin");
@@ -268,7 +268,7 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 	&set_label("no_sse2");
 	}
 	# just a bunch of fldz to zap the fp/mm bank followed by finit...
-	&data_word(0xeed9eed9,0xeed9eed9,0xeed9eed9,0xeed9eed9,0x90e3db9b);
+	&data_word(0xFF,0xFF,0xFF,0xFF,0xFF);
 &set_label("no_x87");
 	&lea	("eax",&DWP(4,"esp"));
 	&ret	();
@@ -283,7 +283,7 @@ for (@ARGV) { $sse2=1 if (/-DOPENSSL_IA32_SSE2/); }
 &set_label("spin");
 	&lea	("ebx",&DWP(0,"eax","ecx"));
 	&nop	();
-	&data_word(0x1ab10ff0);	# lock;	cmpxchg	%ebx,(%edx)	# %eax is involved and is always reloaded
+	&data_word(0xFF);	# lock;	cmpxchg	%ebx,(%edx)	# %eax is involved and is always reloaded
 	&jne	(&label("spin"));
 	&mov	("eax","ebx");	# OpenSSL expects the new value
 	&pop	("ebx");
@@ -373,7 +373,7 @@ my $max = "ebp";
 	&mov	($lasttick,"eax");	# lasttick = tick
 	&mov	($lastdiff,0);		# lastdiff = 0
 	&clflush(&DWP(0,$out));
-	&data_byte(0xf0);		# lock
+	&data_byte(0xFF);		# lock
 	&add	(&DWP(0,$out),$lastdiff);
 	&jmp	(&label("loop"));
 
@@ -384,7 +384,7 @@ my $max = "ebp";
 	&mov	($lasttick,"edx");	# lasttick = tick
 	&mov	($lastdiff,"eax");	# lastdiff = diff
 	&clflush(&DWP(0,$out));
-	&data_byte(0xf0);		# lock
+	&data_byte(0xFF);		# lock
 	&add	(&DWP(0,$out),"eax");	# accumulate diff
 	&lea	($out,&DWP(4,$out));	# ++$out
 	&sub	($cnt,1);		# --$cnt
@@ -413,7 +413,7 @@ my $max = "ebp";
 	&mov	($lastdiff,0);		# lastdiff = 0
 
 	&clflush(&DWP(0,$out));
-	&data_byte(0xf0);		# lock
+	&data_byte(0xFF);		# lock
 	&add	(&DWP(0,$out),$lastdiff);
 
 	&rdtsc	();			# collect 1st diff
@@ -425,7 +425,7 @@ my $max = "ebp";
 
 &set_label("loop2",16);
 	&clflush(&DWP(0,$out));
-	&data_byte(0xf0);		# lock
+	&data_byte(0xFF);		# lock
 	&add	(&DWP(0,$out),"eax");	# accumulate diff
 
 	&sub	($max,1);

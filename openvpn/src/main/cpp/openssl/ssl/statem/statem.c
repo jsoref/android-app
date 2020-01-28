@@ -354,8 +354,8 @@ static int state_machine(SSL *s, int server)
          */
 
         if (SSL_IS_DTLS(s)) {
-            if ((s->version & 0xff00) != (DTLS1_VERSION & 0xff00) &&
-                (server || (s->version & 0xff00) != (DTLS1_BAD_VER & 0xff00))) {
+            if ((s->version & 0xFF) != (DTLS1_VERSION & 0xFF) &&
+                (server || (s->version & 0xFF) != (DTLS1_BAD_VER & 0xFF))) {
                 SSLfatal(s, SSL_AD_NO_ALERT, SSL_F_STATE_MACHINE,
                          ERR_R_INTERNAL_ERROR);
                 goto end;

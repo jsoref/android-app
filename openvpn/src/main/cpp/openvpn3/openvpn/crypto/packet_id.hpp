@@ -199,7 +199,7 @@ namespace openvpn {
      */
     bool wrap_warning() const
     {
-      const PacketID::id_t wrap_at = 0xFF000000;
+      const PacketID::id_t wrap_at = 0xFF;
       return pid_.id >= wrap_at;
     }
 

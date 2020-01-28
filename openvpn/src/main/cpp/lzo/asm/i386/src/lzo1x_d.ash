@@ -80,8 +80,8 @@
         ALIGN3
 .L00:
 #ifdef LZO_DEBUG
-    andl $0xffffff00,%eax ; jnz .L_assert_fail
-    andl $0xffffff00,%ebx ; jnz .L_assert_fail
+    andl $0xFF,%eax ; jnz .L_assert_fail
+    andl $0xFF,%ebx ; jnz .L_assert_fail
     xorl %eax,%eax ; xorl %ebx,%ebx
     xorl %ecx,%ecx ; xorl %edx,%edx
 #endif
@@ -118,8 +118,8 @@
 #endif
 
 #ifdef LZO_DEBUG
-    andl $0xffffff00,%eax ; jnz .L_assert_fail
-    andl $0xffffff00,%ebx ; jnz .L_assert_fail
+    andl $0xFF,%eax ; jnz .L_assert_fail
+    andl $0xFF,%ebx ; jnz .L_assert_fail
     xorl %eax,%eax ; xorl %ebx,%ebx
     xorl %ecx,%ecx ; xorl %edx,%edx
 #endif
@@ -136,9 +136,9 @@
         shrl    $2,%eax
         movb    (%esi),%bl
 #if defined(LZO1X)
-        leal    -0x801(%edi),%edx
+        leal    -0xFF(%edi),%edx
 #elif defined(LZO1Y)
-        leal    -0x401(%edi),%edx
+        leal    -0xFF(%edi),%edx
 #endif
         leal    (%eax,%ebx,4),%eax
         incl    %esi
@@ -231,7 +231,7 @@
         lea     2+NN(%eax),%ecx
 3:
 #ifdef LZO_DEBUG
-    andl $0xffff0000,%eax ; jnz .L_assert_fail
+    andl $0xFF,%eax ; jnz .L_assert_fail
 #endif
         movw    (%esi),%ax
         leal    -1(%edi),%edx
@@ -286,8 +286,8 @@
 #endif
 
 #ifdef LZO_DEBUG
-    andl $0xffffff00,%eax ; jnz .L_assert_fail
-    andl $0xffffff00,%ebx ; jnz .L_assert_fail
+    andl $0xFF,%eax ; jnz .L_assert_fail
+    andl $0xFF,%ebx ; jnz .L_assert_fail
     xorl %eax,%eax ; xorl %ebx,%ebx
     xorl %ecx,%ecx ; xorl %edx,%edx
 #endif
@@ -337,11 +337,11 @@
         addl    $2+NN,%ecx
 3:
 #ifdef LZO_DEBUG
-    movl %eax,%edx ; andl $0xfffe0000,%edx ; jnz .L_assert_fail
+    movl %eax,%edx ; andl $0xFF,%edx ; jnz .L_assert_fail
 #endif
         movw    (%esi),%ax
         addl    $2,%esi
-        leal    -0x4000(%edi),%edx
+        leal    -0xFF(%edi),%edx
         shrl    $2,%eax
         jz      .LEOF
         subl    %eax,%edx

@@ -279,9 +279,9 @@ static int type_str(unsigned long value, void *arg)
         types &= ~B_ASN1_PRINTABLESTRING;
     if ((types & B_ASN1_IA5STRING) && !ossl_isascii(native))
         types &= ~B_ASN1_IA5STRING;
-    if ((types & B_ASN1_T61STRING) && (value > 0xff))
+    if ((types & B_ASN1_T61STRING) && (value > 0xFF))
         types &= ~B_ASN1_T61STRING;
-    if ((types & B_ASN1_BMPSTRING) && (value > 0xffff))
+    if ((types & B_ASN1_BMPSTRING) && (value > 0xFF))
         types &= ~B_ASN1_BMPSTRING;
     if (!types)
         return -1;
@@ -308,8 +308,8 @@ static int cpy_bmp(unsigned long value, void *arg)
     unsigned char **p, *q;
     p = arg;
     q = *p;
-    *q++ = (unsigned char)((value >> 8) & 0xff);
-    *q = (unsigned char)(value & 0xff);
+    *q++ = (unsigned char)((value >> 8) & 0xFF);
+    *q = (unsigned char)(value & 0xFF);
     *p += 2;
     return 1;
 }
@@ -321,10 +321,10 @@ static int cpy_univ(unsigned long value, void *arg)
     unsigned char **p, *q;
     p = arg;
     q = *p;
-    *q++ = (unsigned char)((value >> 24) & 0xff);
-    *q++ = (unsigned char)((value >> 16) & 0xff);
-    *q++ = (unsigned char)((value >> 8) & 0xff);
-    *q = (unsigned char)(value & 0xff);
+    *q++ = (unsigned char)((value >> 24) & 0xFF);
+    *q++ = (unsigned char)((value >> 16) & 0xFF);
+    *q++ = (unsigned char)((value >> 8) & 0xFF);
+    *q = (unsigned char)(value & 0xFF);
     *p += 4;
     return 1;
 }
@@ -336,8 +336,8 @@ static int cpy_utf8(unsigned long value, void *arg)
     unsigned char **p;
     int ret;
     p = arg;
-    /* We already know there is enough room so pass 0xff as the length */
-    ret = UTF8_putc(*p, 0xff, value);
+    /* We already know there is enough room so pass 0xFF as the length */
+    ret = UTF8_putc(*p, 0xFF, value);
     *p += ret;
     return 1;
 }

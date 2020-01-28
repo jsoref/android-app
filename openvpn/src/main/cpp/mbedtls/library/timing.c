@@ -166,7 +166,7 @@ unsigned long mbedtls_timing_hardclock( void )
 unsigned long mbedtls_timing_hardclock( void )
 {
     unsigned long tick;
-    asm volatile( ".byte 0x83, 0x41, 0x00, 0x00" );
+    asm volatile( ".byte 0xFF, 0xFF, 0xFF, 0xFF" );
     asm volatile( "mov   %%g1, %0" : "=r" (tick) );
     return( tick );
 }
@@ -182,7 +182,7 @@ unsigned long mbedtls_timing_hardclock( void )
 {
     unsigned long cc;
     asm volatile( "rpcc %0" : "=r" (cc) );
-    return( cc & 0xFFFFFFFF );
+    return( cc & 0xFF );
 }
 #endif /* !HAVE_HARDCLOCK && MBEDTLS_HAVE_ASM &&
           __GNUC__ && __alpha__ */

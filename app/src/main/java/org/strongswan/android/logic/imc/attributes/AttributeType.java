@@ -28,7 +28,7 @@ public enum AttributeType {
         PrivateEnterpriseNumber.IETF, 9), IETF_REMEDIATION_INSTRUCTIONS(PrivateEnterpriseNumber.IETF,
         10), IETF_FORWARDING_ENABLED(PrivateEnterpriseNumber.IETF, 11), IETF_FACTORY_DEFAULT_PWD_ENABLED(
         PrivateEnterpriseNumber.IETF, 12), IETF_RESERVED(PrivateEnterpriseNumber.IETF,
-        0xffffffff), /* ITA attributes */
+        0xFF), /* ITA attributes */
     ITA_SETTINGS(PrivateEnterpriseNumber.ITA, 4), ITA_DEVICE_ID(PrivateEnterpriseNumber.ITA, 8);
 
     private PrivateEnterpriseNumber mVendor;

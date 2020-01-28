@@ -110,8 +110,8 @@ _lzo_version_date(void)
 LZO_PUBLIC(lzo_uint32_t)
 lzo_adler32(lzo_uint32_t adler, const lzo_bytep buf, lzo_uint len)
 {
-    lzo_uint32_t s1 = adler & 0xffff;
-    lzo_uint32_t s2 = (adler >> 16) & 0xffff;
+    lzo_uint32_t s1 = adler & 0xFF;
+    lzo_uint32_t s2 = (adler >> 16) & 0xFF;
     unsigned k;
 
     if (buf == NULL)

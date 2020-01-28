@@ -18,12 +18,12 @@
 
 /** RFC 3394 section 2.2.3.1 Default Initial Value */
 static const unsigned char default_iv[] = {
-    0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
 /** RFC 5649 section 3 Alternative Initial Value 32-bit constant */
 static const unsigned char default_aiv[] = {
-    0xA6, 0x59, 0x59, 0xA6
+    0xFF, 0xFF, 0xFF, 0xFF
 };
 
 /** Input size limit: lower than maximum of standards but far larger than
@@ -52,7 +52,7 @@ size_t CRYPTO_128_wrap(void *key, const unsigned char *iv,
 {
     unsigned char *A, B[16], *R;
     size_t i, j, t;
-    if ((inlen & 0x7) || (inlen < 16) || (inlen > CRYPTO128_WRAP_MAX))
+    if ((inlen & 0xFF) || (inlen < 16) || (inlen > CRYPTO128_WRAP_MAX))
         return 0;
     A = B;
     t = 1;
@@ -67,11 +67,11 @@ size_t CRYPTO_128_wrap(void *key, const unsigned char *iv,
         for (i = 0; i < inlen; i += 8, t++, R += 8) {
             memcpy(B + 8, R, 8);
             block(B, B, key);
-            A[7] ^= (unsigned char)(t & 0xff);
-            if (t > 0xff) {
-                A[6] ^= (unsigned char)((t >> 8) & 0xff);
-                A[5] ^= (unsigned char)((t >> 16) & 0xff);
-                A[4] ^= (unsigned char)((t >> 24) & 0xff);
+            A[7] ^= (unsigned char)(t & 0xFF);
+            if (t > 0xFF) {
+                A[6] ^= (unsigned char)((t >> 8) & 0xFF);
+                A[5] ^= (unsigned char)((t >> 16) & 0xFF);
+                A[4] ^= (unsigned char)((t >> 24) & 0xFF);
             }
             memcpy(R, B + 8, 8);
         }
@@ -104,7 +104,7 @@ static size_t crypto_128_unwrap_raw(void *key, unsigned char *iv,
     unsigned char *A, B[16], *R;
     size_t i, j, t;
     inlen -= 8;
-    if ((inlen & 0x7) || (inlen < 16) || (inlen > CRYPTO128_WRAP_MAX))
+    if ((inlen & 0xFF) || (inlen < 16) || (inlen > CRYPTO128_WRAP_MAX))
         return 0;
     A = B;
     t = 6 * (inlen >> 3);
@@ -113,11 +113,11 @@ static size_t crypto_128_unwrap_raw(void *key, unsigned char *iv,
     for (j = 0; j < 6; j++) {
         R = out + inlen - 8;
         for (i = 0; i < inlen; i += 8, t--, R -= 8) {
-            A[7] ^= (unsigned char)(t & 0xff);
-            if (t > 0xff) {
-                A[6] ^= (unsigned char)((t >> 8) & 0xff);
-                A[5] ^= (unsigned char)((t >> 16) & 0xff);
-                A[4] ^= (unsigned char)((t >> 24) & 0xff);
+            A[7] ^= (unsigned char)(t & 0xFF);
+            if (t > 0xFF) {
+                A[6] ^= (unsigned char)((t >> 8) & 0xFF);
+                A[5] ^= (unsigned char)((t >> 16) & 0xFF);
+                A[4] ^= (unsigned char)((t >> 24) & 0xFF);
             }
             memcpy(B + 8, R, 8);
             block(B, B, key);
@@ -260,11 +260,11 @@ size_t CRYPTO_128_unwrap_pad(void *key, const unsigned char *icv,
     size_t ptext_len;
     /* RFC 5649 section 3: Alternative Initial Value */
     unsigned char aiv[8];
-    static unsigned char zeros[8] = { 0x0 };
+    static unsigned char zeros[8] = { 0xFF };
     size_t ret;
 
     /* Section 4.2: Ciphertext length has to be (n+1) 64-bit blocks. */
-    if ((inlen & 0x7) != 0 || inlen < 16 || inlen >= CRYPTO128_WRAP_MAX)
+    if ((inlen & 0xFF) != 0 || inlen < 16 || inlen >= CRYPTO128_WRAP_MAX)
         return 0;
 
     if (inlen == 16) {

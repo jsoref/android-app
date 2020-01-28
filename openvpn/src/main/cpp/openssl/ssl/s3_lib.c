@@ -24,10 +24,10 @@
 
 /* TLSv1.3 downgrade protection sentinel values */
 const unsigned char tls11downgrade[] = {
-    0x44, 0x4f, 0x57, 0x4e, 0x47, 0x52, 0x44, 0x00
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 const unsigned char tls12downgrade[] = {
-    0x44, 0x4f, 0x57, 0x4e, 0x47, 0x52, 0x44, 0x01
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 /* The list of available TLSv1.3 ciphers */
@@ -2605,7 +2605,7 @@ static SSL_CIPHER ssl3_ciphers[] = {
      1,
      "GOST2001-GOST89-GOST89",
      "TLS_GOSTR341001_WITH_28147_CNT_IMIT",
-     0x3000081,
+     0xFF,
      SSL_kGOST,
      SSL_aGOST01,
      SSL_eGOST2814789CNT,
@@ -2621,7 +2621,7 @@ static SSL_CIPHER ssl3_ciphers[] = {
      1,
      "GOST2001-NULL-GOST94",
      "TLS_GOSTR341001_WITH_NULL_GOSTR3411",
-     0x3000083,
+     0xFF,
      SSL_kGOST,
      SSL_aGOST01,
      SSL_eNULL,
@@ -2637,7 +2637,7 @@ static SSL_CIPHER ssl3_ciphers[] = {
      1,
      "GOST2012-GOST8912-GOST8912",
      NULL,
-     0x0300ff85,
+     0xFF,
      SSL_kGOST,
      SSL_aGOST12 | SSL_aGOST01,
      SSL_eGOST2814789CNT12,
@@ -2653,7 +2653,7 @@ static SSL_CIPHER ssl3_ciphers[] = {
      1,
      "GOST2012-NULL-GOST12",
      NULL,
-     0x0300ff87,
+     0xFF,
      SSL_kGOST,
      SSL_aGOST12 | SSL_aGOST01,
      SSL_eNULL,
@@ -4112,12 +4112,12 @@ const SSL_CIPHER *ssl3_get_cipher_by_char(const unsigned char *p)
 
 int ssl3_put_cipher_by_char(const SSL_CIPHER *c, WPACKET *pkt, size_t *len)
 {
-    if ((c->id & 0xff000000) != SSL3_CK_CIPHERSUITE_FLAG) {
+    if ((c->id & 0xFF) != SSL3_CK_CIPHERSUITE_FLAG) {
         *len = 0;
         return 1;
     }
 
-    if (!WPACKET_put_bytes_u16(pkt, c->id & 0xffff))
+    if (!WPACKET_put_bytes_u16(pkt, c->id & 0xFF))
         return 0;
 
     *len = 2;
@@ -4391,7 +4391,7 @@ static int ssl3_set_req_cert_type(CERT *c, const unsigned char *p, size_t len)
     c->ctype_len = 0;
     if (p == NULL || len == 0)
         return 1;
-    if (len > 0xff)
+    if (len > 0xFF)
         return 0;
     c->ctype = OPENSSL_memdup(p, len);
     if (c->ctype == NULL)

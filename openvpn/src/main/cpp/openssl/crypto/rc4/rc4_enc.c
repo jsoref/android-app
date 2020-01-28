@@ -30,12 +30,12 @@ void RC4(RC4_KEY *key, size_t len, const unsigned char *indata,
     d = key->data;
 
 #define LOOP(in,out) \
-                x=((x+1)&0xff); \
+                x=((x+1)&0xFF); \
                 tx=d[x]; \
-                y=(tx+y)&0xff; \
+                y=(tx+y)&0xFF; \
                 d[x]=ty=d[y]; \
                 d[y]=tx; \
-                (out) = d[(tx+ty)&0xff]^ (in);
+                (out) = d[(tx+ty)&0xFF]^ (in);
 
     i = len >> 3;
     if (i) {
@@ -54,7 +54,7 @@ void RC4(RC4_KEY *key, size_t len, const unsigned char *indata,
                 break;
         }
     }
-    i = len & 0x07;
+    i = len & 0xFF;
     if (i) {
         for (;;) {
             LOOP(indata[0], outdata[0]);

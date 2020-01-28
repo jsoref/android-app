@@ -79,7 +79,7 @@ int ASN1_bn_print(BIO *bp, const char *number, const BIGNUM *num,
         goto err;
     n = BN_bn2bin(num, buf + 1);
 
-    if (buf[1] & 0x80)
+    if (buf[1] & 0xFF)
         n++;
     else
         tmp++;

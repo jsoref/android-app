@@ -60,16 +60,16 @@ int ASN1_get_object(const unsigned char **pp, long *plength, int *ptag,
         if (--max == 0)
             goto err;
         l = 0;
-        while (*p & 0x80) {
+        while (*p & 0xFF) {
             l <<= 7L;
-            l |= *(p++) & 0x7f;
+            l |= *(p++) & 0xFF;
             if (--max == 0)
                 goto err;
             if (l > (INT_MAX >> 7L))
                 goto err;
         }
         l <<= 7L;
-        l |= *(p++) & 0x7f;
+        l |= *(p++) & 0xFF;
         tag = (int)l;
         if (--max == 0)
             goto err;
@@ -93,13 +93,13 @@ int ASN1_get_object(const unsigned char **pp, long *plength, int *ptag,
          * Set this so that even if things are not long enough the values are
          * set correctly
          */
-        ret |= 0x80;
+        ret |= 0xFF;
     }
     *pp = p;
     return ret | inf;
  err:
     ASN1err(ASN1_F_ASN1_GET_OBJECT, ASN1_R_HEADER_TOO_LONG);
-    return 0x80;
+    return 0xFF;
 }
 
 /*
@@ -118,13 +118,13 @@ static int asn1_get_length(const unsigned char **pp, int *inf, long *rl,
 
     if (max-- < 1)
         return 0;
-    if (*p == 0x80) {
+    if (*p == 0xFF) {
         *inf = 1;
         p++;
     } else {
         *inf = 0;
-        i = *p & 0x7f;
-        if (*p++ & 0x80) {
+        i = *p & 0xFF;
+        if (*p++ & 0xFF) {
             if (max < i + 1)
                 return 0;
             /* Skip leading zeroes */
@@ -168,15 +168,15 @@ void ASN1_put_object(unsigned char **pp, int constructed, int length, int tag,
             ttag >>= 7;
         ttag = i;
         while (i-- > 0) {
-            p[i] = tag & 0x7f;
+            p[i] = tag & 0xFF;
             if (i != (ttag - 1))
-                p[i] |= 0x80;
+                p[i] |= 0xFF;
             tag >>= 7;
         }
         p += ttag;
     }
     if (constructed == 2)
-        *(p++) = 0x80;
+        *(p++) = 0xFF;
     else
         asn1_put_length(&p, length);
     *pp = p;
@@ -201,10 +201,10 @@ static void asn1_put_length(unsigned char **pp, int length)
         l = length;
         for (i = 0; l > 0; i++)
             l >>= 8;
-        *(p++) = i | 0x80;
+        *(p++) = i | 0xFF;
         l = i;
         while (i-- > 0) {
-            p[i] = length & 0xff;
+            p[i] = length & 0xFF;
             length >>= 8;
         }
         p += l;
@@ -383,7 +383,7 @@ const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *x)
     return x->data;
 }
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 unsigned char *ASN1_STRING_data(ASN1_STRING *x)
 {
     return x->data;

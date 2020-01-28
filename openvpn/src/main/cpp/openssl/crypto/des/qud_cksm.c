@@ -55,13 +55,13 @@ DES_LONG DES_quad_cksum(const unsigned char *input, DES_cblock output[],
             l--;
             /* add */
             t0 += z0;
-            t0 &= 0xffffffffL;
+            t0 &= 0xFFL;
             t1 = z1;
             /* square, well sort of square */
-            z0 = ((((t0 * t0) & 0xffffffffL) + ((t1 * t1) & 0xffffffffL))
-                  & 0xffffffffL) % 0x7fffffffL;
-            z1 = ((t0 * ((t1 + NOISE) & 0xffffffffL)) & 0xffffffffL) %
-                0x7fffffffL;
+            z0 = ((((t0 * t0) & 0xFFL) + ((t1 * t1) & 0xFFL))
+                  & 0xFFL) % 0xFFL;
+            z1 = ((t0 * ((t1 + NOISE) & 0xFFL)) & 0xFFL) %
+                0xFFL;
         }
         if (lp != NULL) {
             /*

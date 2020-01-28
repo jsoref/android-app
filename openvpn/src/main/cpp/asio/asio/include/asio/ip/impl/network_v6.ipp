@@ -50,7 +50,7 @@ ASIO_DECL address_v6 network_v6::network() const ASIO_NOEXCEPT
     if (prefix_length_ <= i * 8)
       bytes[i] = 0;
     else if (prefix_length_ < (i + 1) * 8)
-      bytes[i] &= 0xFF00 >> (prefix_length_ % 8);
+      bytes[i] &= 0xFF >> (prefix_length_ % 8);
   }
   return address_v6(bytes, address_.scope_id());
 }
@@ -68,7 +68,7 @@ address_v6_range network_v6::hosts() const ASIO_NOEXCEPT
     }
     else if (prefix_length_ < (i + 1) * 8)
     {
-      begin_bytes[i] &= 0xFF00 >> (prefix_length_ % 8);
+      begin_bytes[i] &= 0xFF >> (prefix_length_ % 8);
       end_bytes[i] |= 0xFF >> (prefix_length_ % 8);
     }
   }

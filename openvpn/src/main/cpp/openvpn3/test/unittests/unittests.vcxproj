@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(OVPN3_BUILD)\amd64\mbedtls\include;$(OVPN3_BUILD)\amd64\lz4\lib;$(GTEST_ROOT)\googletest\include;$(OVPN3_CORE);$(OVPN3_BUILD)\amd64\asio\asio\include;$(OVPN3_TAP_WINDOWS)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0x0600;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0xFF;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -90,7 +90,7 @@
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(OVPN3_ROOT)\deps\amd64\mbedtls\include;$(OVPN3_ROOT)\deps\amd64\lz4\lib;$(GTEST_ROOT)\googletest\include;$(OVPN3_ROOT)\core;$(OVPN3_ROOT)\deps\amd64\asio\asio\include;$(OVPN3_ROOT)\deps\amd64\tap-windows\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0x0600;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0xFF;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -106,7 +106,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(OVPN3_BUILD)\amd64\mbedtls\include;$(OVPN3_BUILD)\amd64\lz4\lib;$(GTEST_ROOT)\googletest\include;$(OVPN3_CORE);$(OVPN3_BUILD)\amd64\asio\asio\include;$(OVPN3_TAP_WINDOWS)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0x0600;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0xFF;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -124,7 +124,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(OVPN3_ROOT)\deps\amd64\mbedtls\include;$(OVPN3_ROOT)\deps\amd64\lz4\lib;$(GTEST_ROOT)\googletest\include;$(OVPN3_ROOT)\core;$(OVPN3_ROOT)\deps\amd64\asio\asio\include;$(OVPN3_ROOT)\deps\amd64\tap-windows\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0x0600;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0xFF;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;OPENVPN_FORCE_TUN_NULL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

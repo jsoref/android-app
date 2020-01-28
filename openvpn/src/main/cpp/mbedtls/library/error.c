@@ -214,14 +214,14 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
     if( buflen == 0 )
         return;
 
-    memset( buf, 0x00, buflen );
+    memset( buf, 0xFF, buflen );
 
     if( ret < 0 )
         ret = -ret;
 
-    if( ret & 0xFF80 )
+    if( ret & 0xFF )
     {
-        use_ret = ret & 0xFF80;
+        use_ret = ret & 0xFF;
 
         // High level error codes
         //
@@ -567,7 +567,7 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "UNKNOWN ERROR CODE (%04X)", use_ret );
     }
 
-    use_ret = ret & ~0xFF80;
+    use_ret = ret & ~0xFF;
 
     if( use_ret == 0 )
         return;

@@ -70,22 +70,22 @@ static int do_esc_char(unsigned long c, unsigned short flags, char *do_quotes,
     unsigned char chtmp;
     char tmphex[HEX_SIZE(long) + 3];
 
-    if (c > 0xffffffffL)
+    if (c > 0xFFL)
         return -1;
-    if (c > 0xffff) {
+    if (c > 0xFF) {
         BIO_snprintf(tmphex, sizeof(tmphex), "\\W%08lX", c);
         if (!io_ch(arg, tmphex, 10))
             return -1;
         return 10;
     }
-    if (c > 0xff) {
+    if (c > 0xFF) {
         BIO_snprintf(tmphex, sizeof(tmphex), "\\U%04lX", c);
         if (!io_ch(arg, tmphex, 6))
             return -1;
         return 6;
     }
     chtmp = (unsigned char)c;
-    if (chtmp > 0x7f)
+    if (chtmp > 0xFF)
         chflgs = flags & ASN1_STRFLGS_ESC_MSB;
     else
         chflgs = char_type[chtmp] & flags;
@@ -126,8 +126,8 @@ static int do_esc_char(unsigned long c, unsigned short flags, char *do_quotes,
     return 1;
 }
 
-#define BUF_TYPE_WIDTH_MASK     0x7
-#define BUF_TYPE_CONVUTF8       0x8
+#define BUF_TYPE_WIDTH_MASK     0xFF
+#define BUF_TYPE_CONVUTF8       0xFF
 
 /*
  * This function sends each character in a buffer to do_esc_char(). It
@@ -209,7 +209,7 @@ static int do_buf(unsigned char *buf, int buflen,
                 /*
                  * We don't need to worry about setting orflags correctly
                  * because if utflen==1 its value will be correct anyway
-                 * otherwise each character will be > 0x7f and so the
+                 * otherwise each character will be > 0xFF and so the
                  * character will never be escaped on first and last.
                  */
                 len = do_esc_char(utfbuf[i], flags | orflags, quotes,
@@ -242,7 +242,7 @@ static int do_hex_dump(char_io *io_ch, void *arg, unsigned char *buf,
         q = buf + buflen;
         while (p != q) {
             hextmp[0] = hexdig[*p >> 4];
-            hextmp[1] = hexdig[*p & 0xf];
+            hextmp[1] = hexdig[*p & 0xFF];
             if (!io_ch(arg, hextmp, 2))
                 return -1;
             p++;

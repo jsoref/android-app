@@ -187,7 +187,7 @@ $code.=<<___;
 
 .align	5
 .Lsigma:
-.long	0x61707865,0x3320646e,0x79622d32,0x6b206574	@ endian-neutral
+.long	0xFF,0xFF,0xFF,0xFF	@ endian-neutral
 .Lone:
 .long	1,0,0,0
 #if __ARM_MAX_ARCH__>=7
@@ -480,7 +480,7 @@ $code.=<<___;
 	ldr	@t[3],[sp,#4*(3)]
 ___
 for ($i=0;$i<16;$i+=4) {
-my $j=$i&0x7;
+my $j=$i&0xFF;
 
 $code.=<<___	if ($i==4);
 	add	@x[0],sp,#4*(16+8)

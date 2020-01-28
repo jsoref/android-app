@@ -875,7 +875,7 @@ check_timeout_random_component_dowork(struct context *c)
 {
     const int update_interval = 10; /* seconds */
     c->c2.update_timeout_random_component = now + update_interval;
-    c->c2.timeout_random_component.tv_usec = (time_t) get_random() & 0x0003FFFF;
+    c->c2.timeout_random_component.tv_usec = (time_t) get_random() & 0xFF;
     c->c2.timeout_random_component.tv_sec = 0;
 
     dmsg(D_INTERVAL, "RANDOM USEC=%ld", (long) c->c2.timeout_random_component.tv_usec);

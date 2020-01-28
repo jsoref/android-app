@@ -29,17 +29,17 @@ void DES_ofb_encrypt(const unsigned char *in, unsigned char *out, int numbits,
     if (num > 64)
         return;
     if (num > 32) {
-        mask0 = 0xffffffffL;
+        mask0 = 0xFFL;
         if (num >= 64)
             mask1 = mask0;
         else
             mask1 = (1L << (num - 32)) - 1;
     } else {
         if (num == 32)
-            mask0 = 0xffffffffL;
+            mask0 = 0xFFL;
         else
             mask0 = (1L << num) - 1;
-        mask1 = 0x00000000L;
+        mask1 = 0xFFL;
     }
 
     iv = &(*ivec)[0];
@@ -67,12 +67,12 @@ void DES_ofb_encrypt(const unsigned char *in, unsigned char *out, int numbits,
             v0 = vv0;
             v1 = vv1;
         } else if (num > 32) {  /* && num != 64 */
-            v0 = ((v1 >> (num - 32)) | (vv0 << (64 - num))) & 0xffffffffL;
-            v1 = ((vv0 >> (num - 32)) | (vv1 << (64 - num))) & 0xffffffffL;
+            v0 = ((v1 >> (num - 32)) | (vv0 << (64 - num))) & 0xFFL;
+            v1 = ((vv0 >> (num - 32)) | (vv1 << (64 - num))) & 0xFFL;
         } else {                /* num < 32 */
 
-            v0 = ((v0 >> num) | (v1 << (32 - num))) & 0xffffffffL;
-            v1 = ((v1 >> num) | (vv0 << (32 - num))) & 0xffffffffL;
+            v0 = ((v0 >> num) | (v1 << (32 - num))) & 0xFFL;
+            v1 = ((v1 >> num) | (vv0 << (32 - num))) & 0xFFL;
         }
     }
     iv = &(*ivec)[0];

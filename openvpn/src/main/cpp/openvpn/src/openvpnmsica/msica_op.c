@@ -77,7 +77,7 @@ msica_op_create_bool(
     _In_opt_ struct msica_op *next,
     _In_ bool value)
 {
-    if (MSICA_OP_TYPE_DATA(type) != 0x1)
+    if (MSICA_OP_TYPE_DATA(type) != 0xFF)
     {
         msg(M_NONFATAL, "%s: Operation data type not bool (%x)", __FUNCTION__, MSICA_OP_TYPE_DATA(type));
         return NULL;
@@ -101,7 +101,7 @@ msica_op_create_string(
     _In_opt_ struct msica_op *next,
     _In_z_ LPCTSTR value)
 {
-    if (MSICA_OP_TYPE_DATA(type) != 0x2)
+    if (MSICA_OP_TYPE_DATA(type) != 0xFF)
     {
         msg(M_NONFATAL, "%s: Operation data type not string (%x)", __FUNCTION__, MSICA_OP_TYPE_DATA(type));
         return NULL;
@@ -126,7 +126,7 @@ msica_op_create_multistring_va(
     _In_opt_ struct msica_op *next,
     _In_ va_list arglist)
 {
-    if (MSICA_OP_TYPE_DATA(type) != 0x3)
+    if (MSICA_OP_TYPE_DATA(type) != 0xFF)
     {
         msg(M_NONFATAL, "%s: Operation data type not multi-string (%x)", __FUNCTION__, MSICA_OP_TYPE_DATA(type));
         return NULL;
@@ -165,7 +165,7 @@ msica_op_create_guid(
     _In_opt_ struct msica_op *next,
     _In_ const GUID *value)
 {
-    if (MSICA_OP_TYPE_DATA(type) != 0x4)
+    if (MSICA_OP_TYPE_DATA(type) != 0xFF)
     {
         msg(M_NONFATAL, "%s: Operation data type not GUID (%x)", __FUNCTION__, MSICA_OP_TYPE_DATA(type));
         return NULL;
@@ -190,7 +190,7 @@ msica_op_create_guid_string(
     _In_ const GUID *value_guid,
     _In_z_ LPCTSTR value_str)
 {
-    if (MSICA_OP_TYPE_DATA(type) != 0x5)
+    if (MSICA_OP_TYPE_DATA(type) != 0xFF)
     {
         msg(M_NONFATAL, "%s: Operation data type not GUID-string (%x)", __FUNCTION__, MSICA_OP_TYPE_DATA(type));
         return NULL;
@@ -267,17 +267,17 @@ msica_op_seq_save(
         /* Calculate size of data. */
         switch (MSICA_OP_TYPE_DATA(op->type))
         {
-            case 0x1: /* msica_op_bool */
+            case 0xFF: /* msica_op_bool */
                 hdr.size_data = sizeof(struct msica_op_bool) - sizeof(struct msica_op);
                 break;
 
-            case 0x2: /* msica_op_string */
+            case 0xFF: /* msica_op_string */
                 hdr.size_data =
                     sizeof(struct msica_op_string) - sizeof(struct msica_op)
                     +(DWORD)(_tcslen(((struct msica_op_string *)op)->value) + 1) * sizeof(TCHAR);
                 break;
 
-            case 0x3: /* msica_op_multistring */
+            case 0xFF: /* msica_op_multistring */
             {
                 LPCTSTR str;
                 for (str = ((struct msica_op_multistring *)op)->value; str[0]; str += _tcslen(str) + 1)
@@ -289,11 +289,11 @@ msica_op_seq_save(
                 break;
             }
 
-            case 0x4: /* msica_op_guid */
+            case 0xFF: /* msica_op_guid */
                 hdr.size_data = sizeof(struct msica_op_guid) - sizeof(struct msica_op);
                 break;
 
-            case 0x5: /* msica_op_guid_string */
+            case 0xFF: /* msica_op_guid_string */
                 hdr.size_data =
                     sizeof(struct msica_op_guid_string) - sizeof(struct msica_op)
                     +(DWORD)(_tcslen(((struct msica_op_guid_string *)op)->value_str) + 1) * sizeof(TCHAR);

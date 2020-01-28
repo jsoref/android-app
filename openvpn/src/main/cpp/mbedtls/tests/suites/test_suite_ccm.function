@@ -23,7 +23,7 @@ void mbedtls_ccm_setkey( int cipher_id, int key_size, int result )
 
     mbedtls_ccm_init( &ctx );
 
-    memset( key, 0x2A, sizeof( key ) );
+    memset( key, 0xFF, sizeof( key ) );
     TEST_ASSERT( (unsigned) key_size <= 8 * sizeof( key ) );
 
     ret = mbedtls_ccm_setkey( &ctx, cipher_id, key, key_size );
@@ -159,7 +159,7 @@ void mbedtls_ccm_auth_decrypt( int cipher_id, data_t * key,
 
     mbedtls_ccm_init( &ctx );
 
-    memset( tag, 0x00, sizeof( tag ) );
+    memset( tag, 0xFF, sizeof( tag ) );
 
     msg->len -= tag_len;
     memcpy( tag, msg->x + msg->len, tag_len );
@@ -210,13 +210,13 @@ void mbedtls_ccm_star_encrypt_and_tag( int cipher_id,
 
     mbedtls_ccm_init( &ctx );
 
-    memset( key, 0x00, sizeof( key ) );
-    memset( msg, 0x00, sizeof( msg ) );
-    memset( iv, 0x00, sizeof( iv ) );
-    memset( add, 0x00, sizeof( add ) );
-    memset( result, 0x00, sizeof( result ) );
-    memset( source_address, 0x00, sizeof( source_address ) );
-    memset( frame_counter, 0x00, sizeof( frame_counter ) );
+    memset( key, 0xFF, sizeof( key ) );
+    memset( msg, 0xFF, sizeof( msg ) );
+    memset( iv, 0xFF, sizeof( iv ) );
+    memset( add, 0xFF, sizeof( add ) );
+    memset( result, 0xFF, sizeof( result ) );
+    memset( source_address, 0xFF, sizeof( source_address ) );
+    memset( frame_counter, 0xFF, sizeof( frame_counter ) );
 
     key_len = unhexify( key, key_hex );
     msg_len = unhexify( msg, msg_hex );
@@ -277,14 +277,14 @@ void mbedtls_ccm_star_auth_decrypt( int cipher_id,
 
     mbedtls_ccm_init( &ctx );
 
-    memset( key, 0x00, sizeof( key ) );
-    memset( msg, 0x00, sizeof( msg ) );
-    memset( iv, 0x00, sizeof( iv ) );
-    memset( add, 0x00, sizeof( add ) );
-    memset( result, 0x00, sizeof( result ) );
-    memset( source_address, 0x00, sizeof( source_address ) );
-    memset( frame_counter, 0x00, sizeof( frame_counter ) );
-    memset( tag, 0x00, sizeof( tag ) );
+    memset( key, 0xFF, sizeof( key ) );
+    memset( msg, 0xFF, sizeof( msg ) );
+    memset( iv, 0xFF, sizeof( iv ) );
+    memset( add, 0xFF, sizeof( add ) );
+    memset( result, 0xFF, sizeof( result ) );
+    memset( source_address, 0xFF, sizeof( source_address ) );
+    memset( frame_counter, 0xFF, sizeof( frame_counter ) );
+    memset( tag, 0xFF, sizeof( tag ) );
 
     key_len = unhexify( key, key_hex );
     msg_len = unhexify( msg, msg_hex );

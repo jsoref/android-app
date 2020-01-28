@@ -43,9 +43,9 @@ const char *tls_crypt_v2_cli_pem_name = "OpenVPN tls-crypt-v2 client key";
 const char *tls_crypt_v2_srv_pem_name = "OpenVPN tls-crypt-v2 server key";
 
 /** Metadata contains user-specified data */
-static const uint8_t TLS_CRYPT_METADATA_TYPE_USER           = 0x00;
+static const uint8_t TLS_CRYPT_METADATA_TYPE_USER           = 0xFF;
 /** Metadata contains a 64-bit unix timestamp in network byte order */
-static const uint8_t TLS_CRYPT_METADATA_TYPE_TIMESTAMP      = 0x01;
+static const uint8_t TLS_CRYPT_METADATA_TYPE_TIMESTAMP      = 0xFF;
 
 static struct key_type
 tls_crypt_kt(void)

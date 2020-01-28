@@ -14,21 +14,21 @@
 #include "internal/cryptlib.h"
 
 static const unsigned char ssl3_pad_1[48] = {
-    0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
-    0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
-    0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
-    0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
-    0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36,
-    0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36, 0x36
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 static const unsigned char ssl3_pad_2[48] = {
-    0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c,
-    0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c,
-    0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c,
-    0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c,
-    0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c,
-    0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 /*
@@ -229,7 +229,7 @@ int ssl3_get_record(SSL *s)
              * The first record received by the server may be a V2ClientHello.
              */
             if (s->server && RECORD_LAYER_is_first_record(&s->rlayer)
-                    && (sslv2len & 0x8000) != 0
+                    && (sslv2len & 0xFF) != 0
                     && (type == SSL2_MT_CLIENT_HELLO)) {
                 /*
                  *  SSLv2 style record
@@ -243,7 +243,7 @@ int ssl3_get_record(SSL *s)
                 thisrr->type = SSL3_RT_HANDSHAKE;
                 thisrr->rec_version = SSL2_VERSION;
 
-                thisrr->length = sslv2len & 0x7fff;
+                thisrr->length = sslv2len & 0xFF;
 
                 if (thisrr->length > SSL3_BUFFER_get_len(rbuf)
                     - SSL2_RT_HEADER_LENGTH) {
@@ -284,7 +284,7 @@ int ssl3_get_record(SSL *s)
                 if (!s->first_packet && !SSL_IS_TLS13(s)
                         && s->hello_retry_request != SSL_HRR_PENDING
                         && version != (unsigned int)s->version) {
-                    if ((s->version & 0xFF00) == (version & 0xFF00)
+                    if ((s->version & 0xFF) == (version & 0xFF)
                         && !s->enc_write_ctx && !s->write_hash) {
                         if (thisrr->type == SSL3_RT_ALERT) {
                             /*
@@ -466,9 +466,9 @@ int ssl3_get_record(SSL *s)
             && (SSL_IS_TLS13(s) || s->hello_retry_request != SSL_HRR_NONE)
             && SSL_IS_FIRST_HANDSHAKE(s)) {
         /*
-         * CCS messages must be exactly 1 byte long, containing the value 0x01
+         * CCS messages must be exactly 1 byte long, containing the value 0xFF
          */
-        if (thisrr->length != 1 || thisrr->data[0] != 0x01) {
+        if (thisrr->length != 1 || thisrr->data[0] != 0xFF) {
             SSLfatal(s, SSL_AD_ILLEGAL_PARAMETER, SSL_F_SSL3_GET_RECORD,
                      SSL_R_INVALID_CCS_MESSAGE);
             return -1;
@@ -1058,7 +1058,7 @@ int tls1_enc(SSL *s, SSL3_RECORD *recs, size_t n_recs, int sending)
                 buf[ctr][9] = (unsigned char)(s->version >> 8);
                 buf[ctr][10] = (unsigned char)(s->version);
                 buf[ctr][11] = (unsigned char)(recs[ctr].length >> 8);
-                buf[ctr][12] = (unsigned char)(recs[ctr].length & 0xff);
+                buf[ctr][12] = (unsigned char)(recs[ctr].length & 0xFF);
                 pad = EVP_CIPHER_CTX_ctrl(ds, EVP_CTRL_AEAD_TLS1_AAD,
                                           EVP_AEAD_TLS1_AAD_LEN, buf[ctr]);
                 if (pad <= 0) {
@@ -1233,7 +1233,7 @@ int n_ssl3_mac(SSL *ssl, SSL3_RECORD *rec, unsigned char *md, int sending)
         j += 8;
         header[j++] = rec->type;
         header[j++] = (unsigned char)(rec->length >> 8);
-        header[j++] = (unsigned char)(rec->length & 0xff);
+        header[j++] = (unsigned char)(rec->length & 0xFF);
 
         /* Final param == is SSLv3 */
         if (ssl3_cbc_digest_record(hash,
@@ -1329,7 +1329,7 @@ int tls1_mac(SSL *ssl, SSL3_RECORD *rec, unsigned char *md, int sending)
     header[9] = (unsigned char)(ssl->version >> 8);
     header[10] = (unsigned char)(ssl->version);
     header[11] = (unsigned char)(rec->length >> 8);
-    header[12] = (unsigned char)(rec->length & 0xff);
+    header[12] = (unsigned char)(rec->length & 0xFF);
 
     if (!sending && !SSL_READ_ETM(ssl) &&
         EVP_CIPHER_CTX_mode(ssl->enc_read_ctx) == EVP_CIPH_CBC_MODE &&
@@ -1500,7 +1500,7 @@ int tls1_cbc_remove_padding(const SSL *s,
      * If any of the final |padding_length+1| bytes had the wrong value, one
      * or more of the lower eight bits of |good| will be cleared.
      */
-    good = constant_time_eq_s(0xff, good & 0xff);
+    good = constant_time_eq_s(0xFF, good & 0xFF);
     rec->length -= good & (padding_length + 1);
 
     return constant_time_select_int_s(good, 1, -1);
@@ -1908,7 +1908,7 @@ int dtls1_get_record(SSL *s)
             }
         }
 
-        if ((version & 0xff00) != (s->version & 0xff00)) {
+        if ((version & 0xFF) != (s->version & 0xFF)) {
             /* wrong version, silently discard record */
             rr->length = 0;
             rr->read = 1;

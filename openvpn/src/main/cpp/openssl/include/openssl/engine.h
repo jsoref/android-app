@@ -14,7 +14,7 @@
 # include <openssl/opensslconf.h>
 
 # ifndef OPENSSL_NO_ENGINE
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/bn.h>
 #  include <openssl/rsa.h>
 #  include <openssl/dsa.h>
@@ -36,18 +36,18 @@ extern "C" {
  * These flags are used to control combinations of algorithm (methods) by
  * bitwise "OR"ing.
  */
-# define ENGINE_METHOD_RSA               (unsigned int)0x0001
-# define ENGINE_METHOD_DSA               (unsigned int)0x0002
-# define ENGINE_METHOD_DH                (unsigned int)0x0004
-# define ENGINE_METHOD_RAND              (unsigned int)0x0008
-# define ENGINE_METHOD_CIPHERS           (unsigned int)0x0040
-# define ENGINE_METHOD_DIGESTS           (unsigned int)0x0080
-# define ENGINE_METHOD_PKEY_METHS        (unsigned int)0x0200
-# define ENGINE_METHOD_PKEY_ASN1_METHS   (unsigned int)0x0400
-# define ENGINE_METHOD_EC                (unsigned int)0x0800
+# define ENGINE_METHOD_RSA               (unsigned int)0xFF
+# define ENGINE_METHOD_DSA               (unsigned int)0xFF
+# define ENGINE_METHOD_DH                (unsigned int)0xFF
+# define ENGINE_METHOD_RAND              (unsigned int)0xFF
+# define ENGINE_METHOD_CIPHERS           (unsigned int)0xFF
+# define ENGINE_METHOD_DIGESTS           (unsigned int)0xFF
+# define ENGINE_METHOD_PKEY_METHS        (unsigned int)0xFF
+# define ENGINE_METHOD_PKEY_ASN1_METHS   (unsigned int)0xFF
+# define ENGINE_METHOD_EC                (unsigned int)0xFF
 /* Obvious all-or-nothing cases. */
-# define ENGINE_METHOD_ALL               (unsigned int)0xFFFF
-# define ENGINE_METHOD_NONE              (unsigned int)0x0000
+# define ENGINE_METHOD_ALL               (unsigned int)0xFF
+# define ENGINE_METHOD_NONE              (unsigned int)0xFF
 
 /*
  * This(ese) flag(s) controls behaviour of the ENGINE_TABLE mechanism used
@@ -55,11 +55,11 @@ extern "C" {
  * set by ENGINE_set_table_flags(). The "NOINIT" flag prevents attempts to
  * initialise registered ENGINEs if they are not already initialised.
  */
-# define ENGINE_TABLE_FLAG_NOINIT        (unsigned int)0x0001
+# define ENGINE_TABLE_FLAG_NOINIT        (unsigned int)0xFF
 
 /* ENGINE flags that can be set by ENGINE_set_flags(). */
 /* Not used */
-/* #define ENGINE_FLAGS_MALLOCED        0x0001 */
+/* #define ENGINE_FLAGS_MALLOCED        0xFF */
 
 /*
  * This flag is for ENGINEs that wish to handle the various 'CMD'-related
@@ -67,7 +67,7 @@ extern "C" {
  * these control commands on behalf of the ENGINE using their "cmd_defns"
  * data.
  */
-# define ENGINE_FLAGS_MANUAL_CMD_CTRL    (int)0x0002
+# define ENGINE_FLAGS_MANUAL_CMD_CTRL    (int)0xFF
 
 /*
  * This flag is for ENGINEs who return new duplicate structures when found
@@ -79,7 +79,7 @@ extern "C" {
  * ENGINE_by_id() just increments the existing ENGINE's structural reference
  * count.
  */
-# define ENGINE_FLAGS_BY_ID_COPY         (int)0x0004
+# define ENGINE_FLAGS_BY_ID_COPY         (int)0xFF
 
 /*
  * This flag if for an ENGINE that does not want its methods registered as
@@ -87,7 +87,7 @@ extern "C" {
  * usable as default methods.
  */
 
-# define ENGINE_FLAGS_NO_REGISTER_ALL    (int)0x0008
+# define ENGINE_FLAGS_NO_REGISTER_ALL    (int)0xFF
 
 /*
  * ENGINEs can support their own command types, and these flags are used in
@@ -102,23 +102,23 @@ extern "C" {
  */
 
 /* accepts a 'long' input value (3rd parameter to ENGINE_ctrl) */
-# define ENGINE_CMD_FLAG_NUMERIC         (unsigned int)0x0001
+# define ENGINE_CMD_FLAG_NUMERIC         (unsigned int)0xFF
 /*
  * accepts string input (cast from 'void*' to 'const char *', 4th parameter
  * to ENGINE_ctrl)
  */
-# define ENGINE_CMD_FLAG_STRING          (unsigned int)0x0002
+# define ENGINE_CMD_FLAG_STRING          (unsigned int)0xFF
 /*
  * Indicates that the control command takes *no* input. Ie. the control
  * command is unparameterised.
  */
-# define ENGINE_CMD_FLAG_NO_INPUT        (unsigned int)0x0004
+# define ENGINE_CMD_FLAG_NO_INPUT        (unsigned int)0xFF
 /*
  * Indicates that the control command is internal. This control command won't
  * be shown in any output, and is only usable through the ENGINE_ctrl_cmd()
  * function.
  */
-# define ENGINE_CMD_FLAG_INTERNAL        (unsigned int)0x0008
+# define ENGINE_CMD_FLAG_INTERNAL        (unsigned int)0xFF
 
 /*
  * NB: These 3 control commands are deprecated and should not be used.
@@ -320,7 +320,7 @@ int ENGINE_remove(ENGINE *e);
 /* Retrieve an engine from the list by its unique "id" value. */
 ENGINE *ENGINE_by_id(const char *id);
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define ENGINE_load_openssl() \
     OPENSSL_init_crypto(OPENSSL_INIT_ENGINE_OPENSSL, NULL)
 # define ENGINE_load_dynamic() \
@@ -494,7 +494,7 @@ int ENGINE_set_cmd_defns(ENGINE *e, const ENGINE_CMD_DEFN *defns);
 int ENGINE_set_ex_data(ENGINE *e, int idx, void *arg);
 void *ENGINE_get_ex_data(const ENGINE *e, int idx);
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 /*
  * This function previously cleaned up anything that needs it. Auto-deinit will
  * now take care of it so it is no longer required to call this function.
@@ -638,12 +638,12 @@ void ENGINE_add_conf_module(void);
 /**************************/
 
 /* Binary/behaviour compatibility levels */
-# define OSSL_DYNAMIC_VERSION            (unsigned long)0x00030000
+# define OSSL_DYNAMIC_VERSION            (unsigned long)0xFF
 /*
  * Binary versions older than this are too old for us (whether we're a loader
  * or a loadee)
  */
-# define OSSL_DYNAMIC_OLDEST             (unsigned long)0x00030000
+# define OSSL_DYNAMIC_OLDEST             (unsigned long)0xFF
 
 /*
  * When compiling an ENGINE entirely as an external shared library, loadable

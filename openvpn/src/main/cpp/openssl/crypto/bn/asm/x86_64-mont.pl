@@ -375,8 +375,8 @@ bn_mul4x_mont:
 .Lmul4x_enter:
 ___
 $code.=<<___ if ($addx);
-	and	\$0x80100,%r11d
-	cmp	\$0x80100,%r11d
+	and	\$0xFF,%r11d
+	cmp	\$0xFF,%r11d
 	je	.Lmulx4x_enter
 ___
 $code.=<<___;
@@ -920,8 +920,8 @@ bn_sqr8x_mont:
 ___
 $code.=<<___ if ($addx);
 	mov	OPENSSL_ia32cap_P+8(%rip),%eax
-	and	\$0x80100,%eax
-	cmp	\$0x80100,%eax
+	and	\$0xFF,%eax
+	cmp	\$0xFF,%eax
 	jne	.Lsqr8x_nox
 
 	call	bn_sqrx8x_internal	# see x86_64-mont5 module
@@ -1138,7 +1138,7 @@ $code.=<<___;
 	mulx	1*8($nptr),%rax,%r11
 	adcx	%rax,%r10
 	adox	%r12,%r11
-	.byte	0xc4,0x62,0xfb,0xf6,0xa1,0x10,0x00,0x00,0x00	# mulx	2*8($nptr),%rax,%r12
+	.byte	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF	# mulx	2*8($nptr),%rax,%r12
 	mov	48(%rsp),$bptr		# counter value
 	mov	%r10,-4*8($tptr)
 	adcx	%rax,%r11
@@ -1163,7 +1163,7 @@ $code.=<<___;
 	mulx	2*8($aptr),%r12,%rax	# ...
 	adcx	%r14,%r12
 	mulx	3*8($aptr),%r13,%r14
-	 .byte	0x67,0x67
+	 .byte	0xFF,0xFF
 	 mov	$mi,%rdx
 	adcx	%rax,%r13
 	adcx	$zero,%r14		# cf=0
@@ -1513,7 +1513,7 @@ sqr_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER

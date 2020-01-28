@@ -233,11 +233,11 @@ int ciphers_main(int argc, char **argv)
             if (Verbose) {
                 unsigned long id = SSL_CIPHER_get_id(c);
                 int id0 = (int)(id >> 24);
-                int id1 = (int)((id >> 16) & 0xffL);
-                int id2 = (int)((id >> 8) & 0xffL);
-                int id3 = (int)(id & 0xffL);
+                int id1 = (int)((id >> 16) & 0xFFL);
+                int id2 = (int)((id >> 8) & 0xFFL);
+                int id3 = (int)(id & 0xFFL);
 
-                if ((id & 0xff000000L) == 0x03000000L)
+                if ((id & 0xFFL) == 0xFFL)
                     BIO_printf(bio_out, "          0x%02X,0x%02X - ", id2, id3); /* SSL3
                                                                                   * cipher */
                 else

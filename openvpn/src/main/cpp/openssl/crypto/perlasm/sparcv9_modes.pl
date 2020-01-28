@@ -77,7 +77,7 @@ $::code.=<<___;
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
 	mov		64, $iright
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	sub		$iright, $ileft, $iright
 	and		$out, 7, $ooff
 	cmp		$len, 127
@@ -142,18 +142,18 @@ $::code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f4		! handle unaligned output
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
 
-	stda		%f4, [$out + $omask]0xc0	! partial store
+	stda		%f4, [$out + $omask]0xFF	! partial store
 	std		%f6, [$out + 8]
 	add		$out, 16, $out
 	orn		%g0, $omask, $omask
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_cbc_enc_loop+4
 	orn		%g0, $omask, $omask
@@ -175,16 +175,16 @@ $::code.=<<___ if (!$::evp);
 
 .align	16
 3:	alignaddrl	$ivec, $ivoff, %g0	! handle unaligned ivec
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	srl		$omask, $ivoff, $omask
 	faligndata	%f0, %f0, %f4
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
-	stda		%f4, [$ivec + $omask]0xc0
+	stda		%f4, [$ivec + $omask]0xFF
 	std		%f6, [$ivec + 8]
 	add		$ivec, 16, $ivec
 	orn		%g0, $omask, $omask
-	stda		%f8, [$ivec + $omask]0xc0
+	stda		%f8, [$ivec + $omask]0xFF
 ___
 $::code.=<<___;
 	ret
@@ -225,9 +225,9 @@ $::code.=<<___;
 	add		$inp, 16, $inp
 	sub		$len, 1, $len
 
-	stda		%f0, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f0, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f2, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f2, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	brnz,pt		$len, .L${bits}_cbc_enc_blk_loop
 	add		$out, 8, $out
 
@@ -295,7 +295,7 @@ $::code.=<<___;
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
 	mov		64, $iright
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	sub		$iright, $ileft, $iright
 	and		$out, 7, $ooff
 	cmp		$len, 255
@@ -364,18 +364,18 @@ $::code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f4		! handle unaligned output
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
 
-	stda		%f4, [$out + $omask]0xc0	! partial store
+	stda		%f4, [$out + $omask]0xFF	! partial store
 	std		%f6, [$out + 8]
 	add		$out, 16, $out
 	orn		%g0, $omask, $omask
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_cbc_dec_loop2x+4
 	orn		%g0, $omask, $omask
@@ -471,7 +471,7 @@ $::code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f8		! handle unaligned output
@@ -479,13 +479,13 @@ $::code.=<<___;
 	faligndata	%f2, %f4, %f2
 	faligndata	%f4, %f6, %f4
 	faligndata	%f6, %f6, %f6
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 	std		%f0, [$out + 8]
 	std		%f2, [$out + 16]
 	std		%f4, [$out + 24]
 	add		$out, 32, $out
 	orn		%g0, $omask, $omask
-	stda		%f6, [$out + $omask]0xc0	! partial store
+	stda		%f6, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_cbc_dec_loop2x+4
 	orn		%g0, $omask, $omask
@@ -508,16 +508,16 @@ $::code.=<<___ if (!$::evp);
 .align	16
 .L${bits}_cbc_dec_unaligned_ivec:
 	alignaddrl	$ivec, $ivoff, %g0	! handle unaligned ivec
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	srl		$omask, $ivoff, $omask
 	faligndata	%f12, %f12, %f0
 	faligndata	%f12, %f14, %f2
 	faligndata	%f14, %f14, %f4
-	stda		%f0, [$ivec + $omask]0xc0
+	stda		%f0, [$ivec + $omask]0xFF
 	std		%f2, [$ivec + 8]
 	add		$ivec, 16, $ivec
 	orn		%g0, $omask, $omask
-	stda		%f4, [$ivec + $omask]0xc0
+	stda		%f4, [$ivec + $omask]0xFF
 ___
 $::code.=<<___;
 	ret
@@ -579,13 +579,13 @@ $::code.=<<___;
 	fxor		%f8, %f4, %f4
 	fxor		%f10, %f6, %f6
 
-	stda		%f0, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f0, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f2, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f2, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f4, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f4, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f6, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f6, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	bgu,pt		$::size_t_cc, .L${bits}_cbc_dec_blk_loop2x
 	add		$out, 8, $out
 
@@ -650,7 +650,7 @@ ${alg}${bits}_t4_ctr32_encrypt:
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
 	mov		64, $iright
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	sub		$iright, $ileft, $iright
 	and		$out, 7, $ooff
 	cmp		$len, 255
@@ -712,17 +712,17 @@ $::code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f4		! handle unaligned output
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
-	stda		%f4, [$out + $omask]0xc0	! partial store
+	stda		%f4, [$out + $omask]0xFF	! partial store
 	std		%f6, [$out + 8]
 	add		$out, 16, $out
 	orn		%g0, $omask, $omask
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_ctr32_loop2x+4
 	orn		%g0, $omask, $omask
@@ -803,7 +803,7 @@ $::code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f8		! handle unaligned output
@@ -812,13 +812,13 @@ $::code.=<<___;
 	faligndata	%f4, %f6, %f4
 	faligndata	%f6, %f6, %f6
 
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 	std		%f0, [$out + 8]
 	std		%f2, [$out + 16]
 	std		%f4, [$out + 24]
 	add		$out, 32, $out
 	orn		%g0, $omask, $omask
-	stda		%f6, [$out + $omask]0xc0	! partial store
+	stda		%f6, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_ctr32_loop2x+4
 	orn		%g0, $omask, $omask
@@ -895,13 +895,13 @@ $::code.=<<___;
 	fxor		%f12, %f4, %f4
 	fxor		%f8, %f6, %f6
 
-	stda		%f0, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f0, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f2, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f2, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f4, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f4, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f6, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f6, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	bgu,pt		$::size_t_cc, .L${bits}_ctr32_blk_loop2x
 	add		$out, 8, $out
 
@@ -938,12 +938,12 @@ ${alg}${bits}_t4_xts_${dir}crypt:
 	mov		$key2, %o2
 
 	add		%fp, $::bias-16, %l7
-	ldxa		[%l7]0x88, %g2
+	ldxa		[%l7]0xFF, %g2
 	add		%fp, $::bias-8, %l7
-	ldxa		[%l7]0x88, %g3		! %g3:%g2 is tweak
+	ldxa		[%l7]0xFF, %g3		! %g3:%g2 is tweak
 
-	sethi		%hi(0x76543210), %l7
-	or		%l7, %lo(0x76543210), %l7
+	sethi		%hi(0xFF), %l7
+	or		%l7, %lo(0xFF), %l7
 	bmask		%l7, %g0, %g0		! byte swap mask
 
 	prefetch	[$inp], 20
@@ -964,7 +964,7 @@ $code.=<<___;
 	andn		$inp, 7, $inp
 	sll		$ileft, 3, $ileft
 	mov		64, $iright
-	mov		0xff, $omask
+	mov		0xFF, $omask
 	sub		$iright, $ileft, $iright
 	and		$out, 7, $ooff
 	cmp		$len, 255
@@ -1018,7 +1018,7 @@ $code.=<<___;
 
 	srax		%g3, 63, %l7		! next tweak value
 	addcc		%g2, %g2, %g2
-	and		%l7, 0x87, %l7
+	and		%l7, 0xFF, %l7
 	addxc		%g3, %g3, %g3
 	xor		%l7, %g2, %g2
 
@@ -1037,17 +1037,17 @@ $code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f4		! handle unaligned output
 	faligndata	%f0, %f2, %f6
 	faligndata	%f2, %f2, %f8
-	stda		%f4, [$out + $omask]0xc0	! partial store
+	stda		%f4, [$out + $omask]0xFF	! partial store
 	std		%f6, [$out + 8]
 	add		$out, 16, $out
 	orn		%g0, $omask, $omask
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_xts_${dir}loop2x+4
 	orn		%g0, $omask, $omask
@@ -1088,7 +1088,7 @@ $code.=<<___;
 
 	srax		%g3, 63, %l7		! next tweak value
 	addcc		%g2, %g2, %g2
-	and		%l7, 0x87, %l7
+	and		%l7, 0xFF, %l7
 	addxc		%g3, %g3, %g3
 	xor		%l7, %g2, %g2
 
@@ -1121,7 +1121,7 @@ $code.=<<___;
 
 	srax		%g3, 63, %l7		! next tweak value
 	addcc		%g2, %g2, %g2
-	and		%l7, 0x87, %l7
+	and		%l7, 0xFF, %l7
 	addxc		%g3, %g3, %g3
 	xor		%l7, %g2, %g2
 
@@ -1152,7 +1152,7 @@ $code.=<<___;
 	restore
 
 .align	16
-2:	ldxa		[$inp]0x82, %o0		! avoid read-after-write hazard
+2:	ldxa		[$inp]0xFF, %o0		! avoid read-after-write hazard
 						! and ~3x deterioration
 						! in inp==out case
 	faligndata	%f0, %f0, %f8		! handle unaligned output
@@ -1161,13 +1161,13 @@ $code.=<<___;
 	faligndata	%f4, %f6, %f14
 	faligndata	%f6, %f6, %f0
 
-	stda		%f8, [$out + $omask]0xc0	! partial store
+	stda		%f8, [$out + $omask]0xFF	! partial store
 	std		%f10, [$out + 8]
 	std		%f12, [$out + 16]
 	std		%f14, [$out + 24]
 	add		$out, 32, $out
 	orn		%g0, $omask, $omask
-	stda		%f0, [$out + $omask]0xc0	! partial store
+	stda		%f0, [$out + $omask]0xFF	! partial store
 
 	brnz,pt		$len, .L${bits}_xts_${dir}loop2x+4
 	orn		%g0, $omask, $omask
@@ -1220,7 +1220,7 @@ $code.=<<___;
 
 	srax		%g3, 63, %l7		! next tweak value
 	addcc		%g2, %g2, %g2
-	and		%l7, 0x87, %l7
+	and		%l7, 0xFF, %l7
 	addxc		%g3, %g3, %g3
 	xor		%l7, %g2, %g2
 
@@ -1252,7 +1252,7 @@ $code.=<<___;
 
 	srax		%g3, 63, %l7		! next tweak value
 	addcc		%g2, %g2, %g2
-	and		%l7, 0x87, %l7
+	and		%l7, 0xFF, %l7
 	addxc		%g3, %g3, %g3
 	xor		%l7, %g2, %g2
 
@@ -1265,13 +1265,13 @@ $code.=<<___;
 	fxor		%f10, %f6, %f6
 
 	subcc		$len, 2, $len
-	stda		%f0, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f0, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f2, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f2, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f4, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f4, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	add		$out, 8, $out
-	stda		%f6, [$out]0xe2		! ASI_BLK_INIT, T4-specific
+	stda		%f6, [$out]0xFF		! ASI_BLK_INIT, T4-specific
 	bgu,pt		$::size_t_cc, .L${bits}_xts_${dir}blk2x
 	add		$out, 8, $out
 
@@ -1338,7 +1338,7 @@ $code.=<<___ if ($dir eq "de");
 8:
 	srax		%g3, 63, %l7		! next tweak value
 	addcc		%g2, %g2, %o2
-	and		%l7, 0x87, %l7
+	and		%l7, 0xFF, %l7
 	addxc		%g3, %g3, %o3
 	xor		%l7, %o2, %o2
 
@@ -1404,11 +1404,11 @@ ___
 sub unvis {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my ($ref,$opf);
-my %visopf = (	"faligndata"	=> 0x048,
-		"bshuffle"	=> 0x04c,
-		"fnot2"		=> 0x066,
-		"fxor"		=> 0x06c,
-		"fsrc2"		=> 0x078	);
+my %visopf = (	"faligndata"	=> 0xFF,
+		"bshuffle"	=> 0xFF,
+		"fnot2"		=> 0xFF,
+		"fxor"		=> 0xFF,
+		"fsrc2"		=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1424,7 +1424,7 @@ my %visopf = (	"faligndata"	=> 0x048,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1435,12 +1435,12 @@ sub unvis3 {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24 );
 my ($ref,$opf);
-my %visopf = (	"addxc"		=> 0x011,
-		"addxccc"	=> 0x013,
-		"umulxhi"	=> 0x016,
-		"alignaddr"	=> 0x018,
-		"bmask"		=> 0x019,
-		"alignaddrl"	=> 0x01a	);
+my %visopf = (	"addxc"		=> 0xFF,
+		"addxccc"	=> 0xFF,
+		"umulxhi"	=> 0xFF,
+		"alignaddr"	=> 0xFF,
+		"bmask"		=> 0xFF,
+		"alignaddrl"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1451,7 +1451,7 @@ my %visopf = (	"addxc"		=> 0x011,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1486,7 +1486,7 @@ my %aesopf = (	"aes_eround01"	=> 0,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x19<<19|$rs1<<14|$rs3<<9|$opf<<5|$rs2,
+			2<<30|$rd<<25|0xFF<<19|$rs1<<14|$rs3<<9|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1496,8 +1496,8 @@ my %aesopf = (	"aes_eround01"	=> 0,
 sub unaes_kexpand {	# 3-argument instructions
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my ($ref,$opf);
-my %aesopf = (	"aes_kexpand0"	=> 0x130,
-		"aes_kexpand2"	=> 0x131	);
+my %aesopf = (	"aes_kexpand0"	=> 0xFF,
+		"aes_kexpand2"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1513,7 +1513,7 @@ my %aesopf = (	"aes_kexpand0"	=> 0x130,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x36<<19|$rs1<<14|$opf<<5|$rs2,
+			2<<30|$rd<<25|0xFF<<19|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1539,7 +1539,7 @@ my ($ref,$opf);
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x19<<19|$rs1<<14|$rs3<<9|0xc<<5|$rs2,
+			2<<30|$rd<<25|0xFF<<19|$rs1<<14|$rs3<<9|0xFF<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1549,8 +1549,8 @@ my ($ref,$opf);
 sub uncamellia3 {	# 3-argument instructions
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my ($ref,$opf);
-my %cmllopf = (	"camellia_fl"	=> 0x13c,
-		"camellia_fli"	=> 0x13d	);
+my %cmllopf = (	"camellia_fl"	=> 0xFF,
+		"camellia_fli"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1566,7 +1566,7 @@ my %cmllopf = (	"camellia_fl"	=> 0x13c,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x36<<19|$rs1<<14|$opf<<5|$rs2,
+			2<<30|$rd<<25|0xFF<<19|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1577,11 +1577,11 @@ sub unmovxtox {		# 2-argument instructions
 my ($mnemonic,$rs,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24, "f" => 0 );
 my ($ref,$opf);
-my %movxopf = (	"movdtox"	=> 0x110,
-		"movstouw"	=> 0x111,
-		"movstosw"	=> 0x113,
-		"movxtod"	=> 0x118,
-		"movwtos"	=> 0x119	);
+my %movxopf = (	"movdtox"	=> 0xFF,
+		"movstouw"	=> 0xFF,
+		"movstosw"	=> 0xFF,
+		"movxtod"	=> 0xFF,
+		"movwtos"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs,$rd";
 
@@ -1597,7 +1597,7 @@ my %movxopf = (	"movdtox"	=> 0x110,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			2<<30|$rd<<25|0x36<<19|$opf<<5|$rs,
+			2<<30|$rd<<25|0xFF<<19|$opf<<5|$rs,
 			$ref;
     } else {
 	return $ref;

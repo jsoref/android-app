@@ -164,7 +164,7 @@ int WPACKET_set_flags(WPACKET *pkt, unsigned int flags)
 static int put_value(unsigned char *data, size_t value, size_t len)
 {
     for (data += len - 1; len > 0; len--) {
-        *data = (unsigned char)(value & 0xff);
+        *data = (unsigned char)(value & 0xFF);
         data--;
         value >>= 8;
     }

@@ -65,10 +65,10 @@ _poly1305_init:
 ||	ZERO	B9:B8
 ||	MVK	-1,B0
 	STDW	B9:B8,*${CTXA}[0]	; initialize h1:h0
-||	SHRU	B0,4,B0			; 0x0fffffff
+||	SHRU	B0,4,B0			; 0xFF
 ||	MVK	-4,B1
 	STDW	B9:B8,*${CTXA}[1]	; initialize h3:h2
-||	AND	B0,B1,B1		; 0x0ffffffc
+||	AND	B0,B1,B1		; 0xFF
 	STW	B8,*${CTXA}[4]		; initialize h4
 
 	.if	.BIG_ENDIAN
@@ -82,11 +82,11 @@ _poly1305_init:
 ||	SWAP4	A17,A17
 	.endif
 
-	AND	B16,B0,B20		; r0 = key[0] & 0x0fffffff
-||	AND	B17,B1,B22		; r1 = key[1] & 0x0ffffffc
+	AND	B16,B0,B20		; r0 = key[0] & 0xFF
+||	AND	B17,B1,B22		; r1 = key[1] & 0xFF
 ||	EXTU	B17,4,6,B16		; r1>>2
-	AND	A16,B1,B21		; r2 = key[2] & 0x0ffffffc
-||	AND	A17,B1,A23		; r3 = key[3] & 0x0ffffffc
+	AND	A16,B1,B21		; r2 = key[2] & 0xFF
+||	AND	A17,B1,A23		; r3 = key[3] & 0xFF
 ||	BNOP	RA
 	SHRU	B21,2,B18
 ||	ADD	B22,B16,B16		; s1 = r1 + r1>>2

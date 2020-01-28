@@ -6,7 +6,7 @@
 .align	16
 RC4:	orq	%rsi,%rsi
 	jne	.Lentry
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .Lentry:
 .cfi_startproc	
 	pushq	%rbx
@@ -526,7 +526,7 @@ RC4:	orq	%rsi,%rsi
 	addq	$24,%rsp
 .cfi_adjust_cfa_offset	-24
 .Lepilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	RC4,.-RC4
 .globl	RC4_set_key
@@ -598,7 +598,7 @@ RC4_set_key:
 	xorl	%eax,%eax
 	movl	%eax,-8(%rdi)
 	movl	%eax,-4(%rdi)
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	RC4_set_key,.-RC4_set_key
 
 .globl	RC4_options
@@ -612,11 +612,11 @@ RC4_options:
 	btl	$30,%edx
 	jnc	.Ldone
 	addq	$25,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .L8xchar:
 	addq	$12,%rax
 .Ldone:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .align	64
 .Lopts:
 .byte	114,99,52,40,56,120,44,105,110,116,41,0

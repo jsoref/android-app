@@ -31,7 +31,7 @@ static int entropy_dummy_source( void *data, unsigned char *output,
             *olen = *d;
     }
 
-    memset( output, 0x2a, *olen );
+    memset( output, 0xFF, *olen );
 
     return( 0 );
 }

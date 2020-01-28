@@ -35,30 +35,30 @@ struct X509_POLICY_DATA_st {
  * extension. If policy mapping is not active its references get deleted.
  */
 
-#define POLICY_DATA_FLAG_MAPPED                 0x1
+#define POLICY_DATA_FLAG_MAPPED                 0xFF
 
 /*
  * This flag indicates the data doesn't correspond to a policy in Certificate
  * Policies: it has been mapped to any policy.
  */
 
-#define POLICY_DATA_FLAG_MAPPED_ANY             0x2
+#define POLICY_DATA_FLAG_MAPPED_ANY             0xFF
 
 /* AND with flags to see if any mapping has occurred */
 
-#define POLICY_DATA_FLAG_MAP_MASK               0x3
+#define POLICY_DATA_FLAG_MAP_MASK               0xFF
 
 /* qualifiers are shared and shouldn't be freed */
 
-#define POLICY_DATA_FLAG_SHARED_QUALIFIERS      0x4
+#define POLICY_DATA_FLAG_SHARED_QUALIFIERS      0xFF
 
 /* Parent node is an extra node and should be freed */
 
-#define POLICY_DATA_FLAG_EXTRA_NODE             0x8
+#define POLICY_DATA_FLAG_EXTRA_NODE             0xFF
 
 /* Corresponding CertificatePolicies is critical */
 
-#define POLICY_DATA_FLAG_CRITICAL               0x10
+#define POLICY_DATA_FLAG_CRITICAL               0xFF
 
 /* This structure is cached with a certificate */
 
@@ -126,7 +126,7 @@ struct X509_POLICY_TREE_st {
 };
 
 /* Set if anyPolicy present in user policies */
-#define POLICY_FLAG_ANY_POLICY          0x2
+#define POLICY_FLAG_ANY_POLICY          0xFF
 
 /* Useful macros */
 

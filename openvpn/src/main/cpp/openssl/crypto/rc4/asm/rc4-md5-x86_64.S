@@ -1276,6 +1276,6 @@ rc4_md5_enc:
 .cfi_adjust_cfa_offset	-88
 .Lepilogue:
 .Labort:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	rc4_md5_enc,.-rc4_md5_enc

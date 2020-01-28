@@ -24,50 +24,50 @@ extern "C" {
  * Signalling cipher suite value from RFC 5746
  * (TLS_EMPTY_RENEGOTIATION_INFO_SCSV)
  */
-# define SSL3_CK_SCSV                            0x030000FF
+# define SSL3_CK_SCSV                            0xFF
 
 /*
  * Signalling cipher suite value from draft-ietf-tls-downgrade-scsv-00
  * (TLS_FALLBACK_SCSV)
  */
-# define SSL3_CK_FALLBACK_SCSV                   0x03005600
+# define SSL3_CK_FALLBACK_SCSV                   0xFF
 
-# define SSL3_CK_RSA_NULL_MD5                    0x03000001
-# define SSL3_CK_RSA_NULL_SHA                    0x03000002
-# define SSL3_CK_RSA_RC4_40_MD5                  0x03000003
-# define SSL3_CK_RSA_RC4_128_MD5                 0x03000004
-# define SSL3_CK_RSA_RC4_128_SHA                 0x03000005
-# define SSL3_CK_RSA_RC2_40_MD5                  0x03000006
-# define SSL3_CK_RSA_IDEA_128_SHA                0x03000007
-# define SSL3_CK_RSA_DES_40_CBC_SHA              0x03000008
-# define SSL3_CK_RSA_DES_64_CBC_SHA              0x03000009
-# define SSL3_CK_RSA_DES_192_CBC3_SHA            0x0300000A
+# define SSL3_CK_RSA_NULL_MD5                    0xFF
+# define SSL3_CK_RSA_NULL_SHA                    0xFF
+# define SSL3_CK_RSA_RC4_40_MD5                  0xFF
+# define SSL3_CK_RSA_RC4_128_MD5                 0xFF
+# define SSL3_CK_RSA_RC4_128_SHA                 0xFF
+# define SSL3_CK_RSA_RC2_40_MD5                  0xFF
+# define SSL3_CK_RSA_IDEA_128_SHA                0xFF
+# define SSL3_CK_RSA_DES_40_CBC_SHA              0xFF
+# define SSL3_CK_RSA_DES_64_CBC_SHA              0xFF
+# define SSL3_CK_RSA_DES_192_CBC3_SHA            0xFF
 
-# define SSL3_CK_DH_DSS_DES_40_CBC_SHA           0x0300000B
-# define SSL3_CK_DH_DSS_DES_64_CBC_SHA           0x0300000C
-# define SSL3_CK_DH_DSS_DES_192_CBC3_SHA         0x0300000D
-# define SSL3_CK_DH_RSA_DES_40_CBC_SHA           0x0300000E
-# define SSL3_CK_DH_RSA_DES_64_CBC_SHA           0x0300000F
-# define SSL3_CK_DH_RSA_DES_192_CBC3_SHA         0x03000010
+# define SSL3_CK_DH_DSS_DES_40_CBC_SHA           0xFF
+# define SSL3_CK_DH_DSS_DES_64_CBC_SHA           0xFF
+# define SSL3_CK_DH_DSS_DES_192_CBC3_SHA         0xFF
+# define SSL3_CK_DH_RSA_DES_40_CBC_SHA           0xFF
+# define SSL3_CK_DH_RSA_DES_64_CBC_SHA           0xFF
+# define SSL3_CK_DH_RSA_DES_192_CBC3_SHA         0xFF
 
-# define SSL3_CK_DHE_DSS_DES_40_CBC_SHA          0x03000011
+# define SSL3_CK_DHE_DSS_DES_40_CBC_SHA          0xFF
 # define SSL3_CK_EDH_DSS_DES_40_CBC_SHA          SSL3_CK_DHE_DSS_DES_40_CBC_SHA
-# define SSL3_CK_DHE_DSS_DES_64_CBC_SHA          0x03000012
+# define SSL3_CK_DHE_DSS_DES_64_CBC_SHA          0xFF
 # define SSL3_CK_EDH_DSS_DES_64_CBC_SHA          SSL3_CK_DHE_DSS_DES_64_CBC_SHA
-# define SSL3_CK_DHE_DSS_DES_192_CBC3_SHA        0x03000013
+# define SSL3_CK_DHE_DSS_DES_192_CBC3_SHA        0xFF
 # define SSL3_CK_EDH_DSS_DES_192_CBC3_SHA        SSL3_CK_DHE_DSS_DES_192_CBC3_SHA
-# define SSL3_CK_DHE_RSA_DES_40_CBC_SHA          0x03000014
+# define SSL3_CK_DHE_RSA_DES_40_CBC_SHA          0xFF
 # define SSL3_CK_EDH_RSA_DES_40_CBC_SHA          SSL3_CK_DHE_RSA_DES_40_CBC_SHA
-# define SSL3_CK_DHE_RSA_DES_64_CBC_SHA          0x03000015
+# define SSL3_CK_DHE_RSA_DES_64_CBC_SHA          0xFF
 # define SSL3_CK_EDH_RSA_DES_64_CBC_SHA          SSL3_CK_DHE_RSA_DES_64_CBC_SHA
-# define SSL3_CK_DHE_RSA_DES_192_CBC3_SHA        0x03000016
+# define SSL3_CK_DHE_RSA_DES_192_CBC3_SHA        0xFF
 # define SSL3_CK_EDH_RSA_DES_192_CBC3_SHA        SSL3_CK_DHE_RSA_DES_192_CBC3_SHA
 
-# define SSL3_CK_ADH_RC4_40_MD5                  0x03000017
-# define SSL3_CK_ADH_RC4_128_MD5                 0x03000018
-# define SSL3_CK_ADH_DES_40_CBC_SHA              0x03000019
-# define SSL3_CK_ADH_DES_64_CBC_SHA              0x0300001A
-# define SSL3_CK_ADH_DES_192_CBC_SHA             0x0300001B
+# define SSL3_CK_ADH_RC4_40_MD5                  0xFF
+# define SSL3_CK_ADH_RC4_128_MD5                 0xFF
+# define SSL3_CK_ADH_DES_40_CBC_SHA              0xFF
+# define SSL3_CK_ADH_DES_64_CBC_SHA              0xFF
+# define SSL3_CK_ADH_DES_192_CBC_SHA             0xFF
 
 /* a bundle of RFC standard cipher names, generated from ssl3_ciphers[] */
 # define SSL3_RFC_RSA_NULL_MD5                   "TLS_RSA_WITH_NULL_MD5"
@@ -206,9 +206,9 @@ extern "C" {
 # define SSL3_MD_CLIENT_FINISHED_CONST   "\x43\x4C\x4E\x54"
 # define SSL3_MD_SERVER_FINISHED_CONST   "\x53\x52\x56\x52"
 
-# define SSL3_VERSION                    0x0300
-# define SSL3_VERSION_MAJOR              0x03
-# define SSL3_VERSION_MINOR              0x00
+# define SSL3_VERSION                    0xFF
+# define SSL3_VERSION_MAJOR              0xFF
+# define SSL3_VERSION_MINOR              0xFF
 
 # define SSL3_RT_CHANGE_CIPHER_SPEC      20
 # define SSL3_RT_ALERT                   21
@@ -217,22 +217,22 @@ extern "C" {
 # define DTLS1_RT_HEARTBEAT              24
 
 /* Pseudo content types to indicate additional parameters */
-# define TLS1_RT_CRYPTO                  0x1000
-# define TLS1_RT_CRYPTO_PREMASTER        (TLS1_RT_CRYPTO | 0x1)
-# define TLS1_RT_CRYPTO_CLIENT_RANDOM    (TLS1_RT_CRYPTO | 0x2)
-# define TLS1_RT_CRYPTO_SERVER_RANDOM    (TLS1_RT_CRYPTO | 0x3)
-# define TLS1_RT_CRYPTO_MASTER           (TLS1_RT_CRYPTO | 0x4)
+# define TLS1_RT_CRYPTO                  0xFF
+# define TLS1_RT_CRYPTO_PREMASTER        (TLS1_RT_CRYPTO | 0xFF)
+# define TLS1_RT_CRYPTO_CLIENT_RANDOM    (TLS1_RT_CRYPTO | 0xFF)
+# define TLS1_RT_CRYPTO_SERVER_RANDOM    (TLS1_RT_CRYPTO | 0xFF)
+# define TLS1_RT_CRYPTO_MASTER           (TLS1_RT_CRYPTO | 0xFF)
 
-# define TLS1_RT_CRYPTO_READ             0x0000
-# define TLS1_RT_CRYPTO_WRITE            0x0100
-# define TLS1_RT_CRYPTO_MAC              (TLS1_RT_CRYPTO | 0x5)
-# define TLS1_RT_CRYPTO_KEY              (TLS1_RT_CRYPTO | 0x6)
-# define TLS1_RT_CRYPTO_IV               (TLS1_RT_CRYPTO | 0x7)
-# define TLS1_RT_CRYPTO_FIXED_IV         (TLS1_RT_CRYPTO | 0x8)
+# define TLS1_RT_CRYPTO_READ             0xFF
+# define TLS1_RT_CRYPTO_WRITE            0xFF
+# define TLS1_RT_CRYPTO_MAC              (TLS1_RT_CRYPTO | 0xFF)
+# define TLS1_RT_CRYPTO_KEY              (TLS1_RT_CRYPTO | 0xFF)
+# define TLS1_RT_CRYPTO_IV               (TLS1_RT_CRYPTO | 0xFF)
+# define TLS1_RT_CRYPTO_FIXED_IV         (TLS1_RT_CRYPTO | 0xFF)
 
 /* Pseudo content types for SSL/TLS header info */
-# define SSL3_RT_HEADER                  0x100
-# define SSL3_RT_INNER_CONTENT_TYPE      0x101
+# define SSL3_RT_HEADER                  0xFF
+# define SSL3_RT_INNER_CONTENT_TYPE      0xFF
 
 # define SSL3_AL_WARNING                 1
 # define SSL3_AL_FATAL                   2
@@ -274,23 +274,23 @@ extern "C" {
 # endif
 
 /* No longer used as of OpenSSL 1.1.1 */
-# define SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS       0x0001
+# define SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS       0xFF
 
 /* Removed from OpenSSL 1.1.0 */
-# define TLS1_FLAGS_TLS_PADDING_BUG              0x0
+# define TLS1_FLAGS_TLS_PADDING_BUG              0xFF
 
-# define TLS1_FLAGS_SKIP_CERT_VERIFY             0x0010
+# define TLS1_FLAGS_SKIP_CERT_VERIFY             0xFF
 
 /* Set if we encrypt then mac instead of usual mac then encrypt */
-# define TLS1_FLAGS_ENCRYPT_THEN_MAC_READ        0x0100
+# define TLS1_FLAGS_ENCRYPT_THEN_MAC_READ        0xFF
 # define TLS1_FLAGS_ENCRYPT_THEN_MAC             TLS1_FLAGS_ENCRYPT_THEN_MAC_READ
 
 /* Set if extended master secret extension received from peer */
-# define TLS1_FLAGS_RECEIVED_EXTMS               0x0200
+# define TLS1_FLAGS_RECEIVED_EXTMS               0xFF
 
-# define TLS1_FLAGS_ENCRYPT_THEN_MAC_WRITE       0x0400
+# define TLS1_FLAGS_ENCRYPT_THEN_MAC_WRITE       0xFF
 
-# define TLS1_FLAGS_STATELESS                    0x0800
+# define TLS1_FLAGS_STATELESS                    0xFF
 
 # define SSL3_MT_HELLO_REQUEST                   0
 # define SSL3_MT_CLIENT_HELLO                    1
@@ -316,18 +316,18 @@ extern "C" {
 # define DTLS1_MT_HELLO_VERIFY_REQUEST           3
 
 /* Dummy message type for handling CCS like a normal handshake message */
-# define SSL3_MT_CHANGE_CIPHER_SPEC              0x0101
+# define SSL3_MT_CHANGE_CIPHER_SPEC              0xFF
 
 # define SSL3_MT_CCS                             1
 
 /* These are used when changing over to a new cipher */
-# define SSL3_CC_READ            0x001
-# define SSL3_CC_WRITE           0x002
-# define SSL3_CC_CLIENT          0x010
-# define SSL3_CC_SERVER          0x020
-# define SSL3_CC_EARLY           0x040
-# define SSL3_CC_HANDSHAKE       0x080
-# define SSL3_CC_APPLICATION     0x100
+# define SSL3_CC_READ            0xFF
+# define SSL3_CC_WRITE           0xFF
+# define SSL3_CC_CLIENT          0xFF
+# define SSL3_CC_SERVER          0xFF
+# define SSL3_CC_EARLY           0xFF
+# define SSL3_CC_HANDSHAKE       0xFF
+# define SSL3_CC_APPLICATION     0xFF
 # define SSL3_CHANGE_CIPHER_CLIENT_WRITE (SSL3_CC_CLIENT|SSL3_CC_WRITE)
 # define SSL3_CHANGE_CIPHER_SERVER_READ  (SSL3_CC_SERVER|SSL3_CC_READ)
 # define SSL3_CHANGE_CIPHER_CLIENT_READ  (SSL3_CC_CLIENT|SSL3_CC_READ)

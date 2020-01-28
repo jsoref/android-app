@@ -342,8 +342,8 @@ int mbedtls_md_hmac_starts( mbedtls_md_context_t *ctx, const unsigned char *key,
     ipad = (unsigned char *) ctx->hmac_ctx;
     opad = (unsigned char *) ctx->hmac_ctx + ctx->md_info->block_size;
 
-    memset( ipad, 0x36, ctx->md_info->block_size );
-    memset( opad, 0x5C, ctx->md_info->block_size );
+    memset( ipad, 0xFF, ctx->md_info->block_size );
+    memset( opad, 0xFF, ctx->md_info->block_size );
 
     for( i = 0; i < keylen; i++ )
     {

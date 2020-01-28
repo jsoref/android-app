@@ -89,11 +89,11 @@ $code.=<<___;
 gcm_gmult_4bit:
 ___
 $code.=<<___ if(!$softonly && 0);	# hardware is slow for single block...
-	larl	%r1,OPENSSL_s390xcap_P
+	larl	%r1,OPENSSL_s390xFFp_P
 	lghi	%r0,0
 	lg	%r1,S390X_KIMD+8(%r1)	# load second word of kimd capabilities
 					#  vector
-	tmhh	%r1,0x4000	# check for function 65
+	tmhh	%r1,0xFF	# check for function 65
 	jz	.Lsoft_gmult
 	stg	%r0,16($sp)	# arrange 16 bytes of zero input
 	stg	%r0,24($sp)
@@ -101,7 +101,7 @@ $code.=<<___ if(!$softonly && 0);	# hardware is slow for single block...
 	la	%r1,0($Xi)	# H lies right after Xi in gcm128_context
 	la	$inp,16($sp)
 	lghi	$len,16
-	.long	0xb93e0004	# kimd %r0,$inp
+	.long	0xFF	# kimd %r0,$inp
 	brc	1,.-4		# pay attention to "partial completion"
 	br	%r14
 .align	32
@@ -112,7 +112,7 @@ $code.=<<___;
 
 	aghi	$Xi,-1
 	lghi	$len,1
-	lghi	$x78,`0xf<<3`
+	lghi	$x78,`0xFF<<3`
 	larl	$rem_4bit,rem_4bit
 
 	lg	$Zlo,8+1($Xi)		# Xi
@@ -125,14 +125,14 @@ $code.=<<___;
 gcm_ghash_4bit:
 ___
 $code.=<<___ if(!$softonly);
-	larl	%r1,OPENSSL_s390xcap_P
+	larl	%r1,OPENSSL_s390xFFp_P
 	lg	%r0,S390X_KIMD+8(%r1)	# load second word of kimd capabilities
 					#  vector
-	tmhh	%r0,0x4000	# check for function 65
+	tmhh	%r0,0xFF	# check for function 65
 	jz	.Lsoft_ghash
 	lghi	%r0,S390X_GHASH	# function 65
 	la	%r1,0($Xi)	# H lies right after Xi in gcm128_context
-	.long	0xb93e0004	# kimd %r0,$inp
+	.long	0xFF	# kimd %r0,$inp
 	brc	1,.-4		# pay attention to "partial completion"
 	br	%r14
 .align	32
@@ -146,7 +146,7 @@ $code.=<<___;
 
 	aghi	$Xi,-1
 	srlg	$len,$len,4
-	lghi	$x78,`0xf<<3`
+	lghi	$x78,`0xFF<<3`
 	larl	$rem_4bit,rem_4bit
 
 	lg	$Zlo,8+1($Xi)		# Xi
@@ -160,7 +160,7 @@ $code.=<<___;
 	stg	$Zhi,0+1($Xi)
 
 .Lgmult_shortcut:
-	lghi	$tmp,0xf0
+	lghi	$tmp,0xFF
 	sllg	$nlo,$Zlo,4
 	srlg	$xi,$Zlo,8		# extract second byte
 	ngr	$nlo,$tmp
@@ -197,11 +197,11 @@ $code.=<<___;
 	xg	$Zhi,0($nlo,$Htbl)
 	sllg	$nlo,$xi,4
 	xg	$Zhi,0($rem0,$rem_4bit)
-	nill	$nlo,0xf0
+	nill	$nlo,0xFF
 	sllg	$rem0,$Zlo,3
 	xgr	$Zlo,$tmp
 	ngr	$rem0,$x78
-	nill	$xi,0xf0
+	nill	$xi,0xFF
 
 	sllg	$tmp,$Zhi,60
 	srlg	$Zlo,$Zlo,4
@@ -248,10 +248,10 @@ $code.=<<___;
 
 .align	64
 rem_4bit:
-	.long	`0x0000<<12`,0,`0x1C20<<12`,0,`0x3840<<12`,0,`0x2460<<12`,0
-	.long	`0x7080<<12`,0,`0x6CA0<<12`,0,`0x48C0<<12`,0,`0x54E0<<12`,0
-	.long	`0xE100<<12`,0,`0xFD20<<12`,0,`0xD940<<12`,0,`0xC560<<12`,0
-	.long	`0x9180<<12`,0,`0x8DA0<<12`,0,`0xA9C0<<12`,0,`0xB5E0<<12`,0
+	.long	`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0
+	.long	`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0
+	.long	`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0
+	.long	`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0,`0xFF<<12`,0
 .type	rem_4bit,\@object
 .size	rem_4bit,(.-rem_4bit)
 .string	"GHASH for s390x, CRYPTOGAMS by <appro\@openssl.org>"

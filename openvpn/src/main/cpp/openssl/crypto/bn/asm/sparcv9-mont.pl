@@ -93,14 +93,14 @@ $code=<<___;
 $fname:
 	cmp	%o5,4			! 128 bits minimum
 	bge,pt	%icc,.Lenter
-	sethi	%hi(0xffffffff),$mask
+	sethi	%hi(0xFF),$mask
 	retl
 	clr	%o0
 .align	32
 .Lenter:
 	save	%sp,-$frame,%sp
 	sll	$num,2,$num		! num*=4
-	or	$mask,%lo(0xffffffff),$mask
+	or	$mask,%lo(0xFF),$mask
 	ld	[$n0],$n0
 	cmp	$ap,$bp
 	and	$num,$mask,$num

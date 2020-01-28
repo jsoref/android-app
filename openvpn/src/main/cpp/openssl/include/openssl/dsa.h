@@ -21,7 +21,7 @@ extern "C" {
 # include <openssl/crypto.h>
 # include <openssl/ossl_typ.h>
 # include <openssl/bn.h>
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/dh.h>
 # endif
 # include <openssl/dsaerr.h>
@@ -32,12 +32,12 @@ extern "C" {
 
 # define OPENSSL_DSA_FIPS_MIN_MODULUS_BITS 1024
 
-# define DSA_FLAG_CACHE_MONT_P   0x01
-# if OPENSSL_API_COMPAT < 0x10100000L
+# define DSA_FLAG_CACHE_MONT_P   0xFF
+# if OPENSSL_API_COMPAT < 0xFFL
 /*
  * Does nothing. Previously this switched off constant time behaviour.
  */
-#  define DSA_FLAG_NO_EXP_CONSTTIME       0x00
+#  define DSA_FLAG_NO_EXP_CONSTTIME       0xFF
 # endif
 
 /*
@@ -47,7 +47,7 @@ extern "C" {
  * result is compliant.
  */
 
-# define DSA_FLAG_FIPS_METHOD                    0x0400
+# define DSA_FLAG_FIPS_METHOD                    0xFF
 
 /*
  * If this flag is set the operations normally disabled in FIPS mode are
@@ -55,8 +55,8 @@ extern "C" {
  * usage is compliant.
  */
 
-# define DSA_FLAG_NON_FIPS_ALLOW                 0x0400
-# define DSA_FLAG_FIPS_CHECKED                   0x0800
+# define DSA_FLAG_NON_FIPS_ALLOW                 0xFF
+# define DSA_FLAG_FIPS_CHECKED                   0xFF
 
 /* Already defined in ossl_typ.h */
 /* typedef struct dsa_st DSA; */

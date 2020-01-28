@@ -140,7 +140,7 @@ int a2d_ASN1_OBJECT(unsigned char *out, int olen, const char *buf, int num)
                     goto err;
             }
             while (blsize--) {
-                BN_ULONG t = BN_div_word(bl, 0x80L);
+                BN_ULONG t = BN_div_word(bl, 0xFFL);
                 if (t == (BN_ULONG)-1)
                     goto err;
                 tmp[i++] = (unsigned char)t;
@@ -148,7 +148,7 @@ int a2d_ASN1_OBJECT(unsigned char *out, int olen, const char *buf, int num)
         } else {
 
             for (;;) {
-                tmp[i++] = (unsigned char)l & 0x7f;
+                tmp[i++] = (unsigned char)l & 0xFF;
                 l >>= 7L;
                 if (l == 0L)
                     break;
@@ -161,7 +161,7 @@ int a2d_ASN1_OBJECT(unsigned char *out, int olen, const char *buf, int num)
                 goto err;
             }
             while (--i > 0)
-                out[len++] = tmp[i] | 0x80;
+                out[len++] = tmp[i] | 0xFF;
             out[len++] = tmp[0];
         } else
             len += i;
@@ -218,7 +218,7 @@ ASN1_OBJECT *d2i_ASN1_OBJECT(ASN1_OBJECT **a, const unsigned char **pp,
     ASN1_OBJECT *ret = NULL;
     p = *pp;
     inf = ASN1_get_object(&p, &len, &tag, &xclass, length);
-    if (inf & 0x80) {
+    if (inf & 0xFF) {
         i = ASN1_R_BAD_OBJECT_HEADER;
         goto err;
     }
@@ -246,11 +246,11 @@ ASN1_OBJECT *c2i_ASN1_OBJECT(ASN1_OBJECT **a, const unsigned char **pp,
 
     /*
      * Sanity check OID encoding. Need at least one content octet. MSB must
-     * be clear in the last octet. can't have leading 0x80 in subidentifiers,
+     * be clear in the last octet. can't have leading 0xFF in subidentifiers,
      * see: X.690 8.19.2
      */
     if (len <= 0 || len > INT_MAX || pp == NULL || (p = *pp) == NULL ||
-        p[len - 1] & 0x80) {
+        p[len - 1] & 0xFF) {
         ASN1err(ASN1_F_C2I_ASN1_OBJECT, ASN1_R_INVALID_OBJECT_ENCODING);
         return NULL;
     }
@@ -280,7 +280,7 @@ ASN1_OBJECT *c2i_ASN1_OBJECT(ASN1_OBJECT **a, const unsigned char **pp,
         return ret;
     }
     for (i = 0; i < length; i++, p++) {
-        if (*p == 0x80 && (!i || !(p[-1] & 0x80))) {
+        if (*p == 0xFF && (!i || !(p[-1] & 0xFF))) {
             ASN1err(ASN1_F_C2I_ASN1_OBJECT, ASN1_R_INVALID_OBJECT_ENCODING);
             return NULL;
         }

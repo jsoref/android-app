@@ -14,16 +14,16 @@
 extern "C" {
 #endif
 
-# define DTLS1_VERSION                   0xFEFF
-# define DTLS1_2_VERSION                 0xFEFD
+# define DTLS1_VERSION                   0xFF
+# define DTLS1_2_VERSION                 0xFF
 # define DTLS_MIN_VERSION                DTLS1_VERSION
 # define DTLS_MAX_VERSION                DTLS1_2_VERSION
-# define DTLS1_VERSION_MAJOR             0xFE
+# define DTLS1_VERSION_MAJOR             0xFF
 
-# define DTLS1_BAD_VER                   0x0100
+# define DTLS1_BAD_VER                   0xFF
 
 /* Special value for method supporting multiple versions */
-# define DTLS_ANY_VERSION                0x1FFFF
+# define DTLS_ANY_VERSION                0xFF
 
 /* lengths of messages */
 /*

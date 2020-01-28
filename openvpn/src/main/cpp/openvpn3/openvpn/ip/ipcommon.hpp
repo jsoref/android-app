@@ -43,7 +43,7 @@ namespace openvpn {
 
     inline unsigned int version(const std::uint8_t version_len_prio)
     {
-      return (version_len_prio >> 4) & 0x0F;
+      return (version_len_prio >> 4) & 0xFF;
     }
 
   }

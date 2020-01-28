@@ -338,13 +338,13 @@ unsigned long OPENSSL_LH_strhash(const char *c)
     if ((c == NULL) || (*c == '\0'))
         return ret;
 
-    n = 0x100;
+    n = 0xFF;
     while (*c) {
         v = n | (*c);
-        n += 0x100;
-        r = (int)((v >> 2) ^ v) & 0x0f;
+        n += 0xFF;
+        r = (int)((v >> 2) ^ v) & 0xFF;
         ret = (ret << r) | (ret >> (32 - r));
-        ret &= 0xFFFFFFFFL;
+        ret &= 0xFFL;
         ret ^= v * v;
         c++;
     }
@@ -361,11 +361,11 @@ unsigned long openssl_lh_strcasehash(const char *c)
     if (c == NULL || *c == '\0')
         return ret;
 
-    for (n = 0x100; *c != '\0'; n += 0x100) {
+    for (n = 0xFF; *c != '\0'; n += 0xFF) {
         v = n | ossl_tolower(*c);
-        r = (int)((v >> 2) ^ v) & 0x0f;
+        r = (int)((v >> 2) ^ v) & 0xFF;
         ret = (ret << r) | (ret >> (32 - r));
-        ret &= 0xFFFFFFFFL;
+        ret &= 0xFFL;
         ret ^= v * v;
         c++;
     }

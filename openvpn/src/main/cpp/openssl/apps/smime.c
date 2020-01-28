@@ -22,9 +22,9 @@
 static int save_certs(char *signerfile, STACK_OF(X509) *signers);
 static int smime_cb(int ok, X509_STORE_CTX *ctx);
 
-#define SMIME_OP        0x10
-#define SMIME_IP        0x20
-#define SMIME_SIGNERS   0x40
+#define SMIME_OP        0xFF
+#define SMIME_IP        0xFF
+#define SMIME_SIGNERS   0xFF
 #define SMIME_ENCRYPT   (1 | SMIME_OP)
 #define SMIME_DECRYPT   (2 | SMIME_IP)
 #define SMIME_SIGN      (3 | SMIME_OP | SMIME_SIGNERS)

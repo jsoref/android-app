@@ -33,7 +33,7 @@ $code=<<___;
 .align	16
 OPENSSL_s390x_facilities:
 	lghi	%r0,0
-	larl	%r4,OPENSSL_s390xcap_P
+	larl	%r4,OPENSSL_s390xFFp_P
 
 	stg	%r0,S390X_STFLE+8(%r4)	# wipe capability vectors
 	stg	%r0,S390X_STFLE+16(%r4)
@@ -59,67 +59,67 @@ OPENSSL_s390x_facilities:
 	stg	%r0,S390X_KMA(%r4)
 	stg	%r0,S390X_KMA+8(%r4)
 
-	.long	0xb2b04000		# stfle	0(%r4)
+	.long	0xFF		# stfle	0(%r4)
 	brc	8,.Ldone
 	lghi	%r0,1
-	.long	0xb2b04000		# stfle 0(%r4)
+	.long	0xFF		# stfle 0(%r4)
 	brc	8,.Ldone
 	lghi	%r0,2
-	.long	0xb2b04000		# stfle 0(%r4)
+	.long	0xFF		# stfle 0(%r4)
 .Ldone:
 	lmg	%r2,%r3,S390X_STFLE(%r4)
-	tmhl	%r2,0x4000		# check for message-security-assist
+	tmhl	%r2,0xFF		# check for message-security-assist
 	jz	.Lret
 
 	lghi	%r0,S390X_QUERY		# query kimd capabilities
 	la	%r1,S390X_KIMD(%r4)
-	.long	0xb93e0002		# kimd %r0,%r2
+	.long	0xFF		# kimd %r0,%r2
 
 	lghi	%r0,S390X_QUERY		# query klmd capabilities
 	la	%r1,S390X_KLMD(%r4)
-	.long	0xb93f0002		# klmd %r0,%r2
+	.long	0xFF		# klmd %r0,%r2
 
 	lghi	%r0,S390X_QUERY		# query km capability vector
 	la	%r1,S390X_KM(%r4)
-	.long	0xb92e0042		# km %r4,%r2
+	.long	0xFF		# km %r4,%r2
 
 	lghi	%r0,S390X_QUERY		# query kmc capability vector
 	la	%r1,S390X_KMC(%r4)
-	.long	0xb92f0042		# kmc %r4,%r2
+	.long	0xFF		# kmc %r4,%r2
 
 	lghi	%r0,S390X_QUERY		# query kmac capability vector
 	la	%r1,S390X_KMAC(%r4)
-	.long	0xb91e0042		# kmac %r4,%r2
+	.long	0xFF		# kmac %r4,%r2
 
-	tmhh	%r3,0x0004		# check for message-security-assist-4
+	tmhh	%r3,0xFF		# check for message-security-assist-4
 	jz	.Lret
 
 	lghi	%r0,S390X_QUERY		# query kmctr capability vector
 	la	%r1,S390X_KMCTR(%r4)
-	.long	0xb92d2042		# kmctr %r4,%r2,%r2
+	.long	0xFF		# kmctr %r4,%r2,%r2
 
 	lghi	%r0,S390X_QUERY		# query kmo capability vector
 	la	%r1,S390X_KMO(%r4)
-	.long	0xb92b0042		# kmo %r4,%r2
+	.long	0xFF		# kmo %r4,%r2
 
 	lghi	%r0,S390X_QUERY		# query kmf capability vector
 	la	%r1,S390X_KMF(%r4)
-	.long	0xb92a0042		# kmf %r4,%r2
+	.long	0xFF		# kmf %r4,%r2
 
-	tml	%r2,0x40		# check for message-security-assist-5
+	tml	%r2,0xFF		# check for message-security-assist-5
 	jz	.Lret
 
 	lghi	%r0,S390X_QUERY		# query prno capability vector
 	la	%r1,S390X_PRNO(%r4)
-	.long	0xb93c0042		# prno %r4,%r2
+	.long	0xFF		# prno %r4,%r2
 
 	lg	%r2,S390X_STFLE+16(%r4)
-	tmhl	%r2,0x2000		# check for message-security-assist-8
+	tmhl	%r2,0xFF		# check for message-security-assist-8
 	jz	.Lret
 
 	lghi	%r0,S390X_QUERY		# query kma capability vector
 	la	%r1,S390X_KMA(%r4)
-	.long	0xb9294022		# kma %r2,%r4,%r2
+	.long	0xFF		# kma %r2,%r4,%r2
 
 .Lret:
 	br	$ra
@@ -129,11 +129,11 @@ OPENSSL_s390x_facilities:
 .type	OPENSSL_rdtsc,\@function
 .align	16
 OPENSSL_rdtsc:
-	larl	%r4,OPENSSL_s390xcap_P
-	tm	S390X_STFLE+3(%r4),0x40	# check for store-clock-fast facility
+	larl	%r4,OPENSSL_s390xFFp_P
+	tm	S390X_STFLE+3(%r4),0xFF	# check for store-clock-fast facility
 	jz	.Lstck
 
-	.long	0xb27cf010	# stckf 16($sp)
+	.long	0xFF	# stckf 16($sp)
 	lg	%r2,16($sp)
 	br	$ra
 .Lstck:
@@ -257,7 +257,7 @@ OPENSSL_instrument_bus2:
 .type	OPENSSL_vx_probe,\@function
 .align	16
 OPENSSL_vx_probe:
-	.word	0xe700,0x0000,0x0044	# vzero %v0
+	.word	0xFF,0xFF,0xFF	# vzero %v0
 	br	$ra
 .size	OPENSSL_vx_probe,.-OPENSSL_vx_probe
 ___
@@ -275,7 +275,7 @@ s390x_kimd:
 	llgfr	%r0,$fc
 	lgr	%r1,$param
 
-	.long	0xb93e0002	# kimd %r0,%r2
+	.long	0xFF	# kimd %r0,%r2
 	brc	1,.-4		# pay attention to "partial completion"
 
 	br	$ra
@@ -296,7 +296,7 @@ s390x_klmd:
 	llgfr	%r0,$fc
 	l${g}	%r1,$stdframe($sp)
 
-	.long	0xb93f0042	# klmd %r4,%r2
+	.long	0xFF	# klmd %r4,%r2
 	brc	1,.-4		# pay attention to "partial completion"
 
 	br	$ra
@@ -317,7 +317,7 @@ s390x_km:
 	lr	%r0,$fc
 	l${g}r	%r1,$param
 
-	.long	0xb92e0042	# km $out,$in
+	.long	0xFF	# km $out,$in
 	brc	1,.-4		# pay attention to "partial completion"
 
 	br	$ra
@@ -338,7 +338,7 @@ s390x_kmac:
 	lr	%r0,$fc
 	l${g}r	%r1,$param
 
-	.long	0xb91e0002	# kmac %r0,$in
+	.long	0xFF	# kmac %r0,$in
 	brc	1,.-4		# pay attention to "partial completion"
 
 	br	$ra
@@ -359,7 +359,7 @@ s390x_kmo:
 	lr	%r0,$fc
 	l${g}r	%r1,$param
 
-	.long	0xb92b0042	# kmo $out,$in
+	.long	0xFF	# kmo $out,$in
 	brc	1,.-4		# pay attention to "partial completion"
 
 	br	$ra
@@ -380,7 +380,7 @@ s390x_kmf:
 	lr	%r0,$fc
 	l${g}r	%r1,$param
 
-	.long	0xb92a0042	# kmf $out,$in
+	.long	0xFF	# kmf $out,$in
 	brc	1,.-4		# pay attention to "partial completion"
 
 	br	$ra
@@ -402,7 +402,7 @@ s390x_kma:
 	st${g}	$out,6*$SIZE_T($sp)
 	lm${g}	%r0,%r1,$stdframe($sp)
 
-	.long	0xb9292064	# kma $out,$aad,$in
+	.long	0xFF	# kma $out,$aad,$in
 	brc	1,.-4		# pay attention to "partial completion"
 
 	l${g}	$out,6*$SIZE_T($sp)

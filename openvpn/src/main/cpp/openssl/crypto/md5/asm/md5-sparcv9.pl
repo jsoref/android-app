@@ -41,25 +41,25 @@ $tx="%g3";
 ($t1,$t2,$t3,$saved_asi)=map("%l$_",(4..7));
 ($shr,$shl1,$shl2)=("%i3","%i4","%i5");
 
-my @K=(	0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
-	0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
-	0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,
-	0x6b901122,0xfd987193,0xa679438e,0x49b40821,
+my @K=(	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
 
-	0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,
-	0xd62f105d,0x02441453,0xd8a1e681,0xe7d3fbc8,
-	0x21e1cde6,0xc33707d6,0xf4d50d87,0x455a14ed,
-	0xa9e3e905,0xfcefa3f8,0x676f02d9,0x8d2a4c8a,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
 
-	0xfffa3942,0x8771f681,0x6d9d6122,0xfde5380c,
-	0xa4beea44,0x4bdecfa9,0xf6bb4b60,0xbebfbc70,
-	0x289b7ec6,0xeaa127fa,0xd4ef3085,0x04881d05,
-	0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
 
-	0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,
-	0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
-	0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,
-	0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391, 0	);
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF,
+	0xFF,0xFF,0xFF,0xFF, 0	);
 
 sub R0 {
   my ($i,$a,$b,$c,$d) = @_;
@@ -225,39 +225,39 @@ md5_block_asm_data_order:
 	nop
 
 	mov	4, %g1
-	andcc	%o1, 0x7, %g0
-	lda	[%o0 + %g0]0x88, %f0		! load context
-	lda	[%o0 + %g1]0x88, %f1
+	andcc	%o1, 0xFF, %g0
+	lda	[%o0 + %g0]0xFF, %f0		! load context
+	lda	[%o0 + %g1]0xFF, %f1
 	add	%o0, 8, %o0
-	lda	[%o0 + %g0]0x88, %f2
-	lda	[%o0 + %g1]0x88, %f3
+	lda	[%o0 + %g0]0xFF, %f2
+	lda	[%o0 + %g1]0xFF, %f3
 	bne,pn	%icc, .Lhwunaligned
 	sub	%o0, 8, %o0
 
 .Lhw_loop:
-	ldd	[%o1 + 0x00], %f8
-	ldd	[%o1 + 0x08], %f10
-	ldd	[%o1 + 0x10], %f12
-	ldd	[%o1 + 0x18], %f14
-	ldd	[%o1 + 0x20], %f16
-	ldd	[%o1 + 0x28], %f18
-	ldd	[%o1 + 0x30], %f20
+	ldd	[%o1 + 0xFF], %f8
+	ldd	[%o1 + 0xFF], %f10
+	ldd	[%o1 + 0xFF], %f12
+	ldd	[%o1 + 0xFF], %f14
+	ldd	[%o1 + 0xFF], %f16
+	ldd	[%o1 + 0xFF], %f18
+	ldd	[%o1 + 0xFF], %f20
 	subcc	%o2, 1, %o2		! done yet?
-	ldd	[%o1 + 0x38], %f22
-	add	%o1, 0x40, %o1
+	ldd	[%o1 + 0xFF], %f22
+	add	%o1, 0xFF, %o1
 	prefetch [%o1 + 63], 20
 
-	.word	0x81b02800		! MD5
+	.word	0xFF		! MD5
 
 	bne,pt	SIZE_T_CC, .Lhw_loop
 	nop
 
 .Lhwfinish:
-	sta	%f0, [%o0 + %g0]0x88	! store context
-	sta	%f1, [%o0 + %g1]0x88
+	sta	%f0, [%o0 + %g0]0xFF	! store context
+	sta	%f1, [%o0 + %g1]0xFF
 	add	%o0, 8, %o0
-	sta	%f2, [%o0 + %g0]0x88
-	sta	%f3, [%o0 + %g1]0x88
+	sta	%f2, [%o0 + %g0]0xFF
+	sta	%f3, [%o0 + %g1]0xFF
 	retl
 	nop
 
@@ -265,18 +265,18 @@ md5_block_asm_data_order:
 .Lhwunaligned:
 	alignaddr %o1, %g0, %o1
 
-	ldd	[%o1 + 0x00], %f10
+	ldd	[%o1 + 0xFF], %f10
 .Lhwunaligned_loop:
-	ldd	[%o1 + 0x08], %f12
-	ldd	[%o1 + 0x10], %f14
-	ldd	[%o1 + 0x18], %f16
-	ldd	[%o1 + 0x20], %f18
-	ldd	[%o1 + 0x28], %f20
-	ldd	[%o1 + 0x30], %f22
-	ldd	[%o1 + 0x38], %f24
+	ldd	[%o1 + 0xFF], %f12
+	ldd	[%o1 + 0xFF], %f14
+	ldd	[%o1 + 0xFF], %f16
+	ldd	[%o1 + 0xFF], %f18
+	ldd	[%o1 + 0xFF], %f20
+	ldd	[%o1 + 0xFF], %f22
+	ldd	[%o1 + 0xFF], %f24
 	subcc	%o2, 1, %o2		! done yet?
-	ldd	[%o1 + 0x40], %f26
-	add	%o1, 0x40, %o1
+	ldd	[%o1 + 0xFF], %f26
+	add	%o1, 0xFF, %o1
 	prefetch [%o1 + 63], 20
 
 	faligndata %f10, %f12, %f8
@@ -288,7 +288,7 @@ md5_block_asm_data_order:
 	faligndata %f22, %f24, %f20
 	faligndata %f24, %f26, %f22
 
-	.word	0x81b02800		! MD5
+	.word	0xFF		! MD5
 
 	bne,pt	SIZE_T_CC, .Lhwunaligned_loop
 	for	%f26, %f26, %f10	! %f10=%f26
@@ -301,7 +301,7 @@ md5_block_asm_data_order:
 	save	%sp,-STACK_FRAME,%sp
 
 	rd	%asi,$saved_asi
-	wr	%g0,0x88,%asi		! ASI_PRIMARY_LITTLE
+	wr	%g0,0xFF,%asi		! ASI_PRIMARY_LITTLE
 	and	$inp,7,$shr
 	andn	$inp,7,$inp
 
@@ -384,8 +384,8 @@ ___
 sub unvis {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my $ref,$opf;
-my %visopf = (	"faligndata"	=> 0x048,
-		"for"		=> 0x07c	);
+my %visopf = (	"faligndata"	=> 0xFF,
+		"for"		=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -401,7 +401,7 @@ my %visopf = (	"faligndata"	=> 0x048,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -417,7 +417,7 @@ my $ref="$mnemonic\t$rs1,$rs2,$rd";
 	else			{ return $ref; }
     }
     return  sprintf ".word\t0x%08x !%s",
-		    0x81b00300|$rd<<25|$rs1<<14|$rs2,
+		    0xFF|$rd<<25|$rs1<<14|$rs2,
 		    $ref;
 }
 

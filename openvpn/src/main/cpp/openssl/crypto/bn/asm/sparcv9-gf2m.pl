@@ -64,8 +64,8 @@ bn_GF2m_mul_2x2:
 	sllx	%o3, 32, %o3
 	or	%o2, %o1, %o1
 	or	%o4, %o3, %o3
-	.word	0x95b262ab			! xmulx   %o1, %o3, %o2
-	.word	0x99b262cb			! xmulxhi %o1, %o3, %o4
+	.word	0xFF			! xmulx   %o1, %o3, %o2
+	.word	0xFF			! xmulxhi %o1, %o3, %o4
 	srlx	%o2, 32, %o1			! 13 cycles later
 	st	%o2, [%o0+0]
 	st	%o1, [%o0+4]
@@ -82,9 +82,9 @@ bn_GF2m_mul_2x2:
 	mov	-1,$a12
 	sllx	%i3,32,$b
 	or	%i2,$a,$a
-	srlx	$a12,1,$a48			! 0x7fff...
+	srlx	$a12,1,$a48			! 0xFF...
 	or	%i4,$b,$b
-	srlx	$a12,2,$a12			! 0x3fff...
+	srlx	$a12,2,$a12			! 0xFF...
 	add	%sp,STACK_BIAS+STACK_FRAME,$tab
 
 	sllx	$a,2,$a4
@@ -92,12 +92,12 @@ bn_GF2m_mul_2x2:
 	sllx	$a,1,$a2
 
 	srax	$a4,63,@i[1]			! broadcast 61st bit
-	and	$a48,$a4,$a4			! (a<<2)&0x7fff...
+	and	$a48,$a4,$a4			! (a<<2)&0xFF...
 	srlx	$a48,2,$a48
 	srax	$a2,63,@i[0]			! broadcast 62nd bit
-	and	$a12,$a2,$a2			! (a<<1)&0x3fff...
+	and	$a12,$a2,$a2			! (a<<1)&0xFF...
 	srax	$a1,63,$lo			! broadcast 63rd bit
-	and	$a48,$a1,$a1			! (a<<0)&0x1fff...
+	and	$a48,$a1,$a1			! (a<<0)&0xFF...
 
 	sllx	$a1,3,$a8
 	and	$b,$lo,$lo
@@ -141,12 +141,12 @@ bn_GF2m_mul_2x2:
 	sllx	@i[0],62,$a1
 	 sllx	$b,3,@i[0]
 	srlx	@i[1],3,@T[1]
-	 and	@i[0],`0xf<<3`,@i[0]
+	 and	@i[0],`0xFF<<3`,@i[0]
 	sllx	@i[1],61,$a2
 	 ldx	[$tab+@i[0]],@i[0]
 	 srlx	$b,4-3,@i[1]
 	xor	@T[0],$hi,$hi
-	 and	@i[1],`0xf<<3`,@i[1]
+	 and	@i[1],`0xFF<<3`,@i[1]
 	xor	$a1,$lo,$lo
 	 ldx	[$tab+@i[1]],@i[1]
 	xor	@T[1],$hi,$hi
@@ -154,7 +154,7 @@ bn_GF2m_mul_2x2:
 	xor	@i[0],$lo,$lo
 	srlx	$b,8-3,@i[0]
 	 xor	$a2,$lo,$lo
-	and	@i[0],`0xf<<3`,@i[0]
+	and	@i[0],`0xFF<<3`,@i[0]
 ___
 for($n=1;$n<14;$n++) {
 $code.=<<___;
@@ -164,7 +164,7 @@ $code.=<<___;
 	xor	@T[0],$lo,$lo
 	srlx	$b,`($n+2)*4`-3,@i[1]
 	xor	@T[1],$hi,$hi
-	and	@i[1],`0xf<<3`,@i[1]
+	and	@i[1],`0xFF<<3`,@i[1]
 ___
 	push(@i,shift(@i)); push(@T,shift(@T));
 }

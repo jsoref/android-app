@@ -40,7 +40,7 @@ static void make_kn(unsigned char *k1, const unsigned char *l, int bl)
         k1[i] = (c << 1) | ((cnext = l[i + 1]) >> 7);
 
     /* If MSB set fixup with R */
-    k1[i] = (c << 1) ^ ((0 - carry) & (bl == 16 ? 0x87 : 0x1b));
+    k1[i] = (c << 1) ^ ((0 - carry) & (bl == 16 ? 0xFF : 0xFF));
 }
 
 CMAC_CTX *CMAC_CTX_new(void)
@@ -198,7 +198,7 @@ int CMAC_Final(CMAC_CTX *ctx, unsigned char *out, size_t *poutlen)
         for (i = 0; i < bl; i++)
             out[i] = ctx->last_block[i] ^ ctx->k1[i];
     } else {
-        ctx->last_block[lb] = 0x80;
+        ctx->last_block[lb] = 0xFF;
         if (bl - lb > 1)
             memset(ctx->last_block + lb + 1, 0, bl - lb - 1);
         for (i = 0; i < bl; i++)

@@ -86,7 +86,7 @@ void SCT_print(const SCT *sct, BIO *out, int indent,
         return;
     }
 
-    BIO_printf(out, "v1 (0x0)");
+    BIO_printf(out, "v1 (0xFF)");
 
     if (log != NULL) {
         BIO_printf(out, "\n%*sLog       : %s", indent + 4, "",

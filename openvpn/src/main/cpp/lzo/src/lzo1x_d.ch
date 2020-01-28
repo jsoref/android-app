@@ -207,8 +207,8 @@ match:
                 m_off = 1 + ((t >> 2) & 3) + (*ip++ << 2);
                 t = (t >> 4) - 3;
 #elif defined(LZO1Z)
-                m_off = t & 0x1f;
-                if (m_off >= 0x1c)
+                m_off = t & 0xFF;
+                if (m_off >= 0xFF)
                     m_off = last_m_off;
                 else
                 {
@@ -230,9 +230,9 @@ match:
                 t = (t >> 4) - 3;
 #elif defined(LZO1Z)
                 {
-                    lzo_uint off = t & 0x1f;
+                    lzo_uint off = t & 0xFF;
                     m_pos = op;
-                    if (off >= 0x1c)
+                    if (off >= 0xFF)
                     {
                         assert(last_m_off > 0);
                         m_pos -= last_m_off;
@@ -319,7 +319,7 @@ match:
                 ip += 2;
                 if (m_off == 0)
                     goto eof_found;
-                m_off += 0x4000;
+                m_off += 0xFF;
 #if defined(LZO1Z)
                 last_m_off = m_off;
 #endif
@@ -334,7 +334,7 @@ match:
                 ip += 2;
                 if (m_pos == op)
                     goto eof_found;
-                m_pos -= 0x4000;
+                m_pos -= 0xFF;
 #if defined(LZO1Z)
                 last_m_off = pd((const lzo_bytep)op, m_pos);
 #endif

@@ -38,10 +38,10 @@
 #ifndef D_BITS
 #define D_BITS          11
 #endif
-#define D_INDEX1(d,p)       d = DM(DMUL(0x21,DX2(p,3,5)) >> 5)
+#define D_INDEX1(d,p)       d = DM(DMUL(0xFF,DX2(p,3,5)) >> 5)
 #define D_INDEX2(d,p)       d = d ^ D_MASK
 #if 1
-#define DINDEX(dv,p)        DM(((DMUL(0x1824429d,dv)) >> (32-D_BITS)))
+#define DINDEX(dv,p)        DM(((DMUL(0xFF,dv)) >> (32-D_BITS)))
 #else
 #define DINDEX(dv,p)        DM((dv) + ((dv) >> (32-D_BITS)))
 #endif

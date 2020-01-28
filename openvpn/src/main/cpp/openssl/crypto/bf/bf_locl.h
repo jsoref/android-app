@@ -38,21 +38,21 @@
 # define l2nn(l1,l2,c,n) { \
                         c+=n; \
                         switch (n) { \
-                        case 8: *(--(c))=(unsigned char)(((l2)    )&0xff); \
+                        case 8: *(--(c))=(unsigned char)(((l2)    )&0xFF); \
                         /* fall thru */                                    \
-                        case 7: *(--(c))=(unsigned char)(((l2)>> 8)&0xff); \
+                        case 7: *(--(c))=(unsigned char)(((l2)>> 8)&0xFF); \
                         /* fall thru */                                    \
-                        case 6: *(--(c))=(unsigned char)(((l2)>>16)&0xff); \
+                        case 6: *(--(c))=(unsigned char)(((l2)>>16)&0xFF); \
                         /* fall thru */                                    \
-                        case 5: *(--(c))=(unsigned char)(((l2)>>24)&0xff); \
+                        case 5: *(--(c))=(unsigned char)(((l2)>>24)&0xFF); \
                         /* fall thru */                                    \
-                        case 4: *(--(c))=(unsigned char)(((l1)    )&0xff); \
+                        case 4: *(--(c))=(unsigned char)(((l1)    )&0xFF); \
                         /* fall thru */                                    \
-                        case 3: *(--(c))=(unsigned char)(((l1)>> 8)&0xff); \
+                        case 3: *(--(c))=(unsigned char)(((l1)>> 8)&0xFF); \
                         /* fall thru */                                    \
-                        case 2: *(--(c))=(unsigned char)(((l1)>>16)&0xff); \
+                        case 2: *(--(c))=(unsigned char)(((l1)>>16)&0xFF); \
                         /* fall thru */                                    \
-                        case 1: *(--(c))=(unsigned char)(((l1)>>24)&0xff); \
+                        case 1: *(--(c))=(unsigned char)(((l1)>>24)&0xFF); \
                                 } \
                         }
 
@@ -63,10 +63,10 @@
                          l|=((unsigned long)(*((c)++))))
 
 # undef l2n
-# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)     )&0xff))
+# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)     )&0xFF))
 
 /*
  * This is actually a big endian algorithm, the most significant byte is used
@@ -75,10 +75,10 @@
 
 # define BF_ENC(LL,R,S,P) ( \
         LL^=P, \
-        LL^=((( S[       ((R>>24)&0xff)] + \
-                S[0x0100+((R>>16)&0xff)])^ \
-                S[0x0200+((R>> 8)&0xff)])+ \
-                S[0x0300+((R    )&0xff)])&0xffffffffU \
+        LL^=((( S[       ((R>>24)&0xFF)] + \
+                S[0xFF+((R>>16)&0xFF)])^ \
+                S[0xFF+((R>> 8)&0xFF)])+ \
+                S[0xFF+((R    )&0xFF)])&0xFFU \
         )
 
 #endif

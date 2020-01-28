@@ -96,7 +96,7 @@ namespace openvpn {
     RenderHexByte(const unsigned char byte, const bool caps=false)
     {
       c[0] = render_hex_char(byte >> 4, caps);
-      c[1] = render_hex_char(byte & 0x0F, caps);
+      c[1] = render_hex_char(byte & 0xFF, caps);
     }
 
     char char1() const { return c[0]; }
@@ -251,7 +251,7 @@ namespace openvpn {
   {
     if (!data)
       return "NULL\n";
-    const unsigned int mask = 0x0F; // N bytes per line - 1
+    const unsigned int mask = 0xFF; // N bytes per line - 1
     std::ostringstream os;
     os << std::hex;
     std::string chars;

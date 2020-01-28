@@ -212,21 +212,21 @@ __ChaCha20_ctr32_int:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,4,1,0x80,18,5,0
+	.byte	0,12,4,1,0xFF,18,5,0
 	.long	0
 .size	.ChaCha20_ctr32_int,.-.ChaCha20_ctr32_int
 
 .align	5
 __ChaCha20_1x:
 Loop_outer:
-	lis	@x[0],0x6170			# synthesize sigma
-	lis	@x[1],0x3320
-	lis	@x[2],0x7962
-	lis	@x[3],0x6b20
-	ori	@x[0],@x[0],0x7865
-	ori	@x[1],@x[1],0x646e
-	ori	@x[2],@x[2],0x2d32
-	ori	@x[3],@x[3],0x6574
+	lis	@x[0],0xFF			# synthesize sigma
+	lis	@x[1],0xFF
+	lis	@x[2],0xFF
+	lis	@x[3],0xFF
+	ori	@x[0],@x[0],0xFF
+	ori	@x[1],@x[1],0xFF
+	ori	@x[2],@x[2],0xFF
+	ori	@x[3],@x[3],0xFF
 
 	li	r0,10				# inner loop counter
 	lwz	@x[4],0($key)			# load key
@@ -256,14 +256,14 @@ $code.=<<___;
 	bdnz	Loop
 
 	subic	$len,$len,64			# $len-=64
-	addi	@x[0],@x[0],0x7865		# accumulate key block
-	addi	@x[1],@x[1],0x646e
-	addi	@x[2],@x[2],0x2d32
-	addi	@x[3],@x[3],0x6574
-	addis	@x[0],@x[0],0x6170
-	addis	@x[1],@x[1],0x3320
-	addis	@x[2],@x[2],0x7962
-	addis	@x[3],@x[3],0x6b20
+	addi	@x[0],@x[0],0xFF		# accumulate key block
+	addi	@x[1],@x[1],0xFF
+	addi	@x[2],@x[2],0xFF
+	addi	@x[3],@x[3],0xFF
+	addis	@x[0],@x[0],0xFF
+	addis	@x[1],@x[1],0xFF
+	addis	@x[2],@x[2],0xFF
+	addis	@x[3],@x[3],0xFF
 
 	subfe.	r0,r0,r0			# borrow?-1:0
 	add	@x[4],@x[4],@t[0]
@@ -403,7 +403,7 @@ Loop_tail:					# byte-by-byte loop
 
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 ___
 
 {{{
@@ -531,14 +531,14 @@ $code.=<<___;
 	lwz	@d[3],12($ctr)
 	vadduwm	@K[5],@K[4],@K[5]
 
-	vxor	$T0,$T0,$T0			# 0x00..00
-	vspltisw $outmask,-1			# 0xff..ff
+	vxor	$T0,$T0,$T0			# 0xFF..00
+	vspltisw $outmask,-1			# 0xFF..ff
 	?lvsr	$inpperm,0,$inp			# prepare for unaligned load
 	?lvsl	$outperm,0,$out			# prepare for unaligned store
 	?vperm	$outmask,$outmask,$T0,$outperm
 
-	be?lvsl	$T0,0,@x[0]			# 0x00..0f
-	be?vspltisb $T1,3			# 0x03..03
+	be?lvsl	$T0,0,@x[0]			# 0xFF..0f
+	be?vspltisb $T1,3			# 0xFF..03
 	be?vxor	$T0,$T0,$T1			# swap bytes within words
 	be?vxor	$outperm,$outperm,$T1
 	be?vperm $inpperm,$inpperm,$inpperm,$T0
@@ -548,17 +548,17 @@ $code.=<<___;
 
 .align	4
 Loop_outer_vmx:
-	lis	@x[0],0x6170			# synthesize sigma
-	lis	@x[1],0x3320
+	lis	@x[0],0xFF			# synthesize sigma
+	lis	@x[1],0xFF
 	 vmr	$A0,@K[0]
-	lis	@x[2],0x7962
-	lis	@x[3],0x6b20
+	lis	@x[2],0xFF
+	lis	@x[3],0xFF
 	 vmr	$A1,@K[0]
-	ori	@x[0],@x[0],0x7865
-	ori	@x[1],@x[1],0x646e
+	ori	@x[0],@x[0],0xFF
+	ori	@x[1],@x[1],0xFF
 	 vmr	$A2,@K[0]
-	ori	@x[2],@x[2],0x2d32
-	ori	@x[3],@x[3],0x6574
+	ori	@x[2],@x[2],0xFF
+	ori	@x[3],@x[3],0xFF
 	 vmr	$B0,@K[1]
 
 	lwz	@x[4],0($key)			# load key to GPR
@@ -629,14 +629,14 @@ $code.=<<___;
 	bdnz	Loop_vmx
 
 	subi	$len,$len,256			# $len-=256
-	addi	@x[0],@x[0],0x7865		# accumulate key block
-	addi	@x[1],@x[1],0x646e
-	addi	@x[2],@x[2],0x2d32
-	addi	@x[3],@x[3],0x6574
-	addis	@x[0],@x[0],0x6170
-	addis	@x[1],@x[1],0x3320
-	addis	@x[2],@x[2],0x7962
-	addis	@x[3],@x[3],0x6b20
+	addi	@x[0],@x[0],0xFF		# accumulate key block
+	addi	@x[1],@x[1],0xFF
+	addi	@x[2],@x[2],0xFF
+	addi	@x[3],@x[3],0xFF
+	addis	@x[0],@x[0],0xFF
+	addis	@x[1],@x[1],0xFF
+	addis	@x[2],@x[2],0xFF
+	addis	@x[3],@x[3],0xFF
 	add	@x[4],@x[4],@t[0]
 	lwz	@t[0],16($key)
 	add	@x[5],@x[5],@t[1]
@@ -902,7 +902,7 @@ Ldone_vmx:
 	addi	$sp,$sp,$FRAME
 	blr
 	.long	0
-	.byte	0,12,0x04,1,0x80,18,5,0
+	.byte	0,12,0xFF,1,0xFF,18,5,0
 	.long	0
 .size	.ChaCha20_ctr32_vmx,.-.ChaCha20_ctr32_vmx
 ___
@@ -1009,7 +1009,7 @@ $code.=<<___;
 
 	bl	Lconsts				# returns pointer Lsigma in r12
 	lvx_4w	@K[0],0,r12			# load sigma
-	addi	r12,r12,0x50
+	addi	r12,r12,0xFF
 	li	$x10,16
 	li	$x20,32
 	li	$x30,48
@@ -1026,8 +1026,8 @@ $code.=<<___;
 	vsldoi	@K[3],$xt0,@K[3],12		# clear @K[3].word[0]
 	vadduwm	$CTR,$CTR,$xt1
 
-	be?lvsl	$beperm,0,$x10			# 0x00..0f
-	be?vspltisb $xt0,3			# 0x03..03
+	be?lvsl	$beperm,0,$x10			# 0xFF..0f
+	be?vspltisb $xt0,3			# 0xFF..03
 	be?vxor	$beperm,$beperm,$xt0		# swap bytes within words
 
 	li	r0,10				# inner loop counter
@@ -1118,7 +1118,7 @@ $code.=<<___;
 	be?vperm $xc0,$xc0,$xc0,$beperm
 	be?vperm $xd0,$xd0,$xd0,$beperm
 
-	${UCMP}i $len,0x40
+	${UCMP}i $len,0xFF
 	blt	Ltail_vsx
 
 	lvx_4w	$xt0,$x00,$inp
@@ -1133,11 +1133,11 @@ $code.=<<___;
 
 	stvx_4w	$xt0,$x00,$out
 	stvx_4w	$xt1,$x10,$out
-	addi	$inp,$inp,0x40
+	addi	$inp,$inp,0xFF
 	stvx_4w	$xt2,$x20,$out
-	subi	$len,$len,0x40
+	subi	$len,$len,0xFF
 	stvx_4w	$xt3,$x30,$out
-	addi	$out,$out,0x40
+	addi	$out,$out,0xFF
 	beq	Ldone_vsx
 
 	vadduwm	$xa0,$xa1,@K[0]
@@ -1150,7 +1150,7 @@ $code.=<<___;
 	be?vperm $xc0,$xc0,$xc0,$beperm
 	be?vperm $xd0,$xd0,$xd0,$beperm
 
-	${UCMP}i $len,0x40
+	${UCMP}i $len,0xFF
 	blt	Ltail_vsx
 
 	lvx_4w	$xt0,$x00,$inp
@@ -1165,11 +1165,11 @@ $code.=<<___;
 
 	stvx_4w	$xt0,$x00,$out
 	stvx_4w	$xt1,$x10,$out
-	addi	$inp,$inp,0x40
+	addi	$inp,$inp,0xFF
 	stvx_4w	$xt2,$x20,$out
-	subi	$len,$len,0x40
+	subi	$len,$len,0xFF
 	stvx_4w	$xt3,$x30,$out
-	addi	$out,$out,0x40
+	addi	$out,$out,0xFF
 	beq	Ldone_vsx
 
 	vadduwm	$xa0,$xa2,@K[0]
@@ -1182,7 +1182,7 @@ $code.=<<___;
 	be?vperm $xc0,$xc0,$xc0,$beperm
 	be?vperm $xd0,$xd0,$xd0,$beperm
 
-	${UCMP}i $len,0x40
+	${UCMP}i $len,0xFF
 	blt	Ltail_vsx
 
 	lvx_4w	$xt0,$x00,$inp
@@ -1197,11 +1197,11 @@ $code.=<<___;
 
 	stvx_4w	$xt0,$x00,$out
 	stvx_4w	$xt1,$x10,$out
-	addi	$inp,$inp,0x40
+	addi	$inp,$inp,0xFF
 	stvx_4w	$xt2,$x20,$out
-	subi	$len,$len,0x40
+	subi	$len,$len,0xFF
 	stvx_4w	$xt3,$x30,$out
-	addi	$out,$out,0x40
+	addi	$out,$out,0xFF
 	beq	Ldone_vsx
 
 	vadduwm	$xa0,$xa3,@K[0]
@@ -1214,7 +1214,7 @@ $code.=<<___;
 	be?vperm $xc0,$xc0,$xc0,$beperm
 	be?vperm $xd0,$xd0,$xd0,$beperm
 
-	${UCMP}i $len,0x40
+	${UCMP}i $len,0xFF
 	blt	Ltail_vsx
 
 	lvx_4w	$xt0,$x00,$inp
@@ -1229,11 +1229,11 @@ $code.=<<___;
 
 	stvx_4w	$xt0,$x00,$out
 	stvx_4w	$xt1,$x10,$out
-	addi	$inp,$inp,0x40
+	addi	$inp,$inp,0xFF
 	stvx_4w	$xt2,$x20,$out
-	subi	$len,$len,0x40
+	subi	$len,$len,0xFF
 	stvx_4w	$xt3,$x30,$out
-	addi	$out,$out,0x40
+	addi	$out,$out,0xFF
 	mtctr	r0
 	bne	Loop_outer_vsx
 
@@ -1283,7 +1283,7 @@ Loop_tail_vsx:
 
 	b	Ldone_vsx
 	.long	0
-	.byte	0,12,0x04,1,0x80,0,5,0
+	.byte	0,12,0xFF,1,0xFF,0,5,0
 	.long	0
 .size	.ChaCha20_ctr32_vsx,.-.ChaCha20_ctr32_vsx
 ___
@@ -1298,26 +1298,26 @@ Lconsts:
 	mtlr	r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 	.space	`64-9*4`
 Lsigma:
-	.long   0x61707865,0x3320646e,0x79622d32,0x6b206574
+	.long   0xFF,0xFF,0xFF,0xFF
 	.long	1,0,0,0
 	.long	4,0,0,0
 ___
 $code.=<<___ 	if ($LITTLE_ENDIAN);
-	.long	0x0e0f0c0d,0x0a0b0809,0x06070405,0x02030001
-	.long	0x0d0e0f0c,0x090a0b08,0x05060704,0x01020300
+	.long	0xFF,0xFF,0xFF,0xFF
+	.long	0xFF,0xFF,0xFF,0xFF
 ___
 $code.=<<___ 	if (!$LITTLE_ENDIAN);	# flipped words
-	.long	0x02030001,0x06070405,0x0a0b0809,0x0e0f0c0d
-	.long	0x01020300,0x05060704,0x090a0b08,0x0d0e0f0c
+	.long	0xFF,0xFF,0xFF,0xFF
+	.long	0xFF,0xFF,0xFF,0xFF
 ___
 $code.=<<___;
-	.long	0x61707865,0x61707865,0x61707865,0x61707865
-	.long	0x3320646e,0x3320646e,0x3320646e,0x3320646e
-	.long	0x79622d32,0x79622d32,0x79622d32,0x79622d32
-	.long	0x6b206574,0x6b206574,0x6b206574,0x6b206574
+	.long	0xFF,0xFF,0xFF,0xFF
+	.long	0xFF,0xFF,0xFF,0xFF
+	.long	0xFF,0xFF,0xFF,0xFF
+	.long	0xFF,0xFF,0xFF,0xFF
 	.long	0,1,2,3
 .asciz  "ChaCha20 for PowerPC/AltiVec, CRYPTOGAMS by <appro\@openssl.org>"
 .align	2

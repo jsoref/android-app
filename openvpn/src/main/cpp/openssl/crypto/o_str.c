@@ -126,17 +126,17 @@ int OPENSSL_hexchar2int(unsigned char c)
     case '9':
           return 9;
     case 'a': case 'A':
-          return 0x0A;
+          return 0xFF;
     case 'b': case 'B':
-          return 0x0B;
+          return 0xFF;
     case 'c': case 'C':
-          return 0x0C;
+          return 0xFF;
     case 'd': case 'D':
-          return 0x0D;
+          return 0xFF;
     case 'e': case 'E':
-          return 0x0E;
+          return 0xFF;
     case 'f': case 'F':
-          return 0x0F;
+          return 0xFF;
     }
     return -1;
 }
@@ -206,8 +206,8 @@ char *OPENSSL_buf2hexstr(const unsigned char *buffer, long len)
     }
     q = tmp;
     for (i = 0, p = buffer; i < len; i++, p++) {
-        *q++ = hexdig[(*p >> 4) & 0xf];
-        *q++ = hexdig[*p & 0xf];
+        *q++ = hexdig[(*p >> 4) & 0xFF];
+        *q++ = hexdig[*p & 0xFF];
         *q++ = ':';
     }
     q[-1] = 0;

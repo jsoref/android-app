@@ -11,7 +11,7 @@
 .align	5
 mul_1x1_ialu:
 	mov	r4,#0
-	bic	r5,r1,#3<<30		@ a1=a&0x3fffffff
+	bic	r5,r1,#3<<30		@ a1=a&0xFF
 	str	r4,[sp,#0]		@ tab[0]=0
 	add	r6,r5,r5		@ a2=a1<<1
 	str	r5,[sp,#4]		@ tab[1]=a1
@@ -29,44 +29,44 @@ mul_1x1_ialu:
 	str	r7,[sp,#28]		@ tab[7]=a1^a2^a4
 
 	and	r9,r12,r0,lsr#1
-	ldr	r5,[sp,r8]		@ tab[b       & 0x7]
+	ldr	r5,[sp,r8]		@ tab[b       & 0xFF]
 	and	r8,r12,r0,lsr#4
-	ldr	r7,[sp,r9]		@ tab[b >>  3 & 0x7]
+	ldr	r7,[sp,r9]		@ tab[b >>  3 & 0xFF]
 	and	r9,r12,r0,lsr#7
-	ldr	r6,[sp,r8]		@ tab[b >>  6 & 0x7]
+	ldr	r6,[sp,r8]		@ tab[b >>  6 & 0xFF]
 	eor	r5,r5,r7,lsl#3	@ stall
 	mov	r4,r7,lsr#29
-	ldr	r7,[sp,r9]		@ tab[b >>  9 & 0x7]
+	ldr	r7,[sp,r9]		@ tab[b >>  9 & 0xFF]
 
 	and	r8,r12,r0,lsr#10
 	eor	r5,r5,r6,lsl#6
 	eor	r4,r4,r6,lsr#26
-	ldr	r6,[sp,r8]		@ tab[b >> 12 & 0x7]
+	ldr	r6,[sp,r8]		@ tab[b >> 12 & 0xFF]
 
 	and	r9,r12,r0,lsr#13
 	eor	r5,r5,r7,lsl#9
 	eor	r4,r4,r7,lsr#23
-	ldr	r7,[sp,r9]		@ tab[b >> 15 & 0x7]
+	ldr	r7,[sp,r9]		@ tab[b >> 15 & 0xFF]
 
 	and	r8,r12,r0,lsr#16
 	eor	r5,r5,r6,lsl#12
 	eor	r4,r4,r6,lsr#20
-	ldr	r6,[sp,r8]		@ tab[b >> 18 & 0x7]
+	ldr	r6,[sp,r8]		@ tab[b >> 18 & 0xFF]
 
 	and	r9,r12,r0,lsr#19
 	eor	r5,r5,r7,lsl#15
 	eor	r4,r4,r7,lsr#17
-	ldr	r7,[sp,r9]		@ tab[b >> 21 & 0x7]
+	ldr	r7,[sp,r9]		@ tab[b >> 21 & 0xFF]
 
 	and	r8,r12,r0,lsr#22
 	eor	r5,r5,r6,lsl#18
 	eor	r4,r4,r6,lsr#14
-	ldr	r6,[sp,r8]		@ tab[b >> 24 & 0x7]
+	ldr	r6,[sp,r8]		@ tab[b >> 24 & 0xFF]
 
 	and	r9,r12,r0,lsr#25
 	eor	r5,r5,r7,lsl#21
 	eor	r4,r4,r7,lsr#11
-	ldr	r7,[sp,r9]		@ tab[b >> 27 & 0x7]
+	ldr	r7,[sp,r9]		@ tab[b >> 27 & 0xFF]
 
 	tst	r1,#1<<30
 	and	r8,r12,r0,lsr#28
@@ -157,7 +157,7 @@ bn_GF2m_mul_2x2:
 	ldmia	sp!,{r4-r10,lr}
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 #if __ARM_MAX_ARCH__>=7
 .arch	armv7-a
@@ -168,9 +168,9 @@ bn_GF2m_mul_2x2:
 	ldr		r12, [sp]		@ 5th argument
 	vmov		d26, r2, r1
 	vmov		d27, r12, r3
-	vmov.i64	d28, #0x0000ffffffffffff
-	vmov.i64	d29, #0x00000000ffffffff
-	vmov.i64	d30, #0x000000000000ffff
+	vmov.i64	d28, #0xFF
+	vmov.i64	d29, #0xFF
+	vmov.i64	d30, #0xFF
 
 	vext.8		d2, d26, d26, #1	@ A1
 	vmull.p8	q1, d2, d27		@ F = A1*B

@@ -28,12 +28,12 @@ void s390x_kma(const unsigned char *aad, size_t alen, const unsigned char *in,
                size_t len, unsigned char *out, unsigned int fc, void *param);
 
 /*
- * The field elements of OPENSSL_s390xcap_P are the 64-bit words returned by
+ * The field elements of OPENSSL_s390xFFp_P are the 64-bit words returned by
  * the STFLE instruction followed by the 64-bit word pairs returned by
  * instructions' QUERY functions. If STFLE returns fewer data or an instruction
  * is not supported, the corresponding field elements are zero.
  */
-struct OPENSSL_s390xcap_st {
+struct OPENSSL_s390xFFp_st {
     unsigned long long stfle[4];
     unsigned long long kimd[2];
     unsigned long long klmd[2];
@@ -47,25 +47,25 @@ struct OPENSSL_s390xcap_st {
     unsigned long long kma[2];
 };
 
-extern struct OPENSSL_s390xcap_st OPENSSL_s390xcap_P;
+extern struct OPENSSL_s390xFFp_st OPENSSL_s390xFFp_P;
 
 /* convert facility bit number or function code to bit mask */
 #  define S390X_CAPBIT(i)	(1ULL << (63 - (i) % 64))
 
 # endif
 
-/* OPENSSL_s390xcap_P offsets [bytes] */
-# define S390X_STFLE		0x00
-# define S390X_KIMD		0x20
-# define S390X_KLMD		0x30
-# define S390X_KM		0x40
-# define S390X_KMC		0x50
-# define S390X_KMAC		0x60
-# define S390X_KMCTR		0x70
-# define S390X_KMO		0x80
-# define S390X_KMF		0x90
-# define S390X_PRNO		0xa0
-# define S390X_KMA		0xb0
+/* OPENSSL_s390xFFp_P offsets [bytes] */
+# define S390X_STFLE		0xFF
+# define S390X_KIMD		0xFF
+# define S390X_KLMD		0xFF
+# define S390X_KM		0xFF
+# define S390X_KMC		0xFF
+# define S390X_KMAC		0xFF
+# define S390X_KMCTR		0xFF
+# define S390X_KMO		0xFF
+# define S390X_KMF		0xFF
+# define S390X_PRNO		0xFF
+# define S390X_KMA		0xFF
 
 /* Facility Bit Numbers */
 # define S390X_VX		129
@@ -95,9 +95,9 @@ extern struct OPENSSL_s390xcap_st OPENSSL_s390xcap_P;
 # define S390X_TRNG		114
 
 /* Register 0 Flags */
-# define S390X_DECRYPT		0x80
-# define S390X_KMA_LPC		0x100
-# define S390X_KMA_LAAD		0x200
-# define S390X_KMA_HS		0x400
+# define S390X_DECRYPT		0xFF
+# define S390X_KMA_LPC		0xFF
+# define S390X_KMA_LAAD		0xFF
+# define S390X_KMA_HS		0xFF
 
 #endif

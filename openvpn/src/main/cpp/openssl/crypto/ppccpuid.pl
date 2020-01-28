@@ -36,7 +36,7 @@ $code=<<___;
 	fmr	f0,f0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_fpu_probe,.-.OPENSSL_fpu_probe
 .globl	.OPENSSL_ppc64_probe
 .align	4
@@ -45,16 +45,16 @@ $code=<<___;
 	extrdi	r0,r0,32,0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_ppc64_probe,.-.OPENSSL_ppc64_probe
 
 .globl	.OPENSSL_altivec_probe
 .align	4
 .OPENSSL_altivec_probe:
-	.long	0x10000484	# vor	v0,v0,v0
+	.long	0xFF	# vor	v0,v0,v0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_altivec_probe,.-..OPENSSL_altivec_probe
 
 .globl	.OPENSSL_crypto207_probe
@@ -64,7 +64,7 @@ $code=<<___;
 	vcipher	v0,v0,v0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_crypto207_probe,.-.OPENSSL_crypto207_probe
 
 .globl	.OPENSSL_madd300_probe
@@ -75,7 +75,7 @@ $code=<<___;
 	maddhdu	r3,r0,r0,r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 
 .globl	.OPENSSL_wipe_cpu
 .align	4
@@ -107,7 +107,7 @@ $code=<<___;
 	fmr	f13,f31
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_wipe_cpu,.-.OPENSSL_wipe_cpu
 
 .globl	.OPENSSL_atomic_add
@@ -120,7 +120,7 @@ Ladd:	lwarx	r5,0,r3
 	$SIGNX	r3,r0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	.OPENSSL_atomic_add,.-.OPENSSL_atomic_add
 
@@ -130,7 +130,7 @@ Ladd:	lwarx	r5,0,r3
 	mftb	r3
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_rdtsc_mftb,.-.OPENSSL_rdtsc_mftb
 
 .globl	.OPENSSL_rdtsc_mfspr268
@@ -139,7 +139,7 @@ Ladd:	lwarx	r5,0,r3
 	mfspr	r3,268
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,0,0
+	.byte	0,12,0xFF,0,0,0,0,0
 .size	.OPENSSL_rdtsc_mfspr268,.-.OPENSSL_rdtsc_mfspr268
 
 .globl	.OPENSSL_cleanse
@@ -171,7 +171,7 @@ Laligned:
 	bne	Little
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	.OPENSSL_cleanse,.-.OPENSSL_cleanse
 
@@ -197,7 +197,7 @@ Lno_data:
 	extrwi	r3,r3,1,0
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.CRYPTO_memcmp,.-.CRYPTO_memcmp
 ___
@@ -235,7 +235,7 @@ Loop:	mftb	$tick
 	mr	r3,$cnt
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	.OPENSSL_instrument_bus_mftb,.-.OPENSSL_instrument_bus_mftb
 
@@ -287,7 +287,7 @@ Ldone2:
 	sub	r3,r0,$cnt
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.OPENSSL_instrument_bus2_mftb,.-.OPENSSL_instrument_bus2_mftb
 
@@ -319,7 +319,7 @@ Loop3:	mfspr	$tick,268
 	mr	r3,$cnt
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,2,0
+	.byte	0,12,0xFF,0,0,0,2,0
 	.long	0
 .size	.OPENSSL_instrument_bus_mfspr268,.-.OPENSSL_instrument_bus_mfspr268
 
@@ -371,7 +371,7 @@ Ldone4:
 	sub	r3,r0,$cnt
 	blr
 	.long	0
-	.byte	0,12,0x14,0,0,0,3,0
+	.byte	0,12,0xFF,0,0,0,3,0
 	.long	0
 .size	.OPENSSL_instrument_bus2_mfspr268,.-.OPENSSL_instrument_bus2_mfspr268
 ___

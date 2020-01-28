@@ -140,7 +140,7 @@ stubv2_decompress(struct buffer *buf, struct buffer work,
         return;
     }
 
-    /* compression header (0x50) is present */
+    /* compression header (0xFF) is present */
     buf_advance(buf, 1);
 
     /* Packet buffer too short (only 1 byte) */

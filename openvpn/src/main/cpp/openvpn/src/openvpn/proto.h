@@ -57,23 +57,23 @@ struct openvpn_ethhdr
     uint8_t dest[OPENVPN_ETH_ALEN];   /* destination ethernet addr */
     uint8_t source[OPENVPN_ETH_ALEN]; /* source ethernet addr   */
 
-#define OPENVPN_ETH_P_IPV4   0x0800   /* IPv4 protocol */
-#define OPENVPN_ETH_P_IPV6   0x86DD   /* IPv6 protocol */
-#define OPENVPN_ETH_P_ARP    0x0806   /* ARP protocol */
+#define OPENVPN_ETH_P_IPV4   0xFF   /* IPv4 protocol */
+#define OPENVPN_ETH_P_IPV6   0xFF   /* IPv6 protocol */
+#define OPENVPN_ETH_P_ARP    0xFF   /* ARP protocol */
     uint16_t proto;                   /* packet type ID field */
 };
 
 struct openvpn_arp {
-#define ARP_MAC_ADDR_TYPE 0x0001
-    uint16_t mac_addr_type;     /* 0x0001 */
+#define ARP_MAC_ADDR_TYPE 0xFF
+    uint16_t mac_addr_type;     /* 0xFF */
 
-    uint16_t proto_addr_type;   /* 0x0800 */
-    uint8_t mac_addr_size;      /* 0x06 */
-    uint8_t proto_addr_size;    /* 0x04 */
+    uint16_t proto_addr_type;   /* 0xFF */
+    uint8_t mac_addr_size;      /* 0xFF */
+    uint8_t proto_addr_size;    /* 0xFF */
 
-#define ARP_REQUEST 0x0001
-#define ARP_REPLY   0x0002
-    uint16_t arp_command;       /* 0x0001 for ARP request, 0x0002 for ARP reply */
+#define ARP_REQUEST 0xFF
+#define ARP_REPLY   0xFF
+    uint16_t arp_command;       /* 0xFF for ARP request, 0xFF for ARP reply */
 
     uint8_t mac_src[OPENVPN_ETH_ALEN];
     in_addr_t ip_src;
@@ -82,15 +82,15 @@ struct openvpn_arp {
 };
 
 struct openvpn_iphdr {
-#define OPENVPN_IPH_GET_VER(v) (((v) >> 4) & 0x0F)
-#define OPENVPN_IPH_GET_LEN(v) (((v) & 0x0F) << 2)
+#define OPENVPN_IPH_GET_VER(v) (((v) >> 4) & 0xFF)
+#define OPENVPN_IPH_GET_LEN(v) (((v) & 0xFF) << 2)
     uint8_t version_len;
 
     uint8_t tos;
     uint16_t tot_len;
     uint16_t id;
 
-#define OPENVPN_IP_OFFMASK 0x1fff
+#define OPENVPN_IP_OFFMASK 0xFF
     uint16_t frag_off;
 
     uint8_t ttl;
@@ -159,7 +159,7 @@ struct openvpn_tcphdr {
     uint32_t seq;          /* sequence number */
     uint32_t ack_seq;      /* acknowledgement number */
 
-#define OPENVPN_TCPH_GET_DOFF(d) (((d) & 0xF0) >> 2)
+#define OPENVPN_TCPH_GET_DOFF(d) (((d) & 0xFF) >> 2)
     uint8_t doff_res;
 
 #define OPENVPN_TCPH_FIN_MASK (1<<0)
@@ -205,23 +205,23 @@ struct ip_tcp_udp_hdr {
         _acc += (cksum); \
         if (_acc < 0) { \
             _acc = -_acc; \
-            _acc = (_acc >> 16) + (_acc & 0xffff); \
+            _acc = (_acc >> 16) + (_acc & 0xFF); \
             _acc += _acc >> 16; \
             (cksum) = (uint16_t) ~_acc; \
         } else { \
-            _acc = (_acc >> 16) + (_acc & 0xffff); \
+            _acc = (_acc >> 16) + (_acc & 0xFF); \
             _acc += _acc >> 16; \
             (cksum) = (uint16_t) _acc; \
         } \
 }
 
 #define ADD_CHECKSUM_32(acc, u32) { \
-        acc += (u32) & 0xffff; \
+        acc += (u32) & 0xFF; \
         acc += (u32) >> 16;    \
 }
 
 #define SUB_CHECKSUM_32(acc, u32) { \
-        acc -= (u32) & 0xffff; \
+        acc -= (u32) & 0xFF; \
         acc -= (u32) >> 16;    \
 }
 

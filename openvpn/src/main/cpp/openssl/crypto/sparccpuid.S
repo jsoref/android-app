@@ -49,30 +49,30 @@ OPENSSL_wipe_cpu:
 	! specification says that it ("rd %asr2,%o0" in V8 terms) does
 	! not cause illegal_instruction trap. It therefore can be used
 	! to determine if the CPU the code is executing on is V8- or
-	! V9-compliant, as V9 returns a distinct value of 0x99,
+	! V9-compliant, as V9 returns a distinct value of 0xFF,
 	! "negative" and "borrow" bits set in both %icc and %xcc.
-	.word	0x91408000	!rd	%ccr,%o0
-	cmp	%o0,0x99
+	.word	0xFF	!rd	%ccr,%o0
+	cmp	%o0,0xFF
 	bne	.v8
 	nop
 			! Even though we do not use %fp register bank,
 			! we wipe it as memcpy might have used it...
-			.word	0xbfa00040	!fmovd	%f0,%f62
-			.word	0xbba00040	!...
-			.word	0xb7a00040
-			.word	0xb3a00040
-			.word	0xafa00040
-			.word	0xaba00040
-			.word	0xa7a00040
-			.word	0xa3a00040
-			.word	0x9fa00040
-			.word	0x9ba00040
-			.word	0x97a00040
-			.word	0x93a00040
-			.word	0x8fa00040
-			.word	0x8ba00040
-			.word	0x87a00040
-			.word	0x83a00040	!fmovd	%f0,%f32
+			.word	0xFF	!fmovd	%f0,%f62
+			.word	0xFF	!...
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF
+			.word	0xFF	!fmovd	%f0,%f32
 .v8:			fmovs	%f1,%f31
 	clr	%o0
 			fmovs	%f0,%f30
@@ -135,7 +135,7 @@ OPENSSL_wipe_cpu:
 	ret
 	restore
 
-.zero:	.long	0x0,0x0
+.zero:	.long	0xFF,0xFF
 .PIC.zero.up:
 	retl
 	add	%o0,%o7,%o0
@@ -178,8 +178,8 @@ walk_reg_wins:
 OPENSSL_atomic_add:
 #ifndef ABI64
 	subcc	%g0,1,%o2
-	.word	0x95408000	!rd	%ccr,%o2, see comment above
-	cmp	%o2,0x99
+	.word	0xFF	!rd	%ccr,%o2, see comment above
+	cmp	%o2,0xFF
 	be	.v9
 	nop
 	save	%sp,FRAME,%sp
@@ -213,7 +213,7 @@ OPENSSL_atomic_add:
 #endif
 	ld	[%o0],%o2
 1:	add	%o1,%o2,%o3
-	.word	0xd7e2100a	!cas [%o0],%o2,%o3, compare [%o0] with %o2 and swap %o3
+	.word	0xFF	!cas [%o0],%o2,%o3, compare [%o0] with %o2 and swap %o3
 	cmp	%o2,%o3
 	bne	1b
 	mov	%o3,%o2		! cas is always fetching to dest. register
@@ -226,13 +226,13 @@ OPENSSL_atomic_add:
 .align	32
 _sparcv9_rdtick:
 	subcc	%g0,1,%o0
-	.word	0x91408000	!rd	%ccr,%o0
-	cmp	%o0,0x99
+	.word	0xFF	!rd	%ccr,%o0
+	cmp	%o0,0xFF
 	bne	.notick
 	xor	%o0,%o0,%o0
-	.word	0x91410000	!rd	%tick,%o0
+	.word	0xFF	!rd	%tick,%o0
 	retl
-	.word	0x93323020	!srlx	%o0,32,%o1
+	.word	0xFF	!srlx	%o0,32,%o1
 .notick:
 	retl
 	xor	%o1,%o1,%o1
@@ -243,9 +243,9 @@ _sparcv9_rdtick:
 .align	8
 _sparcv9_vis1_probe:
 	add	%sp,BIAS+2,%o1
-	.word	0xc19a5a40	!ldda	[%o1]ASI_FP16_P,%f0
+	.word	0xFF	!ldda	[%o1]ASI_FP16_P,%f0
 	retl
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f0,%f0,%f0
 .type	_sparcv9_vis1_probe,#function
 .size	_sparcv9_vis1_probe,.-_sparcv9_vis1_probe
 
@@ -272,21 +272,21 @@ _sparcv9_vis1_probe:
 .global	_sparcv9_vis1_instrument
 .align	8
 _sparcv9_vis1_instrument:
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
-	.word	0x85b08d82	!fxor	%f2,%f2,%f2
-	.word	0x91410000	!rd	%tick,%o0
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
-	.word	0x85b08d82	!fxor	%f2,%f2,%f2
-	.word	0x93410000	!rd	%tick,%o1
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
-	.word	0x85b08d82	!fxor	%f2,%f2,%f2
-	.word	0x95410000	!rd	%tick,%o2
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
-	.word	0x85b08d82	!fxor	%f2,%f2,%f2
-	.word	0x97410000	!rd	%tick,%o3
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
-	.word	0x85b08d82	!fxor	%f2,%f2,%f2
-	.word	0x99410000	!rd	%tick,%o4
+	.word	0xFF	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f2,%f2,%f2
+	.word	0xFF	!rd	%tick,%o0
+	.word	0xFF	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f2,%f2,%f2
+	.word	0xFF	!rd	%tick,%o1
+	.word	0xFF	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f2,%f2,%f2
+	.word	0xFF	!rd	%tick,%o2
+	.word	0xFF	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f2,%f2,%f2
+	.word	0xFF	!rd	%tick,%o3
+	.word	0xFF	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f2,%f2,%f2
+	.word	0xFF	!rd	%tick,%o4
 
 	! calculate intervals
 	sub	%o1,%o0,%o0
@@ -296,13 +296,13 @@ _sparcv9_vis1_instrument:
 
 	! find minimum value
 	cmp	%o0,%o1
-	.word	0x38680002	!bgu,a	%xcc,.+8
+	.word	0xFF	!bgu,a	%xcc,.+8
 	mov	%o1,%o0
 	cmp	%o0,%o2
-	.word	0x38680002	!bgu,a	%xcc,.+8
+	.word	0xFF	!bgu,a	%xcc,.+8
 	mov	%o2,%o0
 	cmp	%o0,%o3
-	.word	0x38680002	!bgu,a	%xcc,.+8
+	.word	0xFF	!bgu,a	%xcc,.+8
 	mov	%o3,%o0
 
 	retl
@@ -314,17 +314,17 @@ _sparcv9_vis1_instrument:
 .align	8
 _sparcv9_vis2_probe:
 	retl
-	.word	0x81b00980	!bshuffle	%f0,%f0,%f0
+	.word	0xFF	!bshuffle	%f0,%f0,%f0
 .type	_sparcv9_vis2_probe,#function
 .size	_sparcv9_vis2_probe,.-_sparcv9_vis2_probe
 
 .global	_sparcv9_fmadd_probe
 .align	8
 _sparcv9_fmadd_probe:
-	.word	0x81b00d80	!fxor	%f0,%f0,%f0
-	.word	0x85b08d82	!fxor	%f2,%f2,%f2
+	.word	0xFF	!fxor	%f0,%f0,%f0
+	.word	0xFF	!fxor	%f2,%f2,%f2
 	retl
-	.word	0x81b80440	!fmaddd	%f0,%f0,%f2,%f0
+	.word	0xFF	!fmaddd	%f0,%f0,%f2,%f0
 .type	_sparcv9_fmadd_probe,#function
 .size	_sparcv9_fmadd_probe,.-_sparcv9_fmadd_probe
 
@@ -332,7 +332,7 @@ _sparcv9_fmadd_probe:
 .align	8
 _sparcv9_rdcfr:
 	retl
-	.word	0x91468000	!rd	%asr26,%o0
+	.word	0xFF	!rd	%asr26,%o0
 .type	_sparcv9_rdcfr,#function
 .size	_sparcv9_rdcfr,.-_sparcv9_rdcfr
 
@@ -340,7 +340,7 @@ _sparcv9_rdcfr:
 .align	8
 _sparcv9_vis3_probe:
 	retl
-	.word	0x81b022a0	!xmulx	%g0,%g0,%g0
+	.word	0xFF	!xmulx	%g0,%g0,%g0
 .type	_sparcv9_vis3_probe,#function
 .size	_sparcv9_vis3_probe,.-_sparcv9_vis3_probe
 
@@ -348,14 +348,14 @@ _sparcv9_vis3_probe:
 .align	8
 _sparcv9_random:
 	retl
-	.word	0x91b002a0	!random	%o0
+	.word	0xFF	!random	%o0
 .type	_sparcv9_random,#function
 .size	_sparcv9_random,.-_sparcv9_vis3_probe
 
 .global	_sparcv9_fjaesx_probe
 .align	8
 _sparcv9_fjaesx_probe:
-	.word	0x81b09206	!faesencx %f2,%f6,%f0
+	.word	0xFF	!faesencx %f2,%f6,%f0
 	retl
 	nop
 .size	_sparcv9_fjaesx_probe,.-_sparcv9_fjaesx_probe
@@ -388,8 +388,8 @@ OPENSSL_cleanse:
 #ifndef ABI64
 	subcc	%g0,1,%g1
 	! see above for explanation
-	.word	0x83408000	!rd	%ccr,%g1
-	cmp	%g1,0x99
+	.word	0xFF	!rd	%ccr,%g1
+	cmp	%g1,0xFF
 	bne	.v8lot
 	nop
 #endif
@@ -401,15 +401,15 @@ OPENSSL_cleanse:
 	sub	%o1,1,%o1
 	ba	.v9lot
 	add	%o0,1,%o0
-.align	16,0x01000000
+.align	16,0xFF
 .v9aligned:
-	.word	0xc0720000	!stx	%g0,[%o0]
+	.word	0xFF	!stx	%g0,[%o0]
 	sub	%o1,8,%o1
 	andcc	%o1,-8,%g0
 #ifdef ABI64
-	.word	0x126ffffd	!bnz	%xcc,.v9aligned
+	.word	0xFF	!bnz	%xcc,.v9aligned
 #else
-	.word	0x124ffffd	!bnz	%icc,.v9aligned
+	.word	0xFF	!bnz	%icc,.v9aligned
 #endif
 	add	%o0,8,%o0
 
@@ -481,31 +481,31 @@ CRYPTO_memcmp:
 .align	8
 _sparcv9_vis1_instrument_bus:
 	mov	%o1,%o3					! save cnt
-	.word	0x99410000	!rd	%tick,%o4	! tick
+	.word	0xFF	!rd	%tick,%o4	! tick
 	mov	%o4,%o5					! lasttick = tick
 	set	0,%g4					! diff
 
 	andn	%o0,63,%g1
-	.word	0xc1985e00	!ldda	[%g1]0xf0,%f0	! block load
-	.word	0x8143e040	!membar	#Sync
-	.word	0xc1b85c00	!stda	%f0,[%g1]0xe0	! block store and commit
-	.word	0x8143e040	!membar	#Sync
+	.word	0xFF	!ldda	[%g1]0xFF,%f0	! block load
+	.word	0xFF	!membar	#Sync
+	.word	0xFF	!stda	%f0,[%g1]0xFF	! block store and commit
+	.word	0xFF	!membar	#Sync
 	ld	[%o0],%o4
 	add	%o4,%g4,%g4
-	.word	0xc9e2100c	!cas	[%o0],%o4,%g4
+	.word	0xFF	!cas	[%o0],%o4,%g4
 
-.Loop:	.word	0x99410000	!rd	%tick,%o4
+.Loop:	.word	0xFF	!rd	%tick,%o4
 	sub	%o4,%o5,%g4				! diff=tick-lasttick
 	mov	%o4,%o5					! lasttick=tick
 
 	andn	%o0,63,%g1
-	.word	0xc1985e00	!ldda	[%g1]0xf0,%f0	! block load
-	.word	0x8143e040	!membar	#Sync
-	.word	0xc1b85c00	!stda	%f0,[%g1]0xe0	! block store and commit
-	.word	0x8143e040	!membar	#Sync
+	.word	0xFF	!ldda	[%g1]0xFF,%f0	! block load
+	.word	0xFF	!membar	#Sync
+	.word	0xFF	!stda	%f0,[%g1]0xFF	! block store and commit
+	.word	0xFF	!membar	#Sync
 	ld	[%o0],%o4
 	add	%o4,%g4,%g4
-	.word	0xc9e2100c	!cas	[%o0],%o4,%g4
+	.word	0xFF	!cas	[%o0],%o4,%g4
 	subcc	%o1,1,%o1				! --$cnt
 	bnz	.Loop
 	add	%o0,4,%o0				! ++$out
@@ -521,44 +521,44 @@ _sparcv9_vis1_instrument_bus2:
 	mov	%o1,%o3					! save cnt
 	sll	%o1,2,%o1				! cnt*=4
 
-	.word	0x99410000	!rd	%tick,%o4	! tick
+	.word	0xFF	!rd	%tick,%o4	! tick
 	mov	%o4,%o5					! lasttick = tick
 	set	0,%g4					! diff
 
 	andn	%o0,63,%g1
-	.word	0xc1985e00	!ldda	[%g1]0xf0,%f0	! block load
-	.word	0x8143e040	!membar	#Sync
-	.word	0xc1b85c00	!stda	%f0,[%g1]0xe0	! block store and commit
-	.word	0x8143e040	!membar	#Sync
+	.word	0xFF	!ldda	[%g1]0xFF,%f0	! block load
+	.word	0xFF	!membar	#Sync
+	.word	0xFF	!stda	%f0,[%g1]0xFF	! block store and commit
+	.word	0xFF	!membar	#Sync
 	ld	[%o0],%o4
 	add	%o4,%g4,%g4
-	.word	0xc9e2100c	!cas	[%o0],%o4,%g4
+	.word	0xFF	!cas	[%o0],%o4,%g4
 
-	.word	0x99410000	!rd	%tick,%o4	! tick
+	.word	0xFF	!rd	%tick,%o4	! tick
 	sub	%o4,%o5,%g4				! diff=tick-lasttick
 	mov	%o4,%o5					! lasttick=tick
 	mov	%g4,%g5					! lastdiff=diff
 .Loop2:
 	andn	%o0,63,%g1
-	.word	0xc1985e00	!ldda	[%g1]0xf0,%f0	! block load
-	.word	0x8143e040	!membar	#Sync
-	.word	0xc1b85c00	!stda	%f0,[%g1]0xe0	! block store and commit
-	.word	0x8143e040	!membar	#Sync
+	.word	0xFF	!ldda	[%g1]0xFF,%f0	! block load
+	.word	0xFF	!membar	#Sync
+	.word	0xFF	!stda	%f0,[%g1]0xFF	! block store and commit
+	.word	0xFF	!membar	#Sync
 	ld	[%o0],%o4
 	add	%o4,%g4,%g4
-	.word	0xc9e2100c	!cas	[%o0],%o4,%g4
+	.word	0xFF	!cas	[%o0],%o4,%g4
 
 	subcc	%o2,1,%o2				! --max
 	bz	.Ldone2
 	nop
 
-	.word	0x99410000	!rd	%tick,%o4	! tick
+	.word	0xFF	!rd	%tick,%o4	! tick
 	sub	%o4,%o5,%g4				! diff=tick-lasttick
 	mov	%o4,%o5					! lasttick=tick
 	cmp	%g4,%g5
 	mov	%g4,%g5					! lastdiff=diff
 
-	.word	0x83408000	!rd	%ccr,%g1
+	.word	0xFF	!rd	%ccr,%g1
 	and	%g1,4,%g1				! isolate zero flag
 	xor	%g1,4,%g1				! flip zero flag
 

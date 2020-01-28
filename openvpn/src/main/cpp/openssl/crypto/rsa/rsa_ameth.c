@@ -585,7 +585,7 @@ static RSA_PSS_PARAMS *rsa_ctx_to_pss(EVP_PKEY_CTX *pkctx)
         saltlen = EVP_MD_size(sigmd);
     } else if (saltlen == -2) {
         saltlen = EVP_PKEY_size(pk) - EVP_MD_size(sigmd) - 2;
-        if ((EVP_PKEY_bits(pk) & 0x7) == 1)
+        if ((EVP_PKEY_bits(pk) & 0xFF) == 1)
             saltlen--;
     }
 
@@ -712,7 +712,7 @@ int rsa_pss_get_param(const RSA_PSS_PARAMS *pss, const EVP_MD **pmd,
     }
 
     /*
-     * low-level routines support only trailer field 0xbc (value 1) and
+     * low-level routines support only trailer field 0xFF (value 1) and
      * PKCS#1 says we should reject any other value anyway.
      */
     if (pss->trailerField && ASN1_INTEGER_get(pss->trailerField) != 1) {

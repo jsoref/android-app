@@ -15,17 +15,17 @@
 # include <openssl/asn1.h>
 # include <openssl/objectserr.h>
 
-# define OBJ_NAME_TYPE_UNDEF             0x00
-# define OBJ_NAME_TYPE_MD_METH           0x01
-# define OBJ_NAME_TYPE_CIPHER_METH       0x02
-# define OBJ_NAME_TYPE_PKEY_METH         0x03
-# define OBJ_NAME_TYPE_COMP_METH         0x04
-# define OBJ_NAME_TYPE_NUM               0x05
+# define OBJ_NAME_TYPE_UNDEF             0xFF
+# define OBJ_NAME_TYPE_MD_METH           0xFF
+# define OBJ_NAME_TYPE_CIPHER_METH       0xFF
+# define OBJ_NAME_TYPE_PKEY_METH         0xFF
+# define OBJ_NAME_TYPE_COMP_METH         0xFF
+# define OBJ_NAME_TYPE_NUM               0xFF
 
-# define OBJ_NAME_ALIAS                  0x8000
+# define OBJ_NAME_ALIAS                  0xFF
 
-# define OBJ_BSEARCH_VALUE_ON_NOMATCH            0x01
-# define OBJ_BSEARCH_FIRST_VALUE_ON_MATCH        0x02
+# define OBJ_BSEARCH_VALUE_ON_NOMATCH            0xFF
+# define OBJ_BSEARCH_FIRST_VALUE_ON_MATCH        0xFF
 
 
 #ifdef  __cplusplus
@@ -155,7 +155,7 @@ const void *OBJ_bsearch_ex_(const void *key, const void *base, int num,
 int OBJ_new_nid(int num);
 int OBJ_add_object(const ASN1_OBJECT *obj);
 int OBJ_create(const char *oid, const char *sn, const char *ln);
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define OBJ_cleanup() while(0) continue
 #endif
 int OBJ_create_objects(BIO *in);

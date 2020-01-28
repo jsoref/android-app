@@ -32,9 +32,9 @@ int RSA_padding_add_PKCS1_type_1(unsigned char *to, int tlen,
     *(p++) = 0;
     *(p++) = 1;                 /* Private Key BT (Block Type) */
 
-    /* pad out with 0xff data */
+    /* pad out with 0xFF data */
     j = tlen - 3 - flen;
-    memset(p, 0xff, j);
+    memset(p, 0xFF, j);
     p += j;
     *(p++) = '\0';
     memcpy(p, from, (unsigned int)flen);
@@ -62,7 +62,7 @@ int RSA_padding_check_PKCS1_type_1(unsigned char *to, int tlen,
 
     /* Accept inputs with and without the leading 0-byte. */
     if (num == flen) {
-        if ((*p++) != 0x00) {
+        if ((*p++) != 0xFF) {
             RSAerr(RSA_F_RSA_PADDING_CHECK_PKCS1_TYPE_1,
                    RSA_R_INVALID_PADDING);
             return -1;
@@ -70,7 +70,7 @@ int RSA_padding_check_PKCS1_type_1(unsigned char *to, int tlen,
         flen--;
     }
 
-    if ((num != (flen + 1)) || (*(p++) != 0x01)) {
+    if ((num != (flen + 1)) || (*(p++) != 0xFF)) {
         RSAerr(RSA_F_RSA_PADDING_CHECK_PKCS1_TYPE_1,
                RSA_R_BLOCK_TYPE_IS_NOT_01);
         return -1;
@@ -79,7 +79,7 @@ int RSA_padding_check_PKCS1_type_1(unsigned char *to, int tlen,
     /* scan over padding data */
     j = flen - 1;               /* one for type. */
     for (i = 0; i < j; i++) {
-        if (*p != 0xff) {       /* should decrypt to 0xff */
+        if (*p != 0xFF) {       /* should decrypt to 0xFF */
             if (*p == 0) {
                 p++;
                 break;

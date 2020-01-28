@@ -20,8 +20,8 @@ void gcm_bad_parameters( int cipher_id, int direction,
 
     mbedtls_gcm_init( &ctx );
 
-    memset( output, 0x00, sizeof( output ) );
-    memset( tag_output, 0x00, sizeof( tag_output ) );
+    memset( output, 0xFF, sizeof( output ) );
+    memset( tag_output, 0xFF, sizeof( tag_output ) );
 
     TEST_ASSERT( mbedtls_gcm_setkey( &ctx, cipher_id, key_str->x, key_str->len * 8 ) == 0 );
     TEST_ASSERT( mbedtls_gcm_crypt_and_tag( &ctx, direction, src_str->len, iv_str->x, iv_str->len,
@@ -46,8 +46,8 @@ void gcm_encrypt_and_tag( int cipher_id, data_t * key_str,
 
     mbedtls_gcm_init( &ctx );
 
-    memset(output, 0x00, 128);
-    memset(tag_output, 0x00, 16);
+    memset(output, 0xFF, 128);
+    memset(tag_output, 0xFF, 16);
 
 
     TEST_ASSERT( mbedtls_gcm_setkey( &ctx, cipher_id, key_str->x, key_str->len * 8 ) == init_result );
@@ -78,7 +78,7 @@ void gcm_decrypt_and_verify( int cipher_id, data_t * key_str,
 
     mbedtls_gcm_init( &ctx );
 
-    memset(output, 0x00, 128);
+    memset(output, 0xFF, 128);
 
 
     TEST_ASSERT( mbedtls_gcm_setkey( &ctx, cipher_id, key_str->x, key_str->len * 8 ) == init_result );

@@ -357,7 +357,7 @@ int ssl_print_groups(BIO *out, SSL *s, int noshared)
         nid = groups[i];
         /* If unrecognised print out hex version */
         if (nid & TLSEXT_nid_unknown) {
-            BIO_printf(out, "0x%04X", nid & 0xFFFF);
+            BIO_printf(out, "0x%04X", nid & 0xFF);
         } else {
             /* TODO(TLS1.3): Get group name here */
             /* Use NIST name for curve if it exists */
@@ -1088,8 +1088,8 @@ static char *hexencode(const unsigned char *data, size_t len)
     cp = out = app_malloc(ilen, "TLSA hex data buffer");
 
     while (len-- > 0) {
-        *cp++ = hex[(*data >> 4) & 0x0f];
-        *cp++ = hex[*data++ & 0x0f];
+        *cp++ = hex[(*data >> 4) & 0xFF];
+        *cp++ = hex[*data++ & 0xFF];
     }
     *cp = '\0';
     return out;

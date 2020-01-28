@@ -142,7 +142,7 @@ static int i2r_address(BIO *out,
     case IANA_AFI_IPV6:
         if (!addr_expand(addr, bs, 16, fill))
             return 0;
-        for (n = 16; n > 1 && addr[n - 1] == 0x00 && addr[n - 2] == 0x00;
+        for (n = 16; n > 1 && addr[n - 1] == 0xFF && addr[n - 2] == 0xFF;
              n -= 2) ;
         for (i = 0; i < n; i += 2)
             BIO_printf(out, "%x%s", (addr[i] << 8) | addr[i + 1],
@@ -175,12 +175,12 @@ static int i2r_IPAddressOrRanges(BIO *out,
         BIO_printf(out, "%*s", indent, "");
         switch (aor->type) {
         case IPAddressOrRange_addressPrefix:
-            if (!i2r_address(out, afi, 0x00, aor->u.addressPrefix))
+            if (!i2r_address(out, afi, 0xFF, aor->u.addressPrefix))
                 return 0;
             BIO_printf(out, "/%d\n", addr_prefixlen(aor->u.addressPrefix));
             continue;
         case IPAddressOrRange_addressRange:
-            if (!i2r_address(out, afi, 0x00, aor->u.addressRange->min))
+            if (!i2r_address(out, afi, 0xFF, aor->u.addressRange->min))
                 return 0;
             BIO_puts(out, "-");
             if (!i2r_address(out, afi, 0xFF, aor->u.addressRange->max))
@@ -282,12 +282,12 @@ static int IPAddressOrRange_cmp(const IPAddressOrRange *a,
 
     switch (a->type) {
     case IPAddressOrRange_addressPrefix:
-        if (!addr_expand(addr_a, a->u.addressPrefix, length, 0x00))
+        if (!addr_expand(addr_a, a->u.addressPrefix, length, 0xFF))
             return -1;
         prefixlen_a = addr_prefixlen(a->u.addressPrefix);
         break;
     case IPAddressOrRange_addressRange:
-        if (!addr_expand(addr_a, a->u.addressRange->min, length, 0x00))
+        if (!addr_expand(addr_a, a->u.addressRange->min, length, 0xFF))
             return -1;
         prefixlen_a = length * 8;
         break;
@@ -295,12 +295,12 @@ static int IPAddressOrRange_cmp(const IPAddressOrRange *a,
 
     switch (b->type) {
     case IPAddressOrRange_addressPrefix:
-        if (!addr_expand(addr_b, b->u.addressPrefix, length, 0x00))
+        if (!addr_expand(addr_b, b->u.addressPrefix, length, 0xFF))
             return -1;
         prefixlen_b = addr_prefixlen(b->u.addressPrefix);
         break;
     case IPAddressOrRange_addressRange:
-        if (!addr_expand(addr_b, b->u.addressRange->min, length, 0x00))
+        if (!addr_expand(addr_b, b->u.addressRange->min, length, 0xFF))
             return -1;
         prefixlen_b = length * 8;
         break;
@@ -345,32 +345,32 @@ static int range_should_be_prefix(const unsigned char *min,
     if (memcmp(min, max, length) <= 0)
         return -1;
     for (i = 0; i < length && min[i] == max[i]; i++) ;
-    for (j = length - 1; j >= 0 && min[j] == 0x00 && max[j] == 0xFF; j--) ;
+    for (j = length - 1; j >= 0 && min[j] == 0xFF && max[j] == 0xFF; j--) ;
     if (i < j)
         return -1;
     if (i > j)
         return i * 8;
     mask = min[i] ^ max[i];
     switch (mask) {
-    case 0x01:
+    case 0xFF:
         j = 7;
         break;
-    case 0x03:
+    case 0xFF:
         j = 6;
         break;
-    case 0x07:
+    case 0xFF:
         j = 5;
         break;
-    case 0x0F:
+    case 0xFF:
         j = 4;
         break;
-    case 0x1F:
+    case 0xFF:
         j = 3;
         break;
-    case 0x3F:
+    case 0xFF:
         j = 2;
         break;
-    case 0x7F:
+    case 0xFF:
         j = 1;
         break;
     default:
@@ -441,7 +441,7 @@ static int make_addressRange(IPAddressOrRange **result,
         (aor->u.addressRange->max = ASN1_BIT_STRING_new()) == NULL)
         goto err;
 
-    for (i = length; i > 0 && min[i - 1] == 0x00; --i) ;
+    for (i = length; i > 0 && min[i - 1] == 0xFF; --i) ;
     if (!ASN1_BIT_STRING_set(aor->u.addressRange->min, min, i))
         goto err;
     aor->u.addressRange->min->flags &= ~7;
@@ -628,10 +628,10 @@ static int extract_min_max(IPAddressOrRange *aor,
         return 0;
     switch (aor->type) {
     case IPAddressOrRange_addressPrefix:
-        return (addr_expand(min, aor->u.addressPrefix, length, 0x00) &&
+        return (addr_expand(min, aor->u.addressPrefix, length, 0xFF) &&
                 addr_expand(max, aor->u.addressPrefix, length, 0xFF));
     case IPAddressOrRange_addressRange:
-        return (addr_expand(min, aor->u.addressRange->min, length, 0x00) &&
+        return (addr_expand(min, aor->u.addressRange->min, length, 0xFF) &&
                 addr_expand(max, aor->u.addressRange->max, length, 0xFF));
     }
     return 0;
@@ -750,7 +750,7 @@ int X509v3_addr_is_canonical(IPAddrBlocks *addr)
              * Punt if adjacent or overlapping.  Check for adjacency by
              * subtracting one from b_min first.
              */
-            for (k = length - 1; k >= 0 && b_min[k]-- == 0x00; k--) ;
+            for (k = length - 1; k >= 0 && b_min[k]-- == 0xFF; k--) ;
             if (memcmp(a_max, b_min, length) >= 0)
                 return 0;
 
@@ -828,7 +828,7 @@ static int IPAddressOrRanges_canonize(IPAddressOrRanges *aors,
          * Merge if a and b are adjacent.  We check for
          * adjacency by subtracting one from b_min first.
          */
-        for (j = length - 1; j >= 0 && b_min[j]-- == 0x00; j--) ;
+        for (j = length - 1; j >= 0 && b_min[j]-- == 0xFF; j--) ;
         if (memcmp(a_max, b_min, length) == 0) {
             IPAddressOrRange *merged;
             if (!make_addressRange(&merged, a_min, b_max, length))

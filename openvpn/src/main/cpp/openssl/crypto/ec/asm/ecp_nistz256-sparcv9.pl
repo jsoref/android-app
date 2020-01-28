@@ -85,7 +85,7 @@ for(1..37) {
 	for($i=0;$i<64;$i++) {
 		undef @line;
 		for($j=0;$j<64;$j++) {
-			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xff;
+			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xFF;
 		}
 		$code.=".byte\t";
 		$code.=join(',',map { sprintf "0x%02x",$_} @line);
@@ -105,8 +105,8 @@ $code.=<<___;
 .size	ecp_nistz256_precomputed,.-ecp_nistz256_precomputed
 .align	64
 .LRR:	! 2^512 mod P precomputed for NIST P256 polynomial
-.long	0x00000003, 0x00000000, 0xffffffff, 0xfffffffb
-.long	0xfffffffe, 0xffffffff, 0xfffffffd, 0x00000004
+.long	0xFF, 0xFF, 0xFF, 0xFF
+.long	0xFF, 0xFF, 0xFF, 0xFF
 .Lone:
 .long	1,0,0,0,0,0,0,0
 .asciz	"ECP_NISTZ256 for SPARCv9, CRYPTOGAMS by <appro\@openssl.org>"
@@ -184,7 +184,7 @@ __ecp_nistz256_mul_mont:
 	ld	[$bp+0],$bi		! b[0]
 	mov	-1,$mask
 	ld	[$ap+0],$a0
-	srl	$mask,0,$mask		! 0xffffffff
+	srl	$mask,0,$mask		! 0xFF
 	ld	[$ap+4],$t1
 	ld	[$ap+8],$t2
 	ld	[$ap+12],$t3
@@ -342,7 +342,7 @@ $code.=<<___;
 	subc	$carry,0,$carry		! broadcast borrow bit
 
 	! Note that because mod has special form, i.e. consists of
-	! 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	! 0xFF, 1 and 0s, we can conditionally synthesize it by
 	! using value of broadcasted borrow and the borrow bit itself.
 	! To minimize dependency chain we first broadcast and then
 	! extract the bit by negating (follow $bi).
@@ -426,7 +426,7 @@ __ecp_nistz256_add:
 	subc	$carry,0,$carry
 
 	! Note that because mod has special form, i.e. consists of
-	! 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	! 0xFF, 1 and 0s, we can conditionally synthesize it by
 	! using value of borrow and its negative.
 
 	addcc	@acc[0],$carry,@acc[0]	! add synthesized modulus
@@ -613,7 +613,7 @@ __ecp_nistz256_sub_from:
 	! if a-b borrows, add modulus.
 	!
 	! Note that because mod has special form, i.e. consists of
-	! 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	! 0xFF, 1 and 0s, we can conditionally synthesize it by
 	! using value of broadcasted borrow and the borrow bit itself.
 	! To minimize dependency chain we first broadcast and then
 	! extract the bit by negating (follow $bi).
@@ -1802,7 +1802,7 @@ __ecp_nistz256_div_by_2_vis3:
 .align	32
 __ecp_nistz256_mul_mont_vis3:
 	mulx	$a0,$bi,$acc0
-	not	$poly3,$poly3		! 0xFFFFFFFF00000001
+	not	$poly3,$poly3		! 0xFF
 	umulxhi	$a0,$bi,$t0
 	mulx	$a1,$bi,$acc1
 	umulxhi	$a1,$bi,$t1
@@ -1848,13 +1848,13 @@ for($i=1;$i<4;$i++) {
 	#            there is no subtract with 64-bit borrow:-(
 
 $code.=<<___;
-	sub	$acc0,$t0,$t2		! acc0*0xFFFFFFFF00000001, low part
-	umulxhi	$acc0,$poly3,$t3	! acc0*0xFFFFFFFF00000001, high part
+	sub	$acc0,$t0,$t2		! acc0*0xFF, low part
+	umulxhi	$acc0,$poly3,$t3	! acc0*0xFF, high part
 	addcc	$acc1,$t0,$acc0		! +=acc[0]<<96 and omit acc[0]
 	mulx	$a0,$bi,$t0
 	addxccc	$acc2,$t1,$acc1
 	mulx	$a1,$bi,$t1
-	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFFFFFFFF00000001
+	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFF
 	mulx	$a2,$bi,$t2
 	addxccc	$acc4,$t3,$acc3
 	mulx	$a3,$bi,$t3
@@ -1884,11 +1884,11 @@ $code.=<<___;
 ___
 }
 $code.=<<___;
-	sub	$acc0,$t0,$t2		! acc0*0xFFFFFFFF00000001, low part
-	umulxhi	$acc0,$poly3,$t3	! acc0*0xFFFFFFFF00000001, high part
+	sub	$acc0,$t0,$t2		! acc0*0xFF, low part
+	umulxhi	$acc0,$poly3,$t3	! acc0*0xFF, high part
 	addcc	$acc1,$t0,$acc0		! +=acc[0]<<96 and omit acc[0]
 	addxccc	$acc2,$t1,$acc1
-	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFFFFFFFF00000001
+	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFF
 	addxccc	$acc4,$t3,$acc3
 	b	.Lmul_final_vis3	! see below
 	addxc	$acc5,%g0,$acc4
@@ -1929,7 +1929,7 @@ __ecp_nistz256_sqr_mont_vis3:
 	addxc	$acc4,%g0,$acc4		! can't overflow
 
 	mulx	$a3,$a2,$acc5		! a[3]*a[2]
-	not	$poly3,$poly3		! 0xFFFFFFFF00000001
+	not	$poly3,$poly3		! 0xFF
 	umulxhi	$a3,$a2,$acc6
 
 	addcc	$t2,$t1,$t1		! accumulate high parts of multiplication
@@ -1964,27 +1964,27 @@ __ecp_nistz256_sqr_mont_vis3:
 	addxccc	$acc5,$a2,$acc5
 	 srlx	$acc0,32,$t1
 	addxccc	$acc6,$t3,$acc6
-	 sub	$acc0,$t0,$t2		! acc0*0xFFFFFFFF00000001, low part
+	 sub	$acc0,$t0,$t2		! acc0*0xFF, low part
 	addxc	$acc7,$a3,$acc7
 ___
 for($i=0;$i<3;$i++) {			# reductions, see commentary
 					# in multiplication for details
 $code.=<<___;
-	umulxhi	$acc0,$poly3,$t3	! acc0*0xFFFFFFFF00000001, high part
+	umulxhi	$acc0,$poly3,$t3	! acc0*0xFF, high part
 	addcc	$acc1,$t0,$acc0		! +=acc[0]<<96 and omit acc[0]
 	 sllx	$acc0,32,$t0
 	addxccc	$acc2,$t1,$acc1
 	 srlx	$acc0,32,$t1
-	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFFFFFFFF00000001
-	 sub	$acc0,$t0,$t2		! acc0*0xFFFFFFFF00000001, low part
+	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFF
+	 sub	$acc0,$t0,$t2		! acc0*0xFF, low part
 	addxc	%g0,$t3,$acc3		! can't overflow
 ___
 }
 $code.=<<___;
-	umulxhi	$acc0,$poly3,$t3	! acc0*0xFFFFFFFF00000001, high part
+	umulxhi	$acc0,$poly3,$t3	! acc0*0xFF, high part
 	addcc	$acc1,$t0,$acc0		! +=acc[0]<<96 and omit acc[0]
 	addxccc	$acc2,$t1,$acc1
-	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFFFFFFFF00000001
+	addxccc	$acc3,$t2,$acc2		! +=acc[0]*0xFF
 	addxc	%g0,$t3,$acc3		! can't overflow
 
 	addcc	$acc0,$acc4,$acc0	! accumulate upper half
@@ -2002,7 +2002,7 @@ $code.=<<___;
 	! inverse.
 
 	addcc	$acc0,1,$t0		! add -modulus, i.e. subtract
-	not	$poly3,$poly3		! restore 0x00000000FFFFFFFE
+	not	$poly3,$poly3		! restore 0xFF
 	addxccc	$acc1,$poly1,$t1
 	addxccc	$acc2,$minus1,$t2
 	addxccc	$acc3,$poly3,$t3
@@ -2040,8 +2040,8 @@ ecp_nistz256_point_double_vis3:
 .Ldouble_shortcut_vis3:
 	mov	-1,$minus1
 	mov	-2,$poly3
-	sllx	$minus1,32,$poly1		! 0xFFFFFFFF00000000
-	srl	$poly3,0,$poly3			! 0x00000000FFFFFFFE
+	sllx	$minus1,32,$poly1		! 0xFF
+	srl	$poly3,0,$poly3			! 0xFF
 
 	! convert input to uint64_t[4]
 	ld	[$ap],$a0			! in_x
@@ -2309,8 +2309,8 @@ ecp_nistz256_point_add_vis3:
 	mov	$rp,$rp_real
 	mov	-1,$minus1
 	mov	-2,$poly3
-	sllx	$minus1,32,$poly1		! 0xFFFFFFFF00000000
-	srl	$poly3,0,$poly3			! 0x00000000FFFFFFFE
+	sllx	$minus1,32,$poly1		! 0xFF
+	srl	$poly3,0,$poly3			! 0xFF
 
 	! convert input to uint64_t[4]
 	ld	[$bp],$a0			! in2_x
@@ -2719,8 +2719,8 @@ ecp_nistz256_point_add_affine_vis3:
 	mov	$rp,$rp_real
 	mov	-1,$minus1
 	mov	-2,$poly3
-	sllx	$minus1,32,$poly1		! 0xFFFFFFFF00000000
-	srl	$poly3,0,$poly3			! 0x00000000FFFFFFFE
+	sllx	$minus1,32,$poly1		! 0xFF
+	srl	$poly3,0,$poly3			! 0xFF
 
 	! convert input to uint64_t[4]
 	ld	[$bp],$a0			! in2_x
@@ -3013,8 +3013,8 @@ $code.=<<___;
 .size	ecp_nistz256_point_add_affine_vis3,.-ecp_nistz256_point_add_affine_vis3
 .align	64
 .Lone_mont_vis3:
-.long	0x00000000,0x00000001, 0xffffffff,0x00000000
-.long	0xffffffff,0xffffffff, 0x00000000,0xfffffffe
+.long	0xFF,0xFF, 0xFF,0xFF
+.long	0xFF,0xFF, 0xFF,0xFF
 .align	64
 ___
 }								}}}
@@ -3028,9 +3028,9 @@ sub unvis3 {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24 );
 my ($ref,$opf);
-my %visopf = (	"addxc"		=> 0x011,
-		"addxccc"	=> 0x013,
-		"umulxhi"	=> 0x016	);
+my %visopf = (	"addxc"		=> 0xFF,
+		"addxccc"	=> 0xFF,
+		"umulxhi"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -3041,7 +3041,7 @@ my %visopf = (	"addxc"		=> 0x011,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;

@@ -145,7 +145,7 @@ ___
 $code=<<___;
 	.LEVEL	$LEVEL
 	.SPACE	\$TEXT\$
-	.SUBSPA	\$CODE\$,QUAD=0,ALIGN=8,ACCESS=0x2C,CODE_ONLY
+	.SUBSPA	\$CODE\$,QUAD=0,ALIGN=8,ACCESS=0xFF,CODE_ONLY
 
 	.EXPORT	RC4,ENTRY,ARGW0=GR,ARGW1=GR,ARGW2=GR,ARGW3=GR
 RC4
@@ -165,7 +165,7 @@ RC4
 	$LD	`1*$SZ`($key),$YY
 	ldo	`2*$SZ`($key),$key
 
-	ldi	0xff,$mask
+	ldi	0xFF,$mask
 	ldi	3,$dat0
 
 	ldo	1($XX[0]),$XX[0]	; warm up loop
@@ -271,7 +271,7 @@ L\$1st
 	sub	%r0,$len,%r23		; inverse index
 	copy	%r0,@XX[0]
 	copy	%r0,@XX[1]
-	ldi	0xff,$mask
+	ldi	0xFF,$mask
 
 L\$2nd
 	$LDX	@XX[0]($key),@TX[0]

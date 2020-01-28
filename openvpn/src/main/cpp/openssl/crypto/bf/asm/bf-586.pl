@@ -115,19 +115,19 @@ sub BF_ENCRYPT
 	&mov(	$tmp4,		$R);
 
 	&movb(	&LB($tmp1),	&HB($tmp2));	# A
-	&and(	$tmp2,		0xff);		# B
+	&and(	$tmp2,		0xFF);		# B
 
 	&movb(	&LB($tmp3),	&HB($tmp4));	# C
-	&and(	$tmp4,		0xff);		# D
+	&and(	$tmp4,		0xFF);		# D
 
-	&mov(	$tmp1,		&DWP(&n2a($BF_OFF+0x0000),$P,$tmp1,4));
-	&mov(	$tmp2,		&DWP(&n2a($BF_OFF+0x0400),$P,$tmp2,4));
+	&mov(	$tmp1,		&DWP(&n2a($BF_OFF+0xFF),$P,$tmp1,4));
+	&mov(	$tmp2,		&DWP(&n2a($BF_OFF+0xFF),$P,$tmp2,4));
 
 	&add(	$tmp2,		$tmp1);
-	&mov(	$tmp1,		&DWP(&n2a($BF_OFF+0x0800),$P,$tmp3,4));
+	&mov(	$tmp1,		&DWP(&n2a($BF_OFF+0xFF),$P,$tmp3,4));
 
 	&xor(	$tmp2,		$tmp1);
-	&mov(	$tmp4,		&DWP(&n2a($BF_OFF+0x0C00),$P,$tmp4,4));
+	&mov(	$tmp4,		&DWP(&n2a($BF_OFF+0xFF),$P,$tmp4,4));
 
 	&add(	$tmp2,		$tmp4);
 	if (($enc && ($i != 16)) || ((!$enc) && ($i != 1)))

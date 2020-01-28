@@ -29,9 +29,9 @@ extern "C" {
 #endif
 
 /* There are the classes of BIOs */
-# define BIO_TYPE_DESCRIPTOR     0x0100 /* socket, fd, connect or accept */
-# define BIO_TYPE_FILTER         0x0200
-# define BIO_TYPE_SOURCE_SINK    0x0400
+# define BIO_TYPE_DESCRIPTOR     0xFF /* socket, fd, connect or accept */
+# define BIO_TYPE_FILTER         0xFF
+# define BIO_TYPE_SOURCE_SINK    0xFF
 
 /* These are the 'types' of BIOs */
 # define BIO_TYPE_NONE             0
@@ -66,8 +66,8 @@ extern "C" {
  * BIO_FILENAME_READ|BIO_CLOSE to open or close on free.
  * BIO_set_fp(in,stdin,BIO_NOCLOSE);
  */
-# define BIO_NOCLOSE             0x00
-# define BIO_CLOSE               0x01
+# define BIO_NOCLOSE             0xFF
+# define BIO_CLOSE               0xFF
 
 /*
  * These are used in the following macros and are passed to BIO_ctrl()
@@ -146,16 +146,16 @@ extern "C" {
 # define BIO_CTRL_DGRAM_SET_PEEK_MODE      71
 
 /* modifiers */
-# define BIO_FP_READ             0x02
-# define BIO_FP_WRITE            0x04
-# define BIO_FP_APPEND           0x08
-# define BIO_FP_TEXT             0x10
+# define BIO_FP_READ             0xFF
+# define BIO_FP_WRITE            0xFF
+# define BIO_FP_APPEND           0xFF
+# define BIO_FP_TEXT             0xFF
 
-# define BIO_FLAGS_READ          0x01
-# define BIO_FLAGS_WRITE         0x02
-# define BIO_FLAGS_IO_SPECIAL    0x04
+# define BIO_FLAGS_READ          0xFF
+# define BIO_FLAGS_WRITE         0xFF
+# define BIO_FLAGS_IO_SPECIAL    0xFF
 # define BIO_FLAGS_RWS (BIO_FLAGS_READ|BIO_FLAGS_WRITE|BIO_FLAGS_IO_SPECIAL)
-# define BIO_FLAGS_SHOULD_RETRY  0x08
+# define BIO_FLAGS_SHOULD_RETRY  0xFF
 # ifndef BIO_FLAGS_UPLINK
 /*
  * "UPLINK" flag denotes file descriptors provided by application. It
@@ -164,15 +164,15 @@ extern "C" {
 #  define BIO_FLAGS_UPLINK        0
 # endif
 
-# define BIO_FLAGS_BASE64_NO_NL  0x100
+# define BIO_FLAGS_BASE64_NO_NL  0xFF
 
 /*
  * This is used with memory BIOs:
  * BIO_FLAGS_MEM_RDONLY means we shouldn't free up or change the data in any way;
  * BIO_FLAGS_NONCLEAR_RST means we shouldn't clear data on reset.
  */
-# define BIO_FLAGS_MEM_RDONLY    0x200
-# define BIO_FLAGS_NONCLEAR_RST  0x400
+# define BIO_FLAGS_MEM_RDONLY    0xFF
+# define BIO_FLAGS_NONCLEAR_RST  0xFF
 
 typedef union bio_addr_st BIO_ADDR;
 typedef struct bio_addrinfo_st BIO_ADDRINFO;
@@ -182,7 +182,7 @@ void BIO_set_flags(BIO *b, int flags);
 int BIO_test_flags(const BIO *b, int flags);
 void BIO_clear_flags(BIO *b, int flags);
 
-# define BIO_get_flags(b) BIO_test_flags(b, ~(0x0))
+# define BIO_get_flags(b) BIO_test_flags(b, ~(0xFF))
 # define BIO_set_retry_special(b) \
                 BIO_set_flags(b, (BIO_FLAGS_IO_SPECIAL|BIO_FLAGS_SHOULD_RETRY))
 # define BIO_set_retry_read(b) \
@@ -213,25 +213,25 @@ void BIO_clear_flags(BIO *b, int flags);
 /*
  * Returned from the SSL bio when the certificate retrieval code had an error
  */
-# define BIO_RR_SSL_X509_LOOKUP          0x01
+# define BIO_RR_SSL_X509_LOOKUP          0xFF
 /* Returned from the connect BIO when a connect would have blocked */
-# define BIO_RR_CONNECT                  0x02
+# define BIO_RR_CONNECT                  0xFF
 /* Returned from the accept BIO when an accept would have blocked */
-# define BIO_RR_ACCEPT                   0x03
+# define BIO_RR_ACCEPT                   0xFF
 
 /* These are passed by the BIO callback */
-# define BIO_CB_FREE     0x01
-# define BIO_CB_READ     0x02
-# define BIO_CB_WRITE    0x03
-# define BIO_CB_PUTS     0x04
-# define BIO_CB_GETS     0x05
-# define BIO_CB_CTRL     0x06
+# define BIO_CB_FREE     0xFF
+# define BIO_CB_READ     0xFF
+# define BIO_CB_WRITE    0xFF
+# define BIO_CB_PUTS     0xFF
+# define BIO_CB_GETS     0xFF
+# define BIO_CB_CTRL     0xFF
 
 /*
  * The callback is called before and after the underling operation, The
  * BIO_CB_RETURN flag indicates if it is after the call
  */
-# define BIO_CB_RETURN   0x80
+# define BIO_CB_RETURN   0xFF
 # define BIO_CB_return(a) ((a)|BIO_CB_RETURN)
 # define BIO_cb_pre(a)   (!((a)&BIO_CB_RETURN))
 # define BIO_cb_post(a)  ((a)&BIO_CB_RETURN)
@@ -681,7 +681,7 @@ int BIO_sock_error(int sock);
 int BIO_socket_ioctl(int fd, long type, void *arg);
 int BIO_socket_nbio(int fd, int mode);
 int BIO_sock_init(void);
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define BIO_sock_cleanup() while(0) continue
 # endif
 int BIO_set_tcp_ndelay(int sock, int turn_on);
@@ -701,11 +701,11 @@ enum BIO_sock_info_type {
 int BIO_sock_info(int sock,
                   enum BIO_sock_info_type type, union BIO_sock_info_u *info);
 
-#  define BIO_SOCK_REUSEADDR    0x01
-#  define BIO_SOCK_V6_ONLY      0x02
-#  define BIO_SOCK_KEEPALIVE    0x04
-#  define BIO_SOCK_NONBLOCK     0x08
-#  define BIO_SOCK_NODELAY      0x10
+#  define BIO_SOCK_REUSEADDR    0xFF
+#  define BIO_SOCK_V6_ONLY      0xFF
+#  define BIO_SOCK_KEEPALIVE    0xFF
+#  define BIO_SOCK_NONBLOCK     0xFF
+#  define BIO_SOCK_NODELAY      0xFF
 
 int BIO_socket(int domain, int socktype, int protocol, int options);
 int BIO_connect(int sock, const BIO_ADDR *addr, int options);

@@ -173,7 +173,7 @@ code_match ( LZO_COMPRESS_T *c, lzo_bytep op, lzo_uint m_len, lzo_uint m_off )
         assert(op[-2] >= M2_MARKER);
 #elif defined(LZO1Z)
         if (m_off == c->last_m_off)
-            *op++ = LZO_BYTE(((m_len - 1) << 5) | (0x700 >> 6));
+            *op++ = LZO_BYTE(((m_len - 1) << 5) | (0xFF >> 6));
         else
         {
             m_off -= 1;
@@ -229,9 +229,9 @@ code_match ( LZO_COMPRESS_T *c, lzo_bytep op, lzo_uint m_len, lzo_uint m_off )
         lzo_uint k;
 
         assert(m_len >= 3);
-        assert(m_off > 0x4000); assert(m_off <= 0xbfff);
-        m_off -= 0x4000;
-        k = (m_off & 0x4000) >> 11;
+        assert(m_off > 0xFF); assert(m_off <= 0xFF);
+        m_off -= 0xFF;
+        k = (m_off & 0xFF) >> 11;
         if (m_len <= M4_MAX_LEN)
             *op++ = LZO_BYTE(M4_MARKER | k | (m_len - 2));
         else

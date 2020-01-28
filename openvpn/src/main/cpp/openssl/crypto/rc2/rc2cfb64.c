@@ -45,7 +45,7 @@ void RC2_cfb64_encrypt(const unsigned char *in, unsigned char *out,
             c = *(in++) ^ iv[n];
             *(out++) = c;
             iv[n] = c;
-            n = (n + 1) & 0x07;
+            n = (n + 1) & 0xFF;
         }
     } else {
         while (l--) {
@@ -66,7 +66,7 @@ void RC2_cfb64_encrypt(const unsigned char *in, unsigned char *out,
             c = iv[n];
             iv[n] = cc;
             *(out++) = c ^ cc;
-            n = (n + 1) & 0x07;
+            n = (n + 1) & 0xFF;
         }
     }
     v0 = v1 = ti[0] = ti[1] = t = c = cc = 0;

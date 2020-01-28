@@ -74,7 +74,7 @@ bn_mul_mont:
 	stq	s5,24(sp)
 	stq	fp,32(sp)
 	mov	sp,fp
-	.mask	0x0400f000,-48
+	.mask	0xFF,-48
 	.frame	fp,48,ra
 	.prologue 0
 

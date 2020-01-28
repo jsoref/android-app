@@ -50,29 +50,29 @@ DECLARE_ASN1_PRINT_FUNCTION(CMS_ContentInfo)
 
 /* S/MIME related flags */
 
-# define CMS_TEXT                        0x1
-# define CMS_NOCERTS                     0x2
-# define CMS_NO_CONTENT_VERIFY           0x4
-# define CMS_NO_ATTR_VERIFY              0x8
+# define CMS_TEXT                        0xFF
+# define CMS_NOCERTS                     0xFF
+# define CMS_NO_CONTENT_VERIFY           0xFF
+# define CMS_NO_ATTR_VERIFY              0xFF
 # define CMS_NOSIGS                      \
                         (CMS_NO_CONTENT_VERIFY|CMS_NO_ATTR_VERIFY)
-# define CMS_NOINTERN                    0x10
-# define CMS_NO_SIGNER_CERT_VERIFY       0x20
-# define CMS_NOVERIFY                    0x20
-# define CMS_DETACHED                    0x40
-# define CMS_BINARY                      0x80
-# define CMS_NOATTR                      0x100
-# define CMS_NOSMIMECAP                  0x200
-# define CMS_NOOLDMIMETYPE               0x400
-# define CMS_CRLFEOL                     0x800
-# define CMS_STREAM                      0x1000
-# define CMS_NOCRL                       0x2000
-# define CMS_PARTIAL                     0x4000
-# define CMS_REUSE_DIGEST                0x8000
-# define CMS_USE_KEYID                   0x10000
-# define CMS_DEBUG_DECRYPT               0x20000
-# define CMS_KEY_PARAM                   0x40000
-# define CMS_ASCIICRLF                   0x80000
+# define CMS_NOINTERN                    0xFF
+# define CMS_NO_SIGNER_CERT_VERIFY       0xFF
+# define CMS_NOVERIFY                    0xFF
+# define CMS_DETACHED                    0xFF
+# define CMS_BINARY                      0xFF
+# define CMS_NOATTR                      0xFF
+# define CMS_NOSMIMECAP                  0xFF
+# define CMS_NOOLDMIMETYPE               0xFF
+# define CMS_CRLFEOL                     0xFF
+# define CMS_STREAM                      0xFF
+# define CMS_NOCRL                       0xFF
+# define CMS_PARTIAL                     0xFF
+# define CMS_REUSE_DIGEST                0xFF
+# define CMS_USE_KEYID                   0xFF
+# define CMS_DEBUG_DECRYPT               0xFF
+# define CMS_KEY_PARAM                   0xFF
+# define CMS_ASCIICRLF                   0xFF
 
 const ASN1_OBJECT *CMS_get0_type(const CMS_ContentInfo *cms);
 

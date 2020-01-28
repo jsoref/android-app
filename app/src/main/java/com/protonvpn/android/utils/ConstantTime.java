@@ -47,9 +47,9 @@ public class ConstantTime {
         final StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i + 3 <= raw.length; i += 3) {
-            final int d1 = (raw[i] & 0xff) >> 2;
-            final int d2 = 63 & ((raw[i] & 0xff) << 4 | (raw[i + 1] & 0xff) >> 4);
-            final int d3 = 63 & ((raw[i + 1] & 0xff) << 2 | (raw[i + 2] & 0xff) >> 6);
+            final int d1 = (raw[i] & 0xFF) >> 2;
+            final int d2 = 63 & ((raw[i] & 0xFF) << 4 | (raw[i + 1] & 0xFF) >> 4);
+            final int d3 = 63 & ((raw[i + 1] & 0xFF) << 2 | (raw[i + 2] & 0xFF) >> 6);
             final int d4 = 63 & raw[i + 2];
 
             builder.append(encoder.encode6Bits(d1));
@@ -64,8 +64,8 @@ public class ConstantTime {
                 // No padding necessary
                 break;
             case 1:
-                d1 = (raw[raw.length - 1] & 0xff) >> 2;
-                d2 = 63 & ((raw[raw.length - 1] & 0xff) << 4);
+                d1 = (raw[raw.length - 1] & 0xFF) >> 2;
+                d2 = 63 & ((raw[raw.length - 1] & 0xFF) << 4);
 
                 builder.append(encoder.encode6Bits(d1));
                 builder.append(encoder.encode6Bits(d2));
@@ -75,9 +75,9 @@ public class ConstantTime {
                 }
                 break;
             case 2:
-                d1 = (raw[raw.length - 2] & 0xff) >> 2;
-                d2 = 63 & ((raw[raw.length - 2] & 0xff) << 4 | (raw[raw.length - 1] & 0xff) >> 4);
-                d3 = 63 & (raw[raw.length - 1] & 0xff) << 2;
+                d1 = (raw[raw.length - 2] & 0xFF) >> 2;
+                d2 = 63 & ((raw[raw.length - 2] & 0xFF) << 4 | (raw[raw.length - 1] & 0xFF) >> 4);
+                d3 = 63 & (raw[raw.length - 1] & 0xFF) << 2;
 
                 builder.append(encoder.encode6Bits(d1));
                 builder.append(encoder.encode6Bits(d2));

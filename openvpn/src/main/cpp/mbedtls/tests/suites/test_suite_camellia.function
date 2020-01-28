@@ -14,7 +14,7 @@ void camellia_encrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_camellia_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_camellia_init( &ctx );
 
 
@@ -38,7 +38,7 @@ void camellia_decrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_camellia_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_camellia_init( &ctx );
 
 
@@ -63,7 +63,7 @@ void camellia_encrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_camellia_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_camellia_init( &ctx );
 
 
@@ -88,7 +88,7 @@ void camellia_decrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_camellia_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_camellia_init( &ctx );
 
 
@@ -114,7 +114,7 @@ void camellia_encrypt_cfb128( data_t * key_str, data_t * iv_str,
     mbedtls_camellia_context ctx;
     size_t iv_offset = 0;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_camellia_init( &ctx );
 
 
@@ -137,7 +137,7 @@ void camellia_decrypt_cfb128( data_t * key_str, data_t * iv_str,
     mbedtls_camellia_context ctx;
     size_t iv_offset = 0;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_camellia_init( &ctx );
 
 

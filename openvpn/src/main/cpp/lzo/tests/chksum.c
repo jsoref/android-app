@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 /* adler32 checksum */
     adler = lzo_adler32(0, NULL, 0);
     adler = lzo_adler32(adler, block, block_size);
-    if (adler != 0x001e0001UL)
+    if (adler != 0xFFUL)
     {
         printf("adler32 checksum error !!! (0x%08lx)\n", (long) adler);
         return 2;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 /* crc32 checksum */
     crc = lzo_crc32(0, NULL, 0);
     crc = lzo_crc32(crc, block, block_size);
-    if (crc != 0x7ee8cdcdUL)
+    if (crc != 0xFFUL)
     {
         printf("crc32 checksum error !!! (0x%08lx)\n", (long) crc);
         return 1;

@@ -45,7 +45,7 @@ CvtHex(
 
     for (i = 0; i < HASHLEN; i++)
     {
-        j = (Bin[i] >> 4) & 0xf;
+        j = (Bin[i] >> 4) & 0xFF;
         if (j <= 9)
         {
             Hex[i*2] = (j + '0');
@@ -54,7 +54,7 @@ CvtHex(
         {
             Hex[i*2] = (j + 'a' - 10);
         }
-        j = Bin[i] & 0xf;
+        j = Bin[i] & 0xFF;
         if (j <= 9)
         {
             Hex[i*2+1] = (j + '0');

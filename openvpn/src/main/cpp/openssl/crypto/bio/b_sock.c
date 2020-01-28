@@ -24,7 +24,7 @@
 static int wsa_init_done = 0;
 # endif
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 int BIO_get_host_ip(const char *str, unsigned char *ip)
 {
     BIO_ADDRINFO *res = NULL;
@@ -103,7 +103,7 @@ int BIO_sock_error(int sock)
         return j;
 }
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 struct hostent *BIO_gethostbyname(const char *name)
 {
     /*
@@ -130,7 +130,7 @@ int BIO_sock_init(void)
          * among Winsock DLLs, while API availability is [expected to be]
          * probed at run-time with DSO_global_lookup.
          */
-        if (WSAStartup(0x0202, &wsa_state) != 0) {
+        if (WSAStartup(0xFF, &wsa_state) != 0) {
             err = WSAGetLastError();
             SYSerr(SYS_F_WSASTARTUP, err);
             BIOerr(BIO_F_BIO_SOCK_INIT, BIO_R_WSASTARTUP);
@@ -196,7 +196,7 @@ int BIO_socket_ioctl(int fd, long type, void *arg)
     return i;
 }
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 int BIO_get_accept_socket(char *host, int bind_mode)
 {
     int s = INVALID_SOCKET;

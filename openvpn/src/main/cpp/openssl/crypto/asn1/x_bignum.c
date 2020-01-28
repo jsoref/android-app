@@ -100,7 +100,7 @@ static int bn_i2c(ASN1_VALUE **pval, unsigned char *cont, int *putype,
         return -1;
     bn = (BIGNUM *)*pval;
     /* If MSB set in an octet we need a padding byte */
-    if (BN_num_bits(bn) & 0x7)
+    if (BN_num_bits(bn) & 0xFF)
         pad = 0;
     else
         pad = 1;

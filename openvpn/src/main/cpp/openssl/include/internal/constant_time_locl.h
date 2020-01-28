@@ -15,7 +15,7 @@
 # include <openssl/e_os2.h>              /* For 'ossl_inline' */
 
 /*-
- * The boolean methods return a bitmask of all ones (0xff...f) for true
+ * The boolean methods return a bitmask of all ones (0xFF...f) for true
  * and 0 for false. This is useful for choosing a value based on the result
  * of a conditional in constant time. For example,
  *      if (a < b) {
@@ -35,7 +35,7 @@ static ossl_inline uint32_t constant_time_msb_32(uint32_t a);
 /* Convenience method for uint64_t. */
 static ossl_inline uint64_t constant_time_msb_64(uint64_t a);
 
-/* Returns 0xff..f if a < b and 0 otherwise. */
+/* Returns 0xFF..f if a < b and 0 otherwise. */
 static ossl_inline unsigned int constant_time_lt(unsigned int a,
                                                  unsigned int b);
 /* Convenience method for getting an 8-bit mask. */
@@ -44,21 +44,21 @@ static ossl_inline unsigned char constant_time_lt_8(unsigned int a,
 /* Convenience method for uint64_t. */
 static ossl_inline uint64_t constant_time_lt_64(uint64_t a, uint64_t b);
 
-/* Returns 0xff..f if a >= b and 0 otherwise. */
+/* Returns 0xFF..f if a >= b and 0 otherwise. */
 static ossl_inline unsigned int constant_time_ge(unsigned int a,
                                                  unsigned int b);
 /* Convenience method for getting an 8-bit mask. */
 static ossl_inline unsigned char constant_time_ge_8(unsigned int a,
                                                     unsigned int b);
 
-/* Returns 0xff..f if a == 0 and 0 otherwise. */
+/* Returns 0xFF..f if a == 0 and 0 otherwise. */
 static ossl_inline unsigned int constant_time_is_zero(unsigned int a);
 /* Convenience method for getting an 8-bit mask. */
 static ossl_inline unsigned char constant_time_is_zero_8(unsigned int a);
 /* Convenience method for getting a 32-bit mask. */
 static ossl_inline uint32_t constant_time_is_zero_32(uint32_t a);
 
-/* Returns 0xff..f if a == b and 0 otherwise. */
+/* Returns 0xFF..f if a == b and 0 otherwise. */
 static ossl_inline unsigned int constant_time_eq(unsigned int a,
                                                  unsigned int b);
 /* Convenience method for getting an 8-bit mask. */
@@ -259,7 +259,7 @@ static ossl_inline uint64_t constant_time_select_64(uint64_t mask, uint64_t a,
 }
 
 /*
- * mask must be 0xFFFFFFFF or 0x00000000.
+ * mask must be 0xFF or 0xFF.
  *
  * if (mask) {
  *     uint32_t tmp = *a;
@@ -279,7 +279,7 @@ static ossl_inline void constant_time_cond_swap_32(uint32_t mask, uint32_t *a,
 }
 
 /*
- * mask must be 0xFFFFFFFF or 0x00000000.
+ * mask must be 0xFF or 0xFF.
  *
  * if (mask) {
  *     uint64_t tmp = *a;

@@ -55,7 +55,7 @@ typedef uint32_t net_time_t;
  * start thinking about triggering a new
  * SSL/TLS handshake.
  */
-#define PACKET_ID_WRAP_TRIGGER 0xFF000000
+#define PACKET_ID_WRAP_TRIGGER 0xFF
 
 /* convert a packet_id_type from host to network order */
 #define htonpid(x) htonl(x)
@@ -80,7 +80,7 @@ typedef uint32_t net_time_t;
 typedef uint8_t packet_id_type;
 typedef uint16_t net_time_t;
 
-#define PACKET_ID_WRAP_TRIGGER 0x80
+#define PACKET_ID_WRAP_TRIGGER 0xFF
 
 #define htonpid(x) (x)
 #define ntohpid(x) (x)

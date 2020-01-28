@@ -63,9 +63,9 @@ static void ocb_double(OCB_BLOCK *in, OCB_BLOCK *out)
      * Calculate the mask based on the most significant bit. There are more
      * efficient ways to do this - but this way is constant time
      */
-    mask = in->c[0] & 0x80;
+    mask = in->c[0] & 0xFF;
     mask >>= 7;
-    mask = (0 - mask) & 0x87;
+    mask = (0 - mask) & 0xFF;
 
     ocb_block_lshift(in->c, 1, out->c);
 
@@ -240,7 +240,7 @@ int CRYPTO_ocb128_setiv(OCB128_CONTEXT *ctx, const unsigned char *iv,
 
     /* Ktop = ENCIPHER(K, Nonce[1..122] || zeros(6)) */
     memcpy(tmp, nonce, 16);
-    tmp[15] &= 0xc0;
+    tmp[15] &= 0xFF;
     ctx->encrypt(tmp, ktop, ctx->keyenc);
 
     /* Stretch = Ktop || (Ktop[1..64] xor Ktop[9..72]) */
@@ -248,12 +248,12 @@ int CRYPTO_ocb128_setiv(OCB128_CONTEXT *ctx, const unsigned char *iv,
     ocb_block_xor(ktop, ktop + 1, 8, stretch + 16);
 
     /* bottom = str2num(Nonce[123..128]) */
-    bottom = nonce[15] & 0x3f;
+    bottom = nonce[15] & 0xFF;
 
     /* Offset_0 = Stretch[1+bottom..128+bottom] */
     shift = bottom % 8;
     ocb_block_lshift(stretch + (bottom / 8), shift, ctx->sess.offset.c);
-    mask = 0xff;
+    mask = 0xFF;
     mask <<= 8 - shift;
     ctx->sess.offset.c[15] |=
         (*(stretch + (bottom / 8) + 16) & mask) >> (8 - shift);
@@ -309,7 +309,7 @@ int CRYPTO_ocb128_aad(OCB128_CONTEXT *ctx, const unsigned char *aad,
         /* CipherInput = (A_* || 1 || zeros(127-bitlen(A_*))) xor Offset_* */
         memset(tmp.c, 0, 16);
         memcpy(tmp.c, aad, last_len);
-        tmp.c[last_len] = 0x80;
+        tmp.c[last_len] = 0xFF;
         ocb_block16_xor(&ctx->sess.offset_aad, &tmp, &tmp);
 
         /* Sum = Sum_m xor ENCIPHER(K, CipherInput) */
@@ -405,7 +405,7 @@ int CRYPTO_ocb128_encrypt(OCB128_CONTEXT *ctx,
         /* Checksum_* = Checksum_m xor (P_* || 1 || zeros(127-bitlen(P_*))) */
         memset(pad.c, 0, 16);           /* borrow pad */
         memcpy(pad.c, in, last_len);
-        pad.c[last_len] = 0x80;
+        pad.c[last_len] = 0xFF;
         ocb_block16_xor(&pad, &ctx->sess.checksum, &ctx->sess.checksum);
     }
 
@@ -497,7 +497,7 @@ int CRYPTO_ocb128_decrypt(OCB128_CONTEXT *ctx,
         /* Checksum_* = Checksum_m xor (P_* || 1 || zeros(127-bitlen(P_*))) */
         memset(pad.c, 0, 16);           /* borrow pad */
         memcpy(pad.c, out, last_len);
-        pad.c[last_len] = 0x80;
+        pad.c[last_len] = 0xFF;
         ocb_block16_xor(&pad, &ctx->sess.checksum, &ctx->sess.checksum);
     }
 

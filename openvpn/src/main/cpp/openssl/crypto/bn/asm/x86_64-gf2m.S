@@ -196,7 +196,7 @@ _mul_1x1:
 
 	addq	$128+8,%rsp
 .cfi_adjust_cfa_offset	-128-8
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .Lend_mul_1x1:
 .cfi_endproc	
 .size	_mul_1x1,.-_mul_1x1
@@ -231,7 +231,7 @@ bn_GF2m_mul_2x2:
 	pxor	%xmm5,%xmm0
 	movdqu	%xmm2,0(%rdi)
 	movdqu	%xmm0,16(%rdi)
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 
 .align	16
 .Lvanilla_mul_2x2:
@@ -254,7 +254,7 @@ bn_GF2m_mul_2x2:
 	movq	%rcx,56(%rsp)
 	movq	%r8,64(%rsp)
 
-	movq	$0xf,%r8
+	movq	$0xFF,%r8
 	movq	%rsi,%rax
 	movq	%rcx,%rbp
 	call	_mul_1x1
@@ -303,7 +303,7 @@ bn_GF2m_mul_2x2:
 	leaq	136(%rsp),%rsp
 .cfi_adjust_cfa_offset	-8*17
 .Lepilogue_mul_2x2:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .Lend_mul_2x2:
 .cfi_endproc	
 .size	bn_GF2m_mul_2x2,.-bn_GF2m_mul_2x2

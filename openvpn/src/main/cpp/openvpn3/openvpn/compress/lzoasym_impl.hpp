@@ -64,7 +64,7 @@ namespace openvpn {
     // Internal constants
     enum {
       LZOASYM_EOF_CODE=1,
-      LZOASYM_M2_MAX_OFFSET=0x0800,
+      LZOASYM_M2_MAX_OFFSET=0xFF,
     };
 
     // Polymorphic get/set/copy
@@ -300,7 +300,7 @@ namespace openvpn {
 		    input_ptr += 2;
 		    if (LZOASYM_UNLIKELY(match_ptr == output_ptr))
 		      goto success;
-		    match_ptr -= 0x4000;
+		    match_ptr -= 0xFF;
 		  }
 		else                                   // LZO "M1" match (least likely)
 		  {

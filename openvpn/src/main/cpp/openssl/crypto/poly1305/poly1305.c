@@ -22,10 +22,10 @@ size_t Poly1305_ctx_size(void)
 /* pick 32-bit unsigned integer in little endian order */
 static unsigned int U8TOU32(const unsigned char *p)
 {
-    return (((unsigned int)(p[0] & 0xff)) |
-            ((unsigned int)(p[1] & 0xff) << 8) |
-            ((unsigned int)(p[2] & 0xff) << 16) |
-            ((unsigned int)(p[3] & 0xff) << 24));
+    return (((unsigned int)(p[0] & 0xFF)) |
+            ((unsigned int)(p[1] & 0xFF) << 8) |
+            ((unsigned int)(p[2] & 0xFF) << 16) |
+            ((unsigned int)(p[3] & 0xFF) << 24));
 }
 
 /*
@@ -109,27 +109,27 @@ typedef struct {
 /* pick 32-bit unsigned integer in little endian order */
 static u64 U8TOU64(const unsigned char *p)
 {
-    return (((u64)(p[0] & 0xff)) |
-            ((u64)(p[1] & 0xff) << 8) |
-            ((u64)(p[2] & 0xff) << 16) |
-            ((u64)(p[3] & 0xff) << 24) |
-            ((u64)(p[4] & 0xff) << 32) |
-            ((u64)(p[5] & 0xff) << 40) |
-            ((u64)(p[6] & 0xff) << 48) |
-            ((u64)(p[7] & 0xff) << 56));
+    return (((u64)(p[0] & 0xFF)) |
+            ((u64)(p[1] & 0xFF) << 8) |
+            ((u64)(p[2] & 0xFF) << 16) |
+            ((u64)(p[3] & 0xFF) << 24) |
+            ((u64)(p[4] & 0xFF) << 32) |
+            ((u64)(p[5] & 0xFF) << 40) |
+            ((u64)(p[6] & 0xFF) << 48) |
+            ((u64)(p[7] & 0xFF) << 56));
 }
 
 /* store a 32-bit unsigned integer in little endian */
 static void U64TO8(unsigned char *p, u64 v)
 {
-    p[0] = (unsigned char)((v) & 0xff);
-    p[1] = (unsigned char)((v >> 8) & 0xff);
-    p[2] = (unsigned char)((v >> 16) & 0xff);
-    p[3] = (unsigned char)((v >> 24) & 0xff);
-    p[4] = (unsigned char)((v >> 32) & 0xff);
-    p[5] = (unsigned char)((v >> 40) & 0xff);
-    p[6] = (unsigned char)((v >> 48) & 0xff);
-    p[7] = (unsigned char)((v >> 56) & 0xff);
+    p[0] = (unsigned char)((v) & 0xFF);
+    p[1] = (unsigned char)((v >> 8) & 0xFF);
+    p[2] = (unsigned char)((v >> 16) & 0xFF);
+    p[3] = (unsigned char)((v >> 24) & 0xFF);
+    p[4] = (unsigned char)((v >> 32) & 0xFF);
+    p[5] = (unsigned char)((v >> 40) & 0xFF);
+    p[6] = (unsigned char)((v >> 48) & 0xFF);
+    p[7] = (unsigned char)((v >> 56) & 0xFF);
 }
 
 static void poly1305_init(void *ctx, const unsigned char key[16])
@@ -141,9 +141,9 @@ static void poly1305_init(void *ctx, const unsigned char key[16])
     st->h[1] = 0;
     st->h[2] = 0;
 
-    /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
-    st->r[0] = U8TOU64(&key[0]) & 0x0ffffffc0fffffff;
-    st->r[1] = U8TOU64(&key[8]) & 0x0ffffffc0ffffffc;
+    /* r &= 0xFF */
+    st->r[0] = U8TOU64(&key[0]) & 0xFF;
+    st->r[1] = U8TOU64(&key[8]) & 0xFF;
 }
 
 static void
@@ -264,10 +264,10 @@ typedef struct {
 /* store a 32-bit unsigned integer in little endian */
 static void U32TO8(unsigned char *p, unsigned int v)
 {
-    p[0] = (unsigned char)((v) & 0xff);
-    p[1] = (unsigned char)((v >> 8) & 0xff);
-    p[2] = (unsigned char)((v >> 16) & 0xff);
-    p[3] = (unsigned char)((v >> 24) & 0xff);
+    p[0] = (unsigned char)((v) & 0xFF);
+    p[1] = (unsigned char)((v >> 8) & 0xFF);
+    p[2] = (unsigned char)((v >> 16) & 0xFF);
+    p[3] = (unsigned char)((v >> 24) & 0xFF);
 }
 
 static void poly1305_init(void *ctx, const unsigned char key[16])
@@ -281,11 +281,11 @@ static void poly1305_init(void *ctx, const unsigned char key[16])
     st->h[3] = 0;
     st->h[4] = 0;
 
-    /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
-    st->r[0] = U8TOU32(&key[0]) & 0x0fffffff;
-    st->r[1] = U8TOU32(&key[4]) & 0x0ffffffc;
-    st->r[2] = U8TOU32(&key[8]) & 0x0ffffffc;
-    st->r[3] = U8TOU32(&key[12]) & 0x0ffffffc;
+    /* r &= 0xFF */
+    st->r[0] = U8TOU32(&key[0]) & 0xFF;
+    st->r[1] = U8TOU32(&key[4]) & 0xFF;
+    st->r[2] = U8TOU32(&key[8]) & 0xFF;
+    st->r[3] = U8TOU32(&key[12]) & 0xFF;
 }
 
 static void

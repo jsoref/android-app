@@ -339,7 +339,7 @@ static int pk_group_from_specified( const mbedtls_asn1_buf *params, mbedtls_ecp_
          * reading only the X coordinate and the parity bit of Y.
          */
         if( ret != MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE ||
-            ( p[0] != 0x02 && p[0] != 0x03 ) ||
+            ( p[0] != 0xFF && p[0] != 0xFF ) ||
             len != mbedtls_mpi_size( &grp->P ) + 1 ||
             mbedtls_mpi_read_binary( &grp->G.X, p + 1, len - 1 ) != 0 ||
             mbedtls_mpi_lset( &grp->G.Y, p[0] - 2 ) != 0 ||
@@ -770,7 +770,7 @@ cleanup:
     if( ret != 0 )
     {
         /* Wrap error code if it's coming from a lower level */
-        if( ( ret & 0xff80 ) == 0 )
+        if( ( ret & 0xFF ) == 0 )
             ret = MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret;
         else
             ret = MBEDTLS_ERR_PK_KEY_INVALID_FORMAT;

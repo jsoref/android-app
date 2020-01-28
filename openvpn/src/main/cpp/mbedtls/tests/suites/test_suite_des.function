@@ -21,7 +21,7 @@ void des_encrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_des_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des_init( &ctx );
 
 
@@ -42,7 +42,7 @@ void des_decrypt_ecb( data_t * key_str, data_t * src_str,
     unsigned char output[100];
     mbedtls_des_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des_init( &ctx );
 
 
@@ -64,7 +64,7 @@ void des_encrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_des_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des_init( &ctx );
 
 
@@ -89,7 +89,7 @@ void des_decrypt_cbc( data_t * key_str, data_t * iv_str,
     unsigned char output[100];
     mbedtls_des_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des_init( &ctx );
 
 
@@ -113,7 +113,7 @@ void des3_encrypt_ecb( int key_count, data_t * key_str,
     unsigned char output[100];
     mbedtls_des3_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des3_init( &ctx );
 
 
@@ -140,7 +140,7 @@ void des3_decrypt_ecb( int key_count, data_t * key_str,
     unsigned char output[100];
     mbedtls_des3_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des3_init( &ctx );
 
 
@@ -168,7 +168,7 @@ void des3_encrypt_cbc( int key_count, data_t * key_str,
     unsigned char output[100];
     mbedtls_des3_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des3_init( &ctx );
 
 
@@ -200,7 +200,7 @@ void des3_decrypt_cbc( int key_count, data_t * key_str,
     unsigned char output[100];
     mbedtls_des3_context ctx;
 
-    memset(output, 0x00, 100);
+    memset(output, 0xFF, 100);
     mbedtls_des3_init( &ctx );
 
 

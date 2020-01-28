@@ -41,7 +41,7 @@ void RC4_set_key(RC4_KEY *key, int len, const unsigned char *data)
 
 #define SK_LOOP(d,n) { \
                 tmp=d[(n)]; \
-                id2 = (data[id1] + tmp + id2) & 0xff; \
+                id2 = (data[id1] + tmp + id2) & 0xFF; \
                 if (++id1 == len) id1=0; \
                 d[(n)]=d[id2]; \
                 d[id2]=tmp; }

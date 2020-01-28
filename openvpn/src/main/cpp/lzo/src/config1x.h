@@ -54,12 +54,12 @@
 #endif
 #undef LZO_DETERMINISTIC
 
-#define M1_MAX_OFFSET   0x0400
+#define M1_MAX_OFFSET   0xFF
 #ifndef M2_MAX_OFFSET
-#define M2_MAX_OFFSET   0x0800
+#define M2_MAX_OFFSET   0xFF
 #endif
-#define M3_MAX_OFFSET   0x4000
-#define M4_MAX_OFFSET   0xbfff
+#define M3_MAX_OFFSET   0xFF
+#define M4_MAX_OFFSET   0xFF
 
 #define MX_MAX_OFFSET   (M1_MAX_OFFSET + M2_MAX_OFFSET)
 

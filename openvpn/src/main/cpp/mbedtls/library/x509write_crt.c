@@ -225,8 +225,8 @@ int mbedtls_x509write_crt_set_key_usage( mbedtls_x509write_cert *ctx,
     unsigned char *c;
     int ret;
 
-    /* We currently only support 7 bits, from 0x80 to 0x02 */
-    if( ( key_usage & ~0xfe ) != 0 )
+    /* We currently only support 7 bits, from 0xFF to 0xFF */
+    if( ( key_usage & ~0xFF ) != 0 )
         return( MBEDTLS_ERR_X509_FEATURE_UNAVAILABLE );
 
     c = buf + 4;

@@ -96,19 +96,19 @@ poly1305_init:
 	sll	$shr,3,$shr		! *8
 	neg	$shr,$shl
 
-	sethi	%hi(0x0ffffffc),$t0
+	sethi	%hi(0xFF),$t0
 	set	8,$h1
-	or	$t0,%lo(0x0ffffffc),$t0
+	or	$t0,%lo(0xFF),$t0
 	set	16,$h2
 	sllx	$t0,32,$t1
-	or	$t0,$t1,$t1		! 0x0ffffffc0ffffffc
-	or	$t1,3,$t0		! 0x0ffffffc0fffffff
+	or	$t0,$t1,$t1		! 0xFF
+	or	$t1,3,$t0		! 0xFF
 
-	ldxa	[$inp+%g0]0x88,$h0	! load little-endian key
+	ldxa	[$inp+%g0]0xFF,$h0	! load little-endian key
 	brz,pt	$shr,.Lkey_aligned
-	ldxa	[$inp+$h1]0x88,$h1
+	ldxa	[$inp+$h1]0xFF,$h1
 
-	ldxa	[$inp+$h2]0x88,$h2
+	ldxa	[$inp+$h2]0xFF,$h2
 	srlx	$h0,$shr,$h0
 	sllx	$h1,$shl,$t2
 	srlx	$h1,$shr,$h1
@@ -177,11 +177,11 @@ poly1305_blocks:
 	add	$r3,$s3,$s3
 
 .Loop:
-	ldxa	[$inp+%g0]0x88,$d0	! load little-endian input
+	ldxa	[$inp+%g0]0xFF,$d0	! load little-endian input
 	brz,pt	$shr,.Linp_aligned
-	ldxa	[$inp+$d1]0x88,$d1
+	ldxa	[$inp+$d1]0xFF,$d1
 
-	ldxa	[$inp+$d2]0x88,$d2
+	ldxa	[$inp+$d2]0xFF,$d2
 	srlx	$d0,$shr,$d0
 	sllx	$d1,$shl,$t1
 	srlx	$d1,$shr,$d1
@@ -309,11 +309,11 @@ poly1305_blocks_vis3:
 	add	$R1,$S1,$S1
 
 .Loop_vis3:
-	ldxa	[$inp+%g0]0x88,$D0	! load little-endian input
+	ldxa	[$inp+%g0]0xFF,$D0	! load little-endian input
 	brz,pt	$shr,.Linp_aligned_vis3
-	ldxa	[$inp+$r1]0x88,$D1
+	ldxa	[$inp+$r1]0xFF,$D1
 
-	ldxa	[$inp+$r2]0x88,$D2
+	ldxa	[$inp+$r2]0xFF,$D2
 	srlx	$D0,$shr,$D0
 	sllx	$D1,$shl,$T1
 	srlx	$D1,$shr,$D1
@@ -495,13 +495,13 @@ poly1305_init_fma:
 	mov	16,$i2
 	neg	$shr,$shl
 
-	ldxa	[$inp+%g0]0x88,$in0		! load little-endian key
-	ldxa	[$inp+$i1]0x88,$in2
+	ldxa	[$inp+%g0]0xFF,$in0		! load little-endian key
+	ldxa	[$inp+$i1]0xFF,$in2
 
 	brz	$shr,.Lkey_aligned_fma
-	sethi	%hi(0xf0000000),$i1		!   0xf0000000
+	sethi	%hi(0xFF),$i1		!   0xFF
 
-	ldxa	[$inp+$i2]0x88,$in4
+	ldxa	[$inp+$i2]0xFF,$in4
 
 	srlx	$in0,$shr,$in0			! align data
 	sllx	$in2,$shl,$in1
@@ -511,10 +511,10 @@ poly1305_init_fma:
 	or	$in3,$in2,$in2
 
 .Lkey_aligned_fma:
-	or	$i1,3,$i2			!   0xf0000003
+	or	$i1,3,$i2			!   0xFF
 	srlx	$in0,32,$in1
-	andn	$in0,$i1,$in0			! &=0x0fffffff
-	andn	$in1,$i2,$in1			! &=0x0ffffffc
+	andn	$in0,$i1,$in0			! &=0xFF
+	andn	$in1,$i2,$in1			! &=0xFF
 	srlx	$in2,32,$in3
 	andn	$in2,$i2,$in2
 	andn	$in3,$i2,$in3
@@ -642,11 +642,11 @@ poly1305_blocks_fma:
 	mov	16,$step
 	neg	$shr,$shl
 
-	ldxa	[$inp+%g0]0x88,$in0		! load little-endian input
+	ldxa	[$inp+%g0]0xFF,$in0		! load little-endian input
 	brz	$shr,.Linp_aligned_fma
-	ldxa	[$inp+$i1]0x88,$in2
+	ldxa	[$inp+$i1]0xFF,$in2
 
-	ldxa	[$inp+$step]0x88,$in4
+	ldxa	[$inp+$step]0xFF,$in4
 	add	$inp,8,$inp
 
 	srlx	$in0,$shr,$in0			! align data
@@ -696,10 +696,10 @@ poly1305_blocks_fma:
 
 	fsubd	$h0lo,$two0, $h0lo		! de-bias hash value
 	fsubd	$h1lo,$two32,$h1lo
-	 ldxa	[$inp+%g0]0x88,$in0		! modulo-scheduled input load
+	 ldxa	[$inp+%g0]0xFF,$in0		! modulo-scheduled input load
 	fsubd	$h2lo,$two64,$h2lo
 	fsubd	$h3lo,$two96,$h3lo
-	 ldxa	[$inp+$i1]0x88,$in2
+	 ldxa	[$inp+$i1]0xFF,$in2
 
 	fsubd	$x0,$two0, $x0  		! de-bias input
 	fsubd	$x1,$two32,$x1
@@ -733,8 +733,8 @@ poly1305_blocks_fma:
 
 .align	16
 .Loop_fma:
-	ldxa	[$inp+%g0]0x88,$in0		! modulo-scheduled input load
-	ldxa	[$inp+$i1]0x88,$in2
+	ldxa	[$inp+%g0]0xFF,$in0		! modulo-scheduled input load
+	ldxa	[$inp+$i1]0xFF,$in2
 	movrz	$len,0,$step
 
 	faddd	$y0,$h0lo,$h0lo 		! accumulate input
@@ -933,7 +933,7 @@ poly1305_emit_fma:
 	ld	[$ctx+8*3+0],$d3
 	ld	[$ctx+8*3+4],$h3
 
-	sethi	%hi(0xfff00000),$mask
+	sethi	%hi(0xFF),$mask
 	andn	$d0,$mask,$d0			! mask exponent
 	andn	$d1,$mask,$d1
 	andn	$d2,$mask,$d2
@@ -1025,22 +1025,22 @@ ___
 $code.=<<___;
 .align	64
 .Lconsts_fma:
-.word	0x43300000,0x00000000		! 2^(52+0)
-.word	0x45300000,0x00000000		! 2^(52+32)
-.word	0x47300000,0x00000000		! 2^(52+64)
-.word	0x49300000,0x00000000		! 2^(52+96)
-.word	0x4b500000,0x00000000		! 2^(52+130)
+.word	0xFF,0xFF		! 2^(52+0)
+.word	0xFF,0xFF		! 2^(52+32)
+.word	0xFF,0xFF		! 2^(52+64)
+.word	0xFF,0xFF		! 2^(52+96)
+.word	0xFF,0xFF		! 2^(52+130)
 
-.word	0x37f40000,0x00000000		! 5/2^130
+.word	0xFF,0xFF		! 5/2^130
 .word	0,1<<30				! fsr: truncate, no exceptions
 
-.word	0x44300000,0x00000000		! 2^(52+16+0)
-.word	0x46300000,0x00000000		! 2^(52+16+32)
-.word	0x48300000,0x00000000		! 2^(52+16+64)
-.word	0x4a300000,0x00000000		! 2^(52+16+96)
-.word	0x3e300000,0x00000000		! 2^(52+16+0-96)
-.word	0x40300000,0x00000000		! 2^(52+16+32-96)
-.word	0x42300000,0x00000000		! 2^(52+16+64-96)
+.word	0xFF,0xFF		! 2^(52+16+0)
+.word	0xFF,0xFF		! 2^(52+16+32)
+.word	0xFF,0xFF		! 2^(52+16+64)
+.word	0xFF,0xFF		! 2^(52+16+96)
+.word	0xFF,0xFF		! 2^(52+16+0-96)
+.word	0xFF,0xFF		! 2^(52+16+32-96)
+.word	0xFF,0xFF		! 2^(52+16+64-96)
 .asciz	"Poly1305 for SPARCv9/VIS3/FMA, CRYPTOGAMS by <appro\@openssl.org>"
 .align	4
 ___
@@ -1055,9 +1055,9 @@ sub unvis3 {
 my ($mnemonic,$rs1,$rs2,$rd)=@_;
 my %bias = ( "g" => 0, "o" => 8, "l" => 16, "i" => 24 );
 my ($ref,$opf);
-my %visopf = (	"addxc"		=> 0x011,
-		"addxccc"	=> 0x013,
-		"umulxhi"	=> 0x016	);
+my %visopf = (	"addxc"		=> 0xFF,
+		"addxccc"	=> 0xFF,
+		"umulxhi"	=> 0xFF	);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rd";
 
@@ -1068,7 +1068,7 @@ my %visopf = (	"addxc"		=> 0x011,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b00000|$rd<<25|$rs1<<14|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;
@@ -1078,10 +1078,10 @@ my %visopf = (	"addxc"		=> 0x011,
 sub unfma {
 my ($mnemonic,$rs1,$rs2,$rs3,$rd)=@_;
 my ($ref,$opf);
-my %fmaopf = (	"fmadds"	=> 0x1,
-		"fmaddd"	=> 0x2,
-		"fmsubs"	=> 0x5,
-		"fmsubd"	=> 0x6		);
+my %fmaopf = (	"fmadds"	=> 0xFF,
+		"fmaddd"	=> 0xFF,
+		"fmsubs"	=> 0xFF,
+		"fmsubd"	=> 0xFF		);
 
     $ref = "$mnemonic\t$rs1,$rs2,$rs3,$rd";
 
@@ -1097,7 +1097,7 @@ my %fmaopf = (	"fmadds"	=> 0x1,
 	}
 
 	return	sprintf ".word\t0x%08x !%s",
-			0x81b80000|$rd<<25|$rs1<<14|$rs3<<9|$opf<<5|$rs2,
+			0xFF|$rd<<25|$rs1<<14|$rs3<<9|$opf<<5|$rs2,
 			$ref;
     } else {
 	return $ref;

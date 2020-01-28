@@ -770,7 +770,7 @@ EXT_RETURN tls_construct_ctos_early_data(SSL *s, WPACKET *pkt,
                      SSL_F_TLS_CONSTRUCT_CTOS_EARLY_DATA, ERR_R_INTERNAL_ERROR);
             return EXT_RETURN_FAIL;
         } else if (psklen > 0) {
-            const unsigned char tls13_aes128gcmsha256_id[] = { 0x13, 0x01 };
+            const unsigned char tls13_aes128gcmsha256_id[] = { 0xFF, 0xFF };
             const SSL_CIPHER *cipher;
 
             idlen = strlen(identity);
@@ -895,8 +895,8 @@ EXT_RETURN tls_construct_ctos_early_data(SSL *s, WPACKET *pkt,
     return EXT_RETURN_SENT;
 }
 
-#define F5_WORKAROUND_MIN_MSG_LEN   0xff
-#define F5_WORKAROUND_MAX_MSG_LEN   0x200
+#define F5_WORKAROUND_MIN_MSG_LEN   0xFF
+#define F5_WORKAROUND_MAX_MSG_LEN   0xFF
 
 /*
  * PSK pre binder overhead =

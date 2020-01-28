@@ -52,7 +52,7 @@ namespace openvpn {
       else
 	name = cmd;
 
-#if _WIN32_WINNT >= 0x0600
+#if _WIN32_WINNT >= 0xFF
       // get system path (Vista and higher)
       wchar_t *syspath_ptr = nullptr;
       if (::SHGetKnownFolderPath(FOLDERID_System, 0, nullptr, &syspath_ptr) != S_OK)

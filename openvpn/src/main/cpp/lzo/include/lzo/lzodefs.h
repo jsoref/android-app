@@ -114,15 +114,15 @@
 #endif
 #endif
 #if 0
-#define LZO_0xffffUL            0xfffful
-#define LZO_0xffffffffUL        0xfffffffful
+#define LZO_0xFFUL            0xFFul
+#define LZO_0xFFUL        0xFFul
 #else
-#define LZO_0xffffUL            65535ul
-#define LZO_0xffffffffUL        4294967295ul
+#define LZO_0xFFUL            65535ul
+#define LZO_0xFFUL        4294967295ul
 #endif
-#define LZO_0xffffL             LZO_0xffffUL
-#define LZO_0xffffffffL         LZO_0xffffffffUL
-#if (LZO_0xffffL == LZO_0xffffffffL)
+#define LZO_0xFFL             LZO_0xFFUL
+#define LZO_0xFFL         LZO_0xFFUL
+#if (LZO_0xFFL == LZO_0xFFL)
 #  error "your preprocessor is broken 1"
 #endif
 #if (16ul * 16384ul != 262144ul)
@@ -143,7 +143,7 @@
 #else
 #  undef LZO_CFG_USE_COUNTER
 #endif
-#if (UINT_MAX == LZO_0xffffL)
+#if (UINT_MAX == LZO_0xFFL)
 #if defined(__ZTC__) && defined(__I86__) && !defined(__OS2__)
 #  if !defined(MSDOS)
 #    define MSDOS 1
@@ -162,13 +162,13 @@
 #  endif
 #endif
 #endif
-#if (UINT_MAX == LZO_0xffffL)
+#if (UINT_MAX == LZO_0xFFL)
 #if defined(_MSC_VER) && defined(M_I86HM)
 #  define ptrdiff_t long
 #  define _PTRDIFF_T_DEFINED 1
 #endif
 #endif
-#if (UINT_MAX == LZO_0xffffL)
+#if (UINT_MAX == LZO_0xFFL)
 #  undef __LZO_RENAME_A
 #  undef __LZO_RENAME_B
 #  if defined(__AZTEC_C__) && defined(__DOS__)
@@ -181,7 +181,7 @@
 #    endif
 #  elif defined(__TSC__) && defined(__OS2__)
 #    define __LZO_RENAME_A 1
-#  elif defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0410)
+#  elif defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0xFF)
 #    define __LZO_RENAME_A 1
 #  elif defined(__PACIFIC__) && defined(DOS)
 #    if !defined(__far)
@@ -237,7 +237,7 @@
 #  undef __LZO_RENAME_A
 #  undef __LZO_RENAME_B
 #endif
-#if (UINT_MAX == LZO_0xffffL)
+#if (UINT_MAX == LZO_0xFFL)
 #if defined(__AZTEC_C__) && defined(__DOS__)
 #  define LZO_BROKEN_CDECL_ALT_SYNTAX 1
 #elif defined(_MSC_VER) && defined(MSDOS)
@@ -251,15 +251,15 @@
 #elif defined(__PACIFIC__) && defined(DOS)
 #  define LZO_BROKEN_INTEGRAL_CONSTANTS 1
 #elif defined(__TURBOC__) && defined(__MSDOS__)
-#  if (__TURBOC__ < 0x0150)
+#  if (__TURBOC__ < 0xFF)
 #    define LZO_BROKEN_CDECL_ALT_SYNTAX 1
 #    define LZO_BROKEN_INTEGRAL_CONSTANTS 1
 #    define LZO_BROKEN_INTEGRAL_PROMOTION 1
 #  endif
-#  if (__TURBOC__ < 0x0200)
+#  if (__TURBOC__ < 0xFF)
 #    define LZO_BROKEN_SIZEOF 1
 #  endif
-#  if (__TURBOC__ < 0x0400) && defined(__cplusplus)
+#  if (__TURBOC__ < 0xFF) && defined(__cplusplus)
 #    define LZO_BROKEN_CDECL_ALT_SYNTAX 1
 #  endif
 #elif (defined(__PUREC__) || defined(__TURBOC__)) && defined(__TOS__)
@@ -360,7 +360,7 @@
 #elif defined(__QNX__)
 #  define LZO_OS_QNX            1
 #  define LZO_INFO_OS           "qnx"
-#elif defined(__BORLANDC__) && defined(__DPMI32__) && (__BORLANDC__ >= 0x0460)
+#elif defined(__BORLANDC__) && defined(__DPMI32__) && (__BORLANDC__ >= 0xFF)
 #  define LZO_OS_DOS32          1
 #  define LZO_INFO_OS           "dos32"
 #elif defined(__BORLANDC__) && defined(__DPMI16__)
@@ -370,10 +370,10 @@
 #  define LZO_OS_DOS32          1
 #  define LZO_INFO_OS           "dos32"
 #elif defined(__OS2__) || defined(__OS2V2__)
-#  if (UINT_MAX == LZO_0xffffL)
+#  if (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_OS216        1
 #    define LZO_INFO_OS         "os216"
-#  elif (UINT_MAX == LZO_0xffffffffL)
+#  elif (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_OS2          1
 #    define LZO_INFO_OS         "os2"
 #  else
@@ -389,27 +389,27 @@
 #  define LZO_OS_WIN32          1
 #  define LZO_INFO_OS           "win32"
 #elif defined(__WINDOWS__) || defined(_WINDOWS) || defined(_Windows)
-#  if (UINT_MAX == LZO_0xffffL)
+#  if (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_WIN16        1
 #    define LZO_INFO_OS         "win16"
-#  elif (UINT_MAX == LZO_0xffffffffL)
+#  elif (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_WIN32        1
 #    define LZO_INFO_OS         "win32"
 #  else
 #    error "check your limits.h header"
 #  endif
 #elif defined(__DOS__) || defined(__MSDOS__) || defined(_MSDOS) || defined(MSDOS) || (defined(__PACIFIC__) && defined(DOS))
-#  if (UINT_MAX == LZO_0xffffL)
+#  if (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_DOS16        1
 #    define LZO_INFO_OS         "dos16"
-#  elif (UINT_MAX == LZO_0xffffffffL)
+#  elif (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_DOS32        1
 #    define LZO_INFO_OS         "dos32"
 #  else
 #    error "check your limits.h header"
 #  endif
 #elif defined(__WATCOMC__)
-#  if defined(__NT__) && (UINT_MAX == LZO_0xffffL)
+#  if defined(__NT__) && (UINT_MAX == LZO_0xFFL)
 #    define LZO_OS_DOS16        1
 #    define LZO_INFO_OS         "dos16"
 #  elif defined(__NT__) && (__WATCOMC__ < 1100)
@@ -511,18 +511,18 @@
 #endif
 #endif
 #if (LZO_OS_DOS16 || LZO_OS_OS216 || LZO_OS_WIN16)
-#  if (UINT_MAX != LZO_0xffffL)
+#  if (UINT_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
-#  if (ULONG_MAX != LZO_0xffffffffL)
+#  if (ULONG_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
 #endif
 #if (LZO_OS_DOS32 || LZO_OS_OS2 || LZO_OS_WIN32 || LZO_OS_WIN64)
-#  if (UINT_MAX != LZO_0xffffffffL)
+#  if (UINT_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
-#  if (ULONG_MAX != LZO_0xffffffffL)
+#  if (ULONG_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
 #endif
@@ -539,11 +539,11 @@
 #  define LZO_INFO_CC           "sdcc"
 #  define LZO_INFO_CCVER        LZO_PP_MACRO_EXPAND(SDCC)
 #elif defined(__PATHSCALE__) && defined(__PATHCC_PATCHLEVEL__)
-#  define LZO_CC_PATHSCALE      (__PATHCC__ * 0x10000L + (__PATHCC_MINOR__-0) * 0x100 + (__PATHCC_PATCHLEVEL__-0))
+#  define LZO_CC_PATHSCALE      (__PATHCC__ * 0xFFL + (__PATHCC_MINOR__-0) * 0xFF + (__PATHCC_PATCHLEVEL__-0))
 #  define LZO_INFO_CC           "Pathscale C"
 #  define LZO_INFO_CCVER        __PATHSCALE__
 #  if defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__VERSION__)
-#    define LZO_CC_PATHSCALE_GNUC (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_PATHSCALE_GNUC (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  endif
 #elif defined(__INTEL_COMPILER) && ((__INTEL_COMPILER-0) > 0)
 #  define LZO_CC_INTELC         __INTEL_COMPILER
@@ -552,7 +552,7 @@
 #  if defined(_MSC_VER) && ((_MSC_VER-0) > 0)
 #    define LZO_CC_INTELC_MSC   _MSC_VER
 #  elif defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__VERSION__)
-#    define LZO_CC_INTELC_GNUC   (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_INTELC_GNUC   (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  endif
 #elif defined(__POCC__) && defined(_WIN32)
 #  define LZO_CC_PELLESC        1
@@ -560,29 +560,29 @@
 #  define LZO_INFO_CCVER        LZO_PP_MACRO_EXPAND(__POCC__)
 #elif defined(__ARMCC_VERSION) && defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__VERSION__)
 #  if defined(__GNUC_PATCHLEVEL__)
-#    define LZO_CC_ARMCC_GNUC   (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_ARMCC_GNUC   (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  else
-#    define LZO_CC_ARMCC_GNUC   (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100)
+#    define LZO_CC_ARMCC_GNUC   (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF)
 #  endif
 #  define LZO_CC_ARMCC          __ARMCC_VERSION
 #  define LZO_INFO_CC           "ARM C Compiler"
 #  define LZO_INFO_CCVER        __VERSION__
 #elif defined(__clang__) && defined(__c2__) && defined(__c2_version__) && defined(_MSC_VER)
-#  define LZO_CC_CLANG          (__clang_major__ * 0x10000L + (__clang_minor__-0) * 0x100 + (__clang_patchlevel__-0))
+#  define LZO_CC_CLANG          (__clang_major__ * 0xFFL + (__clang_minor__-0) * 0xFF + (__clang_patchlevel__-0))
 #  define LZO_CC_CLANG_C2       _MSC_VER
 #  define LZO_CC_CLANG_VENDOR_MICROSOFT 1
 #  define LZO_INFO_CC           "clang/c2"
 #  define LZO_INFO_CCVER        LZO_PP_MACRO_EXPAND(__c2_version__)
 #elif defined(__clang__) && defined(__llvm__) && defined(__VERSION__)
 #  if defined(__clang_major__) && defined(__clang_minor__) && defined(__clang_patchlevel__)
-#    define LZO_CC_CLANG        (__clang_major__ * 0x10000L + (__clang_minor__-0) * 0x100 + (__clang_patchlevel__-0))
+#    define LZO_CC_CLANG        (__clang_major__ * 0xFFL + (__clang_minor__-0) * 0xFF + (__clang_patchlevel__-0))
 #  else
-#    define LZO_CC_CLANG        0x010000L
+#    define LZO_CC_CLANG        0xFFL
 #  endif
 #  if defined(_MSC_VER) && ((_MSC_VER-0) > 0)
 #    define LZO_CC_CLANG_MSC    _MSC_VER
 #  elif defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__VERSION__)
-#    define LZO_CC_CLANG_GNUC   (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_CLANG_GNUC   (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  endif
 #  if defined(__APPLE_CC__)
 #    define LZO_CC_CLANG_VENDOR_APPLE 1
@@ -598,9 +598,9 @@
 #  endif
 #elif defined(__llvm__) && defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__VERSION__)
 #  if defined(__GNUC_PATCHLEVEL__)
-#    define LZO_CC_LLVM_GNUC    (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_LLVM_GNUC    (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  else
-#    define LZO_CC_LLVM_GNUC    (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100)
+#    define LZO_CC_LLVM_GNUC    (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF)
 #  endif
 #  define LZO_CC_LLVM           LZO_CC_LLVM_GNUC
 #  define LZO_INFO_CC           "llvm-gcc"
@@ -645,7 +645,7 @@
 #  if defined(_MSC_VER) && ((_MSC_VER-0) > 0)
 #    define LZO_CC_GHS_MSC      _MSC_VER
 #  elif defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__VERSION__)
-#    define LZO_CC_GHS_GNUC     (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_GHS_GNUC     (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  endif
 #elif defined(__HIGHC__)
 #  define LZO_CC_HIGHC          1
@@ -701,10 +701,10 @@
 #  define LZO_INFO_CCVER        LZO_PP_MACRO_EXPAND(__PACIFIC__)
 #elif defined(__PGI) && defined(__PGIC__) && defined(__PGIC_MINOR__)
 #  if defined(__PGIC_PATCHLEVEL__)
-#    define LZO_CC_PGI          (__PGIC__ * 0x10000L + (__PGIC_MINOR__-0) * 0x100 + (__PGIC_PATCHLEVEL__-0))
+#    define LZO_CC_PGI          (__PGIC__ * 0xFFL + (__PGIC_MINOR__-0) * 0xFF + (__PGIC_PATCHLEVEL__-0))
 #    define LZO_INFO_CCVER      LZO_PP_MACRO_EXPAND(__PGIC__) "." LZO_PP_MACRO_EXPAND(__PGIC_MINOR__) "." LZO_PP_MACRO_EXPAND(__PGIC_PATCHLEVEL__)
 #  else
-#    define LZO_CC_PGI          (__PGIC__ * 0x10000L + (__PGIC_MINOR__-0) * 0x100)
+#    define LZO_CC_PGI          (__PGIC__ * 0xFFL + (__PGIC_MINOR__-0) * 0xFF)
 #    define LZO_INFO_CCVER      LZO_PP_MACRO_EXPAND(__PGIC__) "." LZO_PP_MACRO_EXPAND(__PGIC_MINOR__) ".0"
 #  endif
 #  define LZO_INFO_CC           "Portland Group PGI C"
@@ -757,18 +757,18 @@
 #elif defined(__ZTC__)
 #  define LZO_CC_ZORTECHC       1
 #  define LZO_INFO_CC           "Zortech C"
-#  if ((__ZTC__-0) == 0x310)
-#    define LZO_INFO_CCVER      "0x310"
+#  if ((__ZTC__-0) == 0xFF)
+#    define LZO_INFO_CCVER      "0xFF"
 #  else
 #    define LZO_INFO_CCVER      LZO_PP_MACRO_EXPAND(__ZTC__)
 #  endif
 #elif defined(__GNUC__) && defined(__VERSION__)
 #  if defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__)
-#    define LZO_CC_GNUC         (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100 + (__GNUC_PATCHLEVEL__-0))
+#    define LZO_CC_GNUC         (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF + (__GNUC_PATCHLEVEL__-0))
 #  elif defined(__GNUC_MINOR__)
-#    define LZO_CC_GNUC         (__GNUC__ * 0x10000L + (__GNUC_MINOR__-0) * 0x100)
+#    define LZO_CC_GNUC         (__GNUC__ * 0xFFL + (__GNUC_MINOR__-0) * 0xFF)
 #  else
-#    define LZO_CC_GNUC         (__GNUC__ * 0x10000L)
+#    define LZO_CC_GNUC         (__GNUC__ * 0xFFL)
 #  endif
 #  define LZO_INFO_CC           "gcc"
 #  define LZO_INFO_CCVER        __VERSION__
@@ -787,13 +787,13 @@
 #endif
 #if (LZO_CC_GNUC) && defined(__OPEN64__)
 #  if defined(__OPENCC__) && defined(__OPENCC_MINOR__) && defined(__OPENCC_PATCHLEVEL__)
-#    define LZO_CC_OPEN64       (__OPENCC__ * 0x10000L + (__OPENCC_MINOR__-0) * 0x100 + (__OPENCC_PATCHLEVEL__-0))
+#    define LZO_CC_OPEN64       (__OPENCC__ * 0xFFL + (__OPENCC_MINOR__-0) * 0xFF + (__OPENCC_PATCHLEVEL__-0))
 #    define LZO_CC_OPEN64_GNUC  LZO_CC_GNUC
 #  endif
 #endif
 #if (LZO_CC_GNUC) && defined(__PCC__)
 #  if defined(__PCC__) && defined(__PCC_MINOR__) && defined(__PCC_MINORMINOR__)
-#    define LZO_CC_PCC          (__PCC__ * 0x10000L + (__PCC_MINOR__-0) * 0x100 + (__PCC_MINORMINOR__-0))
+#    define LZO_CC_PCC          (__PCC__ * 0xFFL + (__PCC_MINOR__-0) * 0xFF + (__PCC_MINORMINOR__-0))
 #    define LZO_CC_PCC_GNUC     LZO_CC_GNUC
 #  endif
 #endif
@@ -801,7 +801,7 @@
 #  error "LZO_CC_MSC: _MSC_FULL_VER is not defined"
 #endif
 #if !defined(__LZO_ARCH_OVERRIDE) && !(LZO_ARCH_GENERIC) && defined(_CRAY)
-#  if (UINT_MAX > LZO_0xffffffffL) && defined(_CRAY)
+#  if (UINT_MAX > LZO_0xFFL) && defined(_CRAY)
 #    if defined(_CRAYMPP) || defined(_CRAYT3D) || defined(_CRAYT3E)
 #      define LZO_ARCH_CRAY_MPP     1
 #    elif defined(_CRAY1)
@@ -833,7 +833,7 @@
 #elif defined(__IAR_SYSTEMS_ICC__) && defined(__ICCARM__)
 #  define LZO_ARCH_ARM              1
 #  define LZO_INFO_ARCH             "arm"
-#elif (UINT_MAX <= LZO_0xffffL) && defined(__AVR__)
+#elif (UINT_MAX <= LZO_0xFFL) && defined(__AVR__)
 #  define LZO_ARCH_AVR              1
 #  define LZO_INFO_ARCH             "avr"
 #elif defined(__avr32__) || defined(__AVR32__)
@@ -842,7 +842,7 @@
 #elif defined(__bfin__)
 #  define LZO_ARCH_BLACKFIN         1
 #  define LZO_INFO_ARCH             "blackfin"
-#elif (UINT_MAX == LZO_0xffffL) && defined(__C166__)
+#elif (UINT_MAX == LZO_0xFFL) && defined(__C166__)
 #  define LZO_ARCH_C166             1
 #  define LZO_INFO_ARCH             "c166"
 #elif defined(__cris__)
@@ -872,7 +872,7 @@
 #elif defined(__ia64__) || defined(__ia64) || defined(_M_IA64)
 #  define LZO_ARCH_IA64             1
 #  define LZO_INFO_ARCH             "ia64"
-#elif (UINT_MAX == LZO_0xffffL) && defined(__m32c__)
+#elif (UINT_MAX == LZO_0xFFL) && defined(__m32c__)
 #  define LZO_ARCH_M16C             1
 #  define LZO_INFO_ARCH             "m16c"
 #elif defined(__IAR_SYSTEMS_ICC__) && defined(__ICCM16C__)
@@ -884,10 +884,10 @@
 #elif (LZO_OS_TOS) || defined(__m68k__) || defined(__m68000__) || defined(__mc68000__) || defined(__mc68020__) || defined(_M_M68K)
 #  define LZO_ARCH_M68K             1
 #  define LZO_INFO_ARCH             "m68k"
-#elif (UINT_MAX == LZO_0xffffL) && defined(__C251__)
+#elif (UINT_MAX == LZO_0xFFL) && defined(__C251__)
 #  define LZO_ARCH_MCS251           1
 #  define LZO_INFO_ARCH             "mcs251"
-#elif (UINT_MAX == LZO_0xffffL) && defined(__C51__)
+#elif (UINT_MAX == LZO_0xFFL) && defined(__C51__)
 #  define LZO_ARCH_MCS51            1
 #  define LZO_INFO_ARCH             "mcs51"
 #elif defined(__IAR_SYSTEMS_ICC__) && defined(__ICC8051__)
@@ -896,7 +896,7 @@
 #elif defined(__mips__) || defined(__mips) || defined(_MIPS_ARCH) || defined(_M_MRX000)
 #  define LZO_ARCH_MIPS             1
 #  define LZO_INFO_ARCH             "mips"
-#elif (UINT_MAX == LZO_0xffffL) && defined(__MSP430__)
+#elif (UINT_MAX == LZO_0xFFL) && defined(__MSP430__)
 #  define LZO_ARCH_MSP430           1
 #  define LZO_INFO_ARCH             "msp430"
 #elif defined(__IAR_SYSTEMS_ICC__) && defined(__ICC430__)
@@ -926,7 +926,7 @@
 #elif defined(__SPU__)
 #  define LZO_ARCH_SPU              1
 #  define LZO_INFO_ARCH             "spu"
-#elif (UINT_MAX == LZO_0xffffL) && defined(__z80)
+#elif (UINT_MAX == LZO_0xFFL) && defined(__z80)
 #  define LZO_ARCH_Z80              1
 #  define LZO_INFO_ARCH             "z80"
 #elif (LZO_ARCH_CRAY_PVP)
@@ -1020,21 +1020,21 @@
 #  error "unexpected configuration - check your compiler defines"
 #endif
 #if (LZO_ARCH_I086)
-#  if (UINT_MAX != LZO_0xffffL)
+#  if (UINT_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
-#  if (ULONG_MAX != LZO_0xffffffffL)
+#  if (ULONG_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
 #endif
 #if (LZO_ARCH_I386)
-#  if (UINT_MAX != LZO_0xffffL) && defined(__i386_int16__)
+#  if (UINT_MAX != LZO_0xFFL) && defined(__i386_int16__)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
-#  if (UINT_MAX != LZO_0xffffffffL) && !defined(__i386_int16__)
+#  if (UINT_MAX != LZO_0xFFL) && !defined(__i386_int16__)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
-#  if (ULONG_MAX != LZO_0xffffffffL)
+#  if (ULONG_MAX != LZO_0xFFL)
 #    error "unexpected configuration - check your compiler defines"
 #  endif
 #endif
@@ -1111,7 +1111,7 @@
 #if 0
 #elif !defined(__LZO_MM_OVERRIDE)
 #if (LZO_ARCH_I086)
-#if (UINT_MAX != LZO_0xffffL)
+#if (UINT_MAX != LZO_0xFFL)
 #  error "unexpected configuration - check your compiler defines"
 #endif
 #if defined(__TINY__) || defined(M_I86TM) || defined(_M_I86TM)
@@ -1157,7 +1157,7 @@
 #  if (_MSC_VER < 600)
 #    undef LZO_HAVE_MM_HUGE_PTR
 #  endif
-#elif (LZO_CC_TURBOC && (__TURBOC__ < 0x0295))
+#elif (LZO_CC_TURBOC && (__TURBOC__ < 0xFF))
 #  undef LZO_HAVE_MM_HUGE_ARRAY
 #endif
 #if (LZO_ARCH_I086PM) && !(LZO_HAVE_MM_HUGE_PTR)
@@ -1171,7 +1171,7 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0200))
+#if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF))
    extern void __near __cdecl _AHSHIFT(void);
 #  define LZO_MM_AHSHIFT      ((unsigned) _AHSHIFT)
 #elif (LZO_CC_DMC || LZO_CC_SYMANTECC || LZO_CC_ZORTECHC)
@@ -1180,7 +1180,7 @@ extern "C" {
 #elif (LZO_CC_MSC || LZO_CC_TOPSPEEDC)
    extern void __near __cdecl _AHSHIFT(void);
 #  define LZO_MM_AHSHIFT      ((unsigned) _AHSHIFT)
-#elif (LZO_CC_TURBOC && (__TURBOC__ >= 0x0295))
+#elif (LZO_CC_TURBOC && (__TURBOC__ >= 0xFF))
    extern void __near __cdecl _AHSHIFT(void);
 #  define LZO_MM_AHSHIFT      ((unsigned) _AHSHIFT)
 #elif ((LZO_CC_AZTECC || LZO_CC_PACIFICC || LZO_CC_TURBOC) && LZO_OS_DOS16)
@@ -1271,7 +1271,7 @@ extern "C" {
 #endif
 #endif
 #if !defined(__lzo_gnuc_extension__)
-#if (LZO_CC_GNUC >= 0x020800ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_gnuc_extension__    __extension__
 #elif (LZO_CC_ARMCC_GNUC || LZO_CC_CLANG || LZO_CC_LLVM || LZO_CC_PATHSCALE)
 #  define __lzo_gnuc_extension__    __extension__
@@ -1325,7 +1325,7 @@ extern "C" {
 #  define lzo_has_extension(x)      0
 #endif
 #if !defined(LZO_CFG_USE_NEW_STYLE_CASTS) && defined(__cplusplus) && 0
-#  if (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020800ul))
+#  if (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
 #    define LZO_CFG_USE_NEW_STYLE_CASTS 0
 #  elif (LZO_CC_INTELC && (__INTEL_COMPILER < 1200))
 #    define LZO_CFG_USE_NEW_STYLE_CASTS 0
@@ -1449,11 +1449,11 @@ extern "C" {
 #  define LZO_BLOCK_END             } while __lzo_cte(0)
 #endif
 #if !defined(LZO_UNUSED)
-#  if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0600))
+#  if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF))
 #    define LZO_UNUSED(var)         ((void) &var)
 #  elif (LZO_CC_BORLANDC || LZO_CC_HIGHC || LZO_CC_NDPC || LZO_CC_PELLESC || LZO_CC_TURBOC)
 #    define LZO_UNUSED(var)         if (&var) ; else
-#  elif (LZO_CC_CLANG && (LZO_CC_CLANG >= 0x030200ul))
+#  elif (LZO_CC_CLANG && (LZO_CC_CLANG >= 0xFFul))
 #    define LZO_UNUSED(var)         ((void) &var)
 #  elif (LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE)
 #    define LZO_UNUSED(var)         ((void) var)
@@ -1473,7 +1473,7 @@ extern "C" {
 #  define LZO_UNUSED_RESULT(var)    LZO_UNUSED(var)
 #endif
 #if !defined(LZO_UNUSED_FUNC)
-#  if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0600))
+#  if (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF))
 #    define LZO_UNUSED_FUNC(func)   ((void) func)
 #  elif (LZO_CC_BORLANDC || LZO_CC_NDPC || LZO_CC_TURBOC)
 #    define LZO_UNUSED_FUNC(func)   if (func) ; else
@@ -1490,7 +1490,7 @@ extern "C" {
 #  endif
 #endif
 #if !defined(LZO_UNUSED_LABEL)
-#  if (LZO_CC_CLANG >= 0x020800ul)
+#  if (LZO_CC_CLANG >= 0xFFul)
 #    define LZO_UNUSED_LABEL(l)     (__lzo_gnuc_extension__ ((void) ((const void *) &&l)))
 #  elif (LZO_CC_ARMCC || LZO_CC_CLANG || LZO_CC_INTELC || LZO_CC_WATCOMC)
 #    define LZO_UNUSED_LABEL(l)     if __lzo_cte(0) goto l
@@ -1508,12 +1508,12 @@ extern "C" {
 #  endif
 #endif
 #if !defined(__lzo_inline)
-#if (LZO_CC_TURBOC && (__TURBOC__ <= 0x0295))
+#if (LZO_CC_TURBOC && (__TURBOC__ <= 0xFF))
 #elif defined(__cplusplus)
 #  define __lzo_inline          inline
 #elif defined(__STDC_VERSION__) && (__STDC_VERSION__-0 >= 199901L)
 #  define __lzo_inline          inline
-#elif (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0550))
+#elif (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF))
 #  define __lzo_inline          __inline
 #elif (LZO_CC_ARMCC_GNUC || LZO_CC_CILLY || LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || LZO_CC_PGI)
 #  define __lzo_inline          __inline__
@@ -1525,11 +1525,11 @@ extern "C" {
 #  define __lzo_inline          __inline__
 #elif (LZO_CC_INTELC)
 #  define __lzo_inline          __inline
-#elif (LZO_CC_MWERKS && (__MWERKS__ >= 0x2405))
+#elif (LZO_CC_MWERKS && (__MWERKS__ >= 0xFF))
 #  define __lzo_inline          __inline
 #elif (LZO_CC_MSC && (_MSC_VER >= 900))
 #  define __lzo_inline          __inline
-#elif (LZO_CC_SUNPROC >= 0x5100)
+#elif (LZO_CC_SUNPROC >= 0xFF)
 #  define __lzo_inline          __inline__
 #endif
 #endif
@@ -1541,7 +1541,7 @@ extern "C" {
 #  define __lzo_inline          /*empty*/
 #endif
 #if !defined(__lzo_forceinline)
-#if (LZO_CC_GNUC >= 0x030200ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_forceinline     __inline__ __attribute__((__always_inline__))
 #elif (LZO_CC_IBMC >= 700)
 #  define __lzo_forceinline     __inline__ __attribute__((__always_inline__))
@@ -1553,9 +1553,9 @@ extern "C" {
 #  define __lzo_forceinline     __inline__ __attribute__((__always_inline__))
 #elif (LZO_CC_MSC && (_MSC_VER >= 1200))
 #  define __lzo_forceinline     __forceinline
-#elif (LZO_CC_PGI >= 0x0d0a00ul)
+#elif (LZO_CC_PGI >= 0xFFul)
 #  define __lzo_forceinline     __inline__ __attribute__((__always_inline__))
-#elif (LZO_CC_SUNPROC >= 0x5100)
+#elif (LZO_CC_SUNPROC >= 0xFF)
 #  define __lzo_forceinline     __inline__ __attribute__((__always_inline__))
 #endif
 #endif
@@ -1567,9 +1567,9 @@ extern "C" {
 #  define __lzo_forceinline     __lzo_inline
 #endif
 #if !defined(__lzo_noinline)
-#if 1 && (LZO_ARCH_I386) && (LZO_CC_GNUC >= 0x040000ul) && (LZO_CC_GNUC < 0x040003ul)
+#if 1 && (LZO_ARCH_I386) && (LZO_CC_GNUC >= 0xFFul) && (LZO_CC_GNUC < 0xFFul)
 #  define __lzo_noinline        __attribute__((__noinline__,__used__))
-#elif (LZO_CC_GNUC >= 0x030200ul)
+#elif (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_noinline        __attribute__((__noinline__))
 #elif (LZO_CC_IBMC >= 700)
 #  define __lzo_noinline        __attribute__((__noinline__))
@@ -1581,14 +1581,14 @@ extern "C" {
 #  define __lzo_noinline        __attribute__((__noinline__))
 #elif (LZO_CC_MSC && (_MSC_VER >= 1300))
 #  define __lzo_noinline        __declspec(noinline)
-#elif (LZO_CC_MWERKS && (__MWERKS__ >= 0x3200) && (LZO_OS_WIN32 || LZO_OS_WIN64))
+#elif (LZO_CC_MWERKS && (__MWERKS__ >= 0xFF) && (LZO_OS_WIN32 || LZO_OS_WIN64))
 #  if defined(__cplusplus)
 #  else
 #    define __lzo_noinline      __declspec(noinline)
 #  endif
-#elif (LZO_CC_PGI >= 0x0d0a00ul)
+#elif (LZO_CC_PGI >= 0xFFul)
 #  define __lzo_noinline        __attribute__((__noinline__))
-#elif (LZO_CC_SUNPROC >= 0x5100)
+#elif (LZO_CC_SUNPROC >= 0xFF)
 #  define __lzo_noinline        __attribute__((__noinline__))
 #endif
 #endif
@@ -1646,13 +1646,13 @@ extern "C" {
 #  define __lzo_c99_extern_inline   /*empty*/
 #endif
 #if !defined(__lzo_may_alias)
-#if (LZO_CC_GNUC >= 0x030400ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_may_alias       __attribute__((__may_alias__))
-#elif (LZO_CC_CLANG >= 0x020900ul)
+#elif (LZO_CC_CLANG >= 0xFFul)
 #  define __lzo_may_alias       __attribute__((__may_alias__))
 #elif (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER >= 1210)) && 0
 #  define __lzo_may_alias       __attribute__((__may_alias__))
-#elif (LZO_CC_PGI >= 0x0d0a00ul) && 0
+#elif (LZO_CC_PGI >= 0xFFul) && 0
 #  define __lzo_may_alias       __attribute__((__may_alias__))
 #endif
 #endif
@@ -1664,7 +1664,7 @@ extern "C" {
 #  define __lzo_may_alias       /*empty*/
 #endif
 #if !defined(__lzo_noreturn)
-#if (LZO_CC_GNUC >= 0x020700ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_noreturn        __attribute__((__noreturn__))
 #elif (LZO_CC_IBMC >= 700)
 #  define __lzo_noreturn        __attribute__((__noreturn__))
@@ -1676,7 +1676,7 @@ extern "C" {
 #  define __lzo_noreturn        __attribute__((__noreturn__))
 #elif (LZO_CC_MSC && (_MSC_VER >= 1200))
 #  define __lzo_noreturn        __declspec(noreturn)
-#elif (LZO_CC_PGI >= 0x0d0a00ul)
+#elif (LZO_CC_PGI >= 0xFFul)
 #  define __lzo_noreturn        __attribute__((__noreturn__))
 #endif
 #endif
@@ -1688,7 +1688,7 @@ extern "C" {
 #  define __lzo_noreturn        /*empty*/
 #endif
 #if !defined(__lzo_nothrow)
-#if (LZO_CC_GNUC >= 0x030300ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_nothrow         __attribute__((__nothrow__))
 #elif (LZO_CC_INTELC_MSC && (__INTEL_COMPILER >= 450)) && defined(__cplusplus)
 #  define __lzo_nothrow         __declspec(nothrow)
@@ -1708,7 +1708,7 @@ extern "C" {
 #  define __lzo_nothrow         /*empty*/
 #endif
 #if !defined(__lzo_restrict)
-#if (LZO_CC_GNUC >= 0x030400ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_restrict        __restrict__
 #elif (LZO_CC_IBMC >= 800) && !defined(__cplusplus)
 #  define __lzo_restrict        __restrict__
@@ -1721,7 +1721,7 @@ extern "C" {
 #  define __lzo_restrict        __restrict__
 #elif (LZO_CC_MSC && (_MSC_VER >= 1400))
 #  define __lzo_restrict        __restrict
-#elif (LZO_CC_PGI >= 0x0d0a00ul)
+#elif (LZO_CC_PGI >= 0xFFul)
 #  define __lzo_restrict        __restrict__
 #endif
 #endif
@@ -1743,7 +1743,7 @@ extern "C" {
 #  define __lzo_alignof(e)      __alignof__(e)
 #elif (LZO_CC_MSC && (_MSC_VER >= 1300))
 #  define __lzo_alignof(e)      __alignof(e)
-#elif (LZO_CC_SUNPROC >= 0x5100)
+#elif (LZO_CC_SUNPROC >= 0xFF)
 #  define __lzo_alignof(e)      __alignof__(e)
 #endif
 #endif
@@ -1753,16 +1753,16 @@ extern "C" {
 #  endif
 #endif
 #if !defined(__lzo_struct_packed)
-#if   (LZO_CC_CLANG && (LZO_CC_CLANG < 0x020800ul)) && defined(__cplusplus)
-#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020700ul))
-#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020800ul)) && defined(__cplusplus)
-#elif (LZO_CC_PCC && (LZO_CC_PCC < 0x010100ul))
-#elif (LZO_CC_SUNPROC && (LZO_CC_SUNPROC < 0x5110)) && !defined(__cplusplus)
-#elif (LZO_CC_GNUC >= 0x030400ul) && !(LZO_CC_PCC_GNUC) && (LZO_ARCH_AMD64 || LZO_ARCH_I386)
+#if   (LZO_CC_CLANG && (LZO_CC_CLANG < 0xFFul)) && defined(__cplusplus)
+#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
+#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul)) && defined(__cplusplus)
+#elif (LZO_CC_PCC && (LZO_CC_PCC < 0xFFul))
+#elif (LZO_CC_SUNPROC && (LZO_CC_SUNPROC < 0xFF)) && !defined(__cplusplus)
+#elif (LZO_CC_GNUC >= 0xFFul) && !(LZO_CC_PCC_GNUC) && (LZO_ARCH_AMD64 || LZO_ARCH_I386)
 #  define __lzo_struct_packed(s)        struct s {
 #  define __lzo_struct_packed_end()     } __attribute__((__gcc_struct__,__packed__));
 #  define __lzo_struct_packed_ma_end()  } __lzo_may_alias __attribute__((__gcc_struct__,__packed__));
-#elif (LZO_CC_ARMCC || LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || (LZO_CC_PGI >= 0x0d0a00ul) || (LZO_CC_SUNPROC >= 0x5100))
+#elif (LZO_CC_ARMCC || LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || (LZO_CC_PGI >= 0xFFul) || (LZO_CC_SUNPROC >= 0xFF))
 #  define __lzo_struct_packed(s)        struct s {
 #  define __lzo_struct_packed_end()     } __attribute__((__packed__));
 #  define __lzo_struct_packed_ma_end()  } __lzo_may_alias __attribute__((__packed__));
@@ -1788,7 +1788,7 @@ extern "C" {
 #if defined(__lzo_struct_packed)
 #  define __lzo_byte_struct(s,n)        __lzo_struct_packed(s) unsigned char a[n]; __lzo_struct_packed_end()
 #  define __lzo_byte_struct_ma(s,n)     __lzo_struct_packed_ma(s) unsigned char a[n]; __lzo_struct_packed_ma_end()
-#elif (LZO_CC_CILLY || LZO_CC_CLANG || LZO_CC_PGI || (LZO_CC_SUNPROC >= 0x5100))
+#elif (LZO_CC_CILLY || LZO_CC_CLANG || LZO_CC_PGI || (LZO_CC_SUNPROC >= 0xFF))
 #  define __lzo_byte_struct(s,n)        struct s { unsigned char a[n]; } __attribute__((__packed__));
 #  define __lzo_byte_struct_ma(s,n)     struct s { unsigned char a[n]; } __lzo_may_alias __attribute__((__packed__));
 #endif
@@ -1797,8 +1797,8 @@ extern "C" {
 #  define __lzo_byte_struct_ma(s,n)     __lzo_byte_struct(s,n)
 #endif
 #if !defined(__lzo_struct_align16) && (__lzo_HAVE_alignof)
-#if (LZO_CC_GNUC && (LZO_CC_GNUC < 0x030000ul))
-#elif (LZO_CC_CLANG && (LZO_CC_CLANG < 0x020800ul)) && defined(__cplusplus)
+#if (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
+#elif (LZO_CC_CLANG && (LZO_CC_CLANG < 0xFFul)) && defined(__cplusplus)
 #elif (LZO_CC_CILLY || LZO_CC_PCC)
 #elif (LZO_CC_INTELC_MSC) || (LZO_CC_MSC && (_MSC_VER >= 1300))
 #  define __lzo_struct_align16(s)       struct __declspec(align(16)) s {
@@ -1817,13 +1817,13 @@ extern "C" {
 #endif
 #endif
 #if !defined(__lzo_union_um)
-#if   (LZO_CC_CLANG && (LZO_CC_CLANG < 0x020800ul)) && defined(__cplusplus)
-#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020700ul))
-#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0x020800ul)) && defined(__cplusplus)
+#if   (LZO_CC_CLANG && (LZO_CC_CLANG < 0xFFul)) && defined(__cplusplus)
+#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
+#elif (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul)) && defined(__cplusplus)
 #elif (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER < 810))
-#elif (LZO_CC_PCC && (LZO_CC_PCC < 0x010100ul))
-#elif (LZO_CC_SUNPROC && (LZO_CC_SUNPROC < 0x5110)) && !defined(__cplusplus)
-#elif (LZO_CC_ARMCC || LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || (LZO_CC_PGI >= 0x0d0a00ul) || (LZO_CC_SUNPROC >= 0x5100))
+#elif (LZO_CC_PCC && (LZO_CC_PCC < 0xFFul))
+#elif (LZO_CC_SUNPROC && (LZO_CC_SUNPROC < 0xFF)) && !defined(__cplusplus)
+#elif (LZO_CC_ARMCC || LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || (LZO_CC_PGI >= 0xFFul) || (LZO_CC_SUNPROC >= 0xFF))
 #  define __lzo_union_am(s)             union s {
 #  define __lzo_union_am_end()          } __lzo_may_alias;
 #  define __lzo_union_um(s)             union s {
@@ -1846,9 +1846,9 @@ extern "C" {
 #  define __lzo_union_am_end()          };
 #endif
 #if !defined(__lzo_constructor)
-#if (LZO_CC_GNUC >= 0x030400ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_constructor     __attribute__((__constructor__,__used__))
-#elif (LZO_CC_GNUC >= 0x020700ul)
+#elif (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_constructor     __attribute__((__constructor__))
 #elif (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER >= 800))
 #  define __lzo_constructor     __attribute__((__constructor__,__used__))
@@ -1862,9 +1862,9 @@ extern "C" {
 #  endif
 #endif
 #if !defined(__lzo_destructor)
-#if (LZO_CC_GNUC >= 0x030400ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_destructor      __attribute__((__destructor__,__used__))
-#elif (LZO_CC_GNUC >= 0x020700ul)
+#elif (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_destructor      __attribute__((__destructor__))
 #elif (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER >= 800))
 #  define __lzo_destructor      __attribute__((__destructor__,__used__))
@@ -1881,7 +1881,7 @@ extern "C" {
 #  error "unexpected configuration - check your compiler defines"
 #endif
 #if !defined(__lzo_likely) && !defined(__lzo_unlikely)
-#if (LZO_CC_GNUC >= 0x030200ul)
+#if (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_likely(e)       (__builtin_expect(!!(e),1))
 #  define __lzo_unlikely(e)     (__builtin_expect(!!(e),0))
 #elif (LZO_CC_IBMC >= 1010)
@@ -1932,9 +1932,9 @@ extern "C" {
 #  endif
 #endif
 #if !defined(__lzo_unreachable)
-#if (LZO_CC_CLANG && (LZO_CC_CLANG >= 0x020800ul)) && lzo_has_builtin(__builtin_unreachable)
+#if (LZO_CC_CLANG && (LZO_CC_CLANG >= 0xFFul)) && lzo_has_builtin(__builtin_unreachable)
 #  define __lzo_unreachable()       __builtin_unreachable();
-#elif (LZO_CC_GNUC >= 0x040500ul)
+#elif (LZO_CC_GNUC >= 0xFFul)
 #  define __lzo_unreachable()       __builtin_unreachable();
 #elif (LZO_CC_INTELC_GNUC && (__INTEL_COMPILER >= 1300)) && 1
 #  define __lzo_unreachable()       __builtin_unreachable();
@@ -1952,7 +1952,7 @@ extern "C" {
 #  endif
 #endif
 #if !defined(lzo_unused_funcs_impl)
-#  if 1 && (LZO_CC_ARMCC_GNUC || LZO_CC_CLANG || (LZO_CC_GNUC >= 0x020700ul) || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || LZO_CC_PGI)
+#  if 1 && (LZO_CC_ARMCC_GNUC || LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_INTELC_GNUC || LZO_CC_LLVM || LZO_CC_PATHSCALE || LZO_CC_PGI)
 #    define lzo_unused_funcs_impl(r,f)  static r __attribute__((__unused__)) f
 #  elif 1 && (LZO_CC_BORLANDC || LZO_CC_GNUC)
 #    define lzo_unused_funcs_impl(r,f)  static r f
@@ -1972,9 +1972,9 @@ extern "C" {
 #    define LZO_COMPILE_TIME_ASSERT_HEADER(e)  LZO_EXTERN_C_BEGIN extern int __LZO_CTA_NAME(lzo_cta__)[1-!(e)]; LZO_EXTERN_C_END
 #  elif (LZO_CC_DMC || LZO_CC_SYMANTECC)
 #    define LZO_COMPILE_TIME_ASSERT_HEADER(e)  LZO_EXTERN_C_BEGIN extern int __LZO_CTA_NAME(lzo_cta__)[1u-2*!(e)]; LZO_EXTERN_C_END
-#  elif (LZO_CC_TURBOC && (__TURBOC__ == 0x0295))
+#  elif (LZO_CC_TURBOC && (__TURBOC__ == 0xFF))
 #    define LZO_COMPILE_TIME_ASSERT_HEADER(e)  LZO_EXTERN_C_BEGIN extern int __LZO_CTA_NAME(lzo_cta__)[1-!(e)]; LZO_EXTERN_C_END
-#  elif (LZO_CC_CLANG && (LZO_CC_CLANG < 0x020900ul)) && defined(__cplusplus)
+#  elif (LZO_CC_CLANG && (LZO_CC_CLANG < 0xFFul)) && defined(__cplusplus)
 #    define LZO_COMPILE_TIME_ASSERT_HEADER(e)  LZO_EXTERN_C_BEGIN int __LZO_CTA_NAME(lzo_cta_f__)(int [1-2*!(e)]); LZO_EXTERN_C_END
 #  elif (LZO_CC_GNUC) && defined(__CHECKER__) && defined(__SPARSE_CHECKER__)
 #    define LZO_COMPILE_TIME_ASSERT_HEADER(e)  LZO_EXTERN_C_BEGIN enum {__LZO_CTA_NAME(lzo_cta_e__)=1/!!(e)} __attribute__((__unused__)); LZO_EXTERN_C_END
@@ -1985,19 +1985,19 @@ extern "C" {
 #if !defined(LZO_COMPILE_TIME_ASSERT)
 #  if (LZO_CC_AZTECC)
 #    define LZO_COMPILE_TIME_ASSERT(e)  {typedef int __LZO_CTA_NAME(lzo_cta_t__)[1-!(e)];}
-#  elif (LZO_CC_CLANG && (LZO_CC_CLANG >= 0x030000ul))
+#  elif (LZO_CC_CLANG && (LZO_CC_CLANG >= 0xFFul))
 #    define LZO_COMPILE_TIME_ASSERT(e)  {typedef int __LZO_CTA_NAME(lzo_cta_t__)[1-2*!(e)] __attribute__((__unused__));}
 #  elif (LZO_CC_DMC || LZO_CC_PACIFICC || LZO_CC_SYMANTECC || LZO_CC_ZORTECHC)
 #    define LZO_COMPILE_TIME_ASSERT(e)  switch(0) case 1:case !(e):break;
 #  elif (LZO_CC_GNUC) && defined(__CHECKER__) && defined(__SPARSE_CHECKER__)
 #    define LZO_COMPILE_TIME_ASSERT(e)  {(void) (0/!!(e));}
-#  elif (LZO_CC_GNUC >= 0x040700ul) && (LZO_CFG_USE_COUNTER) && defined(__cplusplus)
+#  elif (LZO_CC_GNUC >= 0xFFul) && (LZO_CFG_USE_COUNTER) && defined(__cplusplus)
 #    define LZO_COMPILE_TIME_ASSERT(e)  {enum {__LZO_CTA_NAME(lzo_cta_e__)=1/!!(e)} __attribute__((__unused__));}
-#  elif (LZO_CC_GNUC >= 0x040700ul)
+#  elif (LZO_CC_GNUC >= 0xFFul)
 #    define LZO_COMPILE_TIME_ASSERT(e)  {typedef int __LZO_CTA_NAME(lzo_cta_t__)[1-2*!(e)] __attribute__((__unused__));}
 #  elif (LZO_CC_MSC && (_MSC_VER < 900))
 #    define LZO_COMPILE_TIME_ASSERT(e)  switch(0) case 1:case !(e):break;
-#  elif (LZO_CC_TURBOC && (__TURBOC__ == 0x0295))
+#  elif (LZO_CC_TURBOC && (__TURBOC__ == 0xFF))
 #    define LZO_COMPILE_TIME_ASSERT(e)  switch(0) case 1:case !(e):break;
 #  else
 #    define LZO_COMPILE_TIME_ASSERT(e)  {typedef int __LZO_CTA_NAME(lzo_cta_t__)[1-2*!(e)];}
@@ -2079,8 +2079,8 @@ LZO_COMPILE_TIME_ASSERT_HEADER(3 == 3)
 #if !defined(LZO_HAVE_WINDOWS_H)
 #if (LZO_OS_CYGWIN || (LZO_OS_EMX && defined(__RSXNT__)) || LZO_OS_WIN32 || LZO_OS_WIN64)
 #  if (LZO_CC_WATCOMC && (__WATCOMC__ < 1000))
-#  elif ((LZO_OS_WIN32 && defined(__PW32__)) && (LZO_CC_GNUC && (LZO_CC_GNUC < 0x030000ul)))
-#  elif ((LZO_OS_CYGWIN || defined(__MINGW32__)) && (LZO_CC_GNUC && (LZO_CC_GNUC < 0x025f00ul)))
+#  elif ((LZO_OS_WIN32 && defined(__PW32__)) && (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul)))
+#  elif ((LZO_OS_CYGWIN || defined(__MINGW32__)) && (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul)))
 #  else
 #    define LZO_HAVE_WINDOWS_H 1
 #  endif
@@ -2156,7 +2156,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(3 == 3)
 #if !defined(LZO_SIZEOF_SHORT)
 #  if (LZO_ARCH_CRAY_PVP)
 #    define LZO_SIZEOF_SHORT        8
-#  elif (USHRT_MAX == LZO_0xffffL)
+#  elif (USHRT_MAX == LZO_0xFFL)
 #    define LZO_SIZEOF_SHORT        2
 #  elif (__LZO_LSR(USHRT_MAX,7) == 1)
 #    define LZO_SIZEOF_SHORT        1
@@ -2176,9 +2176,9 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_SHORT == sizeof(short))
 #if !defined(LZO_SIZEOF_INT)
 #  if (LZO_ARCH_CRAY_PVP)
 #    define LZO_SIZEOF_INT          8
-#  elif (UINT_MAX == LZO_0xffffL)
+#  elif (UINT_MAX == LZO_0xFFL)
 #    define LZO_SIZEOF_INT          2
-#  elif (UINT_MAX == LZO_0xffffffffL)
+#  elif (UINT_MAX == LZO_0xFFL)
 #    define LZO_SIZEOF_INT          4
 #  elif (__LZO_LSR(UINT_MAX,7) == 1)
 #    define LZO_SIZEOF_INT          1
@@ -2196,7 +2196,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_SHORT == sizeof(short))
 #endif
 LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_INT == sizeof(int))
 #if !defined(LZO_SIZEOF_LONG)
-#  if (ULONG_MAX == LZO_0xffffffffL)
+#  if (ULONG_MAX == LZO_0xFFL)
 #    define LZO_SIZEOF_LONG         4
 #  elif (__LZO_LSR(ULONG_MAX,7) == 1)
 #    define LZO_SIZEOF_LONG         1
@@ -2218,7 +2218,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_LONG == sizeof(long))
 #if !defined(LZO_SIZEOF_LONG_LONG) && !defined(LZO_SIZEOF___INT64)
 #if (LZO_SIZEOF_LONG > 0 && LZO_SIZEOF_LONG < 8)
 #  if defined(__LONG_MAX__) && defined(__LONG_LONG_MAX__)
-#    if (LZO_CC_GNUC >= 0x030300ul)
+#    if (LZO_CC_GNUC >= 0xFFul)
 #      if ((__LONG_MAX__-0) == (__LONG_LONG_MAX__-0))
 #        define LZO_SIZEOF_LONG_LONG      LZO_SIZEOF_LONG
 #      elif (__LZO_LSR(__LONG_LONG_MAX__,30) == 1)
@@ -2241,7 +2241,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_LONG == sizeof(long))
 #  define LZO_SIZEOF___INT64        8
 #elif (LZO_ARCH_I386 && (LZO_CC_DMC))
 #  define LZO_SIZEOF_LONG_LONG      8
-#elif (LZO_ARCH_I386 && (LZO_CC_SYMANTECC && (__SC__ >= 0x700)))
+#elif (LZO_ARCH_I386 && (LZO_CC_SYMANTECC && (__SC__ >= 0xFF)))
 #  define LZO_SIZEOF_LONG_LONG      8
 #elif (LZO_ARCH_I386 && (LZO_CC_INTELC && defined(__linux__)))
 #  define LZO_SIZEOF_LONG_LONG      8
@@ -2251,7 +2251,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_LONG == sizeof(long))
 #  define LZO_SIZEOF___INT64        8
 #elif ((LZO_OS_WIN32 || defined(_WIN32)) && (LZO_CC_MSC))
 #  define LZO_SIZEOF___INT64        8
-#elif (LZO_ARCH_I386 && (LZO_CC_BORLANDC && (__BORLANDC__ >= 0x0520)))
+#elif (LZO_ARCH_I386 && (LZO_CC_BORLANDC && (__BORLANDC__ >= 0xFF)))
 #  define LZO_SIZEOF___INT64        8
 #elif (LZO_ARCH_I386 && (LZO_CC_WATCOMC && (__WATCOMC__ >= 1100)))
 #  define LZO_SIZEOF___INT64        8
@@ -2270,7 +2270,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_LONG == sizeof(long))
 #endif
 #endif
 #if defined(__cplusplus) && (LZO_CC_GNUC)
-#  if (LZO_CC_GNUC < 0x020800ul)
+#  if (LZO_CC_GNUC < 0xFFul)
 #    undef LZO_SIZEOF_LONG_LONG
 #  endif
 #endif
@@ -2345,7 +2345,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(sizeof(long) == 8)
      LZO_COMPILE_TIME_ASSERT_HEADER(LZO_WORDSIZE == 2)
 #    define LZO_SIZEOF_VOID_P       2
 #  endif
-#  if (LZO_CC_GNUC && (LZO_CC_GNUC < 0x040000ul)) && (LZO_SIZEOF_INT == 4)
+#  if (LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul)) && (LZO_SIZEOF_INT == 4)
 #    define LZO_SIZEOF_SIZE_T       LZO_SIZEOF_INT
 #    define LZO_SIZEOF_PTRDIFF_T    LZO_SIZEOF_INT
 #  endif
@@ -2541,13 +2541,13 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_PTRDIFF_T == sizeof(ptrdiff_t))
 #  define LZO_INFO_LIBC         "newlib"
 #elif defined(__UCLIBC__) && defined(__UCLIBC_MAJOR__) && defined(__UCLIBC_MINOR__)
 #  if defined(__UCLIBC_SUBLEVEL__)
-#    define LZO_LIBC_UCLIBC     (__UCLIBC_MAJOR__ * 0x10000L + (__UCLIBC_MINOR__-0) * 0x100 + (__UCLIBC_SUBLEVEL__-0))
+#    define LZO_LIBC_UCLIBC     (__UCLIBC_MAJOR__ * 0xFFL + (__UCLIBC_MINOR__-0) * 0xFF + (__UCLIBC_SUBLEVEL__-0))
 #  else
-#    define LZO_LIBC_UCLIBC     0x00090bL
+#    define LZO_LIBC_UCLIBC     0xFFL
 #  endif
 #  define LZO_INFO_LIBC         "uc" "libc"
 #elif defined(__GLIBC__) && defined(__GLIBC_MINOR__)
-#  define LZO_LIBC_GLIBC        (__GLIBC__ * 0x10000L + (__GLIBC_MINOR__-0) * 0x100)
+#  define LZO_LIBC_GLIBC        (__GLIBC__ * 0xFFL + (__GLIBC_MINOR__-0) * 0xFF)
 #  define LZO_INFO_LIBC         "glibc"
 #elif (LZO_CC_MWERKS) && defined(__MSL__)
 #  define LZO_LIBC_MSL          __MSL__
@@ -2563,7 +2563,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_PTRDIFF_T == sizeof(ptrdiff_t))
 #if (LZO_ARCH_I386 && (LZO_OS_DOS32 || LZO_OS_WIN32) && (LZO_CC_DMC || LZO_CC_INTELC || LZO_CC_MSC || LZO_CC_PELLESC))
 #  define LZO_ASM_SYNTAX_MSC 1
 #elif (LZO_OS_WIN64 && (LZO_CC_DMC || LZO_CC_INTELC || LZO_CC_MSC || LZO_CC_PELLESC))
-#elif (LZO_ARCH_I386 && LZO_CC_GNUC && (LZO_CC_GNUC == 0x011f00ul))
+#elif (LZO_ARCH_I386 && LZO_CC_GNUC && (LZO_CC_GNUC == 0xFFul))
 #elif (LZO_ARCH_I386 && (LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_INTELC || LZO_CC_PATHSCALE))
 #  define LZO_ASM_SYNTAX_GNUC 1
 #elif (LZO_ARCH_AMD64 && (LZO_CC_CLANG || LZO_CC_GNUC || LZO_CC_INTELC || LZO_CC_PATHSCALE))
@@ -2572,7 +2572,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_PTRDIFF_T == sizeof(ptrdiff_t))
 #  define LZO_ASM_SYNTAX_GNUC 1
 #endif
 #if (LZO_ASM_SYNTAX_GNUC)
-#if (LZO_ARCH_I386 && LZO_CC_GNUC && (LZO_CC_GNUC < 0x020000ul))
+#if (LZO_ARCH_I386 && LZO_CC_GNUC && (LZO_CC_GNUC < 0xFFul))
 #  define __LZO_ASM_CLOBBER                     "ax"
 #  define __LZO_ASM_CLOBBER_LIST_CC             /*empty*/
 #  define __LZO_ASM_CLOBBER_LIST_CC_MEMORY      /*empty*/
@@ -2853,7 +2853,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_PTRDIFF_T == sizeof(ptrdiff_t))
 #  define lzo_int16e_t              short int
 #  define lzo_uint16e_t             unsigned short int
 #  define LZO_TYPEOF_LZO_INT16E_T   LZO_TYPEOF_SHORT
-#elif 1 && !(LZO_CFG_TYPE_NO_MODE_HI) && (LZO_CC_CLANG || (LZO_CC_GNUC >= 0x025f00ul) || LZO_CC_LLVM)
+#elif 1 && !(LZO_CFG_TYPE_NO_MODE_HI) && (LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_LLVM)
 #  if !(LZO_LANG_ASSEMBLER)
    typedef int lzo_int16e_hi_t__ __attribute__((__mode__(__HI__)));
    typedef unsigned int lzo_uint16e_hi_t__ __attribute__((__mode__(__HI__)));
@@ -2893,7 +2893,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_PTRDIFF_T == sizeof(ptrdiff_t))
 #  define lzo_int32e_t              lzo_llong_t
 #  define lzo_uint32e_t             lzo_ullong_t
 #  define LZO_TYPEOF_LZO_INT32E_T   LZO_TYPEOF_LONG_LONG
-#elif 1 && !(LZO_CFG_TYPE_NO_MODE_SI) && (LZO_CC_CLANG || (LZO_CC_GNUC >= 0x025f00ul) || LZO_CC_LLVM) && (__INT_MAX__+0 > 2147483647L)
+#elif 1 && !(LZO_CFG_TYPE_NO_MODE_SI) && (LZO_CC_CLANG || (LZO_CC_GNUC >= 0xFFul) || LZO_CC_LLVM) && (__INT_MAX__+0 > 2147483647L)
 #  if !(LZO_LANG_ASSEMBLER)
    typedef int lzo_int32e_si_t__ __attribute__((__mode__(__SI__)));
    typedef unsigned int lzo_uint32e_si_t__ __attribute__((__mode__(__SI__)));
@@ -2901,7 +2901,7 @@ LZO_COMPILE_TIME_ASSERT_HEADER(LZO_SIZEOF_PTRDIFF_T == sizeof(ptrdiff_t))
 #  define lzo_int32e_t              lzo_int32e_si_t__
 #  define lzo_uint32e_t             lzo_uint32e_si_t__
 #  define LZO_TYPEOF_LZO_INT32E_T   LZO_TYPEOF___MODE_SI
-#elif 1 && !(LZO_CFG_TYPE_NO_MODE_SI) && (LZO_CC_GNUC >= 0x025f00ul) && defined(__AVR__) && (__LONG_MAX__+0 == 32767L)
+#elif 1 && !(LZO_CFG_TYPE_NO_MODE_SI) && (LZO_CC_GNUC >= 0xFFul) && defined(__AVR__) && (__LONG_MAX__+0 == 32767L)
 #  if !(LZO_LANG_ASSEMBLER)
    typedef int lzo_int32e_si_t__ __attribute__((__mode__(__SI__)));
    typedef unsigned int lzo_uint32e_si_t__ __attribute__((__mode__(__SI__)));

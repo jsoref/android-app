@@ -134,10 +134,10 @@ if ($sse2) {
 	&mov	("ebx",&DWP(4*1,"esi"));
 	&mov	("ecx",&DWP(4*2,"esi"));
 	&mov	("edx",&DWP(4*3,"esi"));
-	&and	("eax",0x0fffffff);
-	&and	("ebx",0x0ffffffc);
-	&and	("ecx",0x0ffffffc);
-	&and	("edx",0x0ffffffc);
+	&and	("eax",0xFF);
+	&and	("ebx",0xFF);
+	&and	("ecx",0xFF);
+	&and	("edx",0xFF);
 	&mov	(&DWP(4*6,"edi"),"eax");
 	&mov	(&DWP(4*7,"edi"),"ebx");
 	&mov	(&DWP(4*8,"edi"),"ecx");
@@ -684,11 +684,11 @@ my $extra = shift;
 	&mov	(&DWP(4*5,"edi"),1);			# is_base2_26
 
 	&shr	("ecx",2);
-	&and	("eax",0x3ffffff);
+	&and	("eax",0xFF);
 	&shr	("edx",4);
-	&and	("ecx",0x3ffffff);
+	&and	("ecx",0xFF);
 	&shr	("esi",6);
-	&and	("edx",0x3ffffff);
+	&and	("edx",0xFF);
 
 	&movd	($D0,"eax");
 	&movd	($D1,"ecx");
@@ -1031,7 +1031,7 @@ my $addr = shift;
 	################################################################
 	# multiply (inp[0:1]+hash) or inp[2:3] by r^2:r^1
 
-	 &pshufd	($T2,&QWP(16*(0-9),"edx"),0x10);# r0^n
+	 &pshufd	($T2,&QWP(16*(0-9),"edx"),0xFF);# r0^n
 	&add		("ecx",32);
 	&jnz		(&label("long_tail"));
 
@@ -1060,20 +1060,20 @@ my $addr = shift;
 	&pmuludq	($T1,$T2);			# h1*r0
 	&pmuludq	($D2,$T2);			# h2*r0
 	&movdqa		($D0,$T0);
-	 &pshufd	($T0,&QWP(16*(1-9),"edx"),0x10);# r1^n
+	 &pshufd	($T0,&QWP(16*(1-9),"edx"),0xFF);# r1^n
 	&pmuludq	($D3,$T2);			# h3*r0
 	&movdqa		($D1,$T1);
 	&pmuludq	($D4,$T2);			# h4*r0
 
 	&pmuladd	(sub {	my ($reg,$i)=@_;
-				&pshufd ($reg,&QWP(16*($i-9),"edx"),0x10);
+				&pshufd ($reg,&QWP(16*($i-9),"edx"),0xFF);
 			     },"eax");
 
 	&jz		(&label("short_tail"));
 
 	&load_input	(-16*2,0);
 
-	 &pshufd	($T2,&QWP(16*0,"edx"),0x10);	# r0^n
+	 &pshufd	($T2,&QWP(16*0,"edx"),0xFF);	# r0^n
 	&paddd		($T0,&QWP(16*5,"esp"));		# add hash value
 	&paddd		($T1,&QWP(16*6,"esp"));
 	&paddd		($D2,&QWP(16*7,"esp"));
@@ -1095,7 +1095,7 @@ my $addr = shift;
 	&pmuludq	($D3,$T2);			# h3*r0
 	&paddq		($D2,&QWP(16*2,"esp"));
 	&movdqa		(&QWP(16*2,"esp"),$T0);
-	 &pshufd	($T0,&QWP(16*1,"edx"),0x10);	# r1^n
+	 &pshufd	($T0,&QWP(16*1,"edx"),0xFF);	# r1^n
 	&paddq		($D3,&QWP(16*3,"esp"));
 	&movdqa		(&QWP(16*3,"esp"),$T1);
 	&movdqa		($T1,$D4);
@@ -1104,7 +1104,7 @@ my $addr = shift;
 	&movdqa		(&QWP(16*4,"esp"),$T1);
 
 	&pmuladd	(sub {	my ($reg,$i)=@_;
-				&pshufd ($reg,&QWP(16*$i,"edx"),0x10);
+				&pshufd ($reg,&QWP(16*$i,"edx"),0xFF);
 			     });
 
 &set_label("short_tail");
@@ -1475,11 +1475,11 @@ sub X { my $reg=shift; $reg=~s/^ymm/xmm/; $reg; }
 	&mov	("ebp",&DWP(13,"edi"));
 
 	&shr	("ecx",2);
-	&and	("eax",0x3ffffff);
+	&and	("eax",0xFF);
 	&shr	("edx",4);
-	&and	("ecx",0x3ffffff);
+	&and	("ecx",0xFF);
 	&shr	("esi",6);
-	&and	("edx",0x3ffffff);
+	&and	("edx",0xFF);
 
 	&mov	(&DWP(4*0,"edi"),"eax");
 	&mov	(&DWP(4*1,"edi"),"ecx");
@@ -1804,8 +1804,8 @@ sub vlazy_reduction {
 &set_label("const_sse2",64);
 	&data_word(1<<24,0,	1<<24,0,	1<<24,0,	1<<24,0);
 	&data_word(0,0,		0,0,		0,0,		0,0);
-	&data_word(0x03ffffff,0,0x03ffffff,0,	0x03ffffff,0,	0x03ffffff,0);
-	&data_word(0x0fffffff,0x0ffffffc,0x0ffffffc,0x0ffffffc);
+	&data_word(0xFF,0,0xFF,0,	0xFF,0,	0xFF,0);
+	&data_word(0xFF,0xFF,0xFF,0xFF);
 }
 &asciz	("Poly1305 for x86, CRYPTOGAMS by <appro\@openssl.org>");
 &align	(4);

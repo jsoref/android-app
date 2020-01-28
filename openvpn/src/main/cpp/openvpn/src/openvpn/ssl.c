@@ -4031,7 +4031,7 @@ tls_prepend_opcode_v2(const struct tls_multi *multi, struct buffer *buf)
     ASSERT(ks);
 
     peer = htonl(((P_DATA_V2 << P_OPCODE_SHIFT) | ks->key_id) << 24
-                 | (multi->peer_id & 0xFFFFFF));
+                 | (multi->peer_id & 0xFF));
     ASSERT(buf_write_prepend(buf, &peer, 4));
 }
 

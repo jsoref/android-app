@@ -118,7 +118,7 @@ sub bn_mul_add_words
 		&sub($c,8);
 		&jz(&label("maw_sse2_exit"));
 	&set_label("maw_sse2_entry");
-		&test($c,0xfffffff8);
+		&test($c,0xFF);
 		&jnz(&label("maw_sse2_unrolled"));
 
 	&set_label("maw_sse2_loop",4);
@@ -161,7 +161,7 @@ sub bn_mul_add_words
 	&mov("ecx",&wparam(2));	#
 	&mov($a,&wparam(1));	#
 
-	&and("ecx",0xfffffff8);	# num / 8
+	&and("ecx",0xFF);	# num / 8
 	&mov($w,&wparam(3));	#
 
 	&push("ecx");		# Up the stack for a tmp variable
@@ -278,7 +278,7 @@ sub bn_mul_words
 	&mov($num,&wparam(2));	#
 	&mov($w,&wparam(3));	#
 
-	&and($num,0xfffffff8);	# num / 8
+	&and($num,0xFF);	# num / 8
 	&jz(&label("mw_finish"));
 
 	&set_label("mw_loop",0);
@@ -378,7 +378,7 @@ sub bn_sqr_words
 	&mov($a,&wparam(1));	#
 	&mov($num,&wparam(2));	#
 
-	&and($num,0xfffffff8);	# num / 8
+	&and($num,0xFF);	# num / 8
 	&jz(&label("sw_finish"));
 
 	&set_label("sw_loop",0);
@@ -452,7 +452,7 @@ sub bn_add_words
 	&mov($b,&wparam(2));	# get b
 	 &mov($num,&wparam(3));	# get num
 	&xor($c,$c);		# clear carry
-	 &and($num,0xfffffff8);	# num / 8
+	 &and($num,0xFF);	# num / 8
 
 	&jz(&label("aw_finish"));
 
@@ -524,7 +524,7 @@ sub bn_sub_words
 	&mov($b,&wparam(2));	# get b
 	 &mov($num,&wparam(3));	# get num
 	&xor($c,$c);		# clear carry
-	 &and($num,0xfffffff8);	# num / 8
+	 &and($num,0xFF);	# num / 8
 
 	&jz(&label("aw_finish"));
 
@@ -596,7 +596,7 @@ sub bn_sub_part_words
 	&mov($b,&wparam(2));	# get b
 	 &mov($num,&wparam(3));	# get num
 	&xor($c,$c);		# clear carry
-	 &and($num,0xfffffff8);	# num / 8
+	 &and($num,0xFF);	# num / 8
 
 	&jz(&label("aw_finish"));
 
@@ -658,7 +658,7 @@ sub bn_sub_part_words
 	&mov($tmp2,0);
 	&sub($tmp2,$num);
 	&mov($num,$tmp2);
-	&and($num,0xfffffff8);	# num / 8
+	&and($num,0xFF);	# num / 8
 	&jz(&label("pw_neg_finish"));
 
 	&set_label("pw_neg_loop",0);
@@ -708,7 +708,7 @@ sub bn_sub_part_words
 
 	&set_label("pw_pos",0);
 
-	&and($num,0xfffffff8);	# num / 8
+	&and($num,0xFF);	# num / 8
 	&jz(&label("pw_pos_finish"));
 
 	&set_label("pw_pos_loop",0);

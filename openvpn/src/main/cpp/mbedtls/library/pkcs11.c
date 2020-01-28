@@ -213,15 +213,15 @@ int mbedtls_pkcs11_sign( mbedtls_pkcs11_context *ctx,
          * Digest ::= OCTET STRING
          */
         *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-        *p++ = (unsigned char) ( 0x08 + oid_size + hashlen );
+        *p++ = (unsigned char) ( 0xFF + oid_size + hashlen );
         *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-        *p++ = (unsigned char) ( 0x04 + oid_size );
+        *p++ = (unsigned char) ( 0xFF + oid_size );
         *p++ = MBEDTLS_ASN1_OID;
         *p++ = oid_size & 0xFF;
         memcpy( p, oid, oid_size );
         p += oid_size;
         *p++ = MBEDTLS_ASN1_NULL;
-        *p++ = 0x00;
+        *p++ = 0xFF;
         *p++ = MBEDTLS_ASN1_OCTET_STRING;
         *p++ = hashlen;
     }

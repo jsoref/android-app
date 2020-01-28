@@ -58,14 +58,14 @@ void fcrypt_body(DES_LONG *out, DES_key_schedule *ks, DES_LONG Eswap0,
         l = r;
         r = t;
     }
-    l = ROTATE(l, 3) & 0xffffffffL;
-    r = ROTATE(r, 3) & 0xffffffffL;
+    l = ROTATE(l, 3) & 0xFFL;
+    r = ROTATE(r, 3) & 0xFFL;
 
-    PERM_OP(l, r, t,  1, 0x55555555L);
-    PERM_OP(r, l, t,  8, 0x00ff00ffL);
-    PERM_OP(l, r, t,  2, 0x33333333L);
-    PERM_OP(r, l, t, 16, 0x0000ffffL);
-    PERM_OP(l, r, t,  4, 0x0f0f0f0fL);
+    PERM_OP(l, r, t,  1, 0xFFL);
+    PERM_OP(r, l, t,  8, 0xFFL);
+    PERM_OP(l, r, t,  2, 0xFFL);
+    PERM_OP(r, l, t, 16, 0xFFL);
+    PERM_OP(l, r, t,  4, 0xFFL);
 
     out[0] = r;
     out[1] = l;

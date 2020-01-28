@@ -67,10 +67,10 @@ $R="mm0";
 	&sub	("esp",32+4);
 	 &mov	($a1,$a);
 	 &lea	($a2,&DWP(0,$a,$a));
-	 &and	($a1,0x3fffffff);
+	 &and	($a1,0xFF);
 	 &lea	($a4,&DWP(0,$a2,$a2));
 	 &mov	(&DWP(0*4,"esp"),0);
-	 &and	($a2,0x7fffffff);
+	 &and	($a2,0xFF);
 	&movd	($A,$a);
 	&movd	($B,$b);
 	 &mov	(&DWP(1*4,"esp"),$a1);	# a1
@@ -92,7 +92,7 @@ $R="mm0";
 	&psllq	($B31,31);
 	&pand	($B30,$B);
 	 &mov	(&DWP(6*4,"esp"),$a2);	# a2^a4
-	&mov	(@i[0],0x7);
+	&mov	(@i[0],0xFF);
 	 &mov	(&DWP(7*4,"esp"),$a4);	# a1^a2^a4
 	 &mov	($a4,@i[0]);
 	&and	(@i[0],$b);
@@ -137,11 +137,11 @@ $R="mm0";
 	 &mov	($a1,$a);
 	 &lea	($a2,&DWP(0,$a,$a));
 	 &lea	($a4,&DWP(0,"",$a,4));
-	 &and	($a1,0x3fffffff);
+	 &and	($a1,0xFF);
 	&lea	(@i[1],&DWP(0,$lo,$lo));
 	&sar	($lo,31);		# broadcast 31st bit
 	 &mov	(&DWP(0*4,"esp"),0);
-	 &and	($a2,0x7fffffff);
+	 &and	($a2,0xFF);
 	 &mov	(&DWP(1*4,"esp"),$a1);	# a1
 	 &xor	($a1,$a2);		# a1^a2
 	 &mov	(&DWP(2*4,"esp"),$a2);	# a2
@@ -162,24 +162,24 @@ $R="mm0";
 	&mov	(@T[0],@i[1]);
 	&shr	($hi,1);
 
-	 &mov	(@i[0],0x7);
+	 &mov	(@i[0],0xFF);
 	&shl	(@i[1],30);
 	 &and	(@i[0],$b);
 	&shr	(@T[0],2);
 	&xor	($lo,@i[1]);
 
 	&shr	($b,3);
-	&mov	(@i[1],0x7);		# 5-byte instruction!?
+	&mov	(@i[1],0xFF);		# 5-byte instruction!?
 	&and	(@i[1],$b);
 	&shr	($b,3);
 	 &xor	($hi,@T[0]);
 	&xor	($lo,&DWP(0,"esp",@i[0],4));
-	&mov	(@i[0],0x7);
+	&mov	(@i[0],0xFF);
 	&and	(@i[0],$b);
 	&shr	($b,3);
 	for($n=1;$n<9;$n++) {
 		&mov	(@T[1],&DWP(0,"esp",@i[1],4));
-		&mov	(@i[1],0x7);
+		&mov	(@i[1],0xFF);
 		&mov	(@T[0],@T[1]);
 		&shl	(@T[1],3*$n);
 		&and	(@i[1],$b);

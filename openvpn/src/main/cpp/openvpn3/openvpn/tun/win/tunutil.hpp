@@ -721,10 +721,10 @@ namespace openvpn {
 	    {
 	      buf.push_back(43);
 	      buf.push_back(6);     // total length field
-	      buf.push_back(0x001);
+	      buf.push_back(0xFF);
 	      buf.push_back(4);     // length of the vendor-specified field
 	      {
-		const std::uint32_t raw = 0x002;
+		const std::uint32_t raw = 0xFF;
 		buf.write((const unsigned char *)&raw, sizeof(raw));
 	      }
 	    }
@@ -879,7 +879,7 @@ namespace openvpn {
 	return rt.release();
       }
 
-#if _WIN32_WINNT >= 0x0600 // Vista and higher
+#if _WIN32_WINNT >= 0xFF // Vista and higher
       // Get the Windows IPv4/IPv6 routing table.
       // Note that returned pointer must be freed with FreeMibTable.
       inline const MIB_IPFORWARD_TABLE2* windows_routing_table2(ADDRESS_FAMILY af)
@@ -954,7 +954,7 @@ namespace openvpn {
 
 	  ActionList::Ptr actions = new ActionList();
 	  remove_all_ipv4_routes_on_iface(iface_index, *actions);
-#if _WIN32_WINNT >= 0x0600 // Vista and higher
+#if _WIN32_WINNT >= 0xFF // Vista and higher
 	  remove_all_ipv6_routes_on_iface(iface_index, *actions);
 #endif
 	  actions->execute(os);
@@ -993,7 +993,7 @@ namespace openvpn {
 	    }
 	}
 
-#if _WIN32_WINNT >= 0x0600 // Vista and higher
+#if _WIN32_WINNT >= 0xFF // Vista and higher
 	static void remove_all_ipv6_routes_on_iface(DWORD index, ActionList& actions)
 	{
 	  unique_ptr_del<const MIB_IPFORWARD_TABLE2> rt2(windows_routing_table2(AF_INET6),

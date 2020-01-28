@@ -36,10 +36,10 @@ char *BN_bn2hex(const BIGNUM *a)
     for (i = a->top - 1; i >= 0; i--) {
         for (j = BN_BITS2 - 8; j >= 0; j -= 8) {
             /* strip leading zeros */
-            v = (int)((a->d[i] >> j) & 0xff);
+            v = (int)((a->d[i] >> j) & 0xFF);
             if (z || v != 0) {
                 *p++ = Hex[v >> 4];
-                *p++ = Hex[v & 0x0f];
+                *p++ = Hex[v & 0xFF];
                 z = 1;
             }
         }
@@ -313,7 +313,7 @@ int BN_print(BIO *bp, const BIGNUM *a)
     for (i = a->top - 1; i >= 0; i--) {
         for (j = BN_BITS2 - 4; j >= 0; j -= 4) {
             /* strip leading zeros */
-            v = (int)((a->d[i] >> j) & 0x0f);
+            v = (int)((a->d[i] >> j) & 0xFF);
             if (z || v != 0) {
                 if (BIO_write(bp, &Hex[v], 1) != 1)
                     goto end;

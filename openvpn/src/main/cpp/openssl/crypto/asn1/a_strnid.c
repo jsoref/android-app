@@ -63,7 +63,7 @@ int ASN1_STRING_set_default_mask_asc(const char *p)
     else if (strcmp(p, "utf8only") == 0)
         mask = B_ASN1_UTF8STRING;
     else if (strcmp(p, "default") == 0)
-        mask = 0xFFFFFFFFL;
+        mask = 0xFFL;
     else
         return 0;
     ASN1_STRING_set_default_mask(mask);

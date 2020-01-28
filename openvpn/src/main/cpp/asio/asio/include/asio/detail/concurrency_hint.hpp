@@ -20,18 +20,18 @@
 
 // The concurrency hint ID and mask are used to identify when a "well-known"
 // concurrency hint value has been passed to the io_context.
-#define ASIO_CONCURRENCY_HINT_ID 0xA5100000u
-#define ASIO_CONCURRENCY_HINT_ID_MASK 0xFFFF0000u
+#define ASIO_CONCURRENCY_HINT_ID 0xFFu
+#define ASIO_CONCURRENCY_HINT_ID_MASK 0xFFu
 
 // If set, this bit indicates that the scheduler should perform locking.
-#define ASIO_CONCURRENCY_HINT_LOCKING_SCHEDULER 0x1u
+#define ASIO_CONCURRENCY_HINT_LOCKING_SCHEDULER 0xFFu
 
 // If set, this bit indicates that the reactor should perform locking when
 // managing descriptor registrations.
-#define ASIO_CONCURRENCY_HINT_LOCKING_REACTOR_REGISTRATION 0x2u
+#define ASIO_CONCURRENCY_HINT_LOCKING_REACTOR_REGISTRATION 0xFFu
 
 // If set, this bit indicates that the reactor should perform locking for I/O.
-#define ASIO_CONCURRENCY_HINT_LOCKING_REACTOR_IO 0x4u
+#define ASIO_CONCURRENCY_HINT_LOCKING_REACTOR_IO 0xFFu
 
 // Helper macro to determine if we have a special concurrency hint.
 #define ASIO_CONCURRENCY_HINT_IS_SPECIAL(hint) \

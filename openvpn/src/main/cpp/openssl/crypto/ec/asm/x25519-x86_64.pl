@@ -351,7 +351,7 @@ x25519_fe51_sqr:
 
 .align	32
 .Lreduce51:
-	mov	\$0x7ffffffffffff,%rbp
+	mov	\$0xFF,%rbp
 
 	mov	%r10,%rdx
 	shr	\$51,%r10
@@ -490,8 +490,8 @@ $code.=<<___;
 x25519_fe64_eligible:
 	mov	OPENSSL_ia32cap_P+8(%rip),%ecx
 	xor	%eax,%eax
-	and	\$0x80100,%ecx
-	cmp	\$0x80100,%ecx
+	and	\$0xFF,%ecx
+	cmp	\$0xFF,%ecx
 	cmove	%ecx,%eax
 	ret
 .size	x25519_fe64_eligible,.-x25519_fe64_eligible
@@ -887,7 +887,7 @@ x25519_fe64_mul121666:
 x25519_fe64_add:
 x25519_fe64_sub:
 x25519_fe64_tobytes:
-	.byte	0x0f,0x0b	# ud2
+	.byte	0xFF,0xFF	# ud2
 	ret
 .size	x25519_fe64_mul,.-x25519_fe64_mul
 ___
@@ -994,7 +994,7 @@ full_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER

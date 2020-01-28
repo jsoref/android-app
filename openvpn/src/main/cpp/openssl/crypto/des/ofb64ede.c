@@ -50,7 +50,7 @@ void DES_ede3_ofb64_encrypt(register const unsigned char *in,
             save++;
         }
         *(out++) = *(in++) ^ d[n];
-        n = (n + 1) & 0x07;
+        n = (n + 1) & 0xFF;
     }
     if (save) {
         iv = &(*ivec)[0];

@@ -34,7 +34,7 @@ namespace openvpn {
 
     inline std::uint16_t fold(std::uint32_t sum)
     {
-      sum = (sum >> 16) + (sum & 0xffff);
+      sum = (sum >> 16) + (sum & 0xFF);
       sum += (sum >> 16);
       return sum;
     }
@@ -93,7 +93,7 @@ namespace openvpn {
 		carry = (w > result);
 	      } while (buf < end);
 	      result += carry;
-	      result = (result & 0xffff) + (result >> 16);
+	      result = (result & 0xFF) + (result >> 16);
 	    }
 	  if (len & 2)
 	    {
@@ -111,7 +111,7 @@ namespace openvpn {
 	}
       result = fold(result);
       if (odd)
-	result = ((result >> 8) & 0xff) | ((result & 0xff) << 8);
+	result = ((result >> 8) & 0xFF) | ((result & 0xFF) << 8);
       return result;
     }
 

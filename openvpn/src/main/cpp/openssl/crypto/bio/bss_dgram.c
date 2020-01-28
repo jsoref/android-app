@@ -16,8 +16,8 @@
 # ifndef OPENSSL_NO_SCTP
 #  include <netinet/sctp.h>
 #  include <fcntl.h>
-#  define OPENSSL_SCTP_DATA_CHUNK_TYPE            0x00
-#  define OPENSSL_SCTP_FORWARD_CUM_TSN_CHUNK_TYPE 0xc0
+#  define OPENSSL_SCTP_DATA_CHUNK_TYPE            0xFF
+#  define OPENSSL_SCTP_FORWARD_CUM_TSN_CHUNK_TYPE 0xFF
 # endif
 
 # if defined(OPENSSL_SYS_LINUX) && !defined(IP_MTU)
@@ -35,7 +35,7 @@
 #  define IN6_IS_ADDR_V4MAPPED(a)               \
         (((a)->s6_addr32[0] == 0) &&          \
          ((a)->s6_addr32[1] == 0) &&          \
-         ((a)->s6_addr32[2] == htonl(0x0000ffff)))
+         ((a)->s6_addr32[2] == htonl(0xFF)))
 # endif
 
 static int dgram_write(BIO *h, const char *buf, int num);

@@ -29,8 +29,8 @@ public class Utils {
         char[] hex = new char[bytes.length * 2];
         for (int i = 0; i < bytes.length; i++) {
             int value = bytes[i];
-            hex[i * 2] = HEXDIGITS[(value & 0xf0) >> 4];
-            hex[i * 2 + 1] = HEXDIGITS[value & 0x0f];
+            hex[i * 2] = HEXDIGITS[(value & 0xFF) >> 4];
+            hex[i * 2 + 1] = HEXDIGITS[value & 0xFF];
         }
         return new String(hex);
     }

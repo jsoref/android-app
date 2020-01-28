@@ -384,7 +384,7 @@ public class OpenVpnManagementThread implements Runnable, OpenVPNManagement {
                 break;
         }
 
-        int ovpnlevel = Integer.parseInt(args[2]) & 0x0F;
+        int ovpnlevel = Integer.parseInt(args[2]) & 0xFF;
         String msg = args[3];
 
         if (msg.startsWith("MANAGEMENT: CMD"))

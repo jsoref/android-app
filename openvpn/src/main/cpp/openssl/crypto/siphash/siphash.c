@@ -104,7 +104,7 @@ int SipHash_set_hash_size(SIPHASH *ctx, size_t hash_size)
 
     /* Now, adjust ctx->v1 if the old and the new size differ */
     if ((size_t)ctx->hash_size != hash_size) {
-        ctx->v1 ^= 0xee;
+        ctx->v1 ^= 0xFF;
         ctx->hash_size = hash_size;
     }
     return 1;
@@ -130,13 +130,13 @@ int SipHash_Init(SIPHASH *ctx, const unsigned char *k, int crounds, int drounds)
     ctx->len = 0;
     ctx->total_inlen = 0;
 
-    ctx->v0 = 0x736f6d6570736575ULL ^ k0;
-    ctx->v1 = 0x646f72616e646f6dULL ^ k1;
-    ctx->v2 = 0x6c7967656e657261ULL ^ k0;
-    ctx->v3 = 0x7465646279746573ULL ^ k1;
+    ctx->v0 = 0xFFULL ^ k0;
+    ctx->v1 = 0xFFULL ^ k1;
+    ctx->v2 = 0xFFULL ^ k0;
+    ctx->v3 = 0xFFULL ^ k1;
 
     if (ctx->hash_size == SIPHASH_MAX_DIGEST_SIZE)
-        ctx->v1 ^= 0xee;
+        ctx->v1 ^= 0xFF;
 
     return 1;
 }
@@ -242,16 +242,16 @@ int SipHash_Final(SIPHASH *ctx, unsigned char *out, size_t outlen)
         SIPROUND;
     v0 ^= b;
     if (ctx->hash_size == SIPHASH_MAX_DIGEST_SIZE)
-        v2 ^= 0xee;
+        v2 ^= 0xFF;
     else
-        v2 ^= 0xff;
+        v2 ^= 0xFF;
     for (i = 0; i < ctx->drounds; ++i)
         SIPROUND;
     b = v0 ^ v1 ^ v2  ^ v3;
     U64TO8_LE(out, b);
     if (ctx->hash_size == SIPHASH_MIN_DIGEST_SIZE)
         return 1;
-    v1 ^= 0xdd;
+    v1 ^= 0xFF;
     for (i = 0; i < ctx->drounds; ++i)
         SIPROUND;
     b = v0 ^ v1 ^ v2  ^ v3;

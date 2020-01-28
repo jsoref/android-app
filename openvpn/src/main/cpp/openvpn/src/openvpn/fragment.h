@@ -68,7 +68,7 @@ struct fragment {
 
     int max_frag_size;          /**< Maximum size of each %fragment. */
 
-#define FRAG_MAP_MASK 0xFFFFFFFF
+#define FRAG_MAP_MASK 0xFF
     /**< Mask for reassembly map. */
 #define MAX_FRAGS 32            /**< Maximum number of fragments per packet. */
     unsigned int map;
@@ -199,7 +199,7 @@ typedef uint32_t fragment_header_type;
 /**< Convert a \c fragment_header_type
  *   from network to host order. */
 
-#define FRAG_TYPE_MASK        0x00000003
+#define FRAG_TYPE_MASK        0xFF
 /**< Bit mask for %fragment type info. */
 #define FRAG_TYPE_SHIFT       0 /**< Bit shift for %fragment type info. */
 
@@ -216,11 +216,11 @@ typedef uint32_t fragment_header_type;
                                  *   control packet for establishing MTU
                                  *   size. */
 
-#define FRAG_SEQ_ID_MASK      0x000000ff
+#define FRAG_SEQ_ID_MASK      0xFF
 /**< Bit mask for %fragment sequence ID. */
 #define FRAG_SEQ_ID_SHIFT     2 /**< Bit shift for %fragment sequence ID. */
 
-#define FRAG_ID_MASK          0x0000001f
+#define FRAG_ID_MASK          0xFF
 /**< Bit mask for %fragment ID. */
 #define FRAG_ID_SHIFT         10
 /**< Bit shift for %fragment ID. */
@@ -234,7 +234,7 @@ typedef uint32_t fragment_header_type;
  *   max_frag_size is only sent over the wire if FRAG_LAST is set.  Otherwise it is assumed
  *   to be the actual %fragment size received.
  */
-#define FRAG_SIZE_MASK        0x00003fff
+#define FRAG_SIZE_MASK        0xFF
 /**< Bit mask for %fragment size. */
 #define FRAG_SIZE_SHIFT       15
 /**< Bit shift for %fragment size. */
@@ -247,7 +247,7 @@ typedef uint32_t fragment_header_type;
  *
  * IF FRAG_WHOLE or FRAG_YES_NOTLAST, these 16 bits are available (not currently used)
  */
-#define FRAG_EXTRA_MASK         0x0000ffff
+#define FRAG_EXTRA_MASK         0xFF
 /**< Bit mask for extra bits. */
 #define FRAG_EXTRA_SHIFT        15
 /**< Bit shift for extra bits. */

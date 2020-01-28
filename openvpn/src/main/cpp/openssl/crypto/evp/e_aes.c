@@ -1127,11 +1127,11 @@ typedef struct {
 # define S390X_AES_FC(keylen)  (S390X_AES_128 + ((((keylen) << 3) - 128) >> 6))
 
 /* Most modes of operation need km for partial block processing. */
-# define S390X_aes_128_CAPABLE (OPENSSL_s390xcap_P.km[0] &	\
+# define S390X_aes_128_CAPABLE (OPENSSL_s390xFFp_P.km[0] &	\
                                 S390X_CAPBIT(S390X_AES_128))
-# define S390X_aes_192_CAPABLE (OPENSSL_s390xcap_P.km[0] &	\
+# define S390X_aes_192_CAPABLE (OPENSSL_s390xFFp_P.km[0] &	\
                                 S390X_CAPBIT(S390X_AES_192))
-# define S390X_aes_256_CAPABLE (OPENSSL_s390xcap_P.km[0] &	\
+# define S390X_aes_256_CAPABLE (OPENSSL_s390xFFp_P.km[0] &	\
                                 S390X_CAPBIT(S390X_AES_256))
 
 # define s390x_aes_init_key aes_init_key
@@ -1178,13 +1178,13 @@ static int s390x_aes_ecb_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
 }
 
 # define S390X_aes_128_ofb_CAPABLE (S390X_aes_128_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmo[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmo[0] &	\
                                      S390X_CAPBIT(S390X_AES_128)))
 # define S390X_aes_192_ofb_CAPABLE (S390X_aes_192_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmo[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmo[0] &	\
                                      S390X_CAPBIT(S390X_AES_192)))
 # define S390X_aes_256_ofb_CAPABLE (S390X_aes_256_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmo[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmo[0] &	\
                                      S390X_CAPBIT(S390X_AES_256)))
 
 static int s390x_aes_ofb_init_key(EVP_CIPHER_CTX *ctx,
@@ -1212,15 +1212,15 @@ static int s390x_aes_ofb_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
 
     while (n && len) {
         *out = *in ^ cctx->kmo.param.cv[n];
-        n = (n + 1) & 0xf;
+        n = (n + 1) & 0xFF;
         --len;
         ++in;
         ++out;
     }
 
-    rem = len & 0xf;
+    rem = len & 0xFF;
 
-    len &= ~(size_t)0xf;
+    len &= ~(size_t)0xFF;
     if (len) {
         s390x_kmo(in, len, out, cctx->fc, &cctx->kmo.param);
 
@@ -1243,13 +1243,13 @@ static int s390x_aes_ofb_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
 }
 
 # define S390X_aes_128_cfb_CAPABLE (S390X_aes_128_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmf[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmf[0] &	\
                                      S390X_CAPBIT(S390X_AES_128)))
 # define S390X_aes_192_cfb_CAPABLE (S390X_aes_192_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmf[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmf[0] &	\
                                      S390X_CAPBIT(S390X_AES_192)))
 # define S390X_aes_256_cfb_CAPABLE (S390X_aes_256_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmf[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmf[0] &	\
                                      S390X_CAPBIT(S390X_AES_256)))
 
 static int s390x_aes_cfb_init_key(EVP_CIPHER_CTX *ctx,
@@ -1286,15 +1286,15 @@ static int s390x_aes_cfb_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
         tmp = *in;
         *out = cctx->kmf.param.cv[n] ^ tmp;
         cctx->kmf.param.cv[n] = enc ? *out : tmp;
-        n = (n + 1) & 0xf;
+        n = (n + 1) & 0xFF;
         --len;
         ++in;
         ++out;
     }
 
-    rem = len & 0xf;
+    rem = len & 0xFF;
 
-    len &= ~(size_t)0xf;
+    len &= ~(size_t)0xFF;
     if (len) {
         s390x_kmf(in, len, out, cctx->fc, &cctx->kmf.param);
 
@@ -1318,11 +1318,11 @@ static int s390x_aes_cfb_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
     return 1;
 }
 
-# define S390X_aes_128_cfb8_CAPABLE (OPENSSL_s390xcap_P.kmf[0] &	\
+# define S390X_aes_128_cfb8_CAPABLE (OPENSSL_s390xFFp_P.kmf[0] &	\
                                      S390X_CAPBIT(S390X_AES_128))
-# define S390X_aes_192_cfb8_CAPABLE (OPENSSL_s390xcap_P.kmf[0] &	\
+# define S390X_aes_192_cfb8_CAPABLE (OPENSSL_s390xFFp_P.kmf[0] &	\
                                      S390X_CAPBIT(S390X_AES_192))
-# define S390X_aes_256_cfb8_CAPABLE (OPENSSL_s390xcap_P.kmf[0] &	\
+# define S390X_aes_256_cfb8_CAPABLE (OPENSSL_s390xFFp_P.kmf[0] &	\
                                      S390X_CAPBIT(S390X_AES_256))
 
 static int s390x_aes_cfb8_init_key(EVP_CIPHER_CTX *ctx,
@@ -1375,13 +1375,13 @@ static int s390x_aes_ctr_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
                                 const unsigned char *in, size_t len);
 
 # define S390X_aes_128_gcm_CAPABLE (S390X_aes_128_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kma[0] &	\
+                                    (OPENSSL_s390xFFp_P.kma[0] &	\
                                      S390X_CAPBIT(S390X_AES_128)))
 # define S390X_aes_192_gcm_CAPABLE (S390X_aes_192_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kma[0] &	\
+                                    (OPENSSL_s390xFFp_P.kma[0] &	\
                                      S390X_CAPBIT(S390X_AES_192)))
 # define S390X_aes_256_gcm_CAPABLE (S390X_aes_256_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kma[0] &	\
+                                    (OPENSSL_s390xFFp_P.kma[0] &	\
                                      S390X_CAPBIT(S390X_AES_256)))
 
 /* iv + padding length for iv lenghts != 12 */
@@ -1409,7 +1409,7 @@ static int s390x_aes_gcm_aad(S390X_AES_GCM_CTX *ctx, const unsigned char *aad,
     if (n) {
         while (n && len) {
             ctx->ares[n] = *aad;
-            n = (n + 1) & 0xf;
+            n = (n + 1) & 0xFF;
             ++aad;
             --len;
         }
@@ -1421,9 +1421,9 @@ static int s390x_aes_gcm_aad(S390X_AES_GCM_CTX *ctx, const unsigned char *aad,
         ctx->areslen = n;
     }
 
-    rem = len & 0xf;
+    rem = len & 0xFF;
 
-    len &= ~(size_t)0xf;
+    len &= ~(size_t)0xFF;
     if (len) {
         s390x_kma(aad, len, NULL, 0, NULL, ctx->fc, &ctx->kma.param);
         aad += len;
@@ -1468,7 +1468,7 @@ static int s390x_aes_gcm(S390X_AES_GCM_CTX *ctx, const unsigned char *in,
         inlen = len;
         while (n && inlen) {
             ctx->mres[n] = *inptr;
-            n = (n + 1) & 0xf;
+            n = (n + 1) & 0xFF;
             ++inptr;
             --inlen;
         }
@@ -1484,7 +1484,7 @@ static int s390x_aes_gcm(S390X_AES_GCM_CTX *ctx, const unsigned char *in,
             n = ctx->mreslen;
             while (n) {
                 *out = buf.b[n];
-                n = (n + 1) & 0xf;
+                n = (n + 1) & 0xFF;
                 ++out;
                 ++in;
                 --len;
@@ -1493,9 +1493,9 @@ static int s390x_aes_gcm(S390X_AES_GCM_CTX *ctx, const unsigned char *in,
         }
     }
 
-    rem = len & 0xf;
+    rem = len & 0xFF;
 
-    len &= ~(size_t)0xf;
+    len &= ~(size_t)0xFF;
     if (len) {
         s390x_kma(ctx->ares, ctx->areslen, in, len, out,
                   ctx->fc | S390X_KMA_LAAD, &ctx->kma.param);
@@ -1516,7 +1516,7 @@ static int s390x_aes_gcm(S390X_AES_GCM_CTX *ctx, const unsigned char *in,
             buf.w[1] = ctx->kma.param.j0.w[1];
             buf.w[2] = ctx->kma.param.j0.w[2];
             buf.w[3] = ctx->kma.param.cv.w + 1;
-            s390x_km(buf.b, 16, ctx->kres, ctx->fc & 0x1f, &ctx->kma.param.k);
+            s390x_km(buf.b, 16, ctx->kres, ctx->fc & 0xFF, &ctx->kma.param.k);
         }
 
         n = ctx->mreslen;
@@ -1707,7 +1707,7 @@ static int s390x_aes_gcm_ctrl(EVP_CIPHER_CTX *c, int type, int arg, void *ptr)
             len -= EVP_GCM_TLS_TAG_LEN;
         }
         buf[arg - 2] = len >> 8;
-        buf[arg - 1] = len & 0xff;
+        buf[arg - 1] = len & 0xFF;
         /* Extra padding: tag appended to record. */
         return EVP_GCM_TLS_TAG_LEN;
 
@@ -1910,16 +1910,16 @@ static int s390x_aes_xts_ctrl(EVP_CIPHER_CTX *, int type, int arg, void *ptr);
 # define s390x_aes_xts_cleanup aes_xts_cleanup
 
 # define S390X_aes_128_ccm_CAPABLE (S390X_aes_128_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmac[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmac[0] &	\
                                      S390X_CAPBIT(S390X_AES_128)))
 # define S390X_aes_192_ccm_CAPABLE (S390X_aes_192_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmac[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmac[0] &	\
                                      S390X_CAPBIT(S390X_AES_192)))
 # define S390X_aes_256_ccm_CAPABLE (S390X_aes_256_CAPABLE &&		\
-                                    (OPENSSL_s390xcap_P.kmac[0] &	\
+                                    (OPENSSL_s390xFFp_P.kmac[0] &	\
                                      S390X_CAPBIT(S390X_AES_256)))
 
-# define S390X_CCM_AAD_FLAG	0x40
+# define S390X_CCM_AAD_FLAG	0xFF
 
 /*-
  * Set nonce and length fields. Code is big-endian.
@@ -1955,11 +1955,11 @@ static void s390x_aes_ccm_aad(S390X_AES_CCM_CTX *ctx, const unsigned char *aad,
         i = 2;
     } else if (sizeof(alen) == 8
                && alen >= (size_t)1 << (32 % (sizeof(alen) * 8))) {
-        *(uint16_t *)ptr = 0xffff;
+        *(uint16_t *)ptr = 0xFF;
         *(uint64_t *)(ptr + 2) = alen;
         i = 10;
     } else {
-        *(uint16_t *)ptr = 0xfffe;
+        *(uint16_t *)ptr = 0xFF;
         *(uint32_t *)(ptr + 2) = alen;
         i = 6;
     }
@@ -1981,8 +1981,8 @@ static void s390x_aes_ccm_aad(S390X_AES_CCM_CTX *ctx, const unsigned char *aad,
                &ctx->aes.ccm.kmac_param);
     ctx->aes.ccm.blocks += 2;
 
-    rem = alen & 0xf;
-    alen &= ~(size_t)0xf;
+    rem = alen & 0xFF;
+    alen &= ~(size_t)0xFF;
     if (alen) {
         s390x_kmac(aad, alen, ctx->aes.ccm.fc, &ctx->aes.ccm.kmac_param);
         ctx->aes.ccm.blocks += alen >> 4;
@@ -2016,7 +2016,7 @@ static int s390x_aes_ccm(S390X_AES_CCM_CTX *ctx, const unsigned char *in,
                  ctx->aes.ccm.fc, ctx->aes.ccm.kmac_param.k);
         ctx->aes.ccm.blocks++;
     }
-    l = flags & 0x7;
+    l = flags & 0xFF;
     ctx->aes.ccm.nonce.b[0] = l;
 
     /*-
@@ -2043,8 +2043,8 @@ static int s390x_aes_ccm(S390X_AES_CCM_CTX *ctx, const unsigned char *in,
     }
 
     num = 0;
-    rem = len & 0xf;
-    len &= ~(size_t)0xf;
+    rem = len & 0xFF;
+    len &= ~(size_t)0xFF;
 
     if (enc) {
         /* mac-then-encrypt */
@@ -2166,8 +2166,8 @@ static int s390x_aes_ccm_init_key(EVP_CIPHER_CTX *ctx,
         memcpy(cctx->aes.ccm.kmac_param.k, key, keylen);
 
         /* Store encoded m and l. */
-        cctx->aes.ccm.nonce.b[0] = ((cctx->aes.ccm.l - 1) & 0x7)
-                                 | (((cctx->aes.ccm.m - 2) >> 1) & 0x7) << 3;
+        cctx->aes.ccm.nonce.b[0] = ((cctx->aes.ccm.l - 1) & 0xFF)
+                                 | (((cctx->aes.ccm.m - 2) >> 1) & 0xFF) << 3;
         memset(cctx->aes.ccm.nonce.b + 1, 0,
                sizeof(cctx->aes.ccm.nonce.b));
         cctx->aes.ccm.blocks = 0;
@@ -2324,7 +2324,7 @@ static int s390x_aes_ccm_ctrl(EVP_CIPHER_CTX *c, int type, int arg, void *ptr)
         }
 
         buf[arg - 2] = len >> 8;
-        buf[arg - 1] = len & 0xff;
+        buf[arg - 1] = len & 0xFF;
 
         /* Extra padding: tag appended to record. */
         return cctx->aes.ccm.m;
@@ -2914,7 +2914,7 @@ static int aes_gcm_ctrl(EVP_CIPHER_CTX *c, int type, int arg, void *ptr)
                 len -= EVP_GCM_TLS_TAG_LEN;
             }
             c->buf[arg - 2] = len >> 8;
-            c->buf[arg - 1] = len & 0xff;
+            c->buf[arg - 1] = len & 0xFF;
         }
         /* Extra padding: tag appended to record */
         return EVP_GCM_TLS_TAG_LEN;
@@ -3469,7 +3469,7 @@ static int aes_ccm_ctrl(EVP_CIPHER_CTX *c, int type, int arg, void *ptr)
                 len -= cctx->M;
             }
             EVP_CIPHER_CTX_buf_noconst(c)[arg - 2] = len >> 8;
-            EVP_CIPHER_CTX_buf_noconst(c)[arg - 1] = len & 0xff;
+            EVP_CIPHER_CTX_buf_noconst(c)[arg - 1] = len & 0xFF;
         }
         /* Extra padding: tag appended to record */
         return cctx->M;
@@ -3749,10 +3749,10 @@ static int aes_wrap_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
     if (!inlen)
         return -1;
     /* If decrypting need at least 16 bytes and multiple of 8 */
-    if (!EVP_CIPHER_CTX_encrypting(ctx) && (inlen < 16 || inlen & 0x7))
+    if (!EVP_CIPHER_CTX_encrypting(ctx) && (inlen < 16 || inlen & 0xFF))
         return -1;
     /* If not padding input must be multiple of 8 */
-    if (!pad && inlen & 0x7)
+    if (!pad && inlen & 0xFF)
         return -1;
     if (is_partially_overlapping(out, in, inlen)) {
         EVPerr(EVP_F_AES_WRAP_CIPHER, EVP_R_PARTIALLY_OVERLAPPING);

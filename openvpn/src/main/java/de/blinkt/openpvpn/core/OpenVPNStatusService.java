@@ -90,7 +90,7 @@ public class OpenVPNStatusService extends Service implements VpnStatus.LogListen
                                 fd.write(bytes);
                             }
                             // Mark end
-                            fd.writeShort(0x7fff);
+                            fd.writeShort(0xFF);
                             fd.close();
                         } catch (IOException e) {
                             e.printStackTrace();

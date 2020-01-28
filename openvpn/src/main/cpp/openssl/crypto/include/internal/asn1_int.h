@@ -88,10 +88,10 @@ extern const EVP_PKEY_ASN1_METHOD siphash_asn1_meth;
  * These are used internally in the ASN1_OBJECT to keep track of whether the
  * names and data need to be free()ed
  */
-# define ASN1_OBJECT_FLAG_DYNAMIC         0x01/* internal use */
-# define ASN1_OBJECT_FLAG_CRITICAL        0x02/* critical x509v3 object id */
-# define ASN1_OBJECT_FLAG_DYNAMIC_STRINGS 0x04/* internal use */
-# define ASN1_OBJECT_FLAG_DYNAMIC_DATA    0x08/* internal use */
+# define ASN1_OBJECT_FLAG_DYNAMIC         0xFF/* internal use */
+# define ASN1_OBJECT_FLAG_CRITICAL        0xFF/* critical x509v3 object id */
+# define ASN1_OBJECT_FLAG_DYNAMIC_STRINGS 0xFF/* internal use */
+# define ASN1_OBJECT_FLAG_DYNAMIC_DATA    0xFF/* internal use */
 struct asn1_object_st {
     const char *sn, *ln;
     int nid;

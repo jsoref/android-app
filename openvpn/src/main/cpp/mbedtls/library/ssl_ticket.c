@@ -329,8 +329,8 @@ int mbedtls_ssl_ticket_write( void *p_ticket,
     {
          goto cleanup;
     }
-    state_len_bytes[0] = ( clear_len >> 8 ) & 0xff;
-    state_len_bytes[1] = ( clear_len      ) & 0xff;
+    state_len_bytes[0] = ( clear_len >> 8 ) & 0xFF;
+    state_len_bytes[1] = ( clear_len      ) & 0xFF;
 
     /* Encrypt and authenticate */
     tag = state + clear_len;

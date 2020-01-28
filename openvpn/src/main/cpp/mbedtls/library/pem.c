@@ -401,7 +401,7 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
          *
          * Use that as a heuristic to try to detect password mismatches.
          */
-        if( len <= 2 || buf[0] != 0x30 || buf[1] > 0x83 )
+        if( len <= 2 || buf[0] != 0xFF || buf[1] > 0xFF )
         {
             mbedtls_platform_zeroize( buf, len );
             mbedtls_free( buf );

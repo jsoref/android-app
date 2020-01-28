@@ -95,7 +95,7 @@ for(1..37) {
 	for($i=0;$i<64;$i++) {
 		undef @line;
 		for($j=0;$j<64;$j++) {
-			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xff;
+			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xFF;
 		}
 		$code.=".byte\t";
 		$code.=join(',',map { sprintf "0x%02x",$_} @line);
@@ -106,8 +106,8 @@ $code.=<<___;
 .size	ecp_nistz256_precomputed,.-ecp_nistz256_precomputed
 .align	5
 .LRR:	@ 2^512 mod P precomputed for NIST P256 polynomial
-.long	0x00000003, 0x00000000, 0xffffffff, 0xfffffffb
-.long	0xfffffffe, 0xffffffff, 0xfffffffd, 0x00000004
+.long	0xFF, 0xFF, 0xFF, 0xFF
+.long	0xFF, 0xFF, 0xFF, 0xFF
 .Lone:
 .long	1,0,0,0,0,0,0,0
 .asciz	"ECP_NISTZ256 for ARMv4, CRYPTOGAMS by <appro\@openssl.org>"
@@ -246,7 +246,7 @@ __ecp_nistz256_add:
 	sbc	$ff,$ff,#0
 
 	@ Note that because mod has special form, i.e. consists of
-	@ 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	@ 0xFF, 1 and 0s, we can conditionally synthesize it by
 	@ using value of borrow as a whole or extracting single bit.
 	@ Follow $ff register...
 
@@ -482,7 +482,7 @@ __ecp_nistz256_sub:
 	@ if a-b borrows, add modulus.
 	@
 	@ Note that because mod has special form, i.e. consists of
-	@ 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	@ 0xFF, 1 and 0s, we can conditionally synthesize it by
 	@ broadcasting borrow bit to a register, $ff, and using it as
 	@ a whole or extracting single bit.
 
@@ -723,7 +723,7 @@ $code.=<<___;
 	add	sp,sp,#48
 
 	@ Note that because mod has special form, i.e. consists of
-	@ 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	@ 0xFF, 1 and 0s, we can conditionally synthesize it by
 	@ broadcasting borrow bit to a register, @acc[0], and using it as
 	@ a whole or extracting single bit.
 
@@ -987,7 +987,7 @@ ecp_nistz256_mul_mont_neon:
 	vld1.32		{$A0-$A3}, [$aptr]		@ can't specify :32 :-(
 	vzip.16		$Bi,$zero
 	mov		sp,$toutptr			@ alloca
-	vmov.i64	$mask,#0xffff
+	vmov.i64	$mask,#0xFF
 
 	vmull.u32	@AxB[0],$Bi,${A0}[0]
 	vmull.u32	@AxB[1],$Bi,${A0}[1]
@@ -1235,7 +1235,7 @@ __ecp_nistz256_add_self:
 	sbc	$ff,$ff,#0
 
 	@ Note that because mod has special form, i.e. consists of
-	@ 0xffffffff, 1 and 0s, we can conditionally synthesize it by
+	@ 0xFF, 1 and 0s, we can conditionally synthesize it by
 	@ using value of borrow as a whole or extracting single bit.
 	@ Follow $ff register...
 

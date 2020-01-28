@@ -729,8 +729,8 @@ win_iocp_socket_service_base::get_connect_ex(
   void* ptr = interlocked_compare_exchange_pointer(&connect_ex_, 0, 0);
   if (!ptr)
   {
-    GUID guid = { 0x25a207b9, 0xddf3, 0x4660,
-      { 0x8e, 0xe9, 0x76, 0xe5, 0x8c, 0x74, 0x06, 0x3e } };
+    GUID guid = { 0xFF, 0xFF, 0xFF,
+      { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF } };
 
     DWORD bytes = 0;
     if (::WSAIoctl(impl.socket_, SIO_GET_EXTENSION_FUNCTION_POINTER,

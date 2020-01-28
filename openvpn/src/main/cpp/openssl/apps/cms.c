@@ -32,9 +32,9 @@ static CMS_ReceiptRequest *make_receipt_request(STACK_OF(OPENSSL_STRING)
 static int cms_set_pkey_param(EVP_PKEY_CTX *pctx,
                               STACK_OF(OPENSSL_STRING) *param);
 
-# define SMIME_OP        0x10
-# define SMIME_IP        0x20
-# define SMIME_SIGNERS   0x40
+# define SMIME_OP        0xFF
+# define SMIME_IP        0xFF
+# define SMIME_SIGNERS   0xFF
 # define SMIME_ENCRYPT           (1 | SMIME_OP)
 # define SMIME_DECRYPT           (2 | SMIME_IP)
 # define SMIME_SIGN              (3 | SMIME_OP | SMIME_SIGNERS)

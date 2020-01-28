@@ -21,7 +21,7 @@
 # include <openssl/safestack.h>
 # include <openssl/ec.h>
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/rsa.h>
 #  include <openssl/dsa.h>
 #  include <openssl/dh.h>
@@ -37,24 +37,24 @@ extern "C" {
 
 /* Flags for X509_get_signature_info() */
 /* Signature info is valid */
-# define X509_SIG_INFO_VALID     0x1
+# define X509_SIG_INFO_VALID     0xFF
 /* Signature is suitable for TLS use */
-# define X509_SIG_INFO_TLS       0x2
+# define X509_SIG_INFO_TLS       0xFF
 
 # define X509_FILETYPE_PEM       1
 # define X509_FILETYPE_ASN1      2
 # define X509_FILETYPE_DEFAULT   3
 
-# define X509v3_KU_DIGITAL_SIGNATURE     0x0080
-# define X509v3_KU_NON_REPUDIATION       0x0040
-# define X509v3_KU_KEY_ENCIPHERMENT      0x0020
-# define X509v3_KU_DATA_ENCIPHERMENT     0x0010
-# define X509v3_KU_KEY_AGREEMENT         0x0008
-# define X509v3_KU_KEY_CERT_SIGN         0x0004
-# define X509v3_KU_CRL_SIGN              0x0002
-# define X509v3_KU_ENCIPHER_ONLY         0x0001
-# define X509v3_KU_DECIPHER_ONLY         0x8000
-# define X509v3_KU_UNDEF                 0xffff
+# define X509v3_KU_DIGITAL_SIGNATURE     0xFF
+# define X509v3_KU_NON_REPUDIATION       0xFF
+# define X509v3_KU_KEY_ENCIPHERMENT      0xFF
+# define X509v3_KU_DATA_ENCIPHERMENT     0xFF
+# define X509v3_KU_KEY_AGREEMENT         0xFF
+# define X509v3_KU_KEY_CERT_SIGN         0xFF
+# define X509v3_KU_CRL_SIGN              0xFF
+# define X509v3_KU_ENCIPHER_ONLY         0xFF
+# define X509v3_KU_DECIPHER_ONLY         0xFF
+# define X509v3_KU_UNDEF                 0xFF
 
 struct X509_algor_st {
     ASN1_OBJECT *algorithm;
@@ -76,8 +76,8 @@ DEFINE_STACK_OF(X509_NAME_ENTRY)
 
 DEFINE_STACK_OF(X509_NAME)
 
-# define X509_EX_V_NETSCAPE_HACK         0x8000
-# define X509_EX_V_INIT                  0x0001
+# define X509_EX_V_NETSCAPE_HACK         0xFF
+# define X509_EX_V_INIT                  0xFF
 typedef struct X509_extension_st X509_EXTENSION;
 
 typedef STACK_OF(X509_EXTENSION) X509_EXTENSIONS;
@@ -165,7 +165,7 @@ DEFINE_STACK_OF(X509_TRUST)
 
 /* The field separator information */
 
-# define XN_FLAG_SEP_MASK        (0xf << 16)
+# define XN_FLAG_SEP_MASK        (0xFF << 16)
 
 # define XN_FLAG_COMPAT          0/* Traditional; use old X509_NAME_print */
 # define XN_FLAG_SEP_COMMA_PLUS  (1 << 16)/* RFC2253 ,+ */
@@ -177,7 +177,7 @@ DEFINE_STACK_OF(X509_TRUST)
 
 /* How the field name is shown */
 
-# define XN_FLAG_FN_MASK         (0x3 << 21)
+# define XN_FLAG_FN_MASK         (0xFF << 21)
 
 # define XN_FLAG_FN_SN           0/* Object short name */
 # define XN_FLAG_FN_LN           (1 << 21)/* Object long name */
@@ -650,7 +650,7 @@ int X509_set_pubkey(X509 *x, EVP_PKEY *pkey);
 int X509_up_ref(X509 *x);
 int X509_get_signature_type(const X509 *x);
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define X509_get_notBefore X509_getm_notBefore
 #  define X509_get_notAfter X509_getm_notAfter
 #  define X509_set_notBefore X509_set1_notBefore
@@ -716,7 +716,7 @@ int X509_CRL_set1_nextUpdate(X509_CRL *x, const ASN1_TIME *tm);
 int X509_CRL_sort(X509_CRL *crl);
 int X509_CRL_up_ref(X509_CRL *crl);
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define X509_CRL_set_lastUpdate X509_CRL_set1_lastUpdate
 #  define X509_CRL_set_nextUpdate X509_CRL_set1_nextUpdate
 #endif

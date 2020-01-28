@@ -78,7 +78,7 @@ $code.=<<___;
 	llgc	$XX[0],0($key)
 	llgc	$YY,1($key)
 	la	$XX[0],1($XX[0])
-	nill	$XX[0],0xff
+	nill	$XX[0],0xFF
 	srlg	$cnt,$len,3
 	ltgr	$cnt,$cnt
 	llgc	$TX[0],2($XX[0],$key)

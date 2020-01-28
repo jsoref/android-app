@@ -64,7 +64,7 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
         goto err;
     }
 
-    MSBits = (BN_num_bits(rsa->n) - 1) & 0x7;
+    MSBits = (BN_num_bits(rsa->n) - 1) & 0xFF;
     emLen = RSA_size(rsa);
     if (EM[0] & (0xFF << MSBits)) {
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, RSA_R_FIRST_OCTET_INVALID);
@@ -84,7 +84,7 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, RSA_R_DATA_TOO_LARGE);
         goto err;
     }
-    if (EM[emLen - 1] != 0xbc) {
+    if (EM[emLen - 1] != 0xFF) {
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, RSA_R_LAST_OCTET_INVALID);
         goto err;
     }
@@ -102,7 +102,7 @@ int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
     if (MSBits)
         DB[0] &= 0xFF >> (8 - MSBits);
     for (i = 0; DB[i] == 0 && i < (maskedDBLen - 1); i++) ;
-    if (DB[i++] != 0x1) {
+    if (DB[i++] != 0xFF) {
         RSAerr(RSA_F_RSA_VERIFY_PKCS1_PSS_MGF1, RSA_R_SLEN_RECOVERY_FAILED);
         goto err;
     }
@@ -175,7 +175,7 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
         goto err;
     }
 
-    MSBits = (BN_num_bits(rsa->n) - 1) & 0x7;
+    MSBits = (BN_num_bits(rsa->n) - 1) & 0xFF;
     emLen = RSA_size(rsa);
     if (MSBits == 0) {
         *EM++ = 0;
@@ -228,7 +228,7 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
      * Note from a test above this value is guaranteed to be non-negative.
      */
     p += emLen - sLen - hLen - 2;
-    *p++ ^= 0x1;
+    *p++ ^= 0xFF;
     if (sLen > 0) {
         for (i = 0; i < sLen; i++)
             *p++ ^= salt[i];
@@ -236,9 +236,9 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
     if (MSBits)
         EM[0] &= 0xFF >> (8 - MSBits);
 
-    /* H is already in place so just set final 0xbc */
+    /* H is already in place so just set final 0xFF */
 
-    EM[emLen - 1] = 0xbc;
+    EM[emLen - 1] = 0xFF;
 
     ret = 1;
 

@@ -114,9 +114,9 @@ $code.=<<___;
 .Leight:
 .long	8,8,8,8,8,8,8,8
 .Lrot16:
-.byte	0x2,0x3,0x0,0x1, 0x6,0x7,0x4,0x5, 0xa,0xb,0x8,0x9, 0xe,0xf,0xc,0xd
+.byte	0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF
 .Lrot24:
-.byte	0x3,0x0,0x1,0x2, 0x7,0x4,0x5,0x6, 0xb,0x8,0x9,0xa, 0xf,0xc,0xd,0xe
+.byte	0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF, 0xFF,0xFF,0xFF,0xFF
 .Ltwoy:
 .long	2,0,0,0, 2,0,0,0
 .align	64
@@ -298,10 +298,10 @@ $code.=<<___;
 
 .align	32
 .Loop_outer:
-	mov	\$0x61707865,@x[0]      # 'expa'
-	mov	\$0x3320646e,@x[1]      # 'nd 3'
-	mov	\$0x79622d32,@x[2]      # '2-by'
-	mov	\$0x6b206574,@x[3]      # 'te k'
+	mov	\$0xFF,@x[0]      # 'expa'
+	mov	\$0xFF,@x[1]      # 'nd 3'
+	mov	\$0xFF,@x[2]      # '2-by'
+	mov	\$0xFF,@x[3]      # 'te k'
 	mov	4*4(%rsp),@x[4]
 	mov	4*5(%rsp),@x[5]
 	mov	4*6(%rsp),@x[6]
@@ -337,10 +337,10 @@ $code.=<<___;
 	paddd	%xmm4,%xmm3		# increment counter
 	mov	64+16(%rsp),$out	# load out
 
-	add	\$0x61707865,@x[0]      # 'expa'
-	add	\$0x3320646e,@x[1]      # 'nd 3'
-	add	\$0x79622d32,@x[2]      # '2-by'
-	add	\$0x6b206574,@x[3]      # 'te k'
+	add	\$0xFF,@x[0]      # 'expa'
+	add	\$0xFF,@x[1]      # 'nd 3'
+	add	\$0xFF,@x[2]      # '2-by'
+	add	\$0xFF,@x[3]      # 'te k'
 	add	4*4(%rsp),@x[4]
 	add	4*5(%rsp),@x[5]
 	add	4*6(%rsp),@x[6]
@@ -495,8 +495,8 @@ $code.=<<___;
 	sub	\$64+$xframe,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps	%xmm6,-0x28(%r9)
-	movaps	%xmm7,-0x18(%r9)
+	movaps	%xmm6,-0xFF(%r9)
+	movaps	%xmm7,-0xFF(%r9)
 .Lssse3_body:
 ___
 $code.=<<___;
@@ -507,22 +507,22 @@ $code.=<<___;
 	movdqa	.Lrot16(%rip),$rot16
 	movdqa	.Lrot24(%rip),$rot24
 
-	movdqa	$a,0x00(%rsp)
-	movdqa	$b,0x10(%rsp)
-	movdqa	$c,0x20(%rsp)
-	movdqa	$d,0x30(%rsp)
+	movdqa	$a,0xFF(%rsp)
+	movdqa	$b,0xFF(%rsp)
+	movdqa	$c,0xFF(%rsp)
+	movdqa	$d,0xFF(%rsp)
 	mov	\$10,$counter		# reuse $counter
 	jmp	.Loop_ssse3
 
 .align	32
 .Loop_outer_ssse3:
 	movdqa	.Lone(%rip),$d
-	movdqa	0x00(%rsp),$a
-	movdqa	0x10(%rsp),$b
-	movdqa	0x20(%rsp),$c
-	paddd	0x30(%rsp),$d
+	movdqa	0xFF(%rsp),$a
+	movdqa	0xFF(%rsp),$b
+	movdqa	0xFF(%rsp),$c
+	paddd	0xFF(%rsp),$d
 	mov	\$10,$counter
-	movdqa	$d,0x30(%rsp)
+	movdqa	$d,0xFF(%rsp)
 	jmp	.Loop_ssse3
 
 .align	32
@@ -543,29 +543,29 @@ ___
 	&jnz	(".Loop_ssse3");
 
 $code.=<<___;
-	paddd	0x00(%rsp),$a
-	paddd	0x10(%rsp),$b
-	paddd	0x20(%rsp),$c
-	paddd	0x30(%rsp),$d
+	paddd	0xFF(%rsp),$a
+	paddd	0xFF(%rsp),$b
+	paddd	0xFF(%rsp),$c
+	paddd	0xFF(%rsp),$d
 
 	cmp	\$64,$len
 	jb	.Ltail_ssse3
 
-	movdqu	0x00($inp),$t
-	movdqu	0x10($inp),$t1
+	movdqu	0xFF($inp),$t
+	movdqu	0xFF($inp),$t1
 	pxor	$t,$a			# xor with input
-	movdqu	0x20($inp),$t
+	movdqu	0xFF($inp),$t
 	pxor	$t1,$b
-	movdqu	0x30($inp),$t1
-	lea	0x40($inp),$inp		# inp+=64
+	movdqu	0xFF($inp),$t1
+	lea	0xFF($inp),$inp		# inp+=64
 	pxor	$t,$c
 	pxor	$t1,$d
 
-	movdqu	$a,0x00($out)		# write output
-	movdqu	$b,0x10($out)
-	movdqu	$c,0x20($out)
-	movdqu	$d,0x30($out)
-	lea	0x40($out),$out		# out+=64
+	movdqu	$a,0xFF($out)		# write output
+	movdqu	$b,0xFF($out)
+	movdqu	$c,0xFF($out)
+	movdqu	$d,0xFF($out)
+	lea	0xFF($out),$out		# out+=64
 
 	sub	\$64,$len
 	jnz	.Loop_outer_ssse3
@@ -574,10 +574,10 @@ $code.=<<___;
 
 .align	16
 .Ltail_ssse3:
-	movdqa	$a,0x00(%rsp)
-	movdqa	$b,0x10(%rsp)
-	movdqa	$c,0x20(%rsp)
-	movdqa	$d,0x30(%rsp)
+	movdqa	$a,0xFF(%rsp)
+	movdqa	$b,0xFF(%rsp)
+	movdqa	$c,0xFF(%rsp)
+	movdqa	$d,0xFF(%rsp)
 	xor	$counter,$counter
 
 .Loop_tail_ssse3:
@@ -592,8 +592,8 @@ $code.=<<___;
 .Ldone_ssse3:
 ___
 $code.=<<___	if ($win64);
-	movaps	-0x28(%r9),%xmm6
-	movaps	-0x18(%r9),%xmm7
+	movaps	-0xFF(%r9),%xmm6
+	movaps	-0xFF(%r9),%xmm7
 ___
 $code.=<<___;
 	lea	(%r9),%rsp
@@ -653,7 +653,7 @@ sub SSSE3ROUND_2x {
 	 &por	($b1,$t1);
 }
 
-my $xframe = $win64 ? 0x68 : 8;
+my $xframe = $win64 ? 0xFF : 8;
 
 $code.=<<___;
 .type	ChaCha20_128,\@function,5
@@ -666,12 +666,12 @@ ChaCha20_128:
 	sub	\$64+$xframe,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps	%xmm6,-0x68(%r9)
-	movaps	%xmm7,-0x58(%r9)
-	movaps	%xmm8,-0x48(%r9)
-	movaps	%xmm9,-0x38(%r9)
-	movaps	%xmm10,-0x28(%r9)
-	movaps	%xmm11,-0x18(%r9)
+	movaps	%xmm6,-0xFF(%r9)
+	movaps	%xmm7,-0xFF(%r9)
+	movaps	%xmm8,-0xFF(%r9)
+	movaps	%xmm9,-0xFF(%r9)
+	movaps	%xmm10,-0xFF(%r9)
+	movaps	%xmm11,-0xFF(%r9)
 .L128_body:
 ___
 $code.=<<___;
@@ -684,13 +684,13 @@ $code.=<<___;
 	movdqa	.Lrot24(%rip),$rot24
 
 	movdqa	$a,$a1
-	movdqa	$a,0x00(%rsp)
+	movdqa	$a,0xFF(%rsp)
 	movdqa	$b,$b1
-	movdqa	$b,0x10(%rsp)
+	movdqa	$b,0xFF(%rsp)
 	movdqa	$c,$c1
-	movdqa	$c,0x20(%rsp)
+	movdqa	$c,0xFF(%rsp)
 	paddd	$d,$d1
-	movdqa	$d,0x30(%rsp)
+	movdqa	$d,0xFF(%rsp)
 	mov	\$10,$counter		# reuse $counter
 	jmp	.Loop_128
 
@@ -717,49 +717,49 @@ ___
 	&jnz	(".Loop_128");
 
 $code.=<<___;
-	paddd	0x00(%rsp),$a
-	paddd	0x10(%rsp),$b
-	paddd	0x20(%rsp),$c
-	paddd	0x30(%rsp),$d
+	paddd	0xFF(%rsp),$a
+	paddd	0xFF(%rsp),$b
+	paddd	0xFF(%rsp),$c
+	paddd	0xFF(%rsp),$d
 	paddd	.Lone(%rip),$d1
-	paddd	0x00(%rsp),$a1
-	paddd	0x10(%rsp),$b1
-	paddd	0x20(%rsp),$c1
-	paddd	0x30(%rsp),$d1
+	paddd	0xFF(%rsp),$a1
+	paddd	0xFF(%rsp),$b1
+	paddd	0xFF(%rsp),$c1
+	paddd	0xFF(%rsp),$d1
 
-	movdqu	0x00($inp),$t
-	movdqu	0x10($inp),$t1
+	movdqu	0xFF($inp),$t
+	movdqu	0xFF($inp),$t1
 	pxor	$t,$a			# xor with input
-	movdqu	0x20($inp),$t
+	movdqu	0xFF($inp),$t
 	pxor	$t1,$b
-	movdqu	0x30($inp),$t1
+	movdqu	0xFF($inp),$t1
 	pxor	$t,$c
-	movdqu	0x40($inp),$t
+	movdqu	0xFF($inp),$t
 	pxor	$t1,$d
-	movdqu	0x50($inp),$t1
+	movdqu	0xFF($inp),$t1
 	pxor	$t,$a1
-	movdqu	0x60($inp),$t
+	movdqu	0xFF($inp),$t
 	pxor	$t1,$b1
-	movdqu	0x70($inp),$t1
+	movdqu	0xFF($inp),$t1
 	pxor	$t,$c1
 	pxor	$t1,$d1
 
-	movdqu	$a,0x00($out)		# write output
-	movdqu	$b,0x10($out)
-	movdqu	$c,0x20($out)
-	movdqu	$d,0x30($out)
-	movdqu	$a1,0x40($out)
-	movdqu	$b1,0x50($out)
-	movdqu	$c1,0x60($out)
-	movdqu	$d1,0x70($out)
+	movdqu	$a,0xFF($out)		# write output
+	movdqu	$b,0xFF($out)
+	movdqu	$c,0xFF($out)
+	movdqu	$d,0xFF($out)
+	movdqu	$a1,0xFF($out)
+	movdqu	$b1,0xFF($out)
+	movdqu	$c1,0xFF($out)
+	movdqu	$d1,0xFF($out)
 ___
 $code.=<<___	if ($win64);
-	movaps	-0x68(%r9),%xmm6
-	movaps	-0x58(%r9),%xmm7
-	movaps	-0x48(%r9),%xmm8
-	movaps	-0x38(%r9),%xmm9
-	movaps	-0x28(%r9),%xmm10
-	movaps	-0x18(%r9),%xmm11
+	movaps	-0xFF(%r9),%xmm6
+	movaps	-0xFF(%r9),%xmm7
+	movaps	-0xFF(%r9),%xmm8
+	movaps	-0xFF(%r9),%xmm9
+	movaps	-0xFF(%r9),%xmm10
+	movaps	-0xFF(%r9),%xmm11
 ___
 $code.=<<___;
 	lea	(%r9),%rsp
@@ -902,7 +902,7 @@ my @x=map("\"$_\"",@xx);
 	);
 }
 
-my $xframe = $win64 ? 0xa8 : 8;
+my $xframe = $win64 ? 0xFF : 8;
 
 $code.=<<___;
 .type	ChaCha20_4x,\@function,5
@@ -928,27 +928,27 @@ $code.=<<___;
 	je		.Ldo_sse3_after_all	# to detect Atom
 
 .Lproceed4x:
-	sub		\$0x140+$xframe,%rsp
+	sub		\$0xFF+$xframe,%rsp
 ___
 	################ stack layout
-	# +0x00		SIMD equivalent of @x[8-12]
+	# +0xFF		SIMD equivalent of @x[8-12]
 	# ...
-	# +0x40		constant copy of key[0-2] smashed by lanes
+	# +0xFF		constant copy of key[0-2] smashed by lanes
 	# ...
-	# +0x100	SIMD counters (with nonce smashed by lanes)
+	# +0xFF	SIMD counters (with nonce smashed by lanes)
 	# ...
-	# +0x140
+	# +0xFF
 $code.=<<___	if ($win64);
-	movaps		%xmm6,-0xa8(%r9)
-	movaps		%xmm7,-0x98(%r9)
-	movaps		%xmm8,-0x88(%r9)
-	movaps		%xmm9,-0x78(%r9)
-	movaps		%xmm10,-0x68(%r9)
-	movaps		%xmm11,-0x58(%r9)
-	movaps		%xmm12,-0x48(%r9)
-	movaps		%xmm13,-0x38(%r9)
-	movaps		%xmm14,-0x28(%r9)
-	movaps		%xmm15,-0x18(%r9)
+	movaps		%xmm6,-0xFF(%r9)
+	movaps		%xmm7,-0xFF(%r9)
+	movaps		%xmm8,-0xFF(%r9)
+	movaps		%xmm9,-0xFF(%r9)
+	movaps		%xmm10,-0xFF(%r9)
+	movaps		%xmm11,-0xFF(%r9)
+	movaps		%xmm12,-0xFF(%r9)
+	movaps		%xmm13,-0xFF(%r9)
+	movaps		%xmm14,-0xFF(%r9)
+	movaps		%xmm15,-0xFF(%r9)
 .L4x_body:
 ___
 $code.=<<___;
@@ -956,74 +956,74 @@ $code.=<<___;
 	movdqu		($key),$xb3		# key[1]
 	movdqu		16($key),$xt3		# key[2]
 	movdqu		($counter),$xd3		# key[3]
-	lea		0x100(%rsp),%rcx	# size optimization
+	lea		0xFF(%rsp),%rcx	# size optimization
 	lea		.Lrot16(%rip),%r10
 	lea		.Lrot24(%rip),%r11
 
-	pshufd		\$0x00,$xa3,$xa0	# smash key by lanes...
-	pshufd		\$0x55,$xa3,$xa1
-	movdqa		$xa0,0x40(%rsp)		# ... and offload
-	pshufd		\$0xaa,$xa3,$xa2
-	movdqa		$xa1,0x50(%rsp)
-	pshufd		\$0xff,$xa3,$xa3
-	movdqa		$xa2,0x60(%rsp)
-	movdqa		$xa3,0x70(%rsp)
+	pshufd		\$0xFF,$xa3,$xa0	# smash key by lanes...
+	pshufd		\$0xFF,$xa3,$xa1
+	movdqa		$xa0,0xFF(%rsp)		# ... and offload
+	pshufd		\$0xFF,$xa3,$xa2
+	movdqa		$xa1,0xFF(%rsp)
+	pshufd		\$0xFF,$xa3,$xa3
+	movdqa		$xa2,0xFF(%rsp)
+	movdqa		$xa3,0xFF(%rsp)
 
-	pshufd		\$0x00,$xb3,$xb0
-	pshufd		\$0x55,$xb3,$xb1
-	movdqa		$xb0,0x80-0x100(%rcx)
-	pshufd		\$0xaa,$xb3,$xb2
-	movdqa		$xb1,0x90-0x100(%rcx)
-	pshufd		\$0xff,$xb3,$xb3
-	movdqa		$xb2,0xa0-0x100(%rcx)
-	movdqa		$xb3,0xb0-0x100(%rcx)
+	pshufd		\$0xFF,$xb3,$xb0
+	pshufd		\$0xFF,$xb3,$xb1
+	movdqa		$xb0,0xFF-0xFF(%rcx)
+	pshufd		\$0xFF,$xb3,$xb2
+	movdqa		$xb1,0xFF-0xFF(%rcx)
+	pshufd		\$0xFF,$xb3,$xb3
+	movdqa		$xb2,0xFF-0xFF(%rcx)
+	movdqa		$xb3,0xFF-0xFF(%rcx)
 
-	pshufd		\$0x00,$xt3,$xt0	# "$xc0"
-	pshufd		\$0x55,$xt3,$xt1	# "$xc1"
-	movdqa		$xt0,0xc0-0x100(%rcx)
-	pshufd		\$0xaa,$xt3,$xt2	# "$xc2"
-	movdqa		$xt1,0xd0-0x100(%rcx)
-	pshufd		\$0xff,$xt3,$xt3	# "$xc3"
-	movdqa		$xt2,0xe0-0x100(%rcx)
-	movdqa		$xt3,0xf0-0x100(%rcx)
+	pshufd		\$0xFF,$xt3,$xt0	# "$xc0"
+	pshufd		\$0xFF,$xt3,$xt1	# "$xc1"
+	movdqa		$xt0,0xFF-0xFF(%rcx)
+	pshufd		\$0xFF,$xt3,$xt2	# "$xc2"
+	movdqa		$xt1,0xFF-0xFF(%rcx)
+	pshufd		\$0xFF,$xt3,$xt3	# "$xc3"
+	movdqa		$xt2,0xFF-0xFF(%rcx)
+	movdqa		$xt3,0xFF-0xFF(%rcx)
 
-	pshufd		\$0x00,$xd3,$xd0
-	pshufd		\$0x55,$xd3,$xd1
+	pshufd		\$0xFF,$xd3,$xd0
+	pshufd		\$0xFF,$xd3,$xd1
 	paddd		.Linc(%rip),$xd0	# don't save counters yet
-	pshufd		\$0xaa,$xd3,$xd2
-	movdqa		$xd1,0x110-0x100(%rcx)
-	pshufd		\$0xff,$xd3,$xd3
-	movdqa		$xd2,0x120-0x100(%rcx)
-	movdqa		$xd3,0x130-0x100(%rcx)
+	pshufd		\$0xFF,$xd3,$xd2
+	movdqa		$xd1,0xFF-0xFF(%rcx)
+	pshufd		\$0xFF,$xd3,$xd3
+	movdqa		$xd2,0xFF-0xFF(%rcx)
+	movdqa		$xd3,0xFF-0xFF(%rcx)
 
 	jmp		.Loop_enter4x
 
 .align	32
 .Loop_outer4x:
-	movdqa		0x40(%rsp),$xa0		# re-load smashed key
-	movdqa		0x50(%rsp),$xa1
-	movdqa		0x60(%rsp),$xa2
-	movdqa		0x70(%rsp),$xa3
-	movdqa		0x80-0x100(%rcx),$xb0
-	movdqa		0x90-0x100(%rcx),$xb1
-	movdqa		0xa0-0x100(%rcx),$xb2
-	movdqa		0xb0-0x100(%rcx),$xb3
-	movdqa		0xc0-0x100(%rcx),$xt0	# "$xc0"
-	movdqa		0xd0-0x100(%rcx),$xt1	# "$xc1"
-	movdqa		0xe0-0x100(%rcx),$xt2	# "$xc2"
-	movdqa		0xf0-0x100(%rcx),$xt3	# "$xc3"
-	movdqa		0x100-0x100(%rcx),$xd0
-	movdqa		0x110-0x100(%rcx),$xd1
-	movdqa		0x120-0x100(%rcx),$xd2
-	movdqa		0x130-0x100(%rcx),$xd3
+	movdqa		0xFF(%rsp),$xa0		# re-load smashed key
+	movdqa		0xFF(%rsp),$xa1
+	movdqa		0xFF(%rsp),$xa2
+	movdqa		0xFF(%rsp),$xa3
+	movdqa		0xFF-0xFF(%rcx),$xb0
+	movdqa		0xFF-0xFF(%rcx),$xb1
+	movdqa		0xFF-0xFF(%rcx),$xb2
+	movdqa		0xFF-0xFF(%rcx),$xb3
+	movdqa		0xFF-0xFF(%rcx),$xt0	# "$xc0"
+	movdqa		0xFF-0xFF(%rcx),$xt1	# "$xc1"
+	movdqa		0xFF-0xFF(%rcx),$xt2	# "$xc2"
+	movdqa		0xFF-0xFF(%rcx),$xt3	# "$xc3"
+	movdqa		0xFF-0xFF(%rcx),$xd0
+	movdqa		0xFF-0xFF(%rcx),$xd1
+	movdqa		0xFF-0xFF(%rcx),$xd2
+	movdqa		0xFF-0xFF(%rcx),$xd3
 	paddd		.Lfour(%rip),$xd0	# next SIMD counters
 
 .Loop_enter4x:
-	movdqa		$xt2,0x20(%rsp)		# SIMD equivalent of "@x[10]"
-	movdqa		$xt3,0x30(%rsp)		# SIMD equivalent of "@x[11]"
+	movdqa		$xt2,0xFF(%rsp)		# SIMD equivalent of "@x[10]"
+	movdqa		$xt3,0xFF(%rsp)		# SIMD equivalent of "@x[11]"
 	movdqa		(%r10),$xt3		# .Lrot16(%rip)
 	mov		\$10,%eax
-	movdqa		$xd0,0x100-0x100(%rcx)	# save SIMD counters
+	movdqa		$xd0,0xFF-0xFF(%rcx)	# save SIMD counters
 	jmp		.Loop4x
 
 .align	32
@@ -1035,10 +1035,10 @@ $code.=<<___;
 	dec		%eax
 	jnz		.Loop4x
 
-	paddd		0x40(%rsp),$xa0		# accumulate key material
-	paddd		0x50(%rsp),$xa1
-	paddd		0x60(%rsp),$xa2
-	paddd		0x70(%rsp),$xa3
+	paddd		0xFF(%rsp),$xa0		# accumulate key material
+	paddd		0xFF(%rsp),$xa1
+	paddd		0xFF(%rsp),$xa2
+	paddd		0xFF(%rsp),$xa3
 
 	movdqa		$xa0,$xt2		# "de-interlace" data
 	punpckldq	$xa1,$xa0
@@ -1055,15 +1055,15 @@ $code.=<<___;
 ___
 	($xa2,$xt2)=($xt2,$xa2);
 $code.=<<___;
-	paddd		0x80-0x100(%rcx),$xb0
-	paddd		0x90-0x100(%rcx),$xb1
-	paddd		0xa0-0x100(%rcx),$xb2
-	paddd		0xb0-0x100(%rcx),$xb3
+	paddd		0xFF-0xFF(%rcx),$xb0
+	paddd		0xFF-0xFF(%rcx),$xb1
+	paddd		0xFF-0xFF(%rcx),$xb2
+	paddd		0xFF-0xFF(%rcx),$xb3
 
-	movdqa		$xa0,0x00(%rsp)		# offload $xaN
-	movdqa		$xa1,0x10(%rsp)
-	movdqa		0x20(%rsp),$xa0		# "xc2"
-	movdqa		0x30(%rsp),$xa1		# "xc3"
+	movdqa		$xa0,0xFF(%rsp)		# offload $xaN
+	movdqa		$xa1,0xFF(%rsp)
+	movdqa		0xFF(%rsp),$xa0		# "xc2"
+	movdqa		0xFF(%rsp),$xa1		# "xc3"
 
 	movdqa		$xb0,$xt2
 	punpckldq	$xb1,$xb0
@@ -1081,13 +1081,13 @@ ___
 	($xb2,$xt2)=($xt2,$xb2);
 	my ($xc0,$xc1,$xc2,$xc3)=($xt0,$xt1,$xa0,$xa1);
 $code.=<<___;
-	paddd		0xc0-0x100(%rcx),$xc0
-	paddd		0xd0-0x100(%rcx),$xc1
-	paddd		0xe0-0x100(%rcx),$xc2
-	paddd		0xf0-0x100(%rcx),$xc3
+	paddd		0xFF-0xFF(%rcx),$xc0
+	paddd		0xFF-0xFF(%rcx),$xc1
+	paddd		0xFF-0xFF(%rcx),$xc2
+	paddd		0xFF-0xFF(%rcx),$xc3
 
-	movdqa		$xa2,0x20(%rsp)		# keep offloading $xaN
-	movdqa		$xa3,0x30(%rsp)
+	movdqa		$xa2,0xFF(%rsp)		# keep offloading $xaN
+	movdqa		$xa3,0xFF(%rsp)
 
 	movdqa		$xc0,$xt2
 	punpckldq	$xc1,$xc0
@@ -1105,10 +1105,10 @@ ___
 	($xc2,$xt2)=($xt2,$xc2);
 	($xt0,$xt1)=($xa2,$xa3);		# use $xaN as temporary
 $code.=<<___;
-	paddd		0x100-0x100(%rcx),$xd0
-	paddd		0x110-0x100(%rcx),$xd1
-	paddd		0x120-0x100(%rcx),$xd2
-	paddd		0x130-0x100(%rcx),$xd3
+	paddd		0xFF-0xFF(%rcx),$xd0
+	paddd		0xFF-0xFF(%rcx),$xd1
+	paddd		0xFF-0xFF(%rcx),$xd2
+	paddd		0xFF-0xFF(%rcx),$xd3
 
 	movdqa		$xd0,$xt2
 	punpckldq	$xd1,$xd0
@@ -1128,61 +1128,61 @@ $code.=<<___;
 	cmp		\$64*4,$len
 	jb		.Ltail4x
 
-	movdqu		0x00($inp),$xt0		# xor with input
-	movdqu		0x10($inp),$xt1
-	movdqu		0x20($inp),$xt2
-	movdqu		0x30($inp),$xt3
-	pxor		0x00(%rsp),$xt0		# $xaN is offloaded, remember?
+	movdqu		0xFF($inp),$xt0		# xor with input
+	movdqu		0xFF($inp),$xt1
+	movdqu		0xFF($inp),$xt2
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
 	pxor		$xb0,$xt1
 	pxor		$xc0,$xt2
 	pxor		$xd0,$xt3
 
-	 movdqu		$xt0,0x00($out)
-	movdqu		0x40($inp),$xt0
-	 movdqu		$xt1,0x10($out)
-	movdqu		0x50($inp),$xt1
-	 movdqu		$xt2,0x20($out)
-	movdqu		0x60($inp),$xt2
-	 movdqu		$xt3,0x30($out)
-	movdqu		0x70($inp),$xt3
-	lea		0x80($inp),$inp		# size optimization
-	pxor		0x10(%rsp),$xt0
+	 movdqu		$xt0,0xFF($out)
+	movdqu		0xFF($inp),$xt0
+	 movdqu		$xt1,0xFF($out)
+	movdqu		0xFF($inp),$xt1
+	 movdqu		$xt2,0xFF($out)
+	movdqu		0xFF($inp),$xt2
+	 movdqu		$xt3,0xFF($out)
+	movdqu		0xFF($inp),$xt3
+	lea		0xFF($inp),$inp		# size optimization
+	pxor		0xFF(%rsp),$xt0
 	pxor		$xb1,$xt1
 	pxor		$xc1,$xt2
 	pxor		$xd1,$xt3
 
-	 movdqu		$xt0,0x40($out)
-	movdqu		0x00($inp),$xt0
-	 movdqu		$xt1,0x50($out)
-	movdqu		0x10($inp),$xt1
-	 movdqu		$xt2,0x60($out)
-	movdqu		0x20($inp),$xt2
-	 movdqu		$xt3,0x70($out)
-	 lea		0x80($out),$out		# size optimization
-	movdqu		0x30($inp),$xt3
-	pxor		0x20(%rsp),$xt0
+	 movdqu		$xt0,0xFF($out)
+	movdqu		0xFF($inp),$xt0
+	 movdqu		$xt1,0xFF($out)
+	movdqu		0xFF($inp),$xt1
+	 movdqu		$xt2,0xFF($out)
+	movdqu		0xFF($inp),$xt2
+	 movdqu		$xt3,0xFF($out)
+	 lea		0xFF($out),$out		# size optimization
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0
 	pxor		$xb2,$xt1
 	pxor		$xc2,$xt2
 	pxor		$xd2,$xt3
 
-	 movdqu		$xt0,0x00($out)
-	movdqu		0x40($inp),$xt0
-	 movdqu		$xt1,0x10($out)
-	movdqu		0x50($inp),$xt1
-	 movdqu		$xt2,0x20($out)
-	movdqu		0x60($inp),$xt2
-	 movdqu		$xt3,0x30($out)
-	movdqu		0x70($inp),$xt3
-	lea		0x80($inp),$inp		# inp+=64*4
-	pxor		0x30(%rsp),$xt0
+	 movdqu		$xt0,0xFF($out)
+	movdqu		0xFF($inp),$xt0
+	 movdqu		$xt1,0xFF($out)
+	movdqu		0xFF($inp),$xt1
+	 movdqu		$xt2,0xFF($out)
+	movdqu		0xFF($inp),$xt2
+	 movdqu		$xt3,0xFF($out)
+	movdqu		0xFF($inp),$xt3
+	lea		0xFF($inp),$inp		# inp+=64*4
+	pxor		0xFF(%rsp),$xt0
 	pxor		$xb3,$xt1
 	pxor		$xc3,$xt2
 	pxor		$xd3,$xt3
-	movdqu		$xt0,0x40($out)
-	movdqu		$xt1,0x50($out)
-	movdqu		$xt2,0x60($out)
-	movdqu		$xt3,0x70($out)
-	lea		0x80($out),$out		# out+=64*4
+	movdqu		$xt0,0xFF($out)
+	movdqu		$xt1,0xFF($out)
+	movdqu		$xt2,0xFF($out)
+	movdqu		$xt3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64*4
 
 	sub		\$64*4,$len
 	jnz		.Loop_outer4x
@@ -1197,134 +1197,134 @@ $code.=<<___;
 	cmp		\$64,$len
 	jae		.L64_or_more4x
 
-	#movdqa		0x00(%rsp),$xt0		# $xaN is offloaded, remember?
+	#movdqa		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
 	xor		%r10,%r10
-	#movdqa		$xt0,0x00(%rsp)
-	movdqa		$xb0,0x10(%rsp)
-	movdqa		$xc0,0x20(%rsp)
-	movdqa		$xd0,0x30(%rsp)
+	#movdqa		$xt0,0xFF(%rsp)
+	movdqa		$xb0,0xFF(%rsp)
+	movdqa		$xc0,0xFF(%rsp)
+	movdqa		$xd0,0xFF(%rsp)
 	jmp		.Loop_tail4x
 
 .align	32
 .L64_or_more4x:
-	movdqu		0x00($inp),$xt0		# xor with input
-	movdqu		0x10($inp),$xt1
-	movdqu		0x20($inp),$xt2
-	movdqu		0x30($inp),$xt3
-	pxor		0x00(%rsp),$xt0		# $xaxN is offloaded, remember?
+	movdqu		0xFF($inp),$xt0		# xor with input
+	movdqu		0xFF($inp),$xt1
+	movdqu		0xFF($inp),$xt2
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0		# $xaxN is offloaded, remember?
 	pxor		$xb0,$xt1
 	pxor		$xc0,$xt2
 	pxor		$xd0,$xt3
-	movdqu		$xt0,0x00($out)
-	movdqu		$xt1,0x10($out)
-	movdqu		$xt2,0x20($out)
-	movdqu		$xt3,0x30($out)
+	movdqu		$xt0,0xFF($out)
+	movdqu		$xt1,0xFF($out)
+	movdqu		$xt2,0xFF($out)
+	movdqu		$xt3,0xFF($out)
 	je		.Ldone4x
 
-	movdqa		0x10(%rsp),$xt0		# $xaN is offloaded, remember?
-	lea		0x40($inp),$inp		# inp+=64*1
+	movdqa		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
+	lea		0xFF($inp),$inp		# inp+=64*1
 	xor		%r10,%r10
-	movdqa		$xt0,0x00(%rsp)
-	movdqa		$xb1,0x10(%rsp)
-	lea		0x40($out),$out		# out+=64*1
-	movdqa		$xc1,0x20(%rsp)
+	movdqa		$xt0,0xFF(%rsp)
+	movdqa		$xb1,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*1
+	movdqa		$xc1,0xFF(%rsp)
 	sub		\$64,$len		# len-=64*1
-	movdqa		$xd1,0x30(%rsp)
+	movdqa		$xd1,0xFF(%rsp)
 	jmp		.Loop_tail4x
 
 .align	32
 .L128_or_more4x:
-	movdqu		0x00($inp),$xt0		# xor with input
-	movdqu		0x10($inp),$xt1
-	movdqu		0x20($inp),$xt2
-	movdqu		0x30($inp),$xt3
-	pxor		0x00(%rsp),$xt0		# $xaN is offloaded, remember?
+	movdqu		0xFF($inp),$xt0		# xor with input
+	movdqu		0xFF($inp),$xt1
+	movdqu		0xFF($inp),$xt2
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
 	pxor		$xb0,$xt1
 	pxor		$xc0,$xt2
 	pxor		$xd0,$xt3
 
-	 movdqu		$xt0,0x00($out)
-	movdqu		0x40($inp),$xt0
-	 movdqu		$xt1,0x10($out)
-	movdqu		0x50($inp),$xt1
-	 movdqu		$xt2,0x20($out)
-	movdqu		0x60($inp),$xt2
-	 movdqu		$xt3,0x30($out)
-	movdqu		0x70($inp),$xt3
-	pxor		0x10(%rsp),$xt0
+	 movdqu		$xt0,0xFF($out)
+	movdqu		0xFF($inp),$xt0
+	 movdqu		$xt1,0xFF($out)
+	movdqu		0xFF($inp),$xt1
+	 movdqu		$xt2,0xFF($out)
+	movdqu		0xFF($inp),$xt2
+	 movdqu		$xt3,0xFF($out)
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0
 	pxor		$xb1,$xt1
 	pxor		$xc1,$xt2
 	pxor		$xd1,$xt3
-	movdqu		$xt0,0x40($out)
-	movdqu		$xt1,0x50($out)
-	movdqu		$xt2,0x60($out)
-	movdqu		$xt3,0x70($out)
+	movdqu		$xt0,0xFF($out)
+	movdqu		$xt1,0xFF($out)
+	movdqu		$xt2,0xFF($out)
+	movdqu		$xt3,0xFF($out)
 	je		.Ldone4x
 
-	movdqa		0x20(%rsp),$xt0		# $xaN is offloaded, remember?
-	lea		0x80($inp),$inp		# inp+=64*2
+	movdqa		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
+	lea		0xFF($inp),$inp		# inp+=64*2
 	xor		%r10,%r10
-	movdqa		$xt0,0x00(%rsp)
-	movdqa		$xb2,0x10(%rsp)
-	lea		0x80($out),$out		# out+=64*2
-	movdqa		$xc2,0x20(%rsp)
+	movdqa		$xt0,0xFF(%rsp)
+	movdqa		$xb2,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*2
+	movdqa		$xc2,0xFF(%rsp)
 	sub		\$128,$len		# len-=64*2
-	movdqa		$xd2,0x30(%rsp)
+	movdqa		$xd2,0xFF(%rsp)
 	jmp		.Loop_tail4x
 
 .align	32
 .L192_or_more4x:
-	movdqu		0x00($inp),$xt0		# xor with input
-	movdqu		0x10($inp),$xt1
-	movdqu		0x20($inp),$xt2
-	movdqu		0x30($inp),$xt3
-	pxor		0x00(%rsp),$xt0		# $xaN is offloaded, remember?
+	movdqu		0xFF($inp),$xt0		# xor with input
+	movdqu		0xFF($inp),$xt1
+	movdqu		0xFF($inp),$xt2
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
 	pxor		$xb0,$xt1
 	pxor		$xc0,$xt2
 	pxor		$xd0,$xt3
 
-	 movdqu		$xt0,0x00($out)
-	movdqu		0x40($inp),$xt0
-	 movdqu		$xt1,0x10($out)
-	movdqu		0x50($inp),$xt1
-	 movdqu		$xt2,0x20($out)
-	movdqu		0x60($inp),$xt2
-	 movdqu		$xt3,0x30($out)
-	movdqu		0x70($inp),$xt3
-	lea		0x80($inp),$inp		# size optimization
-	pxor		0x10(%rsp),$xt0
+	 movdqu		$xt0,0xFF($out)
+	movdqu		0xFF($inp),$xt0
+	 movdqu		$xt1,0xFF($out)
+	movdqu		0xFF($inp),$xt1
+	 movdqu		$xt2,0xFF($out)
+	movdqu		0xFF($inp),$xt2
+	 movdqu		$xt3,0xFF($out)
+	movdqu		0xFF($inp),$xt3
+	lea		0xFF($inp),$inp		# size optimization
+	pxor		0xFF(%rsp),$xt0
 	pxor		$xb1,$xt1
 	pxor		$xc1,$xt2
 	pxor		$xd1,$xt3
 
-	 movdqu		$xt0,0x40($out)
-	movdqu		0x00($inp),$xt0
-	 movdqu		$xt1,0x50($out)
-	movdqu		0x10($inp),$xt1
-	 movdqu		$xt2,0x60($out)
-	movdqu		0x20($inp),$xt2
-	 movdqu		$xt3,0x70($out)
-	 lea		0x80($out),$out		# size optimization
-	movdqu		0x30($inp),$xt3
-	pxor		0x20(%rsp),$xt0
+	 movdqu		$xt0,0xFF($out)
+	movdqu		0xFF($inp),$xt0
+	 movdqu		$xt1,0xFF($out)
+	movdqu		0xFF($inp),$xt1
+	 movdqu		$xt2,0xFF($out)
+	movdqu		0xFF($inp),$xt2
+	 movdqu		$xt3,0xFF($out)
+	 lea		0xFF($out),$out		# size optimization
+	movdqu		0xFF($inp),$xt3
+	pxor		0xFF(%rsp),$xt0
 	pxor		$xb2,$xt1
 	pxor		$xc2,$xt2
 	pxor		$xd2,$xt3
-	movdqu		$xt0,0x00($out)
-	movdqu		$xt1,0x10($out)
-	movdqu		$xt2,0x20($out)
-	movdqu		$xt3,0x30($out)
+	movdqu		$xt0,0xFF($out)
+	movdqu		$xt1,0xFF($out)
+	movdqu		$xt2,0xFF($out)
+	movdqu		$xt3,0xFF($out)
 	je		.Ldone4x
 
-	movdqa		0x30(%rsp),$xt0		# $xaN is offloaded, remember?
-	lea		0x40($inp),$inp		# inp+=64*3
+	movdqa		0xFF(%rsp),$xt0		# $xaN is offloaded, remember?
+	lea		0xFF($inp),$inp		# inp+=64*3
 	xor		%r10,%r10
-	movdqa		$xt0,0x00(%rsp)
-	movdqa		$xb3,0x10(%rsp)
-	lea		0x40($out),$out		# out+=64*3
-	movdqa		$xc3,0x20(%rsp)
+	movdqa		$xt0,0xFF(%rsp)
+	movdqa		$xb3,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*3
+	movdqa		$xc3,0xFF(%rsp)
 	sub		\$192,$len		# len-=64*3
-	movdqa		$xd3,0x30(%rsp)
+	movdqa		$xd3,0xFF(%rsp)
 
 .Loop_tail4x:
 	movzb		($inp,%r10),%eax
@@ -1338,16 +1338,16 @@ $code.=<<___;
 .Ldone4x:
 ___
 $code.=<<___	if ($win64);
-	movaps		-0xa8(%r9),%xmm6
-	movaps		-0x98(%r9),%xmm7
-	movaps		-0x88(%r9),%xmm8
-	movaps		-0x78(%r9),%xmm9
-	movaps		-0x68(%r9),%xmm10
-	movaps		-0x58(%r9),%xmm11
-	movaps		-0x48(%r9),%xmm12
-	movaps		-0x38(%r9),%xmm13
-	movaps		-0x28(%r9),%xmm14
-	movaps		-0x18(%r9),%xmm15
+	movaps		-0xFF(%r9),%xmm6
+	movaps		-0xFF(%r9),%xmm7
+	movaps		-0xFF(%r9),%xmm8
+	movaps		-0xFF(%r9),%xmm9
+	movaps		-0xFF(%r9),%xmm10
+	movaps		-0xFF(%r9),%xmm11
+	movaps		-0xFF(%r9),%xmm12
+	movaps		-0xFF(%r9),%xmm13
+	movaps		-0xFF(%r9),%xmm14
+	movaps		-0xFF(%r9),%xmm15
 ___
 $code.=<<___;
 	lea		(%r9),%rsp
@@ -1435,7 +1435,7 @@ my @x=map("\"$_\"",@xx);
 	);
 }
 
-my $xframe = $win64 ? 0xa8 : 8;
+my $xframe = $win64 ? 0xFF : 8;
 
 $code.=<<___;
 .type	ChaCha20_4xop,\@function,5
@@ -1445,27 +1445,27 @@ ChaCha20_4xop:
 .LChaCha20_4xop:
 	mov		%rsp,%r9		# frame pointer
 .cfi_def_cfa_register	%r9
-	sub		\$0x140+$xframe,%rsp
+	sub		\$0xFF+$xframe,%rsp
 ___
 	################ stack layout
-	# +0x00		SIMD equivalent of @x[8-12]
+	# +0xFF		SIMD equivalent of @x[8-12]
 	# ...
-	# +0x40		constant copy of key[0-2] smashed by lanes
+	# +0xFF		constant copy of key[0-2] smashed by lanes
 	# ...
-	# +0x100	SIMD counters (with nonce smashed by lanes)
+	# +0xFF	SIMD counters (with nonce smashed by lanes)
 	# ...
-	# +0x140
+	# +0xFF
 $code.=<<___	if ($win64);
-	movaps		%xmm6,-0xa8(%r9)
-	movaps		%xmm7,-0x98(%r9)
-	movaps		%xmm8,-0x88(%r9)
-	movaps		%xmm9,-0x78(%r9)
-	movaps		%xmm10,-0x68(%r9)
-	movaps		%xmm11,-0x58(%r9)
-	movaps		%xmm12,-0x48(%r9)
-	movaps		%xmm13,-0x38(%r9)
-	movaps		%xmm14,-0x28(%r9)
-	movaps		%xmm15,-0x18(%r9)
+	movaps		%xmm6,-0xFF(%r9)
+	movaps		%xmm7,-0xFF(%r9)
+	movaps		%xmm8,-0xFF(%r9)
+	movaps		%xmm9,-0xFF(%r9)
+	movaps		%xmm10,-0xFF(%r9)
+	movaps		%xmm11,-0xFF(%r9)
+	movaps		%xmm12,-0xFF(%r9)
+	movaps		%xmm13,-0xFF(%r9)
+	movaps		%xmm14,-0xFF(%r9)
+	movaps		%xmm15,-0xFF(%r9)
 .L4xop_body:
 ___
 $code.=<<___;
@@ -1475,69 +1475,69 @@ $code.=<<___;
 	vmovdqu		($key),$xb3		# key[1]
 	vmovdqu		16($key),$xt3		# key[2]
 	vmovdqu		($counter),$xd3		# key[3]
-	lea		0x100(%rsp),%rcx	# size optimization
+	lea		0xFF(%rsp),%rcx	# size optimization
 
-	vpshufd		\$0x00,$xa3,$xa0	# smash key by lanes...
-	vpshufd		\$0x55,$xa3,$xa1
-	vmovdqa		$xa0,0x40(%rsp)		# ... and offload
-	vpshufd		\$0xaa,$xa3,$xa2
-	vmovdqa		$xa1,0x50(%rsp)
-	vpshufd		\$0xff,$xa3,$xa3
-	vmovdqa		$xa2,0x60(%rsp)
-	vmovdqa		$xa3,0x70(%rsp)
+	vpshufd		\$0xFF,$xa3,$xa0	# smash key by lanes...
+	vpshufd		\$0xFF,$xa3,$xa1
+	vmovdqa		$xa0,0xFF(%rsp)		# ... and offload
+	vpshufd		\$0xFF,$xa3,$xa2
+	vmovdqa		$xa1,0xFF(%rsp)
+	vpshufd		\$0xFF,$xa3,$xa3
+	vmovdqa		$xa2,0xFF(%rsp)
+	vmovdqa		$xa3,0xFF(%rsp)
 
-	vpshufd		\$0x00,$xb3,$xb0
-	vpshufd		\$0x55,$xb3,$xb1
-	vmovdqa		$xb0,0x80-0x100(%rcx)
-	vpshufd		\$0xaa,$xb3,$xb2
-	vmovdqa		$xb1,0x90-0x100(%rcx)
-	vpshufd		\$0xff,$xb3,$xb3
-	vmovdqa		$xb2,0xa0-0x100(%rcx)
-	vmovdqa		$xb3,0xb0-0x100(%rcx)
+	vpshufd		\$0xFF,$xb3,$xb0
+	vpshufd		\$0xFF,$xb3,$xb1
+	vmovdqa		$xb0,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xb3,$xb2
+	vmovdqa		$xb1,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xb3,$xb3
+	vmovdqa		$xb2,0xFF-0xFF(%rcx)
+	vmovdqa		$xb3,0xFF-0xFF(%rcx)
 
-	vpshufd		\$0x00,$xt3,$xt0	# "$xc0"
-	vpshufd		\$0x55,$xt3,$xt1	# "$xc1"
-	vmovdqa		$xt0,0xc0-0x100(%rcx)
-	vpshufd		\$0xaa,$xt3,$xt2	# "$xc2"
-	vmovdqa		$xt1,0xd0-0x100(%rcx)
-	vpshufd		\$0xff,$xt3,$xt3	# "$xc3"
-	vmovdqa		$xt2,0xe0-0x100(%rcx)
-	vmovdqa		$xt3,0xf0-0x100(%rcx)
+	vpshufd		\$0xFF,$xt3,$xt0	# "$xc0"
+	vpshufd		\$0xFF,$xt3,$xt1	# "$xc1"
+	vmovdqa		$xt0,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xt3,$xt2	# "$xc2"
+	vmovdqa		$xt1,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xt3,$xt3	# "$xc3"
+	vmovdqa		$xt2,0xFF-0xFF(%rcx)
+	vmovdqa		$xt3,0xFF-0xFF(%rcx)
 
-	vpshufd		\$0x00,$xd3,$xd0
-	vpshufd		\$0x55,$xd3,$xd1
+	vpshufd		\$0xFF,$xd3,$xd0
+	vpshufd		\$0xFF,$xd3,$xd1
 	vpaddd		.Linc(%rip),$xd0,$xd0	# don't save counters yet
-	vpshufd		\$0xaa,$xd3,$xd2
-	vmovdqa		$xd1,0x110-0x100(%rcx)
-	vpshufd		\$0xff,$xd3,$xd3
-	vmovdqa		$xd2,0x120-0x100(%rcx)
-	vmovdqa		$xd3,0x130-0x100(%rcx)
+	vpshufd		\$0xFF,$xd3,$xd2
+	vmovdqa		$xd1,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xd3,$xd3
+	vmovdqa		$xd2,0xFF-0xFF(%rcx)
+	vmovdqa		$xd3,0xFF-0xFF(%rcx)
 
 	jmp		.Loop_enter4xop
 
 .align	32
 .Loop_outer4xop:
-	vmovdqa		0x40(%rsp),$xa0		# re-load smashed key
-	vmovdqa		0x50(%rsp),$xa1
-	vmovdqa		0x60(%rsp),$xa2
-	vmovdqa		0x70(%rsp),$xa3
-	vmovdqa		0x80-0x100(%rcx),$xb0
-	vmovdqa		0x90-0x100(%rcx),$xb1
-	vmovdqa		0xa0-0x100(%rcx),$xb2
-	vmovdqa		0xb0-0x100(%rcx),$xb3
-	vmovdqa		0xc0-0x100(%rcx),$xt0	# "$xc0"
-	vmovdqa		0xd0-0x100(%rcx),$xt1	# "$xc1"
-	vmovdqa		0xe0-0x100(%rcx),$xt2	# "$xc2"
-	vmovdqa		0xf0-0x100(%rcx),$xt3	# "$xc3"
-	vmovdqa		0x100-0x100(%rcx),$xd0
-	vmovdqa		0x110-0x100(%rcx),$xd1
-	vmovdqa		0x120-0x100(%rcx),$xd2
-	vmovdqa		0x130-0x100(%rcx),$xd3
+	vmovdqa		0xFF(%rsp),$xa0		# re-load smashed key
+	vmovdqa		0xFF(%rsp),$xa1
+	vmovdqa		0xFF(%rsp),$xa2
+	vmovdqa		0xFF(%rsp),$xa3
+	vmovdqa		0xFF-0xFF(%rcx),$xb0
+	vmovdqa		0xFF-0xFF(%rcx),$xb1
+	vmovdqa		0xFF-0xFF(%rcx),$xb2
+	vmovdqa		0xFF-0xFF(%rcx),$xb3
+	vmovdqa		0xFF-0xFF(%rcx),$xt0	# "$xc0"
+	vmovdqa		0xFF-0xFF(%rcx),$xt1	# "$xc1"
+	vmovdqa		0xFF-0xFF(%rcx),$xt2	# "$xc2"
+	vmovdqa		0xFF-0xFF(%rcx),$xt3	# "$xc3"
+	vmovdqa		0xFF-0xFF(%rcx),$xd0
+	vmovdqa		0xFF-0xFF(%rcx),$xd1
+	vmovdqa		0xFF-0xFF(%rcx),$xd2
+	vmovdqa		0xFF-0xFF(%rcx),$xd3
 	vpaddd		.Lfour(%rip),$xd0,$xd0	# next SIMD counters
 
 .Loop_enter4xop:
 	mov		\$10,%eax
-	vmovdqa		$xd0,0x100-0x100(%rcx)	# save SIMD counters
+	vmovdqa		$xd0,0xFF-0xFF(%rcx)	# save SIMD counters
 	jmp		.Loop4xop
 
 .align	32
@@ -1549,13 +1549,13 @@ $code.=<<___;
 	dec		%eax
 	jnz		.Loop4xop
 
-	vpaddd		0x40(%rsp),$xa0,$xa0	# accumulate key material
-	vpaddd		0x50(%rsp),$xa1,$xa1
-	vpaddd		0x60(%rsp),$xa2,$xa2
-	vpaddd		0x70(%rsp),$xa3,$xa3
+	vpaddd		0xFF(%rsp),$xa0,$xa0	# accumulate key material
+	vpaddd		0xFF(%rsp),$xa1,$xa1
+	vpaddd		0xFF(%rsp),$xa2,$xa2
+	vpaddd		0xFF(%rsp),$xa3,$xa3
 
-	vmovdqa		$xt2,0x20(%rsp)		# offload $xc2,3
-	vmovdqa		$xt3,0x30(%rsp)
+	vmovdqa		$xt2,0xFF(%rsp)		# offload $xc2,3
+	vmovdqa		$xt3,0xFF(%rsp)
 
 	vpunpckldq	$xa1,$xa0,$xt2		# "de-interlace" data
 	vpunpckldq	$xa3,$xa2,$xt3
@@ -1568,15 +1568,15 @@ $code.=<<___;
 ___
         ($xa0,$xa1,$xa2,$xa3,$xt2)=($xa1,$xt2,$xa3,$xa0,$xa2);
 $code.=<<___;
-	vpaddd		0x80-0x100(%rcx),$xb0,$xb0
-	vpaddd		0x90-0x100(%rcx),$xb1,$xb1
-	vpaddd		0xa0-0x100(%rcx),$xb2,$xb2
-	vpaddd		0xb0-0x100(%rcx),$xb3,$xb3
+	vpaddd		0xFF-0xFF(%rcx),$xb0,$xb0
+	vpaddd		0xFF-0xFF(%rcx),$xb1,$xb1
+	vpaddd		0xFF-0xFF(%rcx),$xb2,$xb2
+	vpaddd		0xFF-0xFF(%rcx),$xb3,$xb3
 
-	vmovdqa		$xa0,0x00(%rsp)		# offload $xa0,1
-	vmovdqa		$xa1,0x10(%rsp)
-	vmovdqa		0x20(%rsp),$xa0		# "xc2"
-	vmovdqa		0x30(%rsp),$xa1		# "xc3"
+	vmovdqa		$xa0,0xFF(%rsp)		# offload $xa0,1
+	vmovdqa		$xa1,0xFF(%rsp)
+	vmovdqa		0xFF(%rsp),$xa0		# "xc2"
+	vmovdqa		0xFF(%rsp),$xa1		# "xc3"
 
 	vpunpckldq	$xb1,$xb0,$xt2
 	vpunpckldq	$xb3,$xb2,$xt3
@@ -1590,10 +1590,10 @@ ___
 	($xb0,$xb1,$xb2,$xb3,$xt2)=($xb1,$xt2,$xb3,$xb0,$xb2);
 	my ($xc0,$xc1,$xc2,$xc3)=($xt0,$xt1,$xa0,$xa1);
 $code.=<<___;
-	vpaddd		0xc0-0x100(%rcx),$xc0,$xc0
-	vpaddd		0xd0-0x100(%rcx),$xc1,$xc1
-	vpaddd		0xe0-0x100(%rcx),$xc2,$xc2
-	vpaddd		0xf0-0x100(%rcx),$xc3,$xc3
+	vpaddd		0xFF-0xFF(%rcx),$xc0,$xc0
+	vpaddd		0xFF-0xFF(%rcx),$xc1,$xc1
+	vpaddd		0xFF-0xFF(%rcx),$xc2,$xc2
+	vpaddd		0xFF-0xFF(%rcx),$xc3,$xc3
 
 	vpunpckldq	$xc1,$xc0,$xt2
 	vpunpckldq	$xc3,$xc2,$xt3
@@ -1606,10 +1606,10 @@ $code.=<<___;
 ___
 	($xc0,$xc1,$xc2,$xc3,$xt2)=($xc1,$xt2,$xc3,$xc0,$xc2);
 $code.=<<___;
-	vpaddd		0x100-0x100(%rcx),$xd0,$xd0
-	vpaddd		0x110-0x100(%rcx),$xd1,$xd1
-	vpaddd		0x120-0x100(%rcx),$xd2,$xd2
-	vpaddd		0x130-0x100(%rcx),$xd3,$xd3
+	vpaddd		0xFF-0xFF(%rcx),$xd0,$xd0
+	vpaddd		0xFF-0xFF(%rcx),$xd1,$xd1
+	vpaddd		0xFF-0xFF(%rcx),$xd2,$xd2
+	vpaddd		0xFF-0xFF(%rcx),$xd3,$xd3
 
 	vpunpckldq	$xd1,$xd0,$xt2
 	vpunpckldq	$xd3,$xd2,$xt3
@@ -1623,49 +1623,49 @@ ___
 	($xd0,$xd1,$xd2,$xd3,$xt2)=($xd1,$xt2,$xd3,$xd0,$xd2);
 	($xa0,$xa1)=($xt2,$xt3);
 $code.=<<___;
-	vmovdqa		0x00(%rsp),$xa0		# restore $xa0,1
-	vmovdqa		0x10(%rsp),$xa1
+	vmovdqa		0xFF(%rsp),$xa0		# restore $xa0,1
+	vmovdqa		0xFF(%rsp),$xa1
 
 	cmp		\$64*4,$len
 	jb		.Ltail4xop
 
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x10($inp),$xb0,$xb0
-	vpxor		0x20($inp),$xc0,$xc0
-	vpxor		0x30($inp),$xd0,$xd0
-	vpxor		0x40($inp),$xa1,$xa1
-	vpxor		0x50($inp),$xb1,$xb1
-	vpxor		0x60($inp),$xc1,$xc1
-	vpxor		0x70($inp),$xd1,$xd1
-	lea		0x80($inp),$inp		# size optimization
-	vpxor		0x00($inp),$xa2,$xa2
-	vpxor		0x10($inp),$xb2,$xb2
-	vpxor		0x20($inp),$xc2,$xc2
-	vpxor		0x30($inp),$xd2,$xd2
-	vpxor		0x40($inp),$xa3,$xa3
-	vpxor		0x50($inp),$xb3,$xb3
-	vpxor		0x60($inp),$xc3,$xc3
-	vpxor		0x70($inp),$xd3,$xd3
-	lea		0x80($inp),$inp		# inp+=64*4
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	lea		0xFF($inp),$inp		# size optimization
+	vpxor		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
+	vpxor		0xFF($inp),$xa3,$xa3
+	vpxor		0xFF($inp),$xb3,$xb3
+	vpxor		0xFF($inp),$xc3,$xc3
+	vpxor		0xFF($inp),$xd3,$xd3
+	lea		0xFF($inp),$inp		# inp+=64*4
 
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x10($out)
-	vmovdqu		$xc0,0x20($out)
-	vmovdqu		$xd0,0x30($out)
-	vmovdqu		$xa1,0x40($out)
-	vmovdqu		$xb1,0x50($out)
-	vmovdqu		$xc1,0x60($out)
-	vmovdqu		$xd1,0x70($out)
-	lea		0x80($out),$out		# size optimization
-	vmovdqu		$xa2,0x00($out)
-	vmovdqu		$xb2,0x10($out)
-	vmovdqu		$xc2,0x20($out)
-	vmovdqu		$xd2,0x30($out)
-	vmovdqu		$xa3,0x40($out)
-	vmovdqu		$xb3,0x50($out)
-	vmovdqu		$xc3,0x60($out)
-	vmovdqu		$xd3,0x70($out)
-	lea		0x80($out),$out		# out+=64*4
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
+	lea		0xFF($out),$out		# size optimization
+	vmovdqu		$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
+	vmovdqu		$xc2,0xFF($out)
+	vmovdqu		$xd2,0xFF($out)
+	vmovdqu		$xa3,0xFF($out)
+	vmovdqu		$xb3,0xFF($out)
+	vmovdqu		$xc3,0xFF($out)
+	vmovdqu		$xd3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64*4
 
 	sub		\$64*4,$len
 	jnz		.Loop_outer4xop
@@ -1682,104 +1682,104 @@ $code.=<<___;
 	jae		.L64_or_more4xop
 
 	xor		%r10,%r10
-	vmovdqa		$xa0,0x00(%rsp)
-	vmovdqa		$xb0,0x10(%rsp)
-	vmovdqa		$xc0,0x20(%rsp)
-	vmovdqa		$xd0,0x30(%rsp)
+	vmovdqa		$xa0,0xFF(%rsp)
+	vmovdqa		$xb0,0xFF(%rsp)
+	vmovdqa		$xc0,0xFF(%rsp)
+	vmovdqa		$xd0,0xFF(%rsp)
 	jmp		.Loop_tail4xop
 
 .align	32
 .L64_or_more4xop:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x10($inp),$xb0,$xb0
-	vpxor		0x20($inp),$xc0,$xc0
-	vpxor		0x30($inp),$xd0,$xd0
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x10($out)
-	vmovdqu		$xc0,0x20($out)
-	vmovdqu		$xd0,0x30($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
 	je		.Ldone4xop
 
-	lea		0x40($inp),$inp		# inp+=64*1
-	vmovdqa		$xa1,0x00(%rsp)
+	lea		0xFF($inp),$inp		# inp+=64*1
+	vmovdqa		$xa1,0xFF(%rsp)
 	xor		%r10,%r10
-	vmovdqa		$xb1,0x10(%rsp)
-	lea		0x40($out),$out		# out+=64*1
-	vmovdqa		$xc1,0x20(%rsp)
+	vmovdqa		$xb1,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*1
+	vmovdqa		$xc1,0xFF(%rsp)
 	sub		\$64,$len		# len-=64*1
-	vmovdqa		$xd1,0x30(%rsp)
+	vmovdqa		$xd1,0xFF(%rsp)
 	jmp		.Loop_tail4xop
 
 .align	32
 .L128_or_more4xop:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x10($inp),$xb0,$xb0
-	vpxor		0x20($inp),$xc0,$xc0
-	vpxor		0x30($inp),$xd0,$xd0
-	vpxor		0x40($inp),$xa1,$xa1
-	vpxor		0x50($inp),$xb1,$xb1
-	vpxor		0x60($inp),$xc1,$xc1
-	vpxor		0x70($inp),$xd1,$xd1
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
 
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x10($out)
-	vmovdqu		$xc0,0x20($out)
-	vmovdqu		$xd0,0x30($out)
-	vmovdqu		$xa1,0x40($out)
-	vmovdqu		$xb1,0x50($out)
-	vmovdqu		$xc1,0x60($out)
-	vmovdqu		$xd1,0x70($out)
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
 	je		.Ldone4xop
 
-	lea		0x80($inp),$inp		# inp+=64*2
-	vmovdqa		$xa2,0x00(%rsp)
+	lea		0xFF($inp),$inp		# inp+=64*2
+	vmovdqa		$xa2,0xFF(%rsp)
 	xor		%r10,%r10
-	vmovdqa		$xb2,0x10(%rsp)
-	lea		0x80($out),$out		# out+=64*2
-	vmovdqa		$xc2,0x20(%rsp)
+	vmovdqa		$xb2,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*2
+	vmovdqa		$xc2,0xFF(%rsp)
 	sub		\$128,$len		# len-=64*2
-	vmovdqa		$xd2,0x30(%rsp)
+	vmovdqa		$xd2,0xFF(%rsp)
 	jmp		.Loop_tail4xop
 
 .align	32
 .L192_or_more4xop:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x10($inp),$xb0,$xb0
-	vpxor		0x20($inp),$xc0,$xc0
-	vpxor		0x30($inp),$xd0,$xd0
-	vpxor		0x40($inp),$xa1,$xa1
-	vpxor		0x50($inp),$xb1,$xb1
-	vpxor		0x60($inp),$xc1,$xc1
-	vpxor		0x70($inp),$xd1,$xd1
-	lea		0x80($inp),$inp		# size optimization
-	vpxor		0x00($inp),$xa2,$xa2
-	vpxor		0x10($inp),$xb2,$xb2
-	vpxor		0x20($inp),$xc2,$xc2
-	vpxor		0x30($inp),$xd2,$xd2
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	lea		0xFF($inp),$inp		# size optimization
+	vpxor		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
 
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x10($out)
-	vmovdqu		$xc0,0x20($out)
-	vmovdqu		$xd0,0x30($out)
-	vmovdqu		$xa1,0x40($out)
-	vmovdqu		$xb1,0x50($out)
-	vmovdqu		$xc1,0x60($out)
-	vmovdqu		$xd1,0x70($out)
-	lea		0x80($out),$out		# size optimization
-	vmovdqu		$xa2,0x00($out)
-	vmovdqu		$xb2,0x10($out)
-	vmovdqu		$xc2,0x20($out)
-	vmovdqu		$xd2,0x30($out)
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
+	lea		0xFF($out),$out		# size optimization
+	vmovdqu		$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
+	vmovdqu		$xc2,0xFF($out)
+	vmovdqu		$xd2,0xFF($out)
 	je		.Ldone4xop
 
-	lea		0x40($inp),$inp		# inp+=64*3
-	vmovdqa		$xa3,0x00(%rsp)
+	lea		0xFF($inp),$inp		# inp+=64*3
+	vmovdqa		$xa3,0xFF(%rsp)
 	xor		%r10,%r10
-	vmovdqa		$xb3,0x10(%rsp)
-	lea		0x40($out),$out		# out+=64*3
-	vmovdqa		$xc3,0x20(%rsp)
+	vmovdqa		$xb3,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*3
+	vmovdqa		$xc3,0xFF(%rsp)
 	sub		\$192,$len		# len-=64*3
-	vmovdqa		$xd3,0x30(%rsp)
+	vmovdqa		$xd3,0xFF(%rsp)
 
 .Loop_tail4xop:
 	movzb		($inp,%r10),%eax
@@ -1794,16 +1794,16 @@ $code.=<<___;
 	vzeroupper
 ___
 $code.=<<___	if ($win64);
-	movaps		-0xa8(%r9),%xmm6
-	movaps		-0x98(%r9),%xmm7
-	movaps		-0x88(%r9),%xmm8
-	movaps		-0x78(%r9),%xmm9
-	movaps		-0x68(%r9),%xmm10
-	movaps		-0x58(%r9),%xmm11
-	movaps		-0x48(%r9),%xmm12
-	movaps		-0x38(%r9),%xmm13
-	movaps		-0x28(%r9),%xmm14
-	movaps		-0x18(%r9),%xmm15
+	movaps		-0xFF(%r9),%xmm6
+	movaps		-0xFF(%r9),%xmm7
+	movaps		-0xFF(%r9),%xmm8
+	movaps		-0xFF(%r9),%xmm9
+	movaps		-0xFF(%r9),%xmm10
+	movaps		-0xFF(%r9),%xmm11
+	movaps		-0xFF(%r9),%xmm12
+	movaps		-0xFF(%r9),%xmm13
+	movaps		-0xFF(%r9),%xmm14
+	movaps		-0xFF(%r9),%xmm15
 ___
 $code.=<<___;
 	lea		(%r9),%rsp
@@ -1937,7 +1937,7 @@ my @x=map("\"$_\"",@xx);
 	);
 }
 
-my $xframe = $win64 ? 0xa8 : 8;
+my $xframe = $win64 ? 0xFF : 8;
 
 $code.=<<___;
 .type	ChaCha20_8x,\@function,5
@@ -1947,106 +1947,106 @@ ChaCha20_8x:
 .LChaCha20_8x:
 	mov		%rsp,%r9		# frame register
 .cfi_def_cfa_register	%r9
-	sub		\$0x280+$xframe,%rsp
+	sub		\$0xFF+$xframe,%rsp
 	and		\$-32,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps		%xmm6,-0xa8(%r9)
-	movaps		%xmm7,-0x98(%r9)
-	movaps		%xmm8,-0x88(%r9)
-	movaps		%xmm9,-0x78(%r9)
-	movaps		%xmm10,-0x68(%r9)
-	movaps		%xmm11,-0x58(%r9)
-	movaps		%xmm12,-0x48(%r9)
-	movaps		%xmm13,-0x38(%r9)
-	movaps		%xmm14,-0x28(%r9)
-	movaps		%xmm15,-0x18(%r9)
+	movaps		%xmm6,-0xFF(%r9)
+	movaps		%xmm7,-0xFF(%r9)
+	movaps		%xmm8,-0xFF(%r9)
+	movaps		%xmm9,-0xFF(%r9)
+	movaps		%xmm10,-0xFF(%r9)
+	movaps		%xmm11,-0xFF(%r9)
+	movaps		%xmm12,-0xFF(%r9)
+	movaps		%xmm13,-0xFF(%r9)
+	movaps		%xmm14,-0xFF(%r9)
+	movaps		%xmm15,-0xFF(%r9)
 .L8x_body:
 ___
 $code.=<<___;
 	vzeroupper
 
 	################ stack layout
-	# +0x00		SIMD equivalent of @x[8-12]
+	# +0xFF		SIMD equivalent of @x[8-12]
 	# ...
-	# +0x80		constant copy of key[0-2] smashed by lanes
+	# +0xFF		constant copy of key[0-2] smashed by lanes
 	# ...
-	# +0x200	SIMD counters (with nonce smashed by lanes)
+	# +0xFF	SIMD counters (with nonce smashed by lanes)
 	# ...
-	# +0x280
+	# +0xFF
 
 	vbroadcasti128	.Lsigma(%rip),$xa3	# key[0]
 	vbroadcasti128	($key),$xb3		# key[1]
 	vbroadcasti128	16($key),$xt3		# key[2]
 	vbroadcasti128	($counter),$xd3		# key[3]
-	lea		0x100(%rsp),%rcx	# size optimization
-	lea		0x200(%rsp),%rax	# size optimization
+	lea		0xFF(%rsp),%rcx	# size optimization
+	lea		0xFF(%rsp),%rax	# size optimization
 	lea		.Lrot16(%rip),%r10
 	lea		.Lrot24(%rip),%r11
 
-	vpshufd		\$0x00,$xa3,$xa0	# smash key by lanes...
-	vpshufd		\$0x55,$xa3,$xa1
-	vmovdqa		$xa0,0x80-0x100(%rcx)	# ... and offload
-	vpshufd		\$0xaa,$xa3,$xa2
-	vmovdqa		$xa1,0xa0-0x100(%rcx)
-	vpshufd		\$0xff,$xa3,$xa3
-	vmovdqa		$xa2,0xc0-0x100(%rcx)
-	vmovdqa		$xa3,0xe0-0x100(%rcx)
+	vpshufd		\$0xFF,$xa3,$xa0	# smash key by lanes...
+	vpshufd		\$0xFF,$xa3,$xa1
+	vmovdqa		$xa0,0xFF-0xFF(%rcx)	# ... and offload
+	vpshufd		\$0xFF,$xa3,$xa2
+	vmovdqa		$xa1,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xa3,$xa3
+	vmovdqa		$xa2,0xFF-0xFF(%rcx)
+	vmovdqa		$xa3,0xFF-0xFF(%rcx)
 
-	vpshufd		\$0x00,$xb3,$xb0
-	vpshufd		\$0x55,$xb3,$xb1
-	vmovdqa		$xb0,0x100-0x100(%rcx)
-	vpshufd		\$0xaa,$xb3,$xb2
-	vmovdqa		$xb1,0x120-0x100(%rcx)
-	vpshufd		\$0xff,$xb3,$xb3
-	vmovdqa		$xb2,0x140-0x100(%rcx)
-	vmovdqa		$xb3,0x160-0x100(%rcx)
+	vpshufd		\$0xFF,$xb3,$xb0
+	vpshufd		\$0xFF,$xb3,$xb1
+	vmovdqa		$xb0,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xb3,$xb2
+	vmovdqa		$xb1,0xFF-0xFF(%rcx)
+	vpshufd		\$0xFF,$xb3,$xb3
+	vmovdqa		$xb2,0xFF-0xFF(%rcx)
+	vmovdqa		$xb3,0xFF-0xFF(%rcx)
 
-	vpshufd		\$0x00,$xt3,$xt0	# "xc0"
-	vpshufd		\$0x55,$xt3,$xt1	# "xc1"
-	vmovdqa		$xt0,0x180-0x200(%rax)
-	vpshufd		\$0xaa,$xt3,$xt2	# "xc2"
-	vmovdqa		$xt1,0x1a0-0x200(%rax)
-	vpshufd		\$0xff,$xt3,$xt3	# "xc3"
-	vmovdqa		$xt2,0x1c0-0x200(%rax)
-	vmovdqa		$xt3,0x1e0-0x200(%rax)
+	vpshufd		\$0xFF,$xt3,$xt0	# "xc0"
+	vpshufd		\$0xFF,$xt3,$xt1	# "xc1"
+	vmovdqa		$xt0,0xFF-0xFF(%rax)
+	vpshufd		\$0xFF,$xt3,$xt2	# "xc2"
+	vmovdqa		$xt1,0xFF-0xFF(%rax)
+	vpshufd		\$0xFF,$xt3,$xt3	# "xc3"
+	vmovdqa		$xt2,0xFF-0xFF(%rax)
+	vmovdqa		$xt3,0xFF-0xFF(%rax)
 
-	vpshufd		\$0x00,$xd3,$xd0
-	vpshufd		\$0x55,$xd3,$xd1
+	vpshufd		\$0xFF,$xd3,$xd0
+	vpshufd		\$0xFF,$xd3,$xd1
 	vpaddd		.Lincy(%rip),$xd0,$xd0	# don't save counters yet
-	vpshufd		\$0xaa,$xd3,$xd2
-	vmovdqa		$xd1,0x220-0x200(%rax)
-	vpshufd		\$0xff,$xd3,$xd3
-	vmovdqa		$xd2,0x240-0x200(%rax)
-	vmovdqa		$xd3,0x260-0x200(%rax)
+	vpshufd		\$0xFF,$xd3,$xd2
+	vmovdqa		$xd1,0xFF-0xFF(%rax)
+	vpshufd		\$0xFF,$xd3,$xd3
+	vmovdqa		$xd2,0xFF-0xFF(%rax)
+	vmovdqa		$xd3,0xFF-0xFF(%rax)
 
 	jmp		.Loop_enter8x
 
 .align	32
 .Loop_outer8x:
-	vmovdqa		0x80-0x100(%rcx),$xa0	# re-load smashed key
-	vmovdqa		0xa0-0x100(%rcx),$xa1
-	vmovdqa		0xc0-0x100(%rcx),$xa2
-	vmovdqa		0xe0-0x100(%rcx),$xa3
-	vmovdqa		0x100-0x100(%rcx),$xb0
-	vmovdqa		0x120-0x100(%rcx),$xb1
-	vmovdqa		0x140-0x100(%rcx),$xb2
-	vmovdqa		0x160-0x100(%rcx),$xb3
-	vmovdqa		0x180-0x200(%rax),$xt0	# "xc0"
-	vmovdqa		0x1a0-0x200(%rax),$xt1	# "xc1"
-	vmovdqa		0x1c0-0x200(%rax),$xt2	# "xc2"
-	vmovdqa		0x1e0-0x200(%rax),$xt3	# "xc3"
-	vmovdqa		0x200-0x200(%rax),$xd0
-	vmovdqa		0x220-0x200(%rax),$xd1
-	vmovdqa		0x240-0x200(%rax),$xd2
-	vmovdqa		0x260-0x200(%rax),$xd3
+	vmovdqa		0xFF-0xFF(%rcx),$xa0	# re-load smashed key
+	vmovdqa		0xFF-0xFF(%rcx),$xa1
+	vmovdqa		0xFF-0xFF(%rcx),$xa2
+	vmovdqa		0xFF-0xFF(%rcx),$xa3
+	vmovdqa		0xFF-0xFF(%rcx),$xb0
+	vmovdqa		0xFF-0xFF(%rcx),$xb1
+	vmovdqa		0xFF-0xFF(%rcx),$xb2
+	vmovdqa		0xFF-0xFF(%rcx),$xb3
+	vmovdqa		0xFF-0xFF(%rax),$xt0	# "xc0"
+	vmovdqa		0xFF-0xFF(%rax),$xt1	# "xc1"
+	vmovdqa		0xFF-0xFF(%rax),$xt2	# "xc2"
+	vmovdqa		0xFF-0xFF(%rax),$xt3	# "xc3"
+	vmovdqa		0xFF-0xFF(%rax),$xd0
+	vmovdqa		0xFF-0xFF(%rax),$xd1
+	vmovdqa		0xFF-0xFF(%rax),$xd2
+	vmovdqa		0xFF-0xFF(%rax),$xd3
 	vpaddd		.Leight(%rip),$xd0,$xd0	# next SIMD counters
 
 .Loop_enter8x:
-	vmovdqa		$xt2,0x40(%rsp)		# SIMD equivalent of "@x[10]"
-	vmovdqa		$xt3,0x60(%rsp)		# SIMD equivalent of "@x[11]"
+	vmovdqa		$xt2,0xFF(%rsp)		# SIMD equivalent of "@x[10]"
+	vmovdqa		$xt3,0xFF(%rsp)		# SIMD equivalent of "@x[11]"
 	vbroadcasti128	(%r10),$xt3
-	vmovdqa		$xd0,0x200-0x200(%rax)	# save SIMD counters
+	vmovdqa		$xd0,0xFF-0xFF(%rax)	# save SIMD counters
 	mov		\$10,%eax
 	jmp		.Loop8x
 
@@ -2059,11 +2059,11 @@ $code.=<<___;
 	dec		%eax
 	jnz		.Loop8x
 
-	lea		0x200(%rsp),%rax	# size optimization
-	vpaddd		0x80-0x100(%rcx),$xa0,$xa0	# accumulate key
-	vpaddd		0xa0-0x100(%rcx),$xa1,$xa1
-	vpaddd		0xc0-0x100(%rcx),$xa2,$xa2
-	vpaddd		0xe0-0x100(%rcx),$xa3,$xa3
+	lea		0xFF(%rsp),%rax	# size optimization
+	vpaddd		0xFF-0xFF(%rcx),$xa0,$xa0	# accumulate key
+	vpaddd		0xFF-0xFF(%rcx),$xa1,$xa1
+	vpaddd		0xFF-0xFF(%rcx),$xa2,$xa2
+	vpaddd		0xFF-0xFF(%rcx),$xa3,$xa3
 
 	vpunpckldq	$xa1,$xa0,$xt2		# "de-interlace" data
 	vpunpckldq	$xa3,$xa2,$xt3
@@ -2076,10 +2076,10 @@ $code.=<<___;
 ___
 	($xa0,$xa1,$xa2,$xa3,$xt2)=($xa1,$xt2,$xa3,$xa0,$xa2);
 $code.=<<___;
-	vpaddd		0x100-0x100(%rcx),$xb0,$xb0
-	vpaddd		0x120-0x100(%rcx),$xb1,$xb1
-	vpaddd		0x140-0x100(%rcx),$xb2,$xb2
-	vpaddd		0x160-0x100(%rcx),$xb3,$xb3
+	vpaddd		0xFF-0xFF(%rcx),$xb0,$xb0
+	vpaddd		0xFF-0xFF(%rcx),$xb1,$xb1
+	vpaddd		0xFF-0xFF(%rcx),$xb2,$xb2
+	vpaddd		0xFF-0xFF(%rcx),$xb3,$xb3
 
 	vpunpckldq	$xb1,$xb0,$xt2
 	vpunpckldq	$xb3,$xb2,$xt3
@@ -2092,27 +2092,27 @@ $code.=<<___;
 ___
 	($xb0,$xb1,$xb2,$xb3,$xt2)=($xb1,$xt2,$xb3,$xb0,$xb2);
 $code.=<<___;
-	vperm2i128	\$0x20,$xb0,$xa0,$xt3	# "de-interlace" further
-	vperm2i128	\$0x31,$xb0,$xa0,$xb0
-	vperm2i128	\$0x20,$xb1,$xa1,$xa0
-	vperm2i128	\$0x31,$xb1,$xa1,$xb1
-	vperm2i128	\$0x20,$xb2,$xa2,$xa1
-	vperm2i128	\$0x31,$xb2,$xa2,$xb2
-	vperm2i128	\$0x20,$xb3,$xa3,$xa2
-	vperm2i128	\$0x31,$xb3,$xa3,$xb3
+	vperm2i128	\$0xFF,$xb0,$xa0,$xt3	# "de-interlace" further
+	vperm2i128	\$0xFF,$xb0,$xa0,$xb0
+	vperm2i128	\$0xFF,$xb1,$xa1,$xa0
+	vperm2i128	\$0xFF,$xb1,$xa1,$xb1
+	vperm2i128	\$0xFF,$xb2,$xa2,$xa1
+	vperm2i128	\$0xFF,$xb2,$xa2,$xb2
+	vperm2i128	\$0xFF,$xb3,$xa3,$xa2
+	vperm2i128	\$0xFF,$xb3,$xa3,$xb3
 ___
 	($xa0,$xa1,$xa2,$xa3,$xt3)=($xt3,$xa0,$xa1,$xa2,$xa3);
 	my ($xc0,$xc1,$xc2,$xc3)=($xt0,$xt1,$xa0,$xa1);
 $code.=<<___;
-	vmovdqa		$xa0,0x00(%rsp)		# offload $xaN
-	vmovdqa		$xa1,0x20(%rsp)
-	vmovdqa		0x40(%rsp),$xc2		# $xa0
-	vmovdqa		0x60(%rsp),$xc3		# $xa1
+	vmovdqa		$xa0,0xFF(%rsp)		# offload $xaN
+	vmovdqa		$xa1,0xFF(%rsp)
+	vmovdqa		0xFF(%rsp),$xc2		# $xa0
+	vmovdqa		0xFF(%rsp),$xc3		# $xa1
 
-	vpaddd		0x180-0x200(%rax),$xc0,$xc0
-	vpaddd		0x1a0-0x200(%rax),$xc1,$xc1
-	vpaddd		0x1c0-0x200(%rax),$xc2,$xc2
-	vpaddd		0x1e0-0x200(%rax),$xc3,$xc3
+	vpaddd		0xFF-0xFF(%rax),$xc0,$xc0
+	vpaddd		0xFF-0xFF(%rax),$xc1,$xc1
+	vpaddd		0xFF-0xFF(%rax),$xc2,$xc2
+	vpaddd		0xFF-0xFF(%rax),$xc3,$xc3
 
 	vpunpckldq	$xc1,$xc0,$xt2
 	vpunpckldq	$xc3,$xc2,$xt3
@@ -2125,10 +2125,10 @@ $code.=<<___;
 ___
 	($xc0,$xc1,$xc2,$xc3,$xt2)=($xc1,$xt2,$xc3,$xc0,$xc2);
 $code.=<<___;
-	vpaddd		0x200-0x200(%rax),$xd0,$xd0
-	vpaddd		0x220-0x200(%rax),$xd1,$xd1
-	vpaddd		0x240-0x200(%rax),$xd2,$xd2
-	vpaddd		0x260-0x200(%rax),$xd3,$xd3
+	vpaddd		0xFF-0xFF(%rax),$xd0,$xd0
+	vpaddd		0xFF-0xFF(%rax),$xd1,$xd1
+	vpaddd		0xFF-0xFF(%rax),$xd2,$xd2
+	vpaddd		0xFF-0xFF(%rax),$xd3,$xd3
 
 	vpunpckldq	$xd1,$xd0,$xt2
 	vpunpckldq	$xd3,$xd2,$xt3
@@ -2141,69 +2141,69 @@ $code.=<<___;
 ___
 	($xd0,$xd1,$xd2,$xd3,$xt2)=($xd1,$xt2,$xd3,$xd0,$xd2);
 $code.=<<___;
-	vperm2i128	\$0x20,$xd0,$xc0,$xt3	# "de-interlace" further
-	vperm2i128	\$0x31,$xd0,$xc0,$xd0
-	vperm2i128	\$0x20,$xd1,$xc1,$xc0
-	vperm2i128	\$0x31,$xd1,$xc1,$xd1
-	vperm2i128	\$0x20,$xd2,$xc2,$xc1
-	vperm2i128	\$0x31,$xd2,$xc2,$xd2
-	vperm2i128	\$0x20,$xd3,$xc3,$xc2
-	vperm2i128	\$0x31,$xd3,$xc3,$xd3
+	vperm2i128	\$0xFF,$xd0,$xc0,$xt3	# "de-interlace" further
+	vperm2i128	\$0xFF,$xd0,$xc0,$xd0
+	vperm2i128	\$0xFF,$xd1,$xc1,$xc0
+	vperm2i128	\$0xFF,$xd1,$xc1,$xd1
+	vperm2i128	\$0xFF,$xd2,$xc2,$xc1
+	vperm2i128	\$0xFF,$xd2,$xc2,$xd2
+	vperm2i128	\$0xFF,$xd3,$xc3,$xc2
+	vperm2i128	\$0xFF,$xd3,$xc3,$xd3
 ___
 	($xc0,$xc1,$xc2,$xc3,$xt3)=($xt3,$xc0,$xc1,$xc2,$xc3);
 	($xb0,$xb1,$xb2,$xb3,$xc0,$xc1,$xc2,$xc3)=
 	($xc0,$xc1,$xc2,$xc3,$xb0,$xb1,$xb2,$xb3);
 	($xa0,$xa1)=($xt2,$xt3);
 $code.=<<___;
-	vmovdqa		0x00(%rsp),$xa0		# $xaN was offloaded, remember?
-	vmovdqa		0x20(%rsp),$xa1
+	vmovdqa		0xFF(%rsp),$xa0		# $xaN was offloaded, remember?
+	vmovdqa		0xFF(%rsp),$xa1
 
 	cmp		\$64*8,$len
 	jb		.Ltail8x
 
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	lea		0x80($inp),$inp		# size optimization
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
-	lea		0x80($out),$out		# size optimization
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	lea		0xFF($inp),$inp		# size optimization
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	lea		0xFF($out),$out		# size optimization
 
-	vpxor		0x00($inp),$xa1,$xa1
-	vpxor		0x20($inp),$xb1,$xb1
-	vpxor		0x40($inp),$xc1,$xc1
-	vpxor		0x60($inp),$xd1,$xd1
-	lea		0x80($inp),$inp		# size optimization
-	vmovdqu		$xa1,0x00($out)
-	vmovdqu		$xb1,0x20($out)
-	vmovdqu		$xc1,0x40($out)
-	vmovdqu		$xd1,0x60($out)
-	lea		0x80($out),$out		# size optimization
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	lea		0xFF($inp),$inp		# size optimization
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
+	lea		0xFF($out),$out		# size optimization
 
-	vpxor		0x00($inp),$xa2,$xa2
-	vpxor		0x20($inp),$xb2,$xb2
-	vpxor		0x40($inp),$xc2,$xc2
-	vpxor		0x60($inp),$xd2,$xd2
-	lea		0x80($inp),$inp		# size optimization
-	vmovdqu		$xa2,0x00($out)
-	vmovdqu		$xb2,0x20($out)
-	vmovdqu		$xc2,0x40($out)
-	vmovdqu		$xd2,0x60($out)
-	lea		0x80($out),$out		# size optimization
+	vpxor		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
+	lea		0xFF($inp),$inp		# size optimization
+	vmovdqu		$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
+	vmovdqu		$xc2,0xFF($out)
+	vmovdqu		$xd2,0xFF($out)
+	lea		0xFF($out),$out		# size optimization
 
-	vpxor		0x00($inp),$xa3,$xa3
-	vpxor		0x20($inp),$xb3,$xb3
-	vpxor		0x40($inp),$xc3,$xc3
-	vpxor		0x60($inp),$xd3,$xd3
-	lea		0x80($inp),$inp		# size optimization
-	vmovdqu		$xa3,0x00($out)
-	vmovdqu		$xb3,0x20($out)
-	vmovdqu		$xc3,0x40($out)
-	vmovdqu		$xd3,0x60($out)
-	lea		0x80($out),$out		# size optimization
+	vpxor		0xFF($inp),$xa3,$xa3
+	vpxor		0xFF($inp),$xb3,$xb3
+	vpxor		0xFF($inp),$xc3,$xc3
+	vpxor		0xFF($inp),$xd3,$xd3
+	lea		0xFF($inp),$inp		# size optimization
+	vmovdqu		$xa3,0xFF($out)
+	vmovdqu		$xb3,0xFF($out)
+	vmovdqu		$xc3,0xFF($out)
+	vmovdqu		$xd3,0xFF($out)
+	lea		0xFF($out),$out		# size optimization
 
 	sub		\$64*8,$len
 	jnz		.Loop_outer8x
@@ -2227,204 +2227,204 @@ $code.=<<___;
 	jae		.L64_or_more8x
 
 	xor		%r10,%r10
-	vmovdqa		$xa0,0x00(%rsp)
-	vmovdqa		$xb0,0x20(%rsp)
+	vmovdqa		$xa0,0xFF(%rsp)
+	vmovdqa		$xb0,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L64_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
 	je		.Ldone8x
 
-	lea		0x40($inp),$inp		# inp+=64*1
+	lea		0xFF($inp),$inp		# inp+=64*1
 	xor		%r10,%r10
-	vmovdqa		$xc0,0x00(%rsp)
-	lea		0x40($out),$out		# out+=64*1
+	vmovdqa		$xc0,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*1
 	sub		\$64,$len		# len-=64*1
-	vmovdqa		$xd0,0x20(%rsp)
+	vmovdqa		$xd0,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L128_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
 	je		.Ldone8x
 
-	lea		0x80($inp),$inp		# inp+=64*2
+	lea		0xFF($inp),$inp		# inp+=64*2
 	xor		%r10,%r10
-	vmovdqa		$xa1,0x00(%rsp)
-	lea		0x80($out),$out		# out+=64*2
+	vmovdqa		$xa1,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*2
 	sub		\$128,$len		# len-=64*2
-	vmovdqa		$xb1,0x20(%rsp)
+	vmovdqa		$xb1,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L192_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	vpxor		0x80($inp),$xa1,$xa1
-	vpxor		0xa0($inp),$xb1,$xb1
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
-	vmovdqu		$xa1,0x80($out)
-	vmovdqu		$xb1,0xa0($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
 	je		.Ldone8x
 
-	lea		0xc0($inp),$inp		# inp+=64*3
+	lea		0xFF($inp),$inp		# inp+=64*3
 	xor		%r10,%r10
-	vmovdqa		$xc1,0x00(%rsp)
-	lea		0xc0($out),$out		# out+=64*3
+	vmovdqa		$xc1,0xFF(%rsp)
+	lea		0xFF($out),$out		# out+=64*3
 	sub		\$192,$len		# len-=64*3
-	vmovdqa		$xd1,0x20(%rsp)
+	vmovdqa		$xd1,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L256_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	vpxor		0x80($inp),$xa1,$xa1
-	vpxor		0xa0($inp),$xb1,$xb1
-	vpxor		0xc0($inp),$xc1,$xc1
-	vpxor		0xe0($inp),$xd1,$xd1
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
-	vmovdqu		$xa1,0x80($out)
-	vmovdqu		$xb1,0xa0($out)
-	vmovdqu		$xc1,0xc0($out)
-	vmovdqu		$xd1,0xe0($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
 	je		.Ldone8x
 
-	lea		0x100($inp),$inp	# inp+=64*4
+	lea		0xFF($inp),$inp	# inp+=64*4
 	xor		%r10,%r10
-	vmovdqa		$xa2,0x00(%rsp)
-	lea		0x100($out),$out	# out+=64*4
+	vmovdqa		$xa2,0xFF(%rsp)
+	lea		0xFF($out),$out	# out+=64*4
 	sub		\$256,$len		# len-=64*4
-	vmovdqa		$xb2,0x20(%rsp)
+	vmovdqa		$xb2,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L320_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	vpxor		0x80($inp),$xa1,$xa1
-	vpxor		0xa0($inp),$xb1,$xb1
-	vpxor		0xc0($inp),$xc1,$xc1
-	vpxor		0xe0($inp),$xd1,$xd1
-	vpxor		0x100($inp),$xa2,$xa2
-	vpxor		0x120($inp),$xb2,$xb2
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
-	vmovdqu		$xa1,0x80($out)
-	vmovdqu		$xb1,0xa0($out)
-	vmovdqu		$xc1,0xc0($out)
-	vmovdqu		$xd1,0xe0($out)
-	vmovdqu		$xa2,0x100($out)
-	vmovdqu		$xb2,0x120($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	vpxor		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
+	vmovdqu		$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
 	je		.Ldone8x
 
-	lea		0x140($inp),$inp	# inp+=64*5
+	lea		0xFF($inp),$inp	# inp+=64*5
 	xor		%r10,%r10
-	vmovdqa		$xc2,0x00(%rsp)
-	lea		0x140($out),$out	# out+=64*5
+	vmovdqa		$xc2,0xFF(%rsp)
+	lea		0xFF($out),$out	# out+=64*5
 	sub		\$320,$len		# len-=64*5
-	vmovdqa		$xd2,0x20(%rsp)
+	vmovdqa		$xd2,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L384_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	vpxor		0x80($inp),$xa1,$xa1
-	vpxor		0xa0($inp),$xb1,$xb1
-	vpxor		0xc0($inp),$xc1,$xc1
-	vpxor		0xe0($inp),$xd1,$xd1
-	vpxor		0x100($inp),$xa2,$xa2
-	vpxor		0x120($inp),$xb2,$xb2
-	vpxor		0x140($inp),$xc2,$xc2
-	vpxor		0x160($inp),$xd2,$xd2
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
-	vmovdqu		$xa1,0x80($out)
-	vmovdqu		$xb1,0xa0($out)
-	vmovdqu		$xc1,0xc0($out)
-	vmovdqu		$xd1,0xe0($out)
-	vmovdqu		$xa2,0x100($out)
-	vmovdqu		$xb2,0x120($out)
-	vmovdqu		$xc2,0x140($out)
-	vmovdqu		$xd2,0x160($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	vpxor		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
+	vmovdqu		$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
+	vmovdqu		$xc2,0xFF($out)
+	vmovdqu		$xd2,0xFF($out)
 	je		.Ldone8x
 
-	lea		0x180($inp),$inp	# inp+=64*6
+	lea		0xFF($inp),$inp	# inp+=64*6
 	xor		%r10,%r10
-	vmovdqa		$xa3,0x00(%rsp)
-	lea		0x180($out),$out	# out+=64*6
+	vmovdqa		$xa3,0xFF(%rsp)
+	lea		0xFF($out),$out	# out+=64*6
 	sub		\$384,$len		# len-=64*6
-	vmovdqa		$xb3,0x20(%rsp)
+	vmovdqa		$xb3,0xFF(%rsp)
 	jmp		.Loop_tail8x
 
 .align	32
 .L448_or_more8x:
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
-	vpxor		0x80($inp),$xa1,$xa1
-	vpxor		0xa0($inp),$xb1,$xb1
-	vpxor		0xc0($inp),$xc1,$xc1
-	vpxor		0xe0($inp),$xd1,$xd1
-	vpxor		0x100($inp),$xa2,$xa2
-	vpxor		0x120($inp),$xb2,$xb2
-	vpxor		0x140($inp),$xc2,$xc2
-	vpxor		0x160($inp),$xd2,$xd2
-	vpxor		0x180($inp),$xa3,$xa3
-	vpxor		0x1a0($inp),$xb3,$xb3
-	vmovdqu		$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
-	vmovdqu		$xa1,0x80($out)
-	vmovdqu		$xb1,0xa0($out)
-	vmovdqu		$xc1,0xc0($out)
-	vmovdqu		$xd1,0xe0($out)
-	vmovdqu		$xa2,0x100($out)
-	vmovdqu		$xb2,0x120($out)
-	vmovdqu		$xc2,0x140($out)
-	vmovdqu		$xd2,0x160($out)
-	vmovdqu		$xa3,0x180($out)
-	vmovdqu		$xb3,0x1a0($out)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	vpxor		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
+	vpxor		0xFF($inp),$xa3,$xa3
+	vpxor		0xFF($inp),$xb3,$xb3
+	vmovdqu		$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
+	vmovdqu		$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
+	vmovdqu		$xc2,0xFF($out)
+	vmovdqu		$xd2,0xFF($out)
+	vmovdqu		$xa3,0xFF($out)
+	vmovdqu		$xb3,0xFF($out)
 	je		.Ldone8x
 
-	lea		0x1c0($inp),$inp	# inp+=64*7
+	lea		0xFF($inp),$inp	# inp+=64*7
 	xor		%r10,%r10
-	vmovdqa		$xc3,0x00(%rsp)
-	lea		0x1c0($out),$out	# out+=64*7
+	vmovdqa		$xc3,0xFF(%rsp)
+	lea		0xFF($out),$out	# out+=64*7
 	sub		\$448,$len		# len-=64*7
-	vmovdqa		$xd3,0x20(%rsp)
+	vmovdqa		$xd3,0xFF(%rsp)
 
 .Loop_tail8x:
 	movzb		($inp,%r10),%eax
@@ -2439,16 +2439,16 @@ $code.=<<___;
 	vzeroall
 ___
 $code.=<<___	if ($win64);
-	movaps		-0xa8(%r9),%xmm6
-	movaps		-0x98(%r9),%xmm7
-	movaps		-0x88(%r9),%xmm8
-	movaps		-0x78(%r9),%xmm9
-	movaps		-0x68(%r9),%xmm10
-	movaps		-0x58(%r9),%xmm11
-	movaps		-0x48(%r9),%xmm12
-	movaps		-0x38(%r9),%xmm13
-	movaps		-0x28(%r9),%xmm14
-	movaps		-0x18(%r9),%xmm15
+	movaps		-0xFF(%r9),%xmm6
+	movaps		-0xFF(%r9),%xmm7
+	movaps		-0xFF(%r9),%xmm8
+	movaps		-0xFF(%r9),%xmm9
+	movaps		-0xFF(%r9),%xmm10
+	movaps		-0xFF(%r9),%xmm11
+	movaps		-0xFF(%r9),%xmm12
+	movaps		-0xFF(%r9),%xmm13
+	movaps		-0xFF(%r9),%xmm14
+	movaps		-0xFF(%r9),%xmm15
 ___
 $code.=<<___;
 	lea		(%r9),%rsp
@@ -2515,8 +2515,8 @@ ChaCha20_avx512:
 	sub	\$64+$xframe,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps	%xmm6,-0x28(%r9)
-	movaps	%xmm7,-0x18(%r9)
+	movaps	%xmm6,-0xFF(%r9)
+	movaps	%xmm7,-0xFF(%r9)
 .Lavx512_body:
 ___
 $code.=<<___;
@@ -2569,17 +2569,17 @@ $code.=<<___;
 	sub		\$64,$len
 	jb		.Ltail64_avx512
 
-	vpxor		0x00($inp),%x#$a,$t0	# xor with input
-	vpxor		0x10($inp),%x#$b,$t1
-	vpxor		0x20($inp),%x#$c,$t2
-	vpxor		0x30($inp),%x#$d,$t3
-	lea		0x40($inp),$inp		# inp+=64
+	vpxor		0xFF($inp),%x#$a,$t0	# xor with input
+	vpxor		0xFF($inp),%x#$b,$t1
+	vpxor		0xFF($inp),%x#$c,$t2
+	vpxor		0xFF($inp),%x#$d,$t3
+	lea		0xFF($inp),$inp		# inp+=64
 
-	vmovdqu		$t0,0x00($out)		# write output
-	vmovdqu		$t1,0x10($out)
-	vmovdqu		$t2,0x20($out)
-	vmovdqu		$t3,0x30($out)
-	lea		0x40($out),$out		# out+=64
+	vmovdqu		$t0,0xFF($out)		# write output
+	vmovdqu		$t1,0xFF($out)
+	vmovdqu		$t2,0xFF($out)
+	vmovdqu		$t3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64
 
 	jz		.Ldone_avx512
 
@@ -2591,17 +2591,17 @@ $code.=<<___;
 	sub		\$64,$len
 	jb		.Ltail_avx512
 
-	vpxor		0x00($inp),$t0,$t0	# xor with input
-	vpxor		0x10($inp),$t1,$t1
-	vpxor		0x20($inp),$t2,$t2
-	vpxor		0x30($inp),$t3,$t3
-	lea		0x40($inp),$inp		# inp+=64
+	vpxor		0xFF($inp),$t0,$t0	# xor with input
+	vpxor		0xFF($inp),$t1,$t1
+	vpxor		0xFF($inp),$t2,$t2
+	vpxor		0xFF($inp),$t3,$t3
+	lea		0xFF($inp),$inp		# inp+=64
 
-	vmovdqu		$t0,0x00($out)		# write output
-	vmovdqu		$t1,0x10($out)
-	vmovdqu		$t2,0x20($out)
-	vmovdqu		$t3,0x30($out)
-	lea		0x40($out),$out		# out+=64
+	vmovdqu		$t0,0xFF($out)		# write output
+	vmovdqu		$t1,0xFF($out)
+	vmovdqu		$t2,0xFF($out)
+	vmovdqu		$t3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64
 
 	jz		.Ldone_avx512
 
@@ -2613,17 +2613,17 @@ $code.=<<___;
 	sub		\$64,$len
 	jb		.Ltail_avx512
 
-	vpxor		0x00($inp),$t0,$t0	# xor with input
-	vpxor		0x10($inp),$t1,$t1
-	vpxor		0x20($inp),$t2,$t2
-	vpxor		0x30($inp),$t3,$t3
-	lea		0x40($inp),$inp		# inp+=64
+	vpxor		0xFF($inp),$t0,$t0	# xor with input
+	vpxor		0xFF($inp),$t1,$t1
+	vpxor		0xFF($inp),$t2,$t2
+	vpxor		0xFF($inp),$t3,$t3
+	lea		0xFF($inp),$inp		# inp+=64
 
-	vmovdqu		$t0,0x00($out)		# write output
-	vmovdqu		$t1,0x10($out)
-	vmovdqu		$t2,0x20($out)
-	vmovdqu		$t3,0x30($out)
-	lea		0x40($out),$out		# out+=64
+	vmovdqu		$t0,0xFF($out)		# write output
+	vmovdqu		$t1,0xFF($out)
+	vmovdqu		$t2,0xFF($out)
+	vmovdqu		$t3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64
 
 	jz		.Ldone_avx512
 
@@ -2635,17 +2635,17 @@ $code.=<<___;
 	sub		\$64,$len
 	jb		.Ltail_avx512
 
-	vpxor		0x00($inp),$t0,$t0	# xor with input
-	vpxor		0x10($inp),$t1,$t1
-	vpxor		0x20($inp),$t2,$t2
-	vpxor		0x30($inp),$t3,$t3
-	lea		0x40($inp),$inp		# inp+=64
+	vpxor		0xFF($inp),$t0,$t0	# xor with input
+	vpxor		0xFF($inp),$t1,$t1
+	vpxor		0xFF($inp),$t2,$t2
+	vpxor		0xFF($inp),$t3,$t3
+	lea		0xFF($inp),$inp		# inp+=64
 
-	vmovdqu		$t0,0x00($out)		# write output
-	vmovdqu		$t1,0x10($out)
-	vmovdqu		$t2,0x20($out)
-	vmovdqu		$t3,0x30($out)
-	lea		0x40($out),$out		# out+=64
+	vmovdqu		$t0,0xFF($out)		# write output
+	vmovdqu		$t1,0xFF($out)
+	vmovdqu		$t2,0xFF($out)
+	vmovdqu		$t3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64
 
 	jnz		.Loop_outer_avx512
 
@@ -2653,19 +2653,19 @@ $code.=<<___;
 
 .align	16
 .Ltail64_avx512:
-	vmovdqa		%x#$a,0x00(%rsp)
-	vmovdqa		%x#$b,0x10(%rsp)
-	vmovdqa		%x#$c,0x20(%rsp)
-	vmovdqa		%x#$d,0x30(%rsp)
+	vmovdqa		%x#$a,0xFF(%rsp)
+	vmovdqa		%x#$b,0xFF(%rsp)
+	vmovdqa		%x#$c,0xFF(%rsp)
+	vmovdqa		%x#$d,0xFF(%rsp)
 	add		\$64,$len
 	jmp		.Loop_tail_avx512
 
 .align	16
 .Ltail_avx512:
-	vmovdqa		$t0,0x00(%rsp)
-	vmovdqa		$t1,0x10(%rsp)
-	vmovdqa		$t2,0x20(%rsp)
-	vmovdqa		$t3,0x30(%rsp)
+	vmovdqa		$t0,0xFF(%rsp)
+	vmovdqa		$t1,0xFF(%rsp)
+	vmovdqa		$t2,0xFF(%rsp)
+	vmovdqa		$t3,0xFF(%rsp)
 	add		\$64,$len
 
 .Loop_tail_avx512:
@@ -2677,14 +2677,14 @@ $code.=<<___;
 	dec		$len
 	jnz		.Loop_tail_avx512
 
-	vmovdqu32	$a_,0x00(%rsp)
+	vmovdqu32	$a_,0xFF(%rsp)
 
 .Ldone_avx512:
 	vzeroall
 ___
 $code.=<<___	if ($win64);
-	movaps	-0x28(%r9),%xmm6
-	movaps	-0x18(%r9),%xmm7
+	movaps	-0xFF(%r9),%xmm6
+	movaps	-0xFF(%r9),%xmm7
 ___
 $code.=<<___;
 	lea	(%r9),%rsp
@@ -2711,8 +2711,8 @@ ChaCha20_avx512vl:
 	sub	\$64+$xframe,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps	%xmm6,-0x28(%r9)
-	movaps	%xmm7,-0x18(%r9)
+	movaps	%xmm6,-0xFF(%r9)
+	movaps	%xmm7,-0xFF(%r9)
 .Lavx512vl_body:
 ___
 $code.=<<___;
@@ -2763,17 +2763,17 @@ $code.=<<___;
 	sub		\$64,$len
 	jb		.Ltail64_avx512vl
 
-	vpxor		0x00($inp),%x#$a,$t0	# xor with input
-	vpxor		0x10($inp),%x#$b,$t1
-	vpxor		0x20($inp),%x#$c,$t2
-	vpxor		0x30($inp),%x#$d,$t3
-	lea		0x40($inp),$inp		# inp+=64
+	vpxor		0xFF($inp),%x#$a,$t0	# xor with input
+	vpxor		0xFF($inp),%x#$b,$t1
+	vpxor		0xFF($inp),%x#$c,$t2
+	vpxor		0xFF($inp),%x#$d,$t3
+	lea		0xFF($inp),$inp		# inp+=64
 
-	vmovdqu		$t0,0x00($out)		# write output
-	vmovdqu		$t1,0x10($out)
-	vmovdqu		$t2,0x20($out)
-	vmovdqu		$t3,0x30($out)
-	lea		0x40($out),$out		# out+=64
+	vmovdqu		$t0,0xFF($out)		# write output
+	vmovdqu		$t1,0xFF($out)
+	vmovdqu		$t2,0xFF($out)
+	vmovdqu		$t3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64
 
 	jz		.Ldone_avx512vl
 
@@ -2785,17 +2785,17 @@ $code.=<<___;
 	sub		\$64,$len
 	jb		.Ltail_avx512vl
 
-	vpxor		0x00($inp),$t0,$t0	# xor with input
-	vpxor		0x10($inp),$t1,$t1
-	vpxor		0x20($inp),$t2,$t2
-	vpxor		0x30($inp),$t3,$t3
-	lea		0x40($inp),$inp		# inp+=64
+	vpxor		0xFF($inp),$t0,$t0	# xor with input
+	vpxor		0xFF($inp),$t1,$t1
+	vpxor		0xFF($inp),$t2,$t2
+	vpxor		0xFF($inp),$t3,$t3
+	lea		0xFF($inp),$inp		# inp+=64
 
-	vmovdqu		$t0,0x00($out)		# write output
-	vmovdqu		$t1,0x10($out)
-	vmovdqu		$t2,0x20($out)
-	vmovdqu		$t3,0x30($out)
-	lea		0x40($out),$out		# out+=64
+	vmovdqu		$t0,0xFF($out)		# write output
+	vmovdqu		$t1,0xFF($out)
+	vmovdqu		$t2,0xFF($out)
+	vmovdqu		$t3,0xFF($out)
+	lea		0xFF($out),$out		# out+=64
 
 	vmovdqa32	$a_,$a
 	vmovdqa32	$b_,$b
@@ -2805,19 +2805,19 @@ $code.=<<___;
 
 .align	16
 .Ltail64_avx512vl:
-	vmovdqa		%x#$a,0x00(%rsp)
-	vmovdqa		%x#$b,0x10(%rsp)
-	vmovdqa		%x#$c,0x20(%rsp)
-	vmovdqa		%x#$d,0x30(%rsp)
+	vmovdqa		%x#$a,0xFF(%rsp)
+	vmovdqa		%x#$b,0xFF(%rsp)
+	vmovdqa		%x#$c,0xFF(%rsp)
+	vmovdqa		%x#$d,0xFF(%rsp)
 	add		\$64,$len
 	jmp		.Loop_tail_avx512vl
 
 .align	16
 .Ltail_avx512vl:
-	vmovdqa		$t0,0x00(%rsp)
-	vmovdqa		$t1,0x10(%rsp)
-	vmovdqa		$t2,0x20(%rsp)
-	vmovdqa		$t3,0x30(%rsp)
+	vmovdqa		$t0,0xFF(%rsp)
+	vmovdqa		$t1,0xFF(%rsp)
+	vmovdqa		$t2,0xFF(%rsp)
+	vmovdqa		$t3,0xFF(%rsp)
 	add		\$64,$len
 
 .Loop_tail_avx512vl:
@@ -2829,15 +2829,15 @@ $code.=<<___;
 	dec		$len
 	jnz		.Loop_tail_avx512vl
 
-	vmovdqu32	$a_,0x00(%rsp)
-	vmovdqu32	$a_,0x20(%rsp)
+	vmovdqu32	$a_,0xFF(%rsp)
+	vmovdqu32	$a_,0xFF(%rsp)
 
 .Ldone_avx512vl:
 	vzeroall
 ___
 $code.=<<___	if ($win64);
-	movaps	-0x28(%r9),%xmm6
-	movaps	-0x18(%r9),%xmm7
+	movaps	-0xFF(%r9),%xmm6
+	movaps	-0xFF(%r9),%xmm7
 ___
 $code.=<<___;
 	lea	(%r9),%rsp
@@ -2920,7 +2920,7 @@ my @x=map("\"$_\"",@xx);
 	);
 }
 
-my $xframe = $win64 ? 0xa8 : 8;
+my $xframe = $win64 ? 0xFF : 8;
 
 $code.=<<___;
 .type	ChaCha20_16x,\@function,5
@@ -2934,16 +2934,16 @@ ChaCha20_16x:
 	and		\$-64,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps		%xmm6,-0xa8(%r9)
-	movaps		%xmm7,-0x98(%r9)
-	movaps		%xmm8,-0x88(%r9)
-	movaps		%xmm9,-0x78(%r9)
-	movaps		%xmm10,-0x68(%r9)
-	movaps		%xmm11,-0x58(%r9)
-	movaps		%xmm12,-0x48(%r9)
-	movaps		%xmm13,-0x38(%r9)
-	movaps		%xmm14,-0x28(%r9)
-	movaps		%xmm15,-0x18(%r9)
+	movaps		%xmm6,-0xFF(%r9)
+	movaps		%xmm7,-0xFF(%r9)
+	movaps		%xmm8,-0xFF(%r9)
+	movaps		%xmm9,-0xFF(%r9)
+	movaps		%xmm10,-0xFF(%r9)
+	movaps		%xmm11,-0xFF(%r9)
+	movaps		%xmm12,-0xFF(%r9)
+	movaps		%xmm13,-0xFF(%r9)
+	movaps		%xmm14,-0xFF(%r9)
+	movaps		%xmm15,-0xFF(%r9)
 .L16x_body:
 ___
 $code.=<<___;
@@ -2955,37 +2955,37 @@ $code.=<<___;
 	vbroadcasti32x4	16($key),$xc3		# key[2]
 	vbroadcasti32x4	($counter),$xd3		# key[3]
 
-	vpshufd		\$0x00,$xa3,$xa0	# smash key by lanes...
-	vpshufd		\$0x55,$xa3,$xa1
-	vpshufd		\$0xaa,$xa3,$xa2
-	vpshufd		\$0xff,$xa3,$xa3
+	vpshufd		\$0xFF,$xa3,$xa0	# smash key by lanes...
+	vpshufd		\$0xFF,$xa3,$xa1
+	vpshufd		\$0xFF,$xa3,$xa2
+	vpshufd		\$0xFF,$xa3,$xa3
 	vmovdqa64	$xa0,@key[0]
 	vmovdqa64	$xa1,@key[1]
 	vmovdqa64	$xa2,@key[2]
 	vmovdqa64	$xa3,@key[3]
 
-	vpshufd		\$0x00,$xb3,$xb0
-	vpshufd		\$0x55,$xb3,$xb1
-	vpshufd		\$0xaa,$xb3,$xb2
-	vpshufd		\$0xff,$xb3,$xb3
+	vpshufd		\$0xFF,$xb3,$xb0
+	vpshufd		\$0xFF,$xb3,$xb1
+	vpshufd		\$0xFF,$xb3,$xb2
+	vpshufd		\$0xFF,$xb3,$xb3
 	vmovdqa64	$xb0,@key[4]
 	vmovdqa64	$xb1,@key[5]
 	vmovdqa64	$xb2,@key[6]
 	vmovdqa64	$xb3,@key[7]
 
-	vpshufd		\$0x00,$xc3,$xc0
-	vpshufd		\$0x55,$xc3,$xc1
-	vpshufd		\$0xaa,$xc3,$xc2
-	vpshufd		\$0xff,$xc3,$xc3
+	vpshufd		\$0xFF,$xc3,$xc0
+	vpshufd		\$0xFF,$xc3,$xc1
+	vpshufd		\$0xFF,$xc3,$xc2
+	vpshufd		\$0xFF,$xc3,$xc3
 	vmovdqa64	$xc0,@key[8]
 	vmovdqa64	$xc1,@key[9]
 	vmovdqa64	$xc2,@key[10]
 	vmovdqa64	$xc3,@key[11]
 
-	vpshufd		\$0x00,$xd3,$xd0
-	vpshufd		\$0x55,$xd3,$xd1
-	vpshufd		\$0xaa,$xd3,$xd2
-	vpshufd		\$0xff,$xd3,$xd3
+	vpshufd		\$0xFF,$xd3,$xd0
+	vpshufd		\$0xFF,$xd3,$xd1
+	vpshufd		\$0xFF,$xd3,$xd2
+	vpshufd		\$0xFF,$xd3,$xd3
 	vpaddd		.Lincz(%rip),$xd0,$xd0	# don't save counters yet
 	vmovdqa64	$xd0,@key[12]
 	vmovdqa64	$xd1,@key[13]
@@ -3064,14 +3064,14 @@ $code.=<<___;
 ___
 	($xb0,$xb1,$xb2,$xb3,$xt2)=($xb1,$xt2,$xb3,$xb0,$xb2);
 $code.=<<___;
-	vshufi32x4	\$0x44,$xb0,$xa0,$xt3	# "de-interlace" further
-	vshufi32x4	\$0xee,$xb0,$xa0,$xb0
-	vshufi32x4	\$0x44,$xb1,$xa1,$xa0
-	vshufi32x4	\$0xee,$xb1,$xa1,$xb1
-	vshufi32x4	\$0x44,$xb2,$xa2,$xa1
-	vshufi32x4	\$0xee,$xb2,$xa2,$xb2
-	vshufi32x4	\$0x44,$xb3,$xa3,$xa2
-	vshufi32x4	\$0xee,$xb3,$xa3,$xb3
+	vshufi32x4	\$0xFF,$xb0,$xa0,$xt3	# "de-interlace" further
+	vshufi32x4	\$0xFF,$xb0,$xa0,$xb0
+	vshufi32x4	\$0xFF,$xb1,$xa1,$xa0
+	vshufi32x4	\$0xFF,$xb1,$xa1,$xb1
+	vshufi32x4	\$0xFF,$xb2,$xa2,$xa1
+	vshufi32x4	\$0xFF,$xb2,$xa2,$xb2
+	vshufi32x4	\$0xFF,$xb3,$xa3,$xa2
+	vshufi32x4	\$0xFF,$xb3,$xa3,$xb3
 ___
 	($xa0,$xa1,$xa2,$xa3,$xt3)=($xt3,$xa0,$xa1,$xa2,$xa3);
 $code.=<<___;
@@ -3107,33 +3107,33 @@ $code.=<<___;
 ___
 	($xd0,$xd1,$xd2,$xd3,$xt2)=($xd1,$xt2,$xd3,$xd0,$xd2);
 $code.=<<___;
-	vshufi32x4	\$0x44,$xd0,$xc0,$xt3	# "de-interlace" further
-	vshufi32x4	\$0xee,$xd0,$xc0,$xd0
-	vshufi32x4	\$0x44,$xd1,$xc1,$xc0
-	vshufi32x4	\$0xee,$xd1,$xc1,$xd1
-	vshufi32x4	\$0x44,$xd2,$xc2,$xc1
-	vshufi32x4	\$0xee,$xd2,$xc2,$xd2
-	vshufi32x4	\$0x44,$xd3,$xc3,$xc2
-	vshufi32x4	\$0xee,$xd3,$xc3,$xd3
+	vshufi32x4	\$0xFF,$xd0,$xc0,$xt3	# "de-interlace" further
+	vshufi32x4	\$0xFF,$xd0,$xc0,$xd0
+	vshufi32x4	\$0xFF,$xd1,$xc1,$xc0
+	vshufi32x4	\$0xFF,$xd1,$xc1,$xd1
+	vshufi32x4	\$0xFF,$xd2,$xc2,$xc1
+	vshufi32x4	\$0xFF,$xd2,$xc2,$xd2
+	vshufi32x4	\$0xFF,$xd3,$xc3,$xc2
+	vshufi32x4	\$0xFF,$xd3,$xc3,$xd3
 ___
 	($xc0,$xc1,$xc2,$xc3,$xt3)=($xt3,$xc0,$xc1,$xc2,$xc3);
 $code.=<<___;
-	vshufi32x4	\$0x88,$xc0,$xa0,$xt0	# "de-interlace" further
-	vshufi32x4	\$0xdd,$xc0,$xa0,$xa0
-	 vshufi32x4	\$0x88,$xd0,$xb0,$xc0
-	 vshufi32x4	\$0xdd,$xd0,$xb0,$xd0
-	vshufi32x4	\$0x88,$xc1,$xa1,$xt1
-	vshufi32x4	\$0xdd,$xc1,$xa1,$xa1
-	 vshufi32x4	\$0x88,$xd1,$xb1,$xc1
-	 vshufi32x4	\$0xdd,$xd1,$xb1,$xd1
-	vshufi32x4	\$0x88,$xc2,$xa2,$xt2
-	vshufi32x4	\$0xdd,$xc2,$xa2,$xa2
-	 vshufi32x4	\$0x88,$xd2,$xb2,$xc2
-	 vshufi32x4	\$0xdd,$xd2,$xb2,$xd2
-	vshufi32x4	\$0x88,$xc3,$xa3,$xt3
-	vshufi32x4	\$0xdd,$xc3,$xa3,$xa3
-	 vshufi32x4	\$0x88,$xd3,$xb3,$xc3
-	 vshufi32x4	\$0xdd,$xd3,$xb3,$xd3
+	vshufi32x4	\$0xFF,$xc0,$xa0,$xt0	# "de-interlace" further
+	vshufi32x4	\$0xFF,$xc0,$xa0,$xa0
+	 vshufi32x4	\$0xFF,$xd0,$xb0,$xc0
+	 vshufi32x4	\$0xFF,$xd0,$xb0,$xd0
+	vshufi32x4	\$0xFF,$xc1,$xa1,$xt1
+	vshufi32x4	\$0xFF,$xc1,$xa1,$xa1
+	 vshufi32x4	\$0xFF,$xd1,$xb1,$xc1
+	 vshufi32x4	\$0xFF,$xd1,$xb1,$xd1
+	vshufi32x4	\$0xFF,$xc2,$xa2,$xt2
+	vshufi32x4	\$0xFF,$xc2,$xa2,$xa2
+	 vshufi32x4	\$0xFF,$xd2,$xb2,$xc2
+	 vshufi32x4	\$0xFF,$xd2,$xb2,$xd2
+	vshufi32x4	\$0xFF,$xc3,$xa3,$xt3
+	vshufi32x4	\$0xFF,$xc3,$xa3,$xa3
+	 vshufi32x4	\$0xFF,$xd3,$xb3,$xc3
+	 vshufi32x4	\$0xFF,$xd3,$xb3,$xd3
 ___
 	($xa0,$xa1,$xa2,$xa3,$xb0,$xb1,$xb2,$xb3)=
 	($xt0,$xt1,$xt2,$xt3,$xa0,$xa1,$xa2,$xa3);
@@ -3146,43 +3146,43 @@ $code.=<<___;
 	cmp		\$64*16,$len
 	jb		.Ltail16x
 
-	vpxord		0x00($inp),$xa0,$xa0	# xor with input
-	vpxord		0x40($inp),$xb0,$xb0
-	vpxord		0x80($inp),$xc0,$xc0
-	vpxord		0xc0($inp),$xd0,$xd0
-	vmovdqu32	$xa0,0x00($out)
-	vmovdqu32	$xb0,0x40($out)
-	vmovdqu32	$xc0,0x80($out)
-	vmovdqu32	$xd0,0xc0($out)
+	vpxord		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxord		0xFF($inp),$xb0,$xb0
+	vpxord		0xFF($inp),$xc0,$xc0
+	vpxord		0xFF($inp),$xd0,$xd0
+	vmovdqu32	$xa0,0xFF($out)
+	vmovdqu32	$xb0,0xFF($out)
+	vmovdqu32	$xc0,0xFF($out)
+	vmovdqu32	$xd0,0xFF($out)
 
-	vpxord		0x100($inp),$xa1,$xa1
-	vpxord		0x140($inp),$xb1,$xb1
-	vpxord		0x180($inp),$xc1,$xc1
-	vpxord		0x1c0($inp),$xd1,$xd1
-	vmovdqu32	$xa1,0x100($out)
-	vmovdqu32	$xb1,0x140($out)
-	vmovdqu32	$xc1,0x180($out)
-	vmovdqu32	$xd1,0x1c0($out)
+	vpxord		0xFF($inp),$xa1,$xa1
+	vpxord		0xFF($inp),$xb1,$xb1
+	vpxord		0xFF($inp),$xc1,$xc1
+	vpxord		0xFF($inp),$xd1,$xd1
+	vmovdqu32	$xa1,0xFF($out)
+	vmovdqu32	$xb1,0xFF($out)
+	vmovdqu32	$xc1,0xFF($out)
+	vmovdqu32	$xd1,0xFF($out)
 
-	vpxord		0x200($inp),$xa2,$xa2
-	vpxord		0x240($inp),$xb2,$xb2
-	vpxord		0x280($inp),$xc2,$xc2
-	vpxord		0x2c0($inp),$xd2,$xd2
-	vmovdqu32	$xa2,0x200($out)
-	vmovdqu32	$xb2,0x240($out)
-	vmovdqu32	$xc2,0x280($out)
-	vmovdqu32	$xd2,0x2c0($out)
+	vpxord		0xFF($inp),$xa2,$xa2
+	vpxord		0xFF($inp),$xb2,$xb2
+	vpxord		0xFF($inp),$xc2,$xc2
+	vpxord		0xFF($inp),$xd2,$xd2
+	vmovdqu32	$xa2,0xFF($out)
+	vmovdqu32	$xb2,0xFF($out)
+	vmovdqu32	$xc2,0xFF($out)
+	vmovdqu32	$xd2,0xFF($out)
 
-	vpxord		0x300($inp),$xa3,$xa3
-	vpxord		0x340($inp),$xb3,$xb3
-	vpxord		0x380($inp),$xc3,$xc3
-	vpxord		0x3c0($inp),$xd3,$xd3
-	lea		0x400($inp),$inp
-	vmovdqu32	$xa3,0x300($out)
-	vmovdqu32	$xb3,0x340($out)
-	vmovdqu32	$xc3,0x380($out)
-	vmovdqu32	$xd3,0x3c0($out)
-	lea		0x400($out),$out
+	vpxord		0xFF($inp),$xa3,$xa3
+	vpxord		0xFF($inp),$xb3,$xb3
+	vpxord		0xFF($inp),$xc3,$xc3
+	vpxord		0xFF($inp),$xd3,$xd3
+	lea		0xFF($inp),$inp
+	vmovdqu32	$xa3,0xFF($out)
+	vmovdqu32	$xb3,0xFF($out)
+	vmovdqu32	$xc3,0xFF($out)
+	vmovdqu32	$xd3,0xFF($out)
+	lea		0xFF($out),$out
 
 	sub		\$64*16,$len
 	jnz		.Loop_outer16x
@@ -3314,7 +3314,7 @@ $code.=<<___;
 	lea		64($inp),$inp
 
 .Less_than_64_16x:
-	vmovdqa32	$xa0,0x00(%rsp)
+	vmovdqa32	$xa0,0xFF(%rsp)
 	lea		($out,$inp),$out
 	and		\$63,$len
 
@@ -3334,16 +3334,16 @@ $code.=<<___;
 	vzeroall
 ___
 $code.=<<___	if ($win64);
-	movaps		-0xa8(%r9),%xmm6
-	movaps		-0x98(%r9),%xmm7
-	movaps		-0x88(%r9),%xmm8
-	movaps		-0x78(%r9),%xmm9
-	movaps		-0x68(%r9),%xmm10
-	movaps		-0x58(%r9),%xmm11
-	movaps		-0x48(%r9),%xmm12
-	movaps		-0x38(%r9),%xmm13
-	movaps		-0x28(%r9),%xmm14
-	movaps		-0x18(%r9),%xmm15
+	movaps		-0xFF(%r9),%xmm6
+	movaps		-0xFF(%r9),%xmm7
+	movaps		-0xFF(%r9),%xmm8
+	movaps		-0xFF(%r9),%xmm9
+	movaps		-0xFF(%r9),%xmm10
+	movaps		-0xFF(%r9),%xmm11
+	movaps		-0xFF(%r9),%xmm12
+	movaps		-0xFF(%r9),%xmm13
+	movaps		-0xFF(%r9),%xmm14
+	movaps		-0xFF(%r9),%xmm15
 ___
 $code.=<<___;
 	lea		(%r9),%rsp
@@ -3374,16 +3374,16 @@ ChaCha20_8xvl:
 	and		\$-64,%rsp
 ___
 $code.=<<___	if ($win64);
-	movaps		%xmm6,-0xa8(%r9)
-	movaps		%xmm7,-0x98(%r9)
-	movaps		%xmm8,-0x88(%r9)
-	movaps		%xmm9,-0x78(%r9)
-	movaps		%xmm10,-0x68(%r9)
-	movaps		%xmm11,-0x58(%r9)
-	movaps		%xmm12,-0x48(%r9)
-	movaps		%xmm13,-0x38(%r9)
-	movaps		%xmm14,-0x28(%r9)
-	movaps		%xmm15,-0x18(%r9)
+	movaps		%xmm6,-0xFF(%r9)
+	movaps		%xmm7,-0xFF(%r9)
+	movaps		%xmm8,-0xFF(%r9)
+	movaps		%xmm9,-0xFF(%r9)
+	movaps		%xmm10,-0xFF(%r9)
+	movaps		%xmm11,-0xFF(%r9)
+	movaps		%xmm12,-0xFF(%r9)
+	movaps		%xmm13,-0xFF(%r9)
+	movaps		%xmm14,-0xFF(%r9)
+	movaps		%xmm15,-0xFF(%r9)
 .L8xvl_body:
 ___
 $code.=<<___;
@@ -3395,37 +3395,37 @@ $code.=<<___;
 	vbroadcasti128	16($key),$xc3		# key[2]
 	vbroadcasti128	($counter),$xd3		# key[3]
 
-	vpshufd		\$0x00,$xa3,$xa0	# smash key by lanes...
-	vpshufd		\$0x55,$xa3,$xa1
-	vpshufd		\$0xaa,$xa3,$xa2
-	vpshufd		\$0xff,$xa3,$xa3
+	vpshufd		\$0xFF,$xa3,$xa0	# smash key by lanes...
+	vpshufd		\$0xFF,$xa3,$xa1
+	vpshufd		\$0xFF,$xa3,$xa2
+	vpshufd		\$0xFF,$xa3,$xa3
 	vmovdqa64	$xa0,@key[0]
 	vmovdqa64	$xa1,@key[1]
 	vmovdqa64	$xa2,@key[2]
 	vmovdqa64	$xa3,@key[3]
 
-	vpshufd		\$0x00,$xb3,$xb0
-	vpshufd		\$0x55,$xb3,$xb1
-	vpshufd		\$0xaa,$xb3,$xb2
-	vpshufd		\$0xff,$xb3,$xb3
+	vpshufd		\$0xFF,$xb3,$xb0
+	vpshufd		\$0xFF,$xb3,$xb1
+	vpshufd		\$0xFF,$xb3,$xb2
+	vpshufd		\$0xFF,$xb3,$xb3
 	vmovdqa64	$xb0,@key[4]
 	vmovdqa64	$xb1,@key[5]
 	vmovdqa64	$xb2,@key[6]
 	vmovdqa64	$xb3,@key[7]
 
-	vpshufd		\$0x00,$xc3,$xc0
-	vpshufd		\$0x55,$xc3,$xc1
-	vpshufd		\$0xaa,$xc3,$xc2
-	vpshufd		\$0xff,$xc3,$xc3
+	vpshufd		\$0xFF,$xc3,$xc0
+	vpshufd		\$0xFF,$xc3,$xc1
+	vpshufd		\$0xFF,$xc3,$xc2
+	vpshufd		\$0xFF,$xc3,$xc3
 	vmovdqa64	$xc0,@key[8]
 	vmovdqa64	$xc1,@key[9]
 	vmovdqa64	$xc2,@key[10]
 	vmovdqa64	$xc3,@key[11]
 
-	vpshufd		\$0x00,$xd3,$xd0
-	vpshufd		\$0x55,$xd3,$xd1
-	vpshufd		\$0xaa,$xd3,$xd2
-	vpshufd		\$0xff,$xd3,$xd3
+	vpshufd		\$0xFF,$xd3,$xd0
+	vpshufd		\$0xFF,$xd3,$xd1
+	vpshufd		\$0xFF,$xd3,$xd2
+	vpshufd		\$0xFF,$xd3,$xd3
 	vpaddd		.Lincy(%rip),$xd0,$xd0	# don't save counters yet
 	vmovdqa64	$xd0,@key[12]
 	vmovdqa64	$xd1,@key[13]
@@ -3547,14 +3547,14 @@ $code.=<<___;
 ___
 	($xd0,$xd1,$xd2,$xd3,$xt2)=($xd1,$xt2,$xd3,$xd0,$xd2);
 $code.=<<___;
-	vperm2i128	\$0x20,$xd0,$xc0,$xt3	# "de-interlace" further
-	vperm2i128	\$0x31,$xd0,$xc0,$xd0
-	vperm2i128	\$0x20,$xd1,$xc1,$xc0
-	vperm2i128	\$0x31,$xd1,$xc1,$xd1
-	vperm2i128	\$0x20,$xd2,$xc2,$xc1
-	vperm2i128	\$0x31,$xd2,$xc2,$xd2
-	vperm2i128	\$0x20,$xd3,$xc3,$xc2
-	vperm2i128	\$0x31,$xd3,$xc3,$xd3
+	vperm2i128	\$0xFF,$xd0,$xc0,$xt3	# "de-interlace" further
+	vperm2i128	\$0xFF,$xd0,$xc0,$xd0
+	vperm2i128	\$0xFF,$xd1,$xc1,$xc0
+	vperm2i128	\$0xFF,$xd1,$xc1,$xd1
+	vperm2i128	\$0xFF,$xd2,$xc2,$xc1
+	vperm2i128	\$0xFF,$xd2,$xc2,$xd2
+	vperm2i128	\$0xFF,$xd3,$xc3,$xc2
+	vperm2i128	\$0xFF,$xd3,$xc3,$xd3
 ___
 	($xc0,$xc1,$xc2,$xc3,$xt3)=($xt3,$xc0,$xc1,$xc2,$xc3);
 	($xb0,$xb1,$xb2,$xb3,$xc0,$xc1,$xc2,$xc3)=
@@ -3563,49 +3563,49 @@ $code.=<<___;
 	cmp		\$64*8,$len
 	jb		.Ltail8xvl
 
-	mov		\$0x80,%eax		# size optimization
-	vpxord		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vpxor		0x40($inp),$xc0,$xc0
-	vpxor		0x60($inp),$xd0,$xd0
+	mov		\$0xFF,%eax		# size optimization
+	vpxord		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
 	lea		($inp,%rax),$inp	# size optimization
-	vmovdqu32	$xa0,0x00($out)
-	vmovdqu		$xb0,0x20($out)
-	vmovdqu		$xc0,0x40($out)
-	vmovdqu		$xd0,0x60($out)
+	vmovdqu32	$xa0,0xFF($out)
+	vmovdqu		$xb0,0xFF($out)
+	vmovdqu		$xc0,0xFF($out)
+	vmovdqu		$xd0,0xFF($out)
 	lea		($out,%rax),$out	# size optimization
 
-	vpxor		0x00($inp),$xa1,$xa1
-	vpxor		0x20($inp),$xb1,$xb1
-	vpxor		0x40($inp),$xc1,$xc1
-	vpxor		0x60($inp),$xd1,$xd1
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
 	lea		($inp,%rax),$inp	# size optimization
-	vmovdqu		$xa1,0x00($out)
-	vmovdqu		$xb1,0x20($out)
-	vmovdqu		$xc1,0x40($out)
-	vmovdqu		$xd1,0x60($out)
+	vmovdqu		$xa1,0xFF($out)
+	vmovdqu		$xb1,0xFF($out)
+	vmovdqu		$xc1,0xFF($out)
+	vmovdqu		$xd1,0xFF($out)
 	lea		($out,%rax),$out	# size optimization
 
-	vpxord		0x00($inp),$xa2,$xa2
-	vpxor		0x20($inp),$xb2,$xb2
-	vpxor		0x40($inp),$xc2,$xc2
-	vpxor		0x60($inp),$xd2,$xd2
+	vpxord		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
 	lea		($inp,%rax),$inp	# size optimization
-	vmovdqu32	$xa2,0x00($out)
-	vmovdqu		$xb2,0x20($out)
-	vmovdqu		$xc2,0x40($out)
-	vmovdqu		$xd2,0x60($out)
+	vmovdqu32	$xa2,0xFF($out)
+	vmovdqu		$xb2,0xFF($out)
+	vmovdqu		$xc2,0xFF($out)
+	vmovdqu		$xd2,0xFF($out)
 	lea		($out,%rax),$out	# size optimization
 
-	vpxor		0x00($inp),$xa3,$xa3
-	vpxor		0x20($inp),$xb3,$xb3
-	vpxor		0x40($inp),$xc3,$xc3
-	vpxor		0x60($inp),$xd3,$xd3
+	vpxor		0xFF($inp),$xa3,$xa3
+	vpxor		0xFF($inp),$xb3,$xb3
+	vpxor		0xFF($inp),$xc3,$xc3
+	vpxor		0xFF($inp),$xd3,$xd3
 	lea		($inp,%rax),$inp	# size optimization
-	vmovdqu		$xa3,0x00($out)
-	vmovdqu		$xb3,0x20($out)
-	vmovdqu		$xc3,0x40($out)
-	vmovdqu		$xd3,0x60($out)
+	vmovdqu		$xa3,0xFF($out)
+	vmovdqu		$xb3,0xFF($out)
+	vmovdqu		$xc3,0xFF($out)
+	vmovdqu		$xd3,0xFF($out)
 	lea		($out,%rax),$out	# size optimization
 
 	vpbroadcastd	0(%r10),%ymm0		# reload key
@@ -3626,10 +3626,10 @@ $code.=<<___;
 	sub		$inp,$out
 	cmp		\$64*1,$len
 	jb		.Less_than_64_8xvl
-	vpxor		0x00($inp),$xa0,$xa0	# xor with input
-	vpxor		0x20($inp),$xb0,$xb0
-	vmovdqu		$xa0,0x00($out,$inp)
-	vmovdqu		$xb0,0x20($out,$inp)
+	vpxor		0xFF($inp),$xa0,$xa0	# xor with input
+	vpxor		0xFF($inp),$xb0,$xb0
+	vmovdqu		$xa0,0xFF($out,$inp)
+	vmovdqu		$xb0,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa		$xc0,$xa0
 	vmovdqa		$xd0,$xb0
@@ -3637,10 +3637,10 @@ $code.=<<___;
 
 	cmp		\$64*2,$len
 	jb		.Less_than_64_8xvl
-	vpxor		0x00($inp),$xc0,$xc0
-	vpxor		0x20($inp),$xd0,$xd0
-	vmovdqu		$xc0,0x00($out,$inp)
-	vmovdqu		$xd0,0x20($out,$inp)
+	vpxor		0xFF($inp),$xc0,$xc0
+	vpxor		0xFF($inp),$xd0,$xd0
+	vmovdqu		$xc0,0xFF($out,$inp)
+	vmovdqu		$xd0,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa		$xa1,$xa0
 	vmovdqa		$xb1,$xb0
@@ -3648,10 +3648,10 @@ $code.=<<___;
 
 	cmp		\$64*3,$len
 	jb		.Less_than_64_8xvl
-	vpxor		0x00($inp),$xa1,$xa1
-	vpxor		0x20($inp),$xb1,$xb1
-	vmovdqu		$xa1,0x00($out,$inp)
-	vmovdqu		$xb1,0x20($out,$inp)
+	vpxor		0xFF($inp),$xa1,$xa1
+	vpxor		0xFF($inp),$xb1,$xb1
+	vmovdqu		$xa1,0xFF($out,$inp)
+	vmovdqu		$xb1,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa		$xc1,$xa0
 	vmovdqa		$xd1,$xb0
@@ -3659,10 +3659,10 @@ $code.=<<___;
 
 	cmp		\$64*4,$len
 	jb		.Less_than_64_8xvl
-	vpxor		0x00($inp),$xc1,$xc1
-	vpxor		0x20($inp),$xd1,$xd1
-	vmovdqu		$xc1,0x00($out,$inp)
-	vmovdqu		$xd1,0x20($out,$inp)
+	vpxor		0xFF($inp),$xc1,$xc1
+	vpxor		0xFF($inp),$xd1,$xd1
+	vmovdqu		$xc1,0xFF($out,$inp)
+	vmovdqu		$xd1,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa32	$xa2,$xa0
 	vmovdqa		$xb2,$xb0
@@ -3670,10 +3670,10 @@ $code.=<<___;
 
 	cmp		\$64*5,$len
 	jb		.Less_than_64_8xvl
-	vpxord		0x00($inp),$xa2,$xa2
-	vpxor		0x20($inp),$xb2,$xb2
-	vmovdqu32	$xa2,0x00($out,$inp)
-	vmovdqu		$xb2,0x20($out,$inp)
+	vpxord		0xFF($inp),$xa2,$xa2
+	vpxor		0xFF($inp),$xb2,$xb2
+	vmovdqu32	$xa2,0xFF($out,$inp)
+	vmovdqu		$xb2,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa		$xc2,$xa0
 	vmovdqa		$xd2,$xb0
@@ -3681,10 +3681,10 @@ $code.=<<___;
 
 	cmp		\$64*6,$len
 	jb		.Less_than_64_8xvl
-	vpxor		0x00($inp),$xc2,$xc2
-	vpxor		0x20($inp),$xd2,$xd2
-	vmovdqu		$xc2,0x00($out,$inp)
-	vmovdqu		$xd2,0x20($out,$inp)
+	vpxor		0xFF($inp),$xc2,$xc2
+	vpxor		0xFF($inp),$xd2,$xd2
+	vmovdqu		$xc2,0xFF($out,$inp)
+	vmovdqu		$xd2,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa		$xa3,$xa0
 	vmovdqa		$xb3,$xb0
@@ -3692,18 +3692,18 @@ $code.=<<___;
 
 	cmp		\$64*7,$len
 	jb		.Less_than_64_8xvl
-	vpxor		0x00($inp),$xa3,$xa3
-	vpxor		0x20($inp),$xb3,$xb3
-	vmovdqu		$xa3,0x00($out,$inp)
-	vmovdqu		$xb3,0x20($out,$inp)
+	vpxor		0xFF($inp),$xa3,$xa3
+	vpxor		0xFF($inp),$xb3,$xb3
+	vmovdqu		$xa3,0xFF($out,$inp)
+	vmovdqu		$xb3,0xFF($out,$inp)
 	je		.Ldone8xvl
 	vmovdqa		$xc3,$xa0
 	vmovdqa		$xd3,$xb0
 	lea		64($inp),$inp
 
 .Less_than_64_8xvl:
-	vmovdqa		$xa0,0x00(%rsp)
-	vmovdqa		$xb0,0x20(%rsp)
+	vmovdqa		$xa0,0xFF(%rsp)
+	vmovdqa		$xb0,0xFF(%rsp)
 	lea		($out,$inp),$out
 	and		\$63,$len
 
@@ -3717,23 +3717,23 @@ $code.=<<___;
 	jnz		.Loop_tail8xvl
 
 	vpxor		$xa0,$xa0,$xa0
-	vmovdqa		$xa0,0x00(%rsp)
-	vmovdqa		$xa0,0x20(%rsp)
+	vmovdqa		$xa0,0xFF(%rsp)
+	vmovdqa		$xa0,0xFF(%rsp)
 
 .Ldone8xvl:
 	vzeroall
 ___
 $code.=<<___	if ($win64);
-	movaps		-0xa8(%r9),%xmm6
-	movaps		-0x98(%r9),%xmm7
-	movaps		-0x88(%r9),%xmm8
-	movaps		-0x78(%r9),%xmm9
-	movaps		-0x68(%r9),%xmm10
-	movaps		-0x58(%r9),%xmm11
-	movaps		-0x48(%r9),%xmm12
-	movaps		-0x38(%r9),%xmm13
-	movaps		-0x28(%r9),%xmm14
-	movaps		-0x18(%r9),%xmm15
+	movaps		-0xFF(%r9),%xmm6
+	movaps		-0xFF(%r9),%xmm7
+	movaps		-0xFF(%r9),%xmm8
+	movaps		-0xFF(%r9),%xmm9
+	movaps		-0xFF(%r9),%xmm10
+	movaps		-0xFF(%r9),%xmm11
+	movaps		-0xFF(%r9),%xmm12
+	movaps		-0xFF(%r9),%xmm13
+	movaps		-0xFF(%r9),%xmm14
+	movaps		-0xFF(%r9),%xmm15
 ___
 $code.=<<___;
 	lea		(%r9),%rsp
@@ -3810,7 +3810,7 @@ se_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER
@@ -3878,7 +3878,7 @@ simd_handler:
 	lea	512($context),%rdi	# &context.Xmm6
 	neg	%ecx
 	shr	\$3,%ecx
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	jmp	.Lcommon_seh_tail
 .size	simd_handler,.-simd_handler
@@ -3939,58 +3939,58 @@ $code.=<<___;
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.Lssse3_body,.Lssse3_epilogue
-	.long	0x20,0
+	.long	0xFF,0
 
 .LSEH_info_ChaCha20_128:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.L128_body,.L128_epilogue
-	.long	0x60,0
+	.long	0xFF,0
 
 .LSEH_info_ChaCha20_4x:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.L4x_body,.L4x_epilogue
-	.long	0xa0,0
+	.long	0xFF,0
 ___
 $code.=<<___ if ($avx);
 .LSEH_info_ChaCha20_4xop:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.L4xop_body,.L4xop_epilogue		# HandlerData[]
-	.long	0xa0,0
+	.long	0xFF,0
 ___
 $code.=<<___ if ($avx>1);
 .LSEH_info_ChaCha20_8x:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.L8x_body,.L8x_epilogue			# HandlerData[]
-	.long	0xa0,0
+	.long	0xFF,0
 ___
 $code.=<<___ if ($avx>2);
 .LSEH_info_ChaCha20_avx512:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.Lavx512_body,.Lavx512_epilogue		# HandlerData[]
-	.long	0x20,0
+	.long	0xFF,0
 
 .LSEH_info_ChaCha20_avx512vl:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.Lavx512vl_body,.Lavx512vl_epilogue	# HandlerData[]
-	.long	0x20,0
+	.long	0xFF,0
 
 .LSEH_info_ChaCha20_16x:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.L16x_body,.L16x_epilogue		# HandlerData[]
-	.long	0xa0,0
+	.long	0xFF,0
 
 .LSEH_info_ChaCha20_8xvl:
 	.byte	9,0,0,0
 	.rva	simd_handler
 	.rva	.L8xvl_body,.L8xvl_epilogue		# HandlerData[]
-	.long	0xa0,0
+	.long	0xFF,0
 ___
 }
 

@@ -91,7 +91,7 @@
 #  define LZO_PUBLIC(func) \
         .p2align 4 ; .byte 0,0,0,0,0,0,0 ; .ascii "LZO_START"
 #  define LZO_PUBLIC_END(func) \
-        .p2align 4,0x90 ; .ascii "LZO_END"
+        .p2align 4,0xFF ; .ascii "LZO_END"
 #elif defined(MFX_ASM_HAVE_TYPE)
 #  define LZO_PUBLIC(func) \
         ALIGN3 ; .type LZO_ASM_NAME(func),@function ; \

@@ -64,7 +64,7 @@ static void bn_GF2m_mul_1x1(BN_ULONG *r1, BN_ULONG *r0, const BN_ULONG a,
     BN_ULONG tab[8], top2b = a >> 30;
     register BN_ULONG a1, a2, a4;
 
-    a1 = a & (0x3FFFFFFF);
+    a1 = a & (0xFF);
     a2 = a1 << 1;
     a4 = a2 << 1;
 
@@ -77,33 +77,33 @@ static void bn_GF2m_mul_1x1(BN_ULONG *r1, BN_ULONG *r0, const BN_ULONG a,
     tab[6] = a2 ^ a4;
     tab[7] = a1 ^ a2 ^ a4;
 
-    s = tab[b & 0x7];
+    s = tab[b & 0xFF];
     l = s;
-    s = tab[b >> 3 & 0x7];
+    s = tab[b >> 3 & 0xFF];
     l ^= s << 3;
     h = s >> 29;
-    s = tab[b >> 6 & 0x7];
+    s = tab[b >> 6 & 0xFF];
     l ^= s << 6;
     h ^= s >> 26;
-    s = tab[b >> 9 & 0x7];
+    s = tab[b >> 9 & 0xFF];
     l ^= s << 9;
     h ^= s >> 23;
-    s = tab[b >> 12 & 0x7];
+    s = tab[b >> 12 & 0xFF];
     l ^= s << 12;
     h ^= s >> 20;
-    s = tab[b >> 15 & 0x7];
+    s = tab[b >> 15 & 0xFF];
     l ^= s << 15;
     h ^= s >> 17;
-    s = tab[b >> 18 & 0x7];
+    s = tab[b >> 18 & 0xFF];
     l ^= s << 18;
     h ^= s >> 14;
-    s = tab[b >> 21 & 0x7];
+    s = tab[b >> 21 & 0xFF];
     l ^= s << 21;
     h ^= s >> 11;
-    s = tab[b >> 24 & 0x7];
+    s = tab[b >> 24 & 0xFF];
     l ^= s << 24;
     h ^= s >> 8;
-    s = tab[b >> 27 & 0x7];
+    s = tab[b >> 27 & 0xFF];
     l ^= s << 27;
     h ^= s >> 5;
     s = tab[b >> 30];
@@ -133,7 +133,7 @@ static void bn_GF2m_mul_1x1(BN_ULONG *r1, BN_ULONG *r0, const BN_ULONG a,
     BN_ULONG tab[16], top3b = a >> 61;
     register BN_ULONG a1, a2, a4, a8;
 
-    a1 = a & (0x1FFFFFFFFFFFFFFFULL);
+    a1 = a & (0xFFULL);
     a2 = a1 << 1;
     a4 = a2 << 1;
     a8 = a4 << 1;
@@ -155,48 +155,48 @@ static void bn_GF2m_mul_1x1(BN_ULONG *r1, BN_ULONG *r0, const BN_ULONG a,
     tab[14] = a2 ^ a4 ^ a8;
     tab[15] = a1 ^ a2 ^ a4 ^ a8;
 
-    s = tab[b & 0xF];
+    s = tab[b & 0xFF];
     l = s;
-    s = tab[b >> 4 & 0xF];
+    s = tab[b >> 4 & 0xFF];
     l ^= s << 4;
     h = s >> 60;
-    s = tab[b >> 8 & 0xF];
+    s = tab[b >> 8 & 0xFF];
     l ^= s << 8;
     h ^= s >> 56;
-    s = tab[b >> 12 & 0xF];
+    s = tab[b >> 12 & 0xFF];
     l ^= s << 12;
     h ^= s >> 52;
-    s = tab[b >> 16 & 0xF];
+    s = tab[b >> 16 & 0xFF];
     l ^= s << 16;
     h ^= s >> 48;
-    s = tab[b >> 20 & 0xF];
+    s = tab[b >> 20 & 0xFF];
     l ^= s << 20;
     h ^= s >> 44;
-    s = tab[b >> 24 & 0xF];
+    s = tab[b >> 24 & 0xFF];
     l ^= s << 24;
     h ^= s >> 40;
-    s = tab[b >> 28 & 0xF];
+    s = tab[b >> 28 & 0xFF];
     l ^= s << 28;
     h ^= s >> 36;
-    s = tab[b >> 32 & 0xF];
+    s = tab[b >> 32 & 0xFF];
     l ^= s << 32;
     h ^= s >> 32;
-    s = tab[b >> 36 & 0xF];
+    s = tab[b >> 36 & 0xFF];
     l ^= s << 36;
     h ^= s >> 28;
-    s = tab[b >> 40 & 0xF];
+    s = tab[b >> 40 & 0xFF];
     l ^= s << 40;
     h ^= s >> 24;
-    s = tab[b >> 44 & 0xF];
+    s = tab[b >> 44 & 0xFF];
     l ^= s << 44;
     h ^= s >> 20;
-    s = tab[b >> 48 & 0xF];
+    s = tab[b >> 48 & 0xFF];
     l ^= s << 48;
     h ^= s >> 16;
-    s = tab[b >> 52 & 0xF];
+    s = tab[b >> 52 & 0xFF];
     l ^= s << 52;
     h ^= s >> 12;
-    s = tab[b >> 56 & 0xF];
+    s = tab[b >> 56 & 0xFF];
     l ^= s << 56;
     h ^= s >> 8;
     s = tab[b >> 60];
@@ -1010,7 +1010,7 @@ int BN_GF2m_mod_solve_quad_arr(BIGNUM *r, const BIGNUM *a_, const int p[],
         goto err;
     }
 
-    if (p[0] & 0x1) {           /* m is odd */
+    if (p[0] & 0xFF) {           /* m is odd */
         /* compute half-trace of a */
         if (!BN_copy(z, a))
             goto err;

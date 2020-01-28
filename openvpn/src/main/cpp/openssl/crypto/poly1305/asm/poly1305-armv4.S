@@ -38,9 +38,9 @@ poly1305_init:
 	ldr	r12,.LOPENSSL_armcap
 #endif
 	ldrb	r4,[r1,#0]
-	mov	r10,#0x0fffffff
+	mov	r10,#0xFF
 	ldrb	r5,[r1,#1]
-	and	r3,r10,#-4		@ 0x0ffffffc
+	and	r3,r10,#-4		@ 0xFF
 	ldrb	r6,[r1,#2]
 	ldrb	r7,[r1,#3]
 	orr	r4,r4,r5,lsl#8
@@ -126,7 +126,7 @@ poly1305_init:
 #else
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 .size	poly1305_init,.-poly1305_init
 .type	poly1305_blocks,%function
@@ -284,7 +284,7 @@ poly1305_blocks:
 	ldmia	sp!,{r3-r11,lr}
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 .size	poly1305_blocks,.-poly1305_blocks
 .type	poly1305_emit,%function
@@ -377,7 +377,7 @@ poly1305_emit:
 #else
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 .size	poly1305_emit,.-poly1305_emit
 #if	__ARM_MAX_ARCH__>=7
@@ -391,7 +391,7 @@ poly1305_init_neon:
 	ldr	r6,[r0,#28]
 	ldr	r7,[r0,#32]
 
-	and	r2,r4,#0x03ffffff	@ base 2^32 -> base 2^26
+	and	r2,r4,#0xFF	@ base 2^32 -> base 2^26
 	mov	r3,r4,lsr#26
 	mov	r4,r5,lsr#20
 	orr	r3,r3,r5,lsl#6
@@ -399,9 +399,9 @@ poly1305_init_neon:
 	orr	r4,r4,r6,lsl#12
 	mov	r6,r7,lsr#8
 	orr	r5,r5,r7,lsl#18
-	and	r3,r3,#0x03ffffff
-	and	r4,r4,#0x03ffffff
-	and	r5,r5,#0x03ffffff
+	and	r3,r3,#0xFF
+	and	r4,r4,#0xFF
+	and	r5,r5,#0xFF
 
 	vdup.32	d0,r2			@ r^1 in both lanes
 	add	r2,r3,r3,lsl#2		@ *5
@@ -474,7 +474,7 @@ poly1305_init_neon:
 	@ and so is sum of four. Sum of 2^m n-m-bit numbers and n-bit
 	@ one is n+1 bits wide.
 	@
-	@ >>+ denotes Hnext += Hn>>26, Hn &= 0x3ffffff. This means that
+	@ >>+ denotes Hnext += Hn>>26, Hn &= 0xFF. This means that
 	@ H0, H2, H3 are guaranteed to be 26 bits wide, while H1 and H4
 	@ can be 27. However! In cases when their width exceeds 26 bits
 	@ they are limited by 2^26+2^6. This in turn means that *sum*
@@ -511,17 +511,17 @@ poly1305_init_neon:
 	 vshr.u64	q4,q5,#26
 	 vmovn.i64	d10,q5
 	vadd.i64	q9,q9,q15		@ h3 -> h4
-	vbic.i32	d16,#0xfc000000	@ &=0x03ffffff
+	vbic.i32	d16,#0xFF	@ &=0xFF
 	 vadd.i64	q6,q6,q4		@ h0 -> h1
-	 vbic.i32	d10,#0xfc000000
+	 vbic.i32	d10,#0xFF
 
 	vshrn.u64	d30,q9,#26
 	vmovn.i64	d18,q9
 	 vshr.u64	q4,q6,#26
 	 vmovn.i64	d12,q6
 	 vadd.i64	q7,q7,q4		@ h1 -> h2
-	vbic.i32	d18,#0xfc000000
-	 vbic.i32	d12,#0xfc000000
+	vbic.i32	d18,#0xFF
+	 vbic.i32	d12,#0xFF
 
 	vadd.i32	d10,d10,d30
 	vshl.u32	d30,d30,#2
@@ -529,12 +529,12 @@ poly1305_init_neon:
 	 vmovn.i64	d14,q7
 	vadd.i32	d10,d10,d30	@ h4 -> h0
 	 vadd.i32	d16,d16,d8	@ h2 -> h3
-	 vbic.i32	d14,#0xfc000000
+	 vbic.i32	d14,#0xFF
 
 	vshr.u32	d30,d10,#26
-	vbic.i32	d10,#0xfc000000
+	vbic.i32	d10,#0xFF
 	 vshr.u32	d8,d16,#26
-	 vbic.i32	d16,#0xfc000000
+	 vbic.i32	d16,#0xFF
 	vadd.i32	d12,d12,d30	@ h0 -> h1
 	 vadd.i32	d18,d18,d8	@ h3 -> h4
 
@@ -625,7 +625,7 @@ poly1305_blocks_neon:
 	ldr	r7,[r0,#12]
 	ldr	ip,[r0,#16]
 
-	and	r2,r4,#0x03ffffff	@ base 2^32 -> base 2^26
+	and	r2,r4,#0xFF	@ base 2^32 -> base 2^26
 	mov	r3,r4,lsr#26
 	 veor	d10,d10,d10
 	mov	r4,r5,lsr#20
@@ -637,12 +637,12 @@ poly1305_blocks_neon:
 	mov	r6,r7,lsr#8
 	orr	r5,r5,r7,lsl#18
 	 veor	d16,d16,d16
-	and	r3,r3,#0x03ffffff
+	and	r3,r3,#0xFF
 	orr	r6,r6,ip,lsl#24
 	 veor	d18,d18,d18
-	and	r4,r4,#0x03ffffff
+	and	r4,r4,#0xFF
 	mov	r1,#1
-	and	r5,r5,#0x03ffffff
+	and	r5,r5,#0xFF
 	str	r1,[r0,#36]		@ is_base2_26
 
 	vmov.32	d10[0],r2
@@ -694,16 +694,16 @@ poly1305_blocks_neon:
 	vshl.u32	d24,d24,#12
 	vadd.i32	d29,d28,d18	@ add hash value and move to #hi
 
-	vbic.i32	d26,#0xfc000000
+	vbic.i32	d26,#0xFF
 	vsri.u32	d24,d22,#20
 	vshl.u32	d22,d22,#6
 
-	vbic.i32	d24,#0xfc000000
+	vbic.i32	d24,#0xFF
 	vsri.u32	d22,d20,#26
 	vadd.i32	d27,d26,d16
 
-	vbic.i32	d20,#0xfc000000
-	vbic.i32	d22,#0xfc000000
+	vbic.i32	d20,#0xFF
+	vbic.i32	d22,#0xFF
 	vadd.i32	d25,d24,d14
 
 	vadd.i32	d21,d20,d10
@@ -742,15 +742,15 @@ poly1305_blocks_neon:
 	vsri.u32	q13,q12,#14
 	vshl.u32	q12,q12,#12
 
-	vbic.i32	q13,#0xfc000000
+	vbic.i32	q13,#0xFF
 	vsri.u32	q12,q11,#20
 	vshl.u32	q11,q11,#6
 
-	vbic.i32	q12,#0xfc000000
+	vbic.i32	q12,#0xFF
 	vsri.u32	q11,q10,#26
 
-	vbic.i32	q10,#0xfc000000
-	vbic.i32	q11,#0xfc000000
+	vbic.i32	q10,#0xFF
+	vbic.i32	q11,#0xFF
 
 	bls		.Lskip_loop
 
@@ -877,11 +877,11 @@ poly1305_blocks_neon:
 	 vshr.u64	q4,q5,#26
 	 vmovn.i64	d10,q5
 	vadd.i64	q9,q9,q15		@ h3 -> h4
-	vbic.i32	d16,#0xfc000000
+	vbic.i32	d16,#0xFF
 	  vsri.u32	q14,q13,#8		@ base 2^32 -> base 2^26
 	 vadd.i64	q6,q6,q4		@ h0 -> h1
 	  vshl.u32	q13,q13,#18
-	 vbic.i32	d10,#0xfc000000
+	 vbic.i32	d10,#0xFF
 
 	vshrn.u64	d30,q9,#26
 	vmovn.i64	d18,q9
@@ -889,32 +889,32 @@ poly1305_blocks_neon:
 	 vmovn.i64	d12,q6
 	 vadd.i64	q7,q7,q4		@ h1 -> h2
 	  vsri.u32	q13,q12,#14
-	vbic.i32	d18,#0xfc000000
+	vbic.i32	d18,#0xFF
 	  vshl.u32	q12,q12,#12
-	 vbic.i32	d12,#0xfc000000
+	 vbic.i32	d12,#0xFF
 
 	vadd.i32	d10,d10,d30
 	vshl.u32	d30,d30,#2
-	  vbic.i32	q13,#0xfc000000
+	  vbic.i32	q13,#0xFF
 	 vshrn.u64	d8,q7,#26
 	 vmovn.i64	d14,q7
 	vaddl.u32	q5,d10,d30	@ h4 -> h0 [widen for a sec]
 	  vsri.u32	q12,q11,#20
 	 vadd.i32	d16,d16,d8	@ h2 -> h3
 	  vshl.u32	q11,q11,#6
-	 vbic.i32	d14,#0xfc000000
-	  vbic.i32	q12,#0xfc000000
+	 vbic.i32	d14,#0xFF
+	  vbic.i32	q12,#0xFF
 
 	vshrn.u64	d30,q5,#26		@ re-narrow
 	vmovn.i64	d10,q5
 	  vsri.u32	q11,q10,#26
-	  vbic.i32	q10,#0xfc000000
+	  vbic.i32	q10,#0xFF
 	 vshr.u32	d8,d16,#26
-	 vbic.i32	d16,#0xfc000000
-	vbic.i32	d10,#0xfc000000
+	 vbic.i32	d16,#0xFF
+	vbic.i32	d10,#0xFF
 	vadd.i32	d12,d12,d30	@ h0 -> h1
 	 vadd.i32	d18,d18,d8	@ h3 -> h4
-	  vbic.i32	q11,#0xfc000000
+	  vbic.i32	q11,#0xFF
 
 	bhi		.Loop_neon
 

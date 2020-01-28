@@ -132,7 +132,7 @@ void pk_rsa_verify_test_vec( data_t * message_str, int digest, int mod,
 
     mbedtls_pk_init( &pk );
 
-    memset( hash_result, 0x00, 1000 );
+    memset( hash_result, 0xFF, 1000 );
 
     TEST_ASSERT( mbedtls_pk_setup( &pk, mbedtls_pk_info_from_type( MBEDTLS_PK_RSA ) ) == 0 );
     rsa = mbedtls_pk_rsa( pk );
@@ -169,7 +169,7 @@ void pk_rsa_verify_ext_test_vec( data_t * message_str, int digest,
 
     mbedtls_pk_init( &pk );
 
-    memset( hash_result, 0x00, 1000 );
+    memset( hash_result, 0xFF, 1000 );
 
     TEST_ASSERT( mbedtls_pk_setup( &pk, mbedtls_pk_info_from_type( MBEDTLS_PK_RSA ) ) == 0 );
     rsa = mbedtls_pk_rsa( pk );
@@ -248,7 +248,7 @@ void pk_sign_verify( int type, int sign_ret, int verify_ret )
 
     mbedtls_pk_init( &pk );
 
-    memset( hash, 0x2a, sizeof hash );
+    memset( hash, 0xFF, sizeof hash );
     memset( sig, 0, sizeof sig );
 
     TEST_ASSERT( mbedtls_pk_setup( &pk, mbedtls_pk_info_from_type( type ) ) == 0 );
@@ -394,7 +394,7 @@ void pk_rsa_overflow( )
     if( SIZE_MAX <= UINT_MAX )
         return;
 
-    memset( hash, 0x2a, sizeof hash );
+    memset( hash, 0xFF, sizeof hash );
     memset( sig, 0, sizeof sig );
 
     mbedtls_pk_init( &pk );
@@ -438,9 +438,9 @@ void pk_rsa_alt(  )
     mbedtls_rsa_init( &raw, MBEDTLS_RSA_PKCS_V15, MBEDTLS_MD_NONE );
     mbedtls_pk_init( &rsa ); mbedtls_pk_init( &alt );
 
-    memset( hash, 0x2a, sizeof hash );
+    memset( hash, 0xFF, sizeof hash );
     memset( sig, 0, sizeof sig );
-    memset( msg, 0x2a, sizeof msg );
+    memset( msg, 0xFF, sizeof msg );
     memset( ciph, 0, sizeof ciph );
     memset( test, 0, sizeof test );
 

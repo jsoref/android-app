@@ -1009,8 +1009,8 @@ int SSL_CTX_use_serverinfo_file(SSL_CTX *ctx, const char *file)
             /* We know this only uses the last 2 bytes */
             sinfo[0] = 0;
             sinfo[1] = 0;
-            sinfo[2] = (SYNTHV1CONTEXT >> 8) & 0xff;
-            sinfo[3] = SYNTHV1CONTEXT & 0xff;
+            sinfo[2] = (SYNTHV1CONTEXT >> 8) & 0xFF;
+            sinfo[3] = SYNTHV1CONTEXT & 0xFF;
         }
         memcpy(serverinfo + serverinfo_length + contextoff,
                extension, extension_length);

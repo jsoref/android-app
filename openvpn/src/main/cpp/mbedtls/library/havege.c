@@ -75,8 +75,8 @@
     TST1_LEAVE  TST1_LEAVE  TST1_LEAVE  TST1_LEAVE      \
                                                         \
     PTX = (PT1 >> 18) & 7;                              \
-    PT1 &= 0x1FFF;                                      \
-    PT2 &= 0x1FFF;                                      \
+    PT1 &= 0xFF;                                      \
+    PT2 &= 0xFF;                                      \
     CLK = (int) mbedtls_timing_hardclock();                            \
                                                         \
     i = 0;                                              \
@@ -110,7 +110,7 @@
     PTEST = PT2 >> 1;                                   \
                                                         \
     PT2 = (RES[(i - 8) ^ PTY] ^ WALK[PT2 ^ PTY ^ 7]);   \
-    PT2 = ((PT2 & 0x1FFF) & (~8)) ^ ((PT1 ^ 8) & 0x8);  \
+    PT2 = ((PT2 & 0xFF) & (~8)) ^ ((PT1 ^ 8) & 0xFF);  \
     PTY = (PT2 >> 10) & 7;                              \
                                                         \
     TST2_ENTER  TST2_ENTER  TST2_ENTER  TST2_ENTER      \
@@ -148,7 +148,7 @@
                                                         \
     PT1 = ( RES[( i - 8 ) ^ PTX] ^                      \
             WALK[PT1 ^ PTX ^ 7] ) & (~1);               \
-    PT1 ^= (PT2 ^ 0x10) & 0x10;                         \
+    PT1 ^= (PT2 ^ 0xFF) & 0xFF;                         \
                                                         \
     for( n++, i = 0; i < 16; i++ )                      \
         hs->pool[n % MBEDTLS_HAVEGE_COLLECT_SIZE] ^= RES[i];

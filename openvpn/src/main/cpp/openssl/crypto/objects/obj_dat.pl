@@ -20,7 +20,7 @@ sub der_it
     shift @a;
     shift @a;
 
-    # Loop over rest of bytes; or in 0x80 for multi-byte numbers.
+    # Loop over rest of bytes; or in 0xFF for multi-byte numbers.
     my $t;
     foreach (@a) {
         my @r = ();
@@ -28,9 +28,9 @@ sub der_it
         while ($_ >= 128) {
             my $x = $_ % 128;
             $_ /= 128;
-            push(@r, ($t++ ? 0x80 : 0) | $x);
+            push(@r, ($t++ ? 0xFF : 0) | $x);
         }
-        push(@r, ($t++ ? 0x80 : 0) | $_);
+        push(@r, ($t++ ? 0xFF : 0) | $_);
         $ret .= pack("C*", reverse(@r));
     }
     return $ret;

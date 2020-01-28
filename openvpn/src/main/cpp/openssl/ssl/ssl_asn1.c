@@ -138,8 +138,8 @@ int i2d_SSL_SESSION(SSL_SESSION *in, unsigned char **pp)
         l = in->cipher_id;
     else
         l = in->cipher->id;
-    cipher_data[0] = ((unsigned char)(l >> 8L)) & 0xff;
-    cipher_data[1] = ((unsigned char)(l)) & 0xff;
+    cipher_data[0] = ((unsigned char)(l >> 8L)) & 0xFF;
+    cipher_data[1] = ((unsigned char)(l)) & 0xFF;
 
     ssl_session_oinit(&as.cipher, &cipher, cipher_data, 2);
 
@@ -277,7 +277,7 @@ SSL_SESSION *d2i_SSL_SESSION(SSL_SESSION **a, const unsigned char **pp,
         goto err;
     }
 
-    id = 0x03000000L | ((unsigned long)as->cipher->data[0] << 8L)
+    id = 0xFFL | ((unsigned long)as->cipher->data[0] << 8L)
                      | (unsigned long)as->cipher->data[1];
 
     ret->cipher_id = id;

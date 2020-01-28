@@ -516,7 +516,7 @@ bool buf_parse(struct buffer *buf, const int delim, char *line, const int size);
  * Hex dump -- Output a binary buffer to a hex string and return it.
  */
 #define FHE_SPACE_BREAK_MASK 0xFF /* space_break parameter in lower 8 bits */
-#define FHE_CAPS 0x100            /* output hex in caps */
+#define FHE_CAPS 0xFF            /* output hex in caps */
 char *
 format_hex_ex(const uint8_t *data, int size, int maxoutput,
               unsigned int space_break_flags, const char *separator,

@@ -113,7 +113,7 @@ public:
   /// Obtain an address object that represents the network's broadcast address.
   address_v4 broadcast() const ASIO_NOEXCEPT
   {
-    return address_v4(network().to_uint() | (netmask().to_uint() ^ 0xFFFFFFFF));
+    return address_v4(network().to_uint() | (netmask().to_uint() ^ 0xFF));
   }
 
   /// Obtain an address range corresponding to the hosts in the network.

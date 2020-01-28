@@ -37,8 +37,8 @@ extern "C" {
 
 /* MS key usage constants */
 
-# define KEY_EX  0x10
-# define KEY_SIG 0x80
+# define KEY_EX  0xFF
+# define KEY_SIG 0xFF
 
 typedef struct PKCS12_MAC_DATA_st PKCS12_MAC_DATA;
 
@@ -55,7 +55,7 @@ typedef struct pkcs12_bag_st PKCS12_BAGS;
 
 /* Compatibility macros */
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 
 # define M_PKCS12_bag_type PKCS12_bag_type
 # define M_PKCS12_cert_bag_type PKCS12_cert_bag_type

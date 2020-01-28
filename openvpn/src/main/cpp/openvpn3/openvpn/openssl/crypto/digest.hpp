@@ -143,7 +143,7 @@ namespace openvpn {
       {
 	if (initialized)
 	  {
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
 	    EVP_MD_CTX_cleanup(ctx);
 #endif
 	    EVP_MD_CTX_free(ctx);

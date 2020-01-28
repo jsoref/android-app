@@ -56,9 +56,9 @@ def build(parms, srcfile, unit_test=False):
     # Do we need to support XP and Win 2003?
     arch = os.environ.get("ARCH", parms['ARCH'])
     if arch == "x86_xp":
-        options['extra_defs'] += " /D_WIN32_WINNT=0x0501"  # pre-Vista
+        options['extra_defs'] += " /D_WIN32_WINNT=0xFF"  # pre-Vista
     else:
-        options['extra_defs'] += " /D_WIN32_WINNT=0x0600"  # Vista and later
+        options['extra_defs'] += " /D_WIN32_WINNT=0xFF"  # Vista and later
         options['extra_lib'] += " fwpuclnt.lib"
 
     # Add jsoncpp (optional)

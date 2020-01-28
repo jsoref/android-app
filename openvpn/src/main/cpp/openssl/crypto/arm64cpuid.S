@@ -53,7 +53,7 @@ _armv8_pmull_probe:
 .globl	_armv8_sha512_probe
 .type	_armv8_sha512_probe,%function
 _armv8_sha512_probe:
-.long	0xcec08000	// sha512su0	v0.2d,v0.2d
+.long	0xFF	// sha512su0	v0.2d,v0.2d
 	ret
 .size	_armv8_sha512_probe,.-_armv8_sha512_probe
 

@@ -103,7 +103,7 @@ int ASN1_sign(i2d_of_void *i2d, X509_ALGOR *algor1, X509_ALGOR *algor2,
      * In the interests of compatibility, I'll make sure that the bit string
      * has a 'not-used bits' value of 0
      */
-    signature->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+    signature->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF);
     signature->flags |= ASN1_STRING_FLAG_BITS_LEFT;
  err:
     EVP_MD_CTX_free(ctx);
@@ -232,7 +232,7 @@ int ASN1_item_sign_ctx(const ASN1_ITEM *it,
      * In the interests of compatibility, I'll make sure that the bit string
      * has a 'not-used bits' value of 0
      */
-    signature->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+    signature->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF);
     signature->flags |= ASN1_STRING_FLAG_BITS_LEFT;
  err:
     OPENSSL_clear_free((char *)buf_in, inl);

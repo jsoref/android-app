@@ -151,7 +151,7 @@ static void ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_RENEGOTIATION_INFO >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_RENEGOTIATION_INFO      ) & 0xFF );
 
-    *p++ = 0x00;
+    *p++ = 0xFF;
     *p++ = ( ssl->verify_data_len + 1 ) & 0xFF;
     *p++ = ssl->verify_data_len & 0xFF;
 
@@ -344,7 +344,7 @@ static void ssl_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SUPPORTED_POINT_FORMATS >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SUPPORTED_POINT_FORMATS      ) & 0xFF );
 
-    *p++ = 0x00;
+    *p++ = 0xFF;
     *p++ = 2;
 
     *p++ = 1;
@@ -458,7 +458,7 @@ static void ssl_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_MAX_FRAGMENT_LENGTH >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_MAX_FRAGMENT_LENGTH      ) & 0xFF );
 
-    *p++ = 0x00;
+    *p++ = 0xFF;
     *p++ = 1;
 
     *p++ = ssl->conf->mfl_code;
@@ -492,8 +492,8 @@ static void ssl_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_TRUNCATED_HMAC >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_TRUNCATED_HMAC      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -526,8 +526,8 @@ static void ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_ENCRYPT_THEN_MAC >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_ENCRYPT_THEN_MAC      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -560,8 +560,8 @@ static void ssl_write_extended_ms_ext( mbedtls_ssl_context *ssl,
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_EXTENDED_MASTER_SECRET >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_EXTENDED_MASTER_SECRET      ) & 0xFF );
 
-    *p++ = 0x00;
-    *p++ = 0x00;
+    *p++ = 0xFF;
+    *p++ = 0xFF;
 
     *olen = 4;
 }
@@ -1132,7 +1132,7 @@ static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
     else
 #endif /* MBEDTLS_SSL_RENEGOTIATION */
     {
-        if( len != 1 || buf[0] != 0x00 )
+        if( len != 1 || buf[0] != 0xFF )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-zero length renegotiation info" ) );
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,

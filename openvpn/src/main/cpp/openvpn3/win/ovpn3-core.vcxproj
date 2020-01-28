@@ -466,7 +466,7 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0x0600;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;TAP_WIN_COMPONENT_ID=tap0901;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0xFF;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;TAP_WIN_COMPONENT_ID=tap0901;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(OVPN3_ROOT)\deps\amd64\mbedtls\include;$(OVPN3_ROOT)\deps\amd64\tap-windows\src;$(OVPN3_ROOT)\deps\amd64\asio\asio\include;$(OVPN3_ROOT)\deps\amd64\lz4\lib;$(OVPN3_ROOT)\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -487,7 +487,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0x0600;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;TAP_WIN_COMPONENT_ID=tap0901;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NOMINMAX;_WIN32_WINNT=0xFF;USE_ASIO;ASIO_STANDALONE;USE_MBEDTLS;HAVE_LZ4;TAP_WIN_COMPONENT_ID=tap0901;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(OVPN3_ROOT)\deps\amd64\mbedtls\include;$(OVPN3_ROOT)\deps\amd64\tap-windows\src;$(OVPN3_ROOT)\deps\amd64\asio\asio\include;$(OVPN3_ROOT)\deps\amd64\lz4\lib;$(OVPN3_ROOT)\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>

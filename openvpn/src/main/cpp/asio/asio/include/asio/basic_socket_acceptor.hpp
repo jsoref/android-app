@@ -578,7 +578,7 @@ public:
    * these platforms.
    */
 #if defined(ASIO_MSVC) && (ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
+  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0xFF)
   __declspec(deprecated("This function always fails with "
         "operation_not_supported when used on Windows versions "
         "prior to Windows 8.1."))
@@ -606,7 +606,7 @@ public:
    * these platforms.
    */
 #if defined(ASIO_MSVC) && (ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
+  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0xFF)
   __declspec(deprecated("This function always fails with "
         "operation_not_supported when used on Windows versions "
         "prior to Windows 8.1."))

@@ -786,7 +786,7 @@ init_static(void)
 #endif
 
 #ifdef IFCONFIG_POOL_TEST
-    ifconfig_pool_test(0x0A010004, 0x0A0100FF);
+    ifconfig_pool_test(0xFF, 0xFF);
     return false;
 #endif
 
@@ -2809,7 +2809,7 @@ do_init_crypto_tls(struct context *c, const unsigned int flags)
 
     to.verify_command = options->tls_verify;
     to.verify_export_cert = options->tls_export_cert;
-    to.verify_x509_type = (options->verify_x509_type & 0xff);
+    to.verify_x509_type = (options->verify_x509_type & 0xFF);
     to.verify_x509_name = options->verify_x509_name;
     to.crl_file = options->crl_file;
     to.crl_file_inline = options->crl_file_inline;

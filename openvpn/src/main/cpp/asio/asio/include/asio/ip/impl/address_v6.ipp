@@ -164,12 +164,12 @@ bool address_v6::is_unspecified() const
 
 bool address_v6::is_link_local() const
 {
-  return ((addr_.s6_addr[0] == 0xfe) && ((addr_.s6_addr[1] & 0xc0) == 0x80));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool address_v6::is_site_local() const
 {
-  return ((addr_.s6_addr[0] == 0xfe) && ((addr_.s6_addr[1] & 0xc0) == 0xc0));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool address_v6::is_v4_mapped() const
@@ -179,7 +179,7 @@ bool address_v6::is_v4_mapped() const
       && (addr_.s6_addr[4] == 0) && (addr_.s6_addr[5] == 0)
       && (addr_.s6_addr[6] == 0) && (addr_.s6_addr[7] == 0)
       && (addr_.s6_addr[8] == 0) && (addr_.s6_addr[9] == 0)
-      && (addr_.s6_addr[10] == 0xff) && (addr_.s6_addr[11] == 0xff));
+      && (addr_.s6_addr[10] == 0xFF) && (addr_.s6_addr[11] == 0xFF));
 }
 
 #if !defined(ASIO_NO_DEPRECATED)
@@ -200,32 +200,32 @@ bool address_v6::is_v4_compatible() const
 
 bool address_v6::is_multicast() const
 {
-  return (addr_.s6_addr[0] == 0xff);
+  return (addr_.s6_addr[0] == 0xFF);
 }
 
 bool address_v6::is_multicast_global() const
 {
-  return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x0e));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool address_v6::is_multicast_link_local() const
 {
-  return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x02));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool address_v6::is_multicast_node_local() const
 {
-  return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x01));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool address_v6::is_multicast_org_local() const
 {
-  return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x08));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool address_v6::is_multicast_site_local() const
 {
-  return ((addr_.s6_addr[0] == 0xff) && ((addr_.s6_addr[1] & 0x0f) == 0x05));
+  return ((addr_.s6_addr[0] == 0xFF) && ((addr_.s6_addr[1] & 0xFF) == 0xFF));
 }
 
 bool operator==(const address_v6& a1, const address_v6& a2)

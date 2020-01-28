@@ -546,7 +546,7 @@ void complete_iocp_connect(socket_type s, asio::error_code& ec)
     // Need to set the SO_UPDATE_CONNECT_CONTEXT option so that getsockname
     // and getpeername will work on the connected socket.
     socket_ops::state_type state = 0;
-    const int so_update_connect_context = 0x7010;
+    const int so_update_connect_context = 0xFF;
     socket_ops::setsockopt(s, state, SOL_SOCKET,
         so_update_connect_context, 0, 0, ec);
   }
@@ -1659,7 +1659,7 @@ int getpeername(socket_type s, socket_addr_type* addr,
     {
       return socket_error_retval;
     }
-    if (connect_time == 0xFFFFFFFF)
+    if (connect_time == 0xFF)
     {
       ec = asio::error::not_connected;
       return socket_error_retval;
@@ -2116,10 +2116,10 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
     using namespace std; // For strcat and sprintf.
     char if_name[(IF_NAMESIZE > 21 ? IF_NAMESIZE : 21) + 1] = "%";
     const in6_addr_type* ipv6_address = static_cast<const in6_addr_type*>(src);
-    bool is_link_local = ((ipv6_address->s6_addr[0] == 0xfe)
-        && ((ipv6_address->s6_addr[1] & 0xc0) == 0x80));
-    bool is_multicast_link_local = ((ipv6_address->s6_addr[0] == 0xff)
-        && ((ipv6_address->s6_addr[1] & 0x0f) == 0x02));
+    bool is_link_local = ((ipv6_address->s6_addr[0] == 0xFF)
+        && ((ipv6_address->s6_addr[1] & 0xFF) == 0xFF));
+    bool is_multicast_link_local = ((ipv6_address->s6_addr[0] == 0xFF)
+        && ((ipv6_address->s6_addr[1] & 0xFF) == 0xFF));
     if ((!is_link_local && !is_multicast_link_local)
         || if_indextoname(static_cast<unsigned>(scope_id), if_name + 1) == 0)
       sprintf(if_name + 1, "%lu", scope_id);
@@ -2168,7 +2168,7 @@ int inet_pton(int af, const char* src, void* dest,
     unsigned long current_word = 0;
     while (state != done)
     {
-      if (current_word > 0xFFFF)
+      if (current_word > 0xFF)
       {
         ec = asio::error::invalid_argument;
         return -1;
@@ -2368,10 +2368,10 @@ int inet_pton(int af, const char* src, void* dest,
     if (if_name != 0)
     {
       in6_addr_type* ipv6_address = static_cast<in6_addr_type*>(dest);
-      bool is_link_local = ((ipv6_address->s6_addr[0] == 0xfe)
-          && ((ipv6_address->s6_addr[1] & 0xc0) == 0x80));
-      bool is_multicast_link_local = ((ipv6_address->s6_addr[0] == 0xff)
-          && ((ipv6_address->s6_addr[1] & 0x0f) == 0x02));
+      bool is_link_local = ((ipv6_address->s6_addr[0] == 0xFF)
+          && ((ipv6_address->s6_addr[1] & 0xFF) == 0xFF));
+      bool is_multicast_link_local = ((ipv6_address->s6_addr[0] == 0xFF)
+          && ((ipv6_address->s6_addr[1] & 0xFF) == 0xFF));
       if (is_link_local || is_multicast_link_local)
         *scope_id = if_nametoindex(if_name + 1);
       if (*scope_id == 0)

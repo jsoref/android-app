@@ -160,7 +160,7 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <limits.h>
 #if (32767 >= 4294967295ul) || (65535u >= 4294967295ul)
 #  include "your C preprocessor is broken 1"
-#elif (0xffffu == 0xfffffffful)
+#elif (0xFFu == 0xFFul)
 #  include "your C preprocessor is broken 2"
 #elif (32767 >= ULONG_MAX) || (65535u >= ULONG_MAX)
 #  include "your C preprocessor is broken 3"
@@ -380,8 +380,8 @@ mfx_cv_header_sane_limits_h,
 #    include "your preprocessor is broken"
 #  endif
 #endif
-#define MFX_0xffff          0xffff
-#define MFX_0xffffffffL     4294967295ul
+#define MFX_0xFF          0xFF
+#define MFX_0xFFL     4294967295ul
 #if !defined(CHAR_BIT) || (CHAR_BIT != 8)
 #  include "error CHAR_BIT"
 #endif
@@ -418,16 +418,16 @@ mfx_cv_header_sane_limits_h,
 #if (ULONG_MAX < 1)
 #  include "error ULONG_MAX 2"
 #endif
-#if (UCHAR_MAX < 0xff)
+#if (UCHAR_MAX < 0xFF)
 #  include "error UCHAR_MAX 3"
 #endif
-#if (USHRT_MAX < MFX_0xffff)
+#if (USHRT_MAX < MFX_0xFF)
 #  include "error USHRT_MAX 3"
 #endif
-#if (UINT_MAX < MFX_0xffff)
+#if (UINT_MAX < MFX_0xFF)
 #  include "error UINT_MAX 3"
 #endif
-#if (ULONG_MAX < MFX_0xffffffffL)
+#if (ULONG_MAX < MFX_0xFFL)
 #  include "error ULONG_MAX 3"
 #endif
 #if (USHRT_MAX > UINT_MAX)
@@ -437,36 +437,36 @@ mfx_cv_header_sane_limits_h,
 #  include "error UINT_MAX vs ULONG_MAX"
 #endif
 ]], [[
-#if (USHRT_MAX == MFX_0xffff)
+#if (USHRT_MAX == MFX_0xFF)
 { typedef char a_short2a[1 - 2 * !(sizeof(short) == 2)]; }
-#elif (USHRT_MAX >= MFX_0xffff)
+#elif (USHRT_MAX >= MFX_0xFF)
 { typedef char a_short2b[1 - 2 * !(sizeof(short) > 2)]; }
 #endif
-#if (UINT_MAX == MFX_0xffff)
+#if (UINT_MAX == MFX_0xFF)
 { typedef char a_int2a[1 - 2 * !(sizeof(int) == 2)]; }
-#elif (UINT_MAX >= MFX_0xffff)
+#elif (UINT_MAX >= MFX_0xFF)
 { typedef char a_int2b[1 - 2 * !(sizeof(int) > 2)]; }
 #endif
-#if (ULONG_MAX == MFX_0xffff)
+#if (ULONG_MAX == MFX_0xFF)
 { typedef char a_long2a[1 - 2 * !(sizeof(long) == 2)]; }
-#elif (ULONG_MAX >= MFX_0xffff)
+#elif (ULONG_MAX >= MFX_0xFF)
 { typedef char a_long2b[1 - 2 * !(sizeof(long) > 2)]; }
 #endif
 #if !defined(_CRAY1) /* CRAY PVP systems */
-#if (USHRT_MAX == MFX_0xffffffffL)
+#if (USHRT_MAX == MFX_0xFFL)
 { typedef char a_short4a[1 - 2 * !(sizeof(short) == 4)]; }
-#elif (USHRT_MAX >= MFX_0xffffffffL)
+#elif (USHRT_MAX >= MFX_0xFFL)
 { typedef char a_short4b[1 - 2 * !(sizeof(short) > 4)]; }
 #endif
 #endif /* _CRAY1 */
-#if (UINT_MAX == MFX_0xffffffffL)
+#if (UINT_MAX == MFX_0xFFL)
 { typedef char a_int4a[1 - 2 * !(sizeof(int) == 4)]; }
-#elif (UINT_MAX >= MFX_0xffffffffL)
+#elif (UINT_MAX >= MFX_0xFFL)
 { typedef char a_int4b[1 - 2 * !(sizeof(int) > 4)]; }
 #endif
-#if (ULONG_MAX == MFX_0xffffffffL)
+#if (ULONG_MAX == MFX_0xFFL)
 { typedef char a_long4a[1 - 2 * !(sizeof(long) == 4)]; }
-#elif (ULONG_MAX >= MFX_0xffffffffL)
+#elif (ULONG_MAX >= MFX_0xFFL)
 { typedef char a_long4b[1 - 2 * !(sizeof(long) > 4)]; }
 #endif
 ]])],

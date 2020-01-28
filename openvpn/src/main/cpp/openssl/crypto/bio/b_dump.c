@@ -51,7 +51,7 @@ int BIO_dump_indent_cb(int (*cb) (const void *data, size_t len, void *u),
                 if (((i * dump_width) + j) >= len) {
                     strcpy(buf + n, "   ");
                 } else {
-                    ch = ((unsigned char)*(s + i * dump_width + j)) & 0xff;
+                    ch = ((unsigned char)*(s + i * dump_width + j)) & 0xFF;
                     BIO_snprintf(buf + n, 4, "%02x%c", ch,
                                  j == 7 ? '-' : ' ');
                 }
@@ -66,7 +66,7 @@ int BIO_dump_indent_cb(int (*cb) (const void *data, size_t len, void *u),
             if (((i * dump_width) + j) >= len)
                 break;
             if (SPACE(buf, n, 1)) {
-                ch = ((unsigned char)*(s + i * dump_width + j)) & 0xff;
+                ch = ((unsigned char)*(s + i * dump_width + j)) & 0xFF;
 #ifndef CHARSET_EBCDIC
                 buf[n++] = ((ch >= ' ') && (ch <= '~')) ? ch : '.';
 #else

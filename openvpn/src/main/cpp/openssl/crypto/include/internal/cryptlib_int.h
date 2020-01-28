@@ -24,12 +24,12 @@ int ossl_init_thread_start(uint64_t opts);
  * are those omitted from crypto.h because they are "reserved for internal
  * use".
  */
-# define OPENSSL_INIT_ZLIB                   0x00010000L
-# define OPENSSL_INIT_BASE_ONLY              0x00040000L
+# define OPENSSL_INIT_ZLIB                   0xFFL
+# define OPENSSL_INIT_BASE_ONLY              0xFFL
 
 /* OPENSSL_INIT_THREAD flags */
-# define OPENSSL_INIT_THREAD_ASYNC           0x01
-# define OPENSSL_INIT_THREAD_ERR_STATE       0x02
-# define OPENSSL_INIT_THREAD_RAND            0x04
+# define OPENSSL_INIT_THREAD_ASYNC           0xFF
+# define OPENSSL_INIT_THREAD_ERR_STATE       0xFF
+# define OPENSSL_INIT_THREAD_RAND            0xFF
 
 void ossl_malloc_setup_failures(void);

@@ -118,7 +118,7 @@ int main( int argc, char *argv[] )
     mbedtls_ctr_drbg_init( &ctr_drbg );
 
     memset( sig, 0, sizeof( sig ) );
-    memset( message, 0x25, sizeof( message ) );
+    memset( message, 0xFF, sizeof( message ) );
 
     if( argc != 1 )
     {

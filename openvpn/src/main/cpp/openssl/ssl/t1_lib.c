@@ -256,7 +256,7 @@ int tls_curve_allowed(SSL *s, uint16_t curve, int op)
         return 0;
 # endif
     ctmp[0] = curve >> 8;
-    ctmp[1] = curve & 0xff;
+    ctmp[1] = curve & 0xFF;
     return ssl_security(s, op, cinfo->secbits, cinfo->nid, (void *)ctmp);
 }
 
@@ -1101,8 +1101,8 @@ int tls12_check_peer_sigalg(SSL *s, uint16_t sig, EVP_PKEY *pkey)
          * Make sure security callback allows algorithm. For historical
          * reasons we have to pass the sigalg as a two byte char array.
          */
-        sigalgstr[0] = (sig >> 8) & 0xff;
-        sigalgstr[1] = sig & 0xff;
+        sigalgstr[0] = (sig >> 8) & 0xFF;
+        sigalgstr[1] = sig & 0xFF;
         if (!ssl_security(s, SSL_SECOP_SIGALG_CHECK,
                     EVP_MD_size(md) * 4, EVP_MD_type(md),
                     (void *)sigalgstr)) {
@@ -1621,8 +1621,8 @@ static int tls12_sigalg_allowed(SSL *s, int op, const SIGALG_LOOKUP *lu)
     /* Security bits: half digest bits */
     secbits = EVP_MD_size(ssl_md(lu->hash_idx)) * 4;
     /* Finally see if security callback allows it */
-    sigalgstr[0] = (lu->sigalg >> 8) & 0xff;
-    sigalgstr[1] = lu->sigalg & 0xff;
+    sigalgstr[0] = (lu->sigalg >> 8) & 0xFF;
+    sigalgstr[1] = lu->sigalg & 0xFF;
     return ssl_security(s, op, secbits, lu->hash, (void *)sigalgstr);
 }
 
@@ -1856,9 +1856,9 @@ int SSL_get_sigalgs(SSL *s, int idx,
             return 0;
         psig += idx;
         if (rhash != NULL)
-            *rhash = (unsigned char)((*psig >> 8) & 0xff);
+            *rhash = (unsigned char)((*psig >> 8) & 0xFF);
         if (rsig != NULL)
-            *rsig = (unsigned char)(*psig & 0xff);
+            *rsig = (unsigned char)(*psig & 0xFF);
         lu = tls1_lookup_sigalg(*psig);
         if (psign != NULL)
             *psign = lu != NULL ? lu->sig : NID_undef;
@@ -1888,9 +1888,9 @@ int SSL_get_shared_sigalgs(SSL *s, int idx,
     if (psignhash != NULL)
         *psignhash = shsigalgs->sigandhash;
     if (rsig != NULL)
-        *rsig = (unsigned char)(shsigalgs->sigalg & 0xff);
+        *rsig = (unsigned char)(shsigalgs->sigalg & 0xFF);
     if (rhash != NULL)
-        *rhash = (unsigned char)((shsigalgs->sigalg >> 8) & 0xff);
+        *rhash = (unsigned char)((shsigalgs->sigalg >> 8) & 0xFF);
     return (int)s->cert->shared_sigalgslen;
 }
 

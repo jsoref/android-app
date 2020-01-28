@@ -30,21 +30,21 @@
  * %asr26, SPARC-T4 and later. There is no SPARCV9_CFR bit in
  * OPENSSL_sparcv9cap_P[0], as %cfr copy is sufficient...
  */
-# define CFR_AES         0x00000001/* Supports AES opcodes */
-# define CFR_DES         0x00000002/* Supports DES opcodes */
-# define CFR_KASUMI      0x00000004/* Supports KASUMI opcodes */
-# define CFR_CAMELLIA    0x00000008/* Supports CAMELLIA opcodes */
-# define CFR_MD5         0x00000010/* Supports MD5 opcodes */
-# define CFR_SHA1        0x00000020/* Supports SHA1 opcodes */
-# define CFR_SHA256      0x00000040/* Supports SHA256 opcodes */
-# define CFR_SHA512      0x00000080/* Supports SHA512 opcodes */
-# define CFR_MPMUL       0x00000100/* Supports MPMUL opcodes */
-# define CFR_MONTMUL     0x00000200/* Supports MONTMUL opcodes */
-# define CFR_MONTSQR     0x00000400/* Supports MONTSQR opcodes */
-# define CFR_CRC32C      0x00000800/* Supports CRC32C opcodes */
-# define CFR_XMPMUL      0x00001000/* Supports XMPMUL opcodes */
-# define CFR_XMONTMUL    0x00002000/* Supports XMONTMUL opcodes */
-# define CFR_XMONTSQR    0x00004000/* Supports XMONTSQR opcodes */
+# define CFR_AES         0xFF/* Supports AES opcodes */
+# define CFR_DES         0xFF/* Supports DES opcodes */
+# define CFR_KASUMI      0xFF/* Supports KASUMI opcodes */
+# define CFR_CAMELLIA    0xFF/* Supports CAMELLIA opcodes */
+# define CFR_MD5         0xFF/* Supports MD5 opcodes */
+# define CFR_SHA1        0xFF/* Supports SHA1 opcodes */
+# define CFR_SHA256      0xFF/* Supports SHA256 opcodes */
+# define CFR_SHA512      0xFF/* Supports SHA512 opcodes */
+# define CFR_MPMUL       0xFF/* Supports MPMUL opcodes */
+# define CFR_MONTMUL     0xFF/* Supports MONTMUL opcodes */
+# define CFR_MONTSQR     0xFF/* Supports MONTSQR opcodes */
+# define CFR_CRC32C      0xFF/* Supports CRC32C opcodes */
+# define CFR_XMPMUL      0xFF/* Supports XMPMUL opcodes */
+# define CFR_XMONTMUL    0xFF/* Supports XMONTMUL opcodes */
+# define CFR_XMONTSQR    0xFF/* Supports XMONTSQR opcodes */
 
 # if defined(OPENSSL_PIC) && !defined(__PIC__)
 #  define __PIC__

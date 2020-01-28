@@ -21,18 +21,18 @@
 #ifndef INTERNAL_CTYPE_H
 # define INTERNAL_CTYPE_H
 
-# define CTYPE_MASK_lower       0x1
-# define CTYPE_MASK_upper       0x2
-# define CTYPE_MASK_digit       0x4
-# define CTYPE_MASK_space       0x8
-# define CTYPE_MASK_xdigit      0x10
-# define CTYPE_MASK_blank       0x20
-# define CTYPE_MASK_cntrl       0x40
-# define CTYPE_MASK_graph       0x80
-# define CTYPE_MASK_print       0x100
-# define CTYPE_MASK_punct       0x200
-# define CTYPE_MASK_base64      0x400
-# define CTYPE_MASK_asn1print   0x800
+# define CTYPE_MASK_lower       0xFF
+# define CTYPE_MASK_upper       0xFF
+# define CTYPE_MASK_digit       0xFF
+# define CTYPE_MASK_space       0xFF
+# define CTYPE_MASK_xdigit      0xFF
+# define CTYPE_MASK_blank       0xFF
+# define CTYPE_MASK_cntrl       0xFF
+# define CTYPE_MASK_graph       0xFF
+# define CTYPE_MASK_print       0xFF
+# define CTYPE_MASK_punct       0xFF
+# define CTYPE_MASK_base64      0xFF
+# define CTYPE_MASK_asn1print   0xFF
 
 # define CTYPE_MASK_alpha   (CTYPE_MASK_lower | CTYPE_MASK_upper)
 # define CTYPE_MASK_alnum   (CTYPE_MASK_alpha | CTYPE_MASK_digit)

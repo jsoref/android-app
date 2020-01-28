@@ -54,12 +54,12 @@ int mbedtls_padlock_has_support( int feature )
     if( flags == -1 )
     {
         asm( "movl  %%ebx, %0           \n\t"
-             "movl  $0xC0000000, %%eax  \n\t"
+             "movl  $0xFF, %%eax  \n\t"
              "cpuid                     \n\t"
-             "cmpl  $0xC0000001, %%eax  \n\t"
+             "cmpl  $0xFF, %%eax  \n\t"
              "movl  $0, %%edx           \n\t"
              "jb    unsupported         \n\t"
-             "movl  $0xC0000001, %%eax  \n\t"
+             "movl  $0xFF, %%eax  \n\t"
              "cpuid                     \n\t"
              "unsupported:              \n\t"
              "movl  %%edx, %1           \n\t"
@@ -93,7 +93,7 @@ int mbedtls_padlock_xcryptecb( mbedtls_aes_context *ctx,
     memcpy( blk, input, 16 );
 
      ctrl = blk + 4;
-    *ctrl = 0x80 | ctx->nr | ( ( ctx->nr + ( mode^1 ) - 10 ) << 9 );
+    *ctrl = 0xFF | ctx->nr | ( ( ctx->nr + ( mode^1 ) - 10 ) << 9 );
 
     asm( "pushfl                        \n\t"
          "popfl                         \n\t"
@@ -103,7 +103,7 @@ int mbedtls_padlock_xcryptecb( mbedtls_aes_context *ctx,
          "movl    %3, %%ebx             \n\t"
          "movl    %4, %%esi             \n\t"
          "movl    %4, %%edi             \n\t"
-         ".byte  0xf3,0x0f,0xa7,0xc8    \n\t"
+         ".byte  0xFF,0xFF,0xFF,0xFF    \n\t"
          "movl    %1, %%ebx             \n\t"
          : "=m" (ebx)
          :  "m" (ebx), "m" (ctrl), "m" (rk), "m" (blk)
@@ -140,7 +140,7 @@ int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx,
     memcpy( iw, iv, 16 );
 
      ctrl = iw + 4;
-    *ctrl = 0x80 | ctx->nr | ( ( ctx->nr + ( mode ^ 1 ) - 10 ) << 9 );
+    *ctrl = 0xFF | ctx->nr | ( ( ctx->nr + ( mode ^ 1 ) - 10 ) << 9 );
 
     count = ( length + 15 ) >> 4;
 
@@ -153,7 +153,7 @@ int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx,
          "movl    %5, %%esi             \n\t"
          "movl    %6, %%edi             \n\t"
          "movl    %7, %%eax             \n\t"
-         ".byte  0xf3,0x0f,0xa7,0xd0    \n\t"
+         ".byte  0xFF,0xFF,0xFF,0xFF    \n\t"
          "movl    %1, %%ebx             \n\t"
          : "=m" (ebx)
          :  "m" (ebx), "m" (count), "m" (ctrl),

@@ -37,7 +37,7 @@ struct ocsp_req_ctx_st {
 /* OCSP states */
 
 /* If set no reading should be performed */
-#define OHS_NOREAD              0x1000
+#define OHS_NOREAD              0xFF
 /* Error condition */
 #define OHS_ERROR               (0 | OHS_NOREAD)
 /* First line being read */
@@ -419,14 +419,14 @@ int OCSP_REQ_CTX_nbio(OCSP_REQ_CTX *rctx)
         }
 
         /* Check out length field */
-        if (*p & 0x80) {
+        if (*p & 0xFF) {
             /*
              * If MSB set on initial length octet we can now always read 6
              * octets: make sure we have them.
              */
             if (n < 6)
                 goto next_io;
-            n = *p & 0x7F;
+            n = *p & 0xFF;
             /* Not NDEF or excessive length */
             if (!n || (n > 4)) {
                 rctx->state = OHS_ERROR;

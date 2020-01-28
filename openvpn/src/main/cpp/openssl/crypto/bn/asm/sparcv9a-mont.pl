@@ -89,7 +89,7 @@ $np_l="%l3";	# This way a bunch of fxtods are eliminated in second
 $np_h="%l4";	# loop and L1-cache aliasing is minimized...
 $i="%l5";
 $j="%l6";
-$mask="%l7";	# 16-bit mask, 0xffff
+$mask="%l7";	# 16-bit mask, 0xFF
 
 $n0="%g4";	# reassigned(!) to "64-bit" register
 $carry="%i4";	# %i4 reused(!) for a carry bit
@@ -121,7 +121,7 @@ $ahia="%f40"; $ahib="%f42"; $ahic="%f44"; $ahid="%f46";
 $nloa="%f48"; $nlob="%f50"; $nloc="%f52"; $nlod="%f54";
 $nhia="%f56"; $nhib="%f58"; $nhic="%f60"; $nhid="%f62";
 
-$ASI_FL16_P=0xD2;	# magic ASI value to engage 16-bit FP load
+$ASI_FL16_P=0xFF;	# magic ASI value to engage 16-bit FP load
 
 $code=<<___;
 #include "sparc_arch.h"
@@ -141,9 +141,9 @@ $fname:
 	clr	%i0			! signal "unsupported input value"
 
 	srl	$num,1,$num
-	sethi	%hi(0xffff),$mask
+	sethi	%hi(0xFF),$mask
 	ld	[%i4+0],$n0		! $n0 reassigned, remember?
-	or	$mask,%lo(0xffff),$mask
+	or	$mask,%lo(0xFF),$mask
 	ld	[%i4+4],%o0
 	sllx	%o0,32,%o0
 	or	%o0,$n0,$n0		! $n0=n0[1].n0[0]
@@ -879,7 +879,7 @@ $code =~ s/\`([^\`]*)\`/eval($1)/gem;
 # is implicit and is just _a_ numerical value loaded to %asi register,
 # which assembler can't recognize as VIS specific...
 $code =~ s/fzeros\s+%f([0-9]+)/
-	   sprintf(".word\t0x%x\t! fzeros %%f%d",0x81b00c20|($1<<25),$1)
+	   sprintf(".word\t0x%x\t! fzeros %%f%d",0xFF|($1<<25),$1)
 	  /gem;
 
 print $code;

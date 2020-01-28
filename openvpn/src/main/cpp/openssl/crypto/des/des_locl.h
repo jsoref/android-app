@@ -54,10 +54,10 @@
                                 } \
                         }
 
-# define l2c(l,c)        (*((c)++)=(unsigned char)(((l)     )&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>24L)&0xff))
+# define l2c(l,c)        (*((c)++)=(unsigned char)(((l)     )&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>24L)&0xFF))
 
 /*
  * replacements for htonl and ntohl since I have no idea what to do when
@@ -69,30 +69,30 @@
                          l|=((DES_LONG)(*((c)++)))<< 8L, \
                          l|=((DES_LONG)(*((c)++))))
 
-# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)     )&0xff))
+# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>>16L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)>> 8L)&0xFF), \
+                         *((c)++)=(unsigned char)(((l)     )&0xFF))
 
 /* NOTE - c is not incremented as per l2c */
 # define l2cn(l1,l2,c,n) { \
                         c+=n; \
                         switch (n) { \
-                        case 8: *(--(c))=(unsigned char)(((l2)>>24L)&0xff); \
+                        case 8: *(--(c))=(unsigned char)(((l2)>>24L)&0xFF); \
                         /* fall thru */                                     \
-                        case 7: *(--(c))=(unsigned char)(((l2)>>16L)&0xff); \
+                        case 7: *(--(c))=(unsigned char)(((l2)>>16L)&0xFF); \
                         /* fall thru */                                     \
-                        case 6: *(--(c))=(unsigned char)(((l2)>> 8L)&0xff); \
+                        case 6: *(--(c))=(unsigned char)(((l2)>> 8L)&0xFF); \
                         /* fall thru */                                     \
-                        case 5: *(--(c))=(unsigned char)(((l2)     )&0xff); \
+                        case 5: *(--(c))=(unsigned char)(((l2)     )&0xFF); \
                         /* fall thru */                                     \
-                        case 4: *(--(c))=(unsigned char)(((l1)>>24L)&0xff); \
+                        case 4: *(--(c))=(unsigned char)(((l1)>>24L)&0xFF); \
                         /* fall thru */                                     \
-                        case 3: *(--(c))=(unsigned char)(((l1)>>16L)&0xff); \
+                        case 3: *(--(c))=(unsigned char)(((l1)>>16L)&0xFF); \
                         /* fall thru */                                     \
-                        case 2: *(--(c))=(unsigned char)(((l1)>> 8L)&0xff); \
+                        case 2: *(--(c))=(unsigned char)(((l1)>> 8L)&0xFF); \
                         /* fall thru */                                     \
-                        case 1: *(--(c))=(unsigned char)(((l1)     )&0xff); \
+                        case 1: *(--(c))=(unsigned char)(((l1)     )&0xFF); \
                                 } \
                         }
 
@@ -147,14 +147,14 @@
         LOAD_DATA_tmp(R,S,u,t,E0,E1); \
         t=ROTATE(t,4); \
         LL^= \
-            DES_SPtrans[0][(u>> 2L)&0x3f]^ \
-            DES_SPtrans[2][(u>>10L)&0x3f]^ \
-            DES_SPtrans[4][(u>>18L)&0x3f]^ \
-            DES_SPtrans[6][(u>>26L)&0x3f]^ \
-            DES_SPtrans[1][(t>> 2L)&0x3f]^ \
-            DES_SPtrans[3][(t>>10L)&0x3f]^ \
-            DES_SPtrans[5][(t>>18L)&0x3f]^ \
-            DES_SPtrans[7][(t>>26L)&0x3f]; }
+            DES_SPtrans[0][(u>> 2L)&0xFF]^ \
+            DES_SPtrans[2][(u>>10L)&0xFF]^ \
+            DES_SPtrans[4][(u>>18L)&0xFF]^ \
+            DES_SPtrans[6][(u>>26L)&0xFF]^ \
+            DES_SPtrans[1][(t>> 2L)&0xFF]^ \
+            DES_SPtrans[3][(t>>10L)&0xFF]^ \
+            DES_SPtrans[5][(t>>18L)&0xFF]^ \
+            DES_SPtrans[7][(t>>26L)&0xFF]; }
 
         /*-
          * IP and FP
@@ -182,7 +182,7 @@
                 4  5  6  7      20 21 22 23
                 8  9 10 11      24 25 26 27
                12 13 14 15      28 29 30 31
-        becomes (for size == 2 and mask == 0x3333)
+        becomes (for size == 2 and mask == 0xFF)
            t =   2^16  3^17 -- --   l =  0  1 16 17  r =  2  3 18 19
                  6^20  7^21 -- --        4  5 20 21       6  7 22 23
                 10^24 11^25 -- --        8  9 24 25      10 11 24 25
@@ -201,21 +201,21 @@
 # define IP(l,r) \
         { \
         register DES_LONG tt; \
-        PERM_OP(r,l,tt, 4,0x0f0f0f0fL); \
-        PERM_OP(l,r,tt,16,0x0000ffffL); \
-        PERM_OP(r,l,tt, 2,0x33333333L); \
-        PERM_OP(l,r,tt, 8,0x00ff00ffL); \
-        PERM_OP(r,l,tt, 1,0x55555555L); \
+        PERM_OP(r,l,tt, 4,0xFFL); \
+        PERM_OP(l,r,tt,16,0xFFL); \
+        PERM_OP(r,l,tt, 2,0xFFL); \
+        PERM_OP(l,r,tt, 8,0xFFL); \
+        PERM_OP(r,l,tt, 1,0xFFL); \
         }
 
 # define FP(l,r) \
         { \
         register DES_LONG tt; \
-        PERM_OP(l,r,tt, 1,0x55555555L); \
-        PERM_OP(r,l,tt, 8,0x00ff00ffL); \
-        PERM_OP(l,r,tt, 2,0x33333333L); \
-        PERM_OP(r,l,tt,16,0x0000ffffL); \
-        PERM_OP(l,r,tt, 4,0x0f0f0f0fL); \
+        PERM_OP(l,r,tt, 1,0xFFL); \
+        PERM_OP(r,l,tt, 8,0xFFL); \
+        PERM_OP(l,r,tt, 2,0xFFL); \
+        PERM_OP(r,l,tt,16,0xFFL); \
+        PERM_OP(l,r,tt, 4,0xFFL); \
         }
 
 extern const DES_LONG DES_SPtrans[8][64];

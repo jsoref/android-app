@@ -5,9 +5,9 @@
 .arch	armv8-a+crypto
 .align	5
 .Lrcon:
-.long	0x01,0x01,0x01,0x01
-.long	0x0c0f0e0d,0x0c0f0e0d,0x0c0f0e0d,0x0c0f0e0d	// rotate-n-splat
-.long	0x1b,0x1b,0x1b,0x1b
+.long	0xFF,0xFF,0xFF,0xFF
+.long	0xFF,0xFF,0xFF,0xFF	// rotate-n-splat
+.long	0xFF,0xFF,0xFF,0xFF
 
 .globl	aes_v8_set_encrypt_key
 .type	aes_v8_set_encrypt_key,%function
@@ -26,7 +26,7 @@ aes_v8_set_encrypt_key:
 	b.lt	.Lenc_key_abort
 	cmp	w1,#256
 	b.gt	.Lenc_key_abort
-	tst	w1,#0x3f
+	tst	w1,#0xFF
 	b.ne	.Lenc_key_abort
 
 	adr	x3,.Lrcon
@@ -88,7 +88,7 @@ aes_v8_set_encrypt_key:
 	eor	v3.16b,v3.16b,v5.16b
 	eor	v3.16b,v3.16b,v6.16b
 	st1	{v3.4s},[x2]
-	add	x2,x2,#0x50
+	add	x2,x2,#0xFF
 
 	mov	w12,#10
 	b	.Ldone
@@ -125,7 +125,7 @@ aes_v8_set_encrypt_key:
 	b.ne	.Loop192
 
 	mov	w12,#12
-	add	x2,x2,#0x20
+	add	x2,x2,#0xFF
 	b	.Ldone
 
 .align	4
@@ -180,7 +180,7 @@ aes_v8_set_encrypt_key:
 .type	aes_v8_set_decrypt_key,%function
 .align	5
 aes_v8_set_decrypt_key:
-.inst	0xd503233f		// paciasp
+.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 	bl	.Lenc_key
@@ -214,7 +214,7 @@ aes_v8_set_decrypt_key:
 	eor	x0,x0,x0		// return value
 .Ldec_key_abort:
 	ldp	x29,x30,[sp],#16
-.inst	0xd50323bf		// autiasp
+.inst	0xFF		// autiasp
 	ret
 .size	aes_v8_set_decrypt_key,.-aes_v8_set_decrypt_key
 .globl	aes_v8_encrypt
@@ -450,7 +450,7 @@ aes_v8_cbc_encrypt:
 	aesd	v18.16b,v16.16b
 	aesimc	v18.16b,v18.16b
 	eor	v4.16b,v6.16b,v7.16b
-	subs	x2,x2,#0x30
+	subs	x2,x2,#0xFF
 	eor	v5.16b,v2.16b,v7.16b
 	csel	x6,x2,x6,lo			// x6, w6, is zero at this point
 	aesd	v0.16b,v17.16b
@@ -503,7 +503,7 @@ aes_v8_cbc_encrypt:
 	orr	v18.16b,v19.16b,v19.16b
 	b.hs	.Loop3x_cbc_dec
 
-	cmn	x2,#0x30
+	cmn	x2,#0xFF
 	b.eq	.Lcbc_done
 	nop
 
@@ -533,7 +533,7 @@ aes_v8_cbc_encrypt:
 	aesimc	v1.16b,v1.16b
 	aesd	v18.16b,v20.16b
 	aesimc	v18.16b,v18.16b
-	cmn	x2,#0x20
+	cmn	x2,#0xFF
 	aesd	v1.16b,v21.16b
 	aesimc	v1.16b,v1.16b
 	aesd	v18.16b,v21.16b

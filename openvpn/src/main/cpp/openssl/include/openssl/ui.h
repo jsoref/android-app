@@ -12,7 +12,7 @@
 
 # include <openssl/opensslconf.h>
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/crypto.h>
 # endif
 # include <openssl/safestack.h>
@@ -21,7 +21,7 @@
 # include <openssl/uierr.h>
 
 /* For compatibility reasons, the macro OPENSSL_NO_UI is currently retained */
-# if OPENSSL_API_COMPAT < 0x10200000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  ifdef OPENSSL_NO_UI_CONSOLE
 #   define OPENSSL_NO_UI
 #  endif
@@ -109,7 +109,7 @@ int UI_dup_error_string(UI *ui, const char *text);
 
 /* These are the possible flags.  They can be or'ed together. */
 /* Use to have echoing of input */
-# define UI_INPUT_FLAG_ECHO              0x01
+# define UI_INPUT_FLAG_ECHO              0xFF
 /*
  * Use a default password.  Where that password is found is completely up to
  * the application, it might for example be in the user data set with
@@ -117,7 +117,7 @@ int UI_dup_error_string(UI *ui, const char *text);
  * each UI being marked with this flag, or the application might get
  * confused.
  */
-# define UI_INPUT_FLAG_DEFAULT_PWD       0x02
+# define UI_INPUT_FLAG_DEFAULT_PWD       0xFF
 
 /*-
  * The user of these routines may want to define flags of their own.  The core
@@ -126,7 +126,7 @@ int UI_dup_error_string(UI *ui, const char *text);
  * UI_INPUT_FLAG_USER_BASE tells which is the lowest bit to use.  A good
  * example of use is this:
  *
- *    #define MY_UI_FLAG1       (0x01 << UI_INPUT_FLAG_USER_BASE)
+ *    #define MY_UI_FLAG1       (0xFF << UI_INPUT_FLAG_USER_BASE)
  *
 */
 # define UI_INPUT_FLAG_USER_BASE 16

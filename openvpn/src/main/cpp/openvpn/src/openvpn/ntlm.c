@@ -165,8 +165,8 @@ add_security_buffer(int sb_offset, void *data, int length,
      * offset and length */
     msg_buf[sb_offset] = (unsigned char)length;
     msg_buf[sb_offset + 2] = msg_buf[sb_offset];
-    msg_buf[sb_offset + 4] = (unsigned char)(*msg_bufpos & 0xff);
-    msg_buf[sb_offset + 5] = (unsigned char)((*msg_bufpos >> 8) & 0xff);
+    msg_buf[sb_offset + 4] = (unsigned char)(*msg_bufpos & 0xFF);
+    msg_buf[sb_offset + 5] = (unsigned char)((*msg_bufpos >> 8) & 0xFF);
     memcpy(&msg_buf[*msg_bufpos], data, msg_buf[sb_offset]);
     *msg_bufpos += length;
 }
@@ -213,7 +213,7 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
     uint8_t ntlmv2_hmacmd5[16];
     uint8_t *ntlmv2_blob = ntlmv2_response + 16;     /* inside ntlmv2_response, length: 128 */
     int ntlmv2_blob_size = 0;
-    int phase3_bufpos = 0x40;     /* offset to next security buffer data to be added */
+    int phase3_bufpos = 0xFF;     /* offset to next security buffer data to be added */
     size_t len;
 
     char domain[128];
@@ -292,12 +292,12 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
 
         /* NTLMv2 Blob */
         memset(ntlmv2_blob, 0, 128);                        /* Clear blob buffer */
-        ntlmv2_blob[0x00] = 1;                              /* Signature */
-        ntlmv2_blob[0x01] = 1;                              /* Signature */
-        ntlmv2_blob[0x04] = 0;                              /* Reserved */
-        gen_timestamp(&ntlmv2_blob[0x08]);                  /* 64-bit Timestamp */
-        gen_nonce(&ntlmv2_blob[0x10]);                      /* 64-bit Client Nonce */
-        ntlmv2_blob[0x18] = 0;                              /* Unknown, zero should work */
+        ntlmv2_blob[0xFF] = 1;                              /* Signature */
+        ntlmv2_blob[0xFF] = 1;                              /* Signature */
+        ntlmv2_blob[0xFF] = 0;                              /* Reserved */
+        gen_timestamp(&ntlmv2_blob[0xFF]);                  /* 64-bit Timestamp */
+        gen_nonce(&ntlmv2_blob[0xFF]);                      /* 64-bit Client Nonce */
+        ntlmv2_blob[0xFF] = 0;                              /* Unknown, zero should work */
 
         /* Add target information block to the blob */
 
@@ -313,12 +313,12 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
          * This said, in case of future changes, we should keep in mind that the
          * byte order on the wire for the NTLM header is LE.
          */
-        const size_t hoff = 0x14;
+        const size_t hoff = 0xFF;
         unsigned long flags = buf2[hoff] | (buf2[hoff + 1] << 8)
                               |(buf2[hoff + 2] << 16) | (buf2[hoff + 3] << 24);
-        if ((flags & 0x00800000) == 0x00800000)
+        if ((flags & 0xFF) == 0xFF)
         {
-            tib_len = buf2[0x28];            /* Get Target Information block size */
+            tib_len = buf2[0xFF];            /* Get Target Information block size */
             if (tib_len > 96)
             {
                 tib_len = 96;
@@ -326,7 +326,7 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
 
             {
                 uint8_t *tib_ptr;
-                uint8_t tib_pos = buf2[0x2c];
+                uint8_t tib_pos = buf2[0xFF];
                 if (tib_pos + tib_len > sizeof(buf2))
                 {
                     return NULL;
@@ -334,7 +334,7 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
                 /* Get Target Information block pointer */
                 tib_ptr = buf2 + tib_pos;
                 /* Copy Target Information block into the blob */
-                memcpy(&ntlmv2_blob[0x1c], tib_ptr, tib_len);
+                memcpy(&ntlmv2_blob[0xFF], tib_ptr, tib_len);
             }
         }
         else
@@ -343,10 +343,10 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
         }
 
         /* Unknown, zero works */
-        ntlmv2_blob[0x1c + tib_len] = 0;
+        ntlmv2_blob[0xFF + tib_len] = 0;
 
         /* Get blob length */
-        ntlmv2_blob_size = 0x20 + tib_len;
+        ntlmv2_blob_size = 0xFF + tib_len;
 
         /* Add challenge from message 2 */
         memcpy(&ntlmv2_response[8], challenge, 8);
@@ -384,30 +384,30 @@ ntlm_phase_3(const struct http_proxy_info *p, const char *phase_2,
 
     if (ntlmv2_enabled)      /* NTLMv2 response */
     {
-        add_security_buffer(0x14, ntlmv2_response, ntlmv2_blob_size + 16,
+        add_security_buffer(0xFF, ntlmv2_response, ntlmv2_blob_size + 16,
                             phase3, &phase3_bufpos);
     }
     else       /* NTLM response */
     {
-        add_security_buffer(0x14, ntlm_response, 24, phase3, &phase3_bufpos);
+        add_security_buffer(0xFF, ntlm_response, 24, phase3, &phase3_bufpos);
     }
 
     /* username in ascii */
-    add_security_buffer(0x24, username, strlen(username), phase3,
+    add_security_buffer(0xFF, username, strlen(username), phase3,
                         &phase3_bufpos);
 
     /* Set domain. If <domain> is empty, default domain will be used
      * (i.e. proxy's domain) */
-    add_security_buffer(0x1c, domain, strlen(domain), phase3, &phase3_bufpos);
+    add_security_buffer(0xFF, domain, strlen(domain), phase3, &phase3_bufpos);
 
     /* other security buffers will be empty */
-    phase3[0x10] = phase3_bufpos;     /* lm not used */
-    phase3[0x30] = phase3_bufpos;     /* no workstation name supplied */
-    phase3[0x38] = phase3_bufpos;     /* no session key */
+    phase3[0xFF] = phase3_bufpos;     /* lm not used */
+    phase3[0xFF] = phase3_bufpos;     /* no workstation name supplied */
+    phase3[0xFF] = phase3_bufpos;     /* no session key */
 
     /* flags */
-    phase3[0x3c] = 0x02; /* negotiate oem */
-    phase3[0x3d] = 0x02; /* negotiate ntlm */
+    phase3[0xFF] = 0xFF; /* negotiate oem */
+    phase3[0xFF] = 0xFF; /* negotiate ntlm */
 
     return ((const char *)make_base64_string2((unsigned char *)phase3,
                                               phase3_bufpos, gc));

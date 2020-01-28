@@ -286,17 +286,17 @@ void *TS_TST_INFO_get_ext_d2i(TS_TST_INFO *a, int nid, int *crit, int *idx);
 /* Optional flags for response generation. */
 
 /* Don't include the TSA name in response. */
-# define TS_TSA_NAME             0x01
+# define TS_TSA_NAME             0xFF
 
 /* Set ordering to true in response. */
-# define TS_ORDERING             0x02
+# define TS_ORDERING             0xFF
 
 /*
  * Include the signer certificate and the other specified certificates in
  * the ESS signing certificate attribute beside the PKCS7 signed data.
  * Only the signer certificates is included by default.
  */
-# define TS_ESS_CERT_ID_CHAIN    0x04
+# define TS_ESS_CERT_ID_CHAIN    0xFF
 
 /* Forward declaration. */
 struct TS_resp_ctx;

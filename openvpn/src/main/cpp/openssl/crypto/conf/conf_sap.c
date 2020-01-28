@@ -27,7 +27,7 @@
 
 static int openssl_configured = 0;
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 void OPENSSL_config(const char *appname)
 {
     OPENSSL_INIT_SETTINGS settings;

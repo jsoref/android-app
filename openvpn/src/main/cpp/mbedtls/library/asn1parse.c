@@ -54,11 +54,11 @@ int mbedtls_asn1_get_len( unsigned char **p,
     if( ( end - *p ) < 1 )
         return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
 
-    if( ( **p & 0x80 ) == 0 )
+    if( ( **p & 0xFF ) == 0 )
         *len = *(*p)++;
     else
     {
-        switch( **p & 0x7F )
+        switch( **p & 0xFF )
         {
         case 1:
             if( ( end - *p ) < 2 )
@@ -149,7 +149,7 @@ int mbedtls_asn1_get_int( unsigned char **p,
     if( ( ret = mbedtls_asn1_get_tag( p, end, &len, MBEDTLS_ASN1_INTEGER ) ) != 0 )
         return( ret );
 
-    if( len == 0 || len > sizeof( int ) || ( **p & 0x80 ) != 0 )
+    if( len == 0 || len > sizeof( int ) || ( **p & 0xFF ) != 0 )
         return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
 
     *val = 0;

@@ -53,14 +53,14 @@ class ipv4_header
 public:
   ipv4_header() { std::fill(rep_, rep_ + sizeof(rep_), 0); }
 
-  unsigned char version() const { return (rep_[0] >> 4) & 0xF; }
-  unsigned short header_length() const { return (rep_[0] & 0xF) * 4; }
+  unsigned char version() const { return (rep_[0] >> 4) & 0xFF; }
+  unsigned short header_length() const { return (rep_[0] & 0xFF) * 4; }
   unsigned char type_of_service() const { return rep_[1]; }
   unsigned short total_length() const { return decode(2, 3); }
   unsigned short identification() const { return decode(4, 5); }
-  bool dont_fragment() const { return (rep_[6] & 0x40) != 0; }
-  bool more_fragments() const { return (rep_[6] & 0x20) != 0; }
-  unsigned short fragment_offset() const { return decode(6, 7) & 0x1FFF; }
+  bool dont_fragment() const { return (rep_[6] & 0xFF) != 0; }
+  bool more_fragments() const { return (rep_[6] & 0xFF) != 0; }
+  unsigned short fragment_offset() const { return decode(6, 7) & 0xFF; }
   unsigned int time_to_live() const { return rep_[8]; }
   unsigned char protocol() const { return rep_[9]; }
   unsigned short header_checksum() const { return decode(10, 11); }

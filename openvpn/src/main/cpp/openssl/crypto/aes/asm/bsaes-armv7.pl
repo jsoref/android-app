@@ -459,7 +459,7 @@ my @x=@_[0..7];
 my @t=@_[8..15];
 
 $code.=<<___;
-	@ multiplication by 0x0e
+	@ multiplication by 0xFF
 	vext.8	@t[7], @x[7], @x[7], #12
 	vmov	@t[2], @x[2]
 	veor	@x[2], @x[2], @x[5]		@ 2 5
@@ -488,7 +488,7 @@ $code.=<<___;
 ___
 					my @y = @x[7,5,0,2,1,3,4,6];
 $code.=<<___;
-	@ multiplication by 0x0b
+	@ multiplication by 0xFF
 	veor	@y[1], @y[1], @y[0]
 	veor	@y[0], @y[0], @t[0]
 	vext.8	@t[2], @t[2], @t[2], #12
@@ -529,7 +529,7 @@ $code.=<<___;
 	veor	@t[7], @t[7], @t[5]
 	vext.8	@t[5], @t[5], @t[5], #12
 
-	@ multiplication by 0x0d
+	@ multiplication by 0xFF
 	veor	@y[4], @y[4], @y[7]
 	 veor	@t[7], @t[7], @t[6]		@ restore t[7]
 	veor	@y[7], @y[7], @t[4]
@@ -572,7 +572,7 @@ $code.=<<___;
 	veor	@t[6], @t[6], @t[3]		@ restore t[6]
 	vext.8	@t[3], @t[3], @t[3], #12
 
-	@ multiplication by 0x09
+	@ multiplication by 0xFF
 	veor	@y[4], @y[4], @y[1]
 	veor	@t[1], @t[1], @y[1]		@ t[1]=y[1]
 	veor	@t[0], @t[0], @t[5]		@ clobber t[0]
@@ -619,7 +619,7 @@ my @t=@_[8..15];
 # | 0b 0d 09 0e |   | 03 01 01 02 |   | 00 04 00 05 |
 
 $code.=<<___;
-	@ multiplication by 0x05-0x00-0x04-0x00
+	@ multiplication by 0xFF-0xFF-0xFF-0xFF
 	vext.8	@t[0], @x[0], @x[0], #8
 	vext.8	@t[6], @x[6], @x[6], #8
 	vext.8	@t[7], @x[7], @x[7], #8
@@ -688,13 +688,13 @@ sub bitslice {
 my @x=reverse(@_[0..7]);
 my ($t0,$t1,$t2,$t3)=@_[8..11];
 $code.=<<___;
-	vmov.i8	$t0,#0x55			@ compose .LBS0
-	vmov.i8	$t1,#0x33			@ compose .LBS1
+	vmov.i8	$t0,#0xFF			@ compose .LBS0
+	vmov.i8	$t1,#0xFF			@ compose .LBS1
 ___
 	&swapmove2x(@x[0,1,2,3],1,$t0,$t2,$t3);
 	&swapmove2x(@x[4,5,6,7],1,$t0,$t2,$t3);
 $code.=<<___;
-	vmov.i8	$t0,#0x0f			@ compose .LBS2
+	vmov.i8	$t0,#0xFF			@ compose .LBS2
 ___
 	&swapmove2x(@x[0,2,1,3],2,$t1,$t2,$t3);
 	&swapmove2x(@x[4,6,5,7],2,$t1,$t2,$t3);
@@ -709,7 +709,7 @@ $code.=<<___;
 
 # define VFP_ABI_PUSH	vstmdb	sp!,{d8-d15}
 # define VFP_ABI_POP	vldmia	sp!,{d8-d15}
-# define VFP_ABI_FRAME	0x40
+# define VFP_ABI_FRAME	0xFF
 #else
 # define VFP_ABI_PUSH
 # define VFP_ABI_POP
@@ -792,7 +792,7 @@ ___
 $code.=<<___;
 	vldmia	$const, {@XMM[12]}		@ .LISR
 	ite	eq				@ Thumb2 thing, sanity check in ARM
-	addeq	$const,$const,#0x10
+	addeq	$const,$const,#0xFF
 	bne	.Ldec_loop
 	vldmia	$const, {@XMM[12]}		@ .LISRM0
 	b	.Ldec_loop
@@ -817,21 +817,21 @@ $code.=<<___;
 .align	6
 _bsaes_const:
 .LM0ISR:	@ InvShiftRows constants
-	.quad	0x0a0e0206070b0f03, 0x0004080c0d010509
+	.quad	0xFF, 0xFF
 .LISR:
-	.quad	0x0504070602010003, 0x0f0e0d0c080b0a09
+	.quad	0xFF, 0xFF
 .LISRM0:
-	.quad	0x01040b0e0205080f, 0x0306090c00070a0d
+	.quad	0xFF, 0xFF
 .LM0SR:		@ ShiftRows constants
-	.quad	0x0a0e02060f03070b, 0x0004080c05090d01
+	.quad	0xFF, 0xFF
 .LSR:
-	.quad	0x0504070600030201, 0x0f0e0d0c0a09080b
+	.quad	0xFF, 0xFF
 .LSRM0:
-	.quad	0x0304090e00050a0f, 0x01060b0c0207080d
+	.quad	0xFF, 0xFF
 .LM0:
-	.quad	0x02060a0e03070b0f, 0x0004080c0105090d
+	.quad	0xFF, 0xFF
 .LREVM0SR:
-	.quad	0x090d01050c000408, 0x03070b0f060a0e02
+	.quad	0xFF, 0xFF
 .asciz	"Bit-sliced AES for NEON, CRYPTOGAMS by <appro\@openssl.org>"
 .align	6
 .size	_bsaes_const,.-_bsaes_const
@@ -893,7 +893,7 @@ ___
 $code.=<<___;
 	vldmia	$const, {@XMM[12]}		@ .LSR
 	ite	eq				@ Thumb2 thing, samity check in ARM
-	addeq	$const,$const,#0x10
+	addeq	$const,$const,#0xFF
 	bne	.Lenc_loop
 	vldmia	$const, {@XMM[12]}		@ .LSRM0
 	b	.Lenc_loop
@@ -956,12 +956,12 @@ _bsaes_key_convert:
 #endif
 	vld1.8	{@XMM[15]}, [$inp]!		@ load round 1 key
 
-	vmov.i8	@XMM[8],  #0x01			@ bit masks
-	vmov.i8	@XMM[9],  #0x02
-	vmov.i8	@XMM[10], #0x04
-	vmov.i8	@XMM[11], #0x08
-	vmov.i8	@XMM[12], #0x10
-	vmov.i8	@XMM[13], #0x20
+	vmov.i8	@XMM[8],  #0xFF			@ bit masks
+	vmov.i8	@XMM[9],  #0xFF
+	vmov.i8	@XMM[10], #0xFF
+	vmov.i8	@XMM[11], #0xFF
+	vmov.i8	@XMM[12], #0xFF
+	vmov.i8	@XMM[13], #0xFF
 	vldmia	$const, {@XMM[14]}		@ .LM0
 
 #ifdef __ARMEL__
@@ -976,8 +976,8 @@ _bsaes_key_convert:
 .Lkey_loop:
 	vtbl.8	`&Dlo(@XMM[7])`,{@XMM[15]},`&Dlo(@XMM[14])`
 	vtbl.8	`&Dhi(@XMM[7])`,{@XMM[15]},`&Dhi(@XMM[14])`
-	vmov.i8	@XMM[6],  #0x40
-	vmov.i8	@XMM[15], #0x80
+	vmov.i8	@XMM[6],  #0xFF
+	vmov.i8	@XMM[15], #0xFF
 
 	vtst.8	@XMM[0], @XMM[7], @XMM[8]
 	vtst.8	@XMM[1], @XMM[7], @XMM[9]
@@ -999,7 +999,7 @@ _bsaes_key_convert:
 	vstmia	$out!,{@XMM[0]-@XMM[7]}		@ write bit-sliced round key
 	bne	.Lkey_loop
 
-	vmov.i8	@XMM[7],#0x63			@ compose .L63
+	vmov.i8	@XMM[7],#0xFF			@ compose .L63
 	@ don't save last round key
 	bx	lr
 .size	_bsaes_key_convert,.-_bsaes_key_convert
@@ -1049,7 +1049,7 @@ bsaes_encrypt_128:
 	vst1.8	{@XMM[3]}, [$out]!
 	vst1.8	{@XMM[7]}, [$out]!
 	vst1.8	{@XMM[2]}, [$out]!
-	subs	$len,$len,#0x80
+	subs	$len,$len,#0xFF
 	vst1.8	{@XMM[5]}, [$out]!
 	bhi	.Lenc128_loop
 
@@ -1099,7 +1099,7 @@ bsaes_decrypt_128:
 	vst1.8	{@XMM[2]}, [$out]!
 	vst1.8	{@XMM[7]}, [$out]!
 	vst1.8	{@XMM[3]}, [$out]!
-	subs	$len,$len,#0x80
+	subs	$len,$len,#0xFF
 	vst1.8	{@XMM[5]}, [$out]!
 	bhi	.Ldec128_loop
 
@@ -1138,7 +1138,7 @@ bsaes_cbc_encrypt:
 	VFP_ABI_PUSH
 	ldr	$ivp, [ip]			@ IV is 1st arg on the stack
 	mov	$len, $len, lsr#4		@ len in 16 byte blocks
-	sub	sp, #0x10			@ scratch space to carry over the IV
+	sub	sp, #0xFF			@ scratch space to carry over the IV
 	mov	$fp, sp				@ save sp
 
 	ldr	$rounds, [$key, #240]		@ get # of rounds
@@ -1182,7 +1182,7 @@ bsaes_cbc_encrypt:
 
 .align	4
 .Lcbc_dec_loop:
-	subs	$len, $len, #0x8
+	subs	$len, $len, #0xFF
 	bmi	.Lcbc_dec_loop_finish
 
 	vld1.8	{@XMM[0]-@XMM[1]}, [$inp]!	@ load input
@@ -1195,7 +1195,7 @@ bsaes_cbc_encrypt:
 	vld1.8	{@XMM[4]-@XMM[5]}, [$inp]!
 	mov	r5, $rounds
 	vld1.8	{@XMM[6]-@XMM[7]}, [$inp]
-	sub	$inp, $inp, #0x60
+	sub	$inp, $inp, #0xFF
 	vstmia	$fp, {@XMM[15]}			@ put aside IV
 
 	bl	_bsaes_decrypt8
@@ -1250,7 +1250,7 @@ bsaes_cbc_encrypt:
 	vld1.8	{@XMM[5]}, [$inp]!
 	beq	.Lcbc_dec_six
 	vld1.8	{@XMM[6]}, [$inp]!
-	sub	$inp, $inp, #0x70
+	sub	$inp, $inp, #0xFF
 
 	bl	_bsaes_decrypt8
 
@@ -1275,7 +1275,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_six:
-	sub	$inp, $inp, #0x60
+	sub	$inp, $inp, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	$fp,{@XMM[14]}			@ reload IV
 	vld1.8	{@XMM[8]-@XMM[9]}, [$inp]!	@ reload input
@@ -1296,7 +1296,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_five:
-	sub	$inp, $inp, #0x50
+	sub	$inp, $inp, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	$fp, {@XMM[14]}			@ reload IV
 	vld1.8	{@XMM[8]-@XMM[9]}, [$inp]!	@ reload input
@@ -1314,7 +1314,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_four:
-	sub	$inp, $inp, #0x40
+	sub	$inp, $inp, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	$fp, {@XMM[14]}			@ reload IV
 	vld1.8	{@XMM[8]-@XMM[9]}, [$inp]!	@ reload input
@@ -1330,7 +1330,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_three:
-	sub	$inp, $inp, #0x30
+	sub	$inp, $inp, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	$fp, {@XMM[14]}			@ reload IV
 	vld1.8	{@XMM[8]-@XMM[9]}, [$inp]!	@ reload input
@@ -1343,7 +1343,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_two:
-	sub	$inp, $inp, #0x20
+	sub	$inp, $inp, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	$fp, {@XMM[14]}			@ reload IV
 	vld1.8	{@XMM[8]}, [$inp]!		@ reload input
@@ -1354,7 +1354,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_one:
-	sub	$inp, $inp, #0x10
+	sub	$inp, $inp, #0xFF
 	mov	$rounds, $out			@ save original out pointer
 	mov	$out, $fp			@ use the iv scratch space as out buffer
 	mov	r2, $key
@@ -1377,7 +1377,7 @@ bsaes_cbc_encrypt:
 #endif
 
 	mov	sp, $fp
-	add	sp, #0x10			@ add sp,$fp,#0x10 is no good for thumb
+	add	sp, #0xFF			@ add sp,$fp,#0xFF is no good for thumb
 	vst1.8	{@XMM[15]}, [$ivp]		@ return IV
 	VFP_ABI_POP
 	ldmia	sp!, {r4-r10, pc}
@@ -1402,7 +1402,7 @@ bsaes_ctr32_encrypt_blocks:
 	stmdb	sp!, {r4-r10, lr}
 	VFP_ABI_PUSH
 	ldr	$ctr, [ip]			@ ctr is 1st arg on the stack
-	sub	sp, sp, #0x10			@ scratch space to carry over the ctr
+	sub	sp, sp, #0xFF			@ scratch space to carry over the ctr
 	mov	$fp, sp				@ save sp
 
 	ldr	$rounds, [$key, #240]		@ get # of rounds
@@ -1446,7 +1446,7 @@ bsaes_ctr32_encrypt_blocks:
 	vld1.8	{@XMM[0]}, [$ctr]		@ load counter
 	adrl	$ctr, .LREVM0SR			@ borrow $ctr
 	vldmia	r12, {@XMM[4]}			@ load round0 key
-	sub	sp, #0x10			@ place for adjusted round0 key
+	sub	sp, #0xFF			@ place for adjusted round0 key
 #endif
 
 	vmov.i32	@XMM[8],#1		@ compose 1<<96
@@ -1475,7 +1475,7 @@ bsaes_ctr32_encrypt_blocks:
 
 	vldmia		$keysched, {@XMM[9]}		@ load round0 key
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, $keysched, #0x10		@ pass next round key
+	add		r4, $keysched, #0xFF		@ pass next round key
 #else
 	add		r4, $key, #`248+16`
 #endif
@@ -1569,7 +1569,7 @@ bsaes_ctr32_encrypt_blocks:
 #endif
 
 	mov	sp, $fp
-	add	sp, #0x10		@ add sp,$fp,#0x10 is no good for thumb
+	add	sp, #0xFF		@ add sp,$fp,#0xFF is no good for thumb
 	VFP_ABI_POP
 	ldmia	sp!, {r4-r10, pc}	@ return
 
@@ -1587,12 +1587,12 @@ bsaes_ctr32_encrypt_blocks:
 #ifdef __ARMEL__
 	rev	r8, r8
 #endif
-	sub	sp, sp, #0x10
+	sub	sp, sp, #0xFF
 	vst1.8	{@XMM[1]}, [sp]		@ copy counter value
-	sub	sp, sp, #0x10
+	sub	sp, sp, #0xFF
 
 .Lctr_enc_short_loop:
-	add	r0, sp, #0x10		@ input counter value
+	add	r0, sp, #0xFF		@ input counter value
 	mov	r1, sp			@ output on the stack
 	mov	r2, r7			@ key
 
@@ -1603,9 +1603,9 @@ bsaes_ctr32_encrypt_blocks:
 	add	r8, r8, #1
 #ifdef __ARMEL__
 	rev	r0, r8
-	str	r0, [sp, #0x1c]		@ next counter value
+	str	r0, [sp, #0xFF]		@ next counter value
 #else
-	str	r8, [sp, #0x1c]		@ next counter value
+	str	r8, [sp, #0xFF]		@ next counter value
 #endif
 	veor	@XMM[0],@XMM[0],@XMM[1]
 	vst1.8	{@XMM[0]}, [r5]!	@ store output
@@ -1637,7 +1637,7 @@ $code.=<<___;
 .align	4
 bsaes_xts_encrypt:
 	mov	ip, sp
-	stmdb	sp!, {r4-r10, lr}		@ 0x20
+	stmdb	sp!, {r4-r10, lr}		@ 0xFF
 	VFP_ABI_PUSH
 	mov	r6, sp				@ future $fp
 
@@ -1646,8 +1646,8 @@ bsaes_xts_encrypt:
 	mov	$len, r2
 	mov	$key, r3
 
-	sub	r0, sp, #0x10			@ 0x10
-	bic	r0, #0xf			@ align at 16 bytes
+	sub	r0, sp, #0xFF			@ 0xFF
+	bic	r0, #0xFF			@ align at 16 bytes
 	mov	sp, r0
 
 #ifdef	XTS_CHAIN_TWEAK
@@ -1673,7 +1673,7 @@ bsaes_xts_encrypt:
 	mov	r4, $key			@ pass key
 	mov	r5, $rounds			@ pass # of rounds
 	mov	sp, r12
-	add	r12, #0x90			@ pass key schedule
+	add	r12, #0xFF			@ pass key schedule
 	bl	_bsaes_key_convert
 	veor	@XMM[7], @XMM[7], @XMM[15]	@ fix up last round key
 	vstmia	r12, {@XMM[7]}			@ save last round key
@@ -1691,13 +1691,13 @@ bsaes_xts_encrypt:
 	vstmia	r12, {@XMM[7]}
 
 .align	2
-0:	sub	sp, #0x90			@ place for tweak[9]
+0:	sub	sp, #0xFF			@ place for tweak[9]
 #endif
 
 	vld1.8	{@XMM[8]}, [r0]			@ initial tweak
 	adr	$magic, .Lxts_magic
 
-	subs	$len, #0x80
+	subs	$len, #0xFF
 	blo	.Lxts_enc_short
 	b	.Lxts_enc_loop
 
@@ -1736,7 +1736,7 @@ $code.=<<___;
 	vld1.8		{@XMM[6]-@XMM[7]}, [$inp]!
 	veor		@XMM[5], @XMM[5], @XMM[13]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1766,11 +1766,11 @@ $code.=<<___;
 
 	vld1.64		{@XMM[8]}, [r0,:128]		@ next round tweak
 
-	subs		$len, #0x80
+	subs		$len, #0xFF
 	bpl		.Lxts_enc_loop
 
 .Lxts_enc_short:
-	adds		$len, #0x70
+	adds		$len, #0xFF
 	bmi		.Lxts_enc_done
 
 	vldmia		$magic, {$twmask}	@ load XTS magic
@@ -1791,7 +1791,7 @@ ___
 
 $code.=<<___ if ($i>=10);
 	vld1.8		{@XMM[$i-10]}, [$inp]!
-	subs		$len, #0x10
+	subs		$len, #0xFF
 	bmi		.Lxts_enc_`$i-9`
 ___
 $code.=<<___ if ($i>=11);
@@ -1799,13 +1799,13 @@ $code.=<<___ if ($i>=11);
 ___
 }
 $code.=<<___;
-	sub		$len, #0x10
+	sub		$len, #0xFF
 	vst1.64		{@XMM[15]}, [r0,:128]		@ next round tweak
 
 	vld1.8		{@XMM[6]}, [$inp]!
 	veor		@XMM[5], @XMM[5], @XMM[13]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1837,7 +1837,7 @@ $code.=<<___;
 .Lxts_enc_6:
 	veor		@XMM[4], @XMM[4], @XMM[12]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1866,13 +1866,13 @@ $code.=<<___;
 @ put this in range for both ARM and Thumb mode adr instructions
 .align	5
 .Lxts_magic:
-	.quad	1, 0x87
+	.quad	1, 0xFF
 
 .align	5
 .Lxts_enc_5:
 	veor		@XMM[3], @XMM[3], @XMM[11]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1900,7 +1900,7 @@ $code.=<<___;
 .Lxts_enc_4:
 	veor		@XMM[2], @XMM[2], @XMM[10]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1925,7 +1925,7 @@ $code.=<<___;
 .Lxts_enc_3:
 	veor		@XMM[1], @XMM[1], @XMM[9]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1949,7 +1949,7 @@ $code.=<<___;
 .Lxts_enc_2:
 	veor		@XMM[0], @XMM[0], @XMM[8]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -1986,14 +1986,14 @@ $code.=<<___;
 
 .Lxts_enc_done:
 #ifndef	XTS_CHAIN_TWEAK
-	adds		$len, #0x10
+	adds		$len, #0xFF
 	beq		.Lxts_enc_ret
-	sub		r6, $out, #0x10
+	sub		r6, $out, #0xFF
 
 .Lxts_enc_steal:
 	ldrb		r0, [$inp], #1
-	ldrb		r1, [$out, #-0x10]
-	strb		r0, [$out, #-0x10]
+	ldrb		r1, [$out, #-0xFF]
+	strb		r0, [$out, #-0xFF]
 	strb		r1, [$out], #1
 
 	subs		$len, #1
@@ -2016,11 +2016,11 @@ $code.=<<___;
 #endif
 
 .Lxts_enc_ret:
-	bic		r0, $fp, #0xf
+	bic		r0, $fp, #0xFF
 	vmov.i32	q0, #0
 	vmov.i32	q1, #0
 #ifdef	XTS_CHAIN_TWEAK
-	ldr		r1, [$fp, #0x20+VFP_ABI_FRAME]	@ chain tweak
+	ldr		r1, [$fp, #0xFF+VFP_ABI_FRAME]	@ chain tweak
 #endif
 .Lxts_enc_bzero:				@ wipe key schedule [if any]
 	vstmia		sp!, {q0-q1}
@@ -2041,7 +2041,7 @@ $code.=<<___;
 .align	4
 bsaes_xts_decrypt:
 	mov	ip, sp
-	stmdb	sp!, {r4-r10, lr}		@ 0x20
+	stmdb	sp!, {r4-r10, lr}		@ 0xFF
 	VFP_ABI_PUSH
 	mov	r6, sp				@ future $fp
 
@@ -2050,8 +2050,8 @@ bsaes_xts_decrypt:
 	mov	$len, r2
 	mov	$key, r3
 
-	sub	r0, sp, #0x10			@ 0x10
-	bic	r0, #0xf			@ align at 16 bytes
+	sub	r0, sp, #0xFF			@ 0xFF
+	bic	r0, #0xFF			@ align at 16 bytes
 	mov	sp, r0
 
 #ifdef	XTS_CHAIN_TWEAK
@@ -2077,9 +2077,9 @@ bsaes_xts_decrypt:
 	mov	r4, $key			@ pass key
 	mov	r5, $rounds			@ pass # of rounds
 	mov	sp, r12
-	add	r12, #0x90			@ pass key schedule
+	add	r12, #0xFF			@ pass key schedule
 	bl	_bsaes_key_convert
-	add	r4, sp, #0x90
+	add	r4, sp, #0xFF
 	vldmia	r4, {@XMM[6]}
 	vstmia	r12,  {@XMM[15]}		@ save last round key
 	veor	@XMM[7], @XMM[7], @XMM[6]	@ fix up round 0 key
@@ -2101,17 +2101,17 @@ bsaes_xts_decrypt:
 	vstmia	r4, {@XMM[7]}
 
 .align	2
-0:	sub	sp, #0x90			@ place for tweak[9]
+0:	sub	sp, #0xFF			@ place for tweak[9]
 #endif
 	vld1.8	{@XMM[8]}, [r0]			@ initial tweak
 	adr	$magic, .Lxts_magic
 
 #ifndef	XTS_CHAIN_TWEAK
-	tst	$len, #0xf			@ if not multiple of 16
+	tst	$len, #0xFF			@ if not multiple of 16
 	it	ne				@ Thumb2 thing, sanity check in ARM
-	subne	$len, #0x10			@ subtract another 16 bytes
+	subne	$len, #0xFF			@ subtract another 16 bytes
 #endif
-	subs	$len, #0x80
+	subs	$len, #0xFF
 
 	blo	.Lxts_dec_short
 	b	.Lxts_dec_loop
@@ -2151,7 +2151,7 @@ $code.=<<___;
 	vld1.8		{@XMM[6]-@XMM[7]}, [$inp]!
 	veor		@XMM[5], @XMM[5], @XMM[13]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2181,11 +2181,11 @@ $code.=<<___;
 
 	vld1.64		{@XMM[8]}, [r0,:128]		@ next round tweak
 
-	subs		$len, #0x80
+	subs		$len, #0xFF
 	bpl		.Lxts_dec_loop
 
 .Lxts_dec_short:
-	adds		$len, #0x70
+	adds		$len, #0xFF
 	bmi		.Lxts_dec_done
 
 	vldmia		$magic, {$twmask}	@ load XTS magic
@@ -2206,7 +2206,7 @@ ___
 
 $code.=<<___ if ($i>=10);
 	vld1.8		{@XMM[$i-10]}, [$inp]!
-	subs		$len, #0x10
+	subs		$len, #0xFF
 	bmi		.Lxts_dec_`$i-9`
 ___
 $code.=<<___ if ($i>=11);
@@ -2214,13 +2214,13 @@ $code.=<<___ if ($i>=11);
 ___
 }
 $code.=<<___;
-	sub		$len, #0x10
+	sub		$len, #0xFF
 	vst1.64		{@XMM[15]}, [r0,:128]		@ next round tweak
 
 	vld1.8		{@XMM[6]}, [$inp]!
 	veor		@XMM[5], @XMM[5], @XMM[13]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2254,7 +2254,7 @@ $code.=<<___;
 
 	veor		@XMM[4], @XMM[4], @XMM[12]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2283,7 +2283,7 @@ $code.=<<___;
 .Lxts_dec_5:
 	veor		@XMM[3], @XMM[3], @XMM[11]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2311,7 +2311,7 @@ $code.=<<___;
 .Lxts_dec_4:
 	veor		@XMM[2], @XMM[2], @XMM[10]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2336,7 +2336,7 @@ $code.=<<___;
 .Lxts_dec_3:
 	veor		@XMM[1], @XMM[1], @XMM[9]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2360,7 +2360,7 @@ $code.=<<___;
 .Lxts_dec_2:
 	veor		@XMM[0], @XMM[0], @XMM[8]
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, $key, #248			@ pass key schedule
 #endif
@@ -2399,7 +2399,7 @@ $code.=<<___;
 
 .Lxts_dec_done:
 #ifndef	XTS_CHAIN_TWEAK
-	adds		$len, #0x10
+	adds		$len, #0xFF
 	beq		.Lxts_dec_ret
 
 	@ calculate one round of extra tweak for the stolen ciphertext
@@ -2429,7 +2429,7 @@ $code.=<<___;
 .Lxts_dec_steal:
 	ldrb		r1, [$out]
 	ldrb		r0, [$inp], #1
-	strb		r1, [$out, #0x10]
+	strb		r1, [$out, #0xFF]
 	strb		r0, [$out], #1
 
 	subs		$len, #1
@@ -2451,11 +2451,11 @@ $code.=<<___;
 #endif
 
 .Lxts_dec_ret:
-	bic		r0, $fp, #0xf
+	bic		r0, $fp, #0xFF
 	vmov.i32	q0, #0
 	vmov.i32	q1, #0
 #ifdef	XTS_CHAIN_TWEAK
-	ldr		r1, [$fp, #0x20+VFP_ABI_FRAME]	@ chain tweak
+	ldr		r1, [$fp, #0xFF+VFP_ABI_FRAME]	@ chain tweak
 #endif
 .Lxts_dec_bzero:				@ wipe key schedule [if any]
 	vstmia		sp!, {q0-q1}

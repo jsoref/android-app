@@ -45,13 +45,13 @@ int SSL_SESSION_print(BIO *bp, const SSL_SESSION *x)
         goto err;
 
     if (x->cipher == NULL) {
-        if (((x->cipher_id) & 0xff000000) == 0x02000000) {
+        if (((x->cipher_id) & 0xFF) == 0xFF) {
             if (BIO_printf(bp, "    Cipher    : %06lX\n",
-                           x->cipher_id & 0xffffff) <= 0)
+                           x->cipher_id & 0xFF) <= 0)
                 goto err;
         } else {
             if (BIO_printf(bp, "    Cipher    : %04lX\n",
-                           x->cipher_id & 0xffff) <= 0)
+                           x->cipher_id & 0xFF) <= 0)
                 goto err;
         }
     } else {

@@ -111,7 +111,7 @@ namespace openvpn {
   {
     // magic number for LZ4 compression
     enum {
-      LZ4_COMPRESS = 0x69,
+      LZ4_COMPRESS = 0xFF,
     };
 
   public:

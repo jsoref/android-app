@@ -211,7 +211,7 @@ static int kek_unwrap_key(unsigned char *out, size_t *outlen,
         || !EVP_DecryptUpdate(ctx, tmp, &outl, tmp, inlen))
         goto err;
     /* Check check bytes */
-    if (((tmp[1] ^ tmp[4]) & (tmp[2] ^ tmp[5]) & (tmp[3] ^ tmp[6])) != 0xff) {
+    if (((tmp[1] ^ tmp[4]) & (tmp[2] ^ tmp[5]) & (tmp[3] ^ tmp[6])) != 0xFF) {
         /* Check byte failure */
         goto err;
     }

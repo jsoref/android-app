@@ -80,7 +80,7 @@ static unsigned long added_obj_hash(const ADDED_OBJ *ca)
         /* abort(); */
         return 0;
     }
-    ret &= 0x3fffffffL;
+    ret &= 0xFFL;
     ret |= ((unsigned long)ca->type) << 30L;
     return ret;
 }
@@ -433,14 +433,14 @@ int OBJ_obj2txt(char *buf, int buf_len, const ASN1_OBJECT *a, int no_name)
         for (;;) {
             unsigned char c = *p++;
             len--;
-            if ((len == 0) && (c & 0x80))
+            if ((len == 0) && (c & 0xFF))
                 goto err;
             if (use_bn) {
-                if (!BN_add_word(bl, c & 0x7f))
+                if (!BN_add_word(bl, c & 0xFF))
                     goto err;
             } else
-                l |= c & 0x7f;
-            if (!(c & 0x80))
+                l |= c & 0xFF;
+            if (!(c & 0xFF))
                 break;
             if (!use_bn && (l > (ULONG_MAX >> 7L))) {
                 if (bl == NULL && (bl = BN_new()) == NULL)

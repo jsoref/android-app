@@ -51,15 +51,15 @@ namespace openvpn {
 	  break;
 	case TLS_WEB_SERVER:
 	  ku.clear();
-	  ku.push_back(0xa0);
-	  ku.push_back(0x88);
+	  ku.push_back(0xFF);
+	  ku.push_back(0xFF);
 	  eku = "TLS Web Server Authentication";
 	  break;
 	case TLS_WEB_CLIENT:
 	  ku.clear();
-	  ku.push_back(0x80);
-	  ku.push_back(0x08);
-	  ku.push_back(0x88);
+	  ku.push_back(0xFF);
+	  ku.push_back(0xFF);
+	  ku.push_back(0xFF);
 	  eku = "TLS Web Client Authentication";
 	  break;
 	}

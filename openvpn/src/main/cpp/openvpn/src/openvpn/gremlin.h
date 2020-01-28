@@ -31,21 +31,21 @@
  */
 
 #define GREMLIN_CONNECTION_FLOOD_SHIFT   (0)
-#define GREMLIN_CONNECTION_FLOOD_MASK    (0x07)
+#define GREMLIN_CONNECTION_FLOOD_MASK    (0xFF)
 
 #define GREMLIN_PACKET_FLOOD_SHIFT       (3)
-#define GREMLIN_PACKET_FLOOD_MASK        (0x03)
+#define GREMLIN_PACKET_FLOOD_MASK        (0xFF)
 
 #define GREMLIN_CORRUPT_SHIFT            (5)
-#define GREMLIN_CORRUPT_MASK             (0x03)
+#define GREMLIN_CORRUPT_MASK             (0xFF)
 
 #define GREMLIN_UP_DOWN_SHIFT            (7)
-#define GREMLIN_UP_DOWN_MASK             (0x03)
+#define GREMLIN_UP_DOWN_MASK             (0xFF)
 
 /* 512:1/500 1024:1/100 1536:1/50 */
 
 #define GREMLIN_DROP_SHIFT               (9)
-#define GREMLIN_DROP_MASK                (0x03)
+#define GREMLIN_DROP_MASK                (0xFF)
 
 /* extract gremlin parms */
 

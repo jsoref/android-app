@@ -1131,8 +1131,8 @@ void ssl_calc_verify_ssl( mbedtls_ssl_context *ssl, unsigned char hash[36] )
     mbedtls_md5_clone( &md5, &ssl->handshake->fin_md5 );
     mbedtls_sha1_clone( &sha1, &ssl->handshake->fin_sha1 );
 
-    memset( pad_1, 0x36, 48 );
-    memset( pad_2, 0x5C, 48 );
+    memset( pad_1, 0xFF, 48 );
+    memset( pad_2, 0xFF, 48 );
 
     mbedtls_md5_update_ret( &md5, ssl->session_negotiate->master, 48 );
     mbedtls_md5_update_ret( &md5, pad_1, 48 );
@@ -1386,7 +1386,7 @@ static void ssl_mac( mbedtls_md_context_t *md_ctx,
     header[ 9] = (unsigned char)( len >> 8 );
     header[10] = (unsigned char)( len      );
 
-    memset( padding, 0x36, padlen );
+    memset( padding, 0xFF, padlen );
     mbedtls_md_starts( md_ctx );
     mbedtls_md_update( md_ctx, secret,  md_size );
     mbedtls_md_update( md_ctx, padding, padlen  );
@@ -1394,7 +1394,7 @@ static void ssl_mac( mbedtls_md_context_t *md_ctx,
     mbedtls_md_update( md_ctx, buf,     len     );
     mbedtls_md_finish( md_ctx, out              );
 
-    memset( padding, 0x5C, padlen );
+    memset( padding, 0xFF, padlen );
     mbedtls_md_starts( md_ctx );
     mbedtls_md_update( md_ctx, secret,    md_size );
     mbedtls_md_update( md_ctx, padding,   padlen  );
@@ -2134,7 +2134,7 @@ static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
             if( padlen > 0 && correct == 0 )
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad padding byte detected" ) );
 #endif
-            padlen &= correct * 0x1FF;
+            padlen &= correct * 0xFF;
         }
         else
 #endif /* MBEDTLS_SSL_PROTO_TLS1 || MBEDTLS_SSL_PROTO_TLS1_1 || \
@@ -3037,13 +3037,13 @@ int mbedtls_ssl_flight_transmit( mbedtls_ssl_context *ssl )
              * Handshake headers: type(1) len(3) seq(2) f_off(3) f_len(3) */
             memcpy( ssl->out_msg, cur->p, 6 );
 
-            ssl->out_msg[6] = ( ( frag_off >> 16 ) & 0xff );
-            ssl->out_msg[7] = ( ( frag_off >>  8 ) & 0xff );
-            ssl->out_msg[8] = ( ( frag_off       ) & 0xff );
+            ssl->out_msg[6] = ( ( frag_off >> 16 ) & 0xFF );
+            ssl->out_msg[7] = ( ( frag_off >>  8 ) & 0xFF );
+            ssl->out_msg[8] = ( ( frag_off       ) & 0xFF );
 
-            ssl->out_msg[ 9] = ( ( cur_hs_frag_len >> 16 ) & 0xff );
-            ssl->out_msg[10] = ( ( cur_hs_frag_len >>  8 ) & 0xff );
-            ssl->out_msg[11] = ( ( cur_hs_frag_len       ) & 0xff );
+            ssl->out_msg[ 9] = ( ( cur_hs_frag_len >> 16 ) & 0xFF );
+            ssl->out_msg[10] = ( ( cur_hs_frag_len >>  8 ) & 0xFF );
+            ssl->out_msg[11] = ( ( cur_hs_frag_len       ) & 0xFF );
 
             MBEDTLS_SSL_DEBUG_BUF( 3, "handshake header", ssl->out_msg, 12 );
 
@@ -3279,7 +3279,7 @@ int mbedtls_ssl_write_handshake_msg( mbedtls_ssl_context *ssl )
 
             /* Handshake hashes are computed without fragmentation,
              * so set frag_offset = 0 and frag_len = hs_len for now */
-            memset( ssl->out_msg + 6, 0x00, 3 );
+            memset( ssl->out_msg + 6, 0xFF, 3 );
             memcpy( ssl->out_msg + 9, ssl->out_msg + 1, 3 );
         }
 #endif /* MBEDTLS_SSL_PROTO_DTLS */
@@ -3918,7 +3918,7 @@ static int ssl_check_dtls_clihlo_cookie(
      * 19-21 uint24 fragment_offset;            copied
      * 22-24 uint24 fragment_length;            olen - 25
      *
-     * 25-26 ProtocolVersion server_version;    0xfe 0xff
+     * 25-26 ProtocolVersion server_version;    0xFF 0xFF
      * 27-27 opaque cookie<0..2^8-1>;           cookie_len = olen - 27, cookie
      *
      * Minimum length is 28.
@@ -3929,8 +3929,8 @@ static int ssl_check_dtls_clihlo_cookie(
     /* Copy most fields and adapt others */
     memcpy( obuf, in, 25 );
     obuf[13] = MBEDTLS_SSL_HS_HELLO_VERIFY_REQUEST;
-    obuf[25] = 0xfe;
-    obuf[26] = 0xff;
+    obuf[25] = 0xFF;
+    obuf[26] = 0xFF;
 
     /* Generate and write actual cookie */
     p = obuf + 28;
@@ -6053,7 +6053,7 @@ static void ssl_calc_finished_ssl(
     sender = ( from == MBEDTLS_SSL_IS_CLIENT ) ? "CLNT"
                                        : "SRVR";
 
-    memset( padbuf, 0x36, 48 );
+    memset( padbuf, 0xFF, 48 );
 
     mbedtls_md5_update_ret( &md5, (const unsigned char *) sender, 4 );
     mbedtls_md5_update_ret( &md5, session->master, 48 );
@@ -6065,7 +6065,7 @@ static void ssl_calc_finished_ssl(
     mbedtls_sha1_update_ret( &sha1, padbuf, 40 );
     mbedtls_sha1_finish_ret( &sha1, sha1sum );
 
-    memset( padbuf, 0x5C, 48 );
+    memset( padbuf, 0xFF, 48 );
 
     mbedtls_md5_starts_ret( &md5 );
     mbedtls_md5_update_ret( &md5, session->master, 48 );
@@ -7772,7 +7772,7 @@ uint32_t mbedtls_ssl_get_verify_result( const mbedtls_ssl_context *ssl )
     if( ssl->session_negotiate != NULL )
         return( ssl->session_negotiate->verify_result );
 
-    return( 0xFFFFFFFF );
+    return( 0xFF );
 }
 
 const char *mbedtls_ssl_get_ciphersuite( const mbedtls_ssl_context *ssl )
@@ -9045,7 +9045,7 @@ int mbedtls_ssl_config_defaults( mbedtls_ssl_config *conf,
 
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
     conf->renego_max_records = MBEDTLS_SSL_RENEGO_MAX_RECORDS_DEFAULT;
-    memset( conf->renego_period,     0x00, 2 );
+    memset( conf->renego_period,     0xFF, 2 );
     memset( conf->renego_period + 2, 0xFF, 6 );
 #endif
 

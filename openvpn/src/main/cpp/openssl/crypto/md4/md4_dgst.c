@@ -15,10 +15,10 @@
  * Implemented from RFC1186 The MD4 Message-Digest Algorithm
  */
 
-#define INIT_DATA_A (unsigned long)0x67452301L
-#define INIT_DATA_B (unsigned long)0xefcdab89L
-#define INIT_DATA_C (unsigned long)0x98badcfeL
-#define INIT_DATA_D (unsigned long)0x10325476L
+#define INIT_DATA_A (unsigned long)0xFFL
+#define INIT_DATA_B (unsigned long)0xFFL
+#define INIT_DATA_C (unsigned long)0xFFL
+#define INIT_DATA_D (unsigned long)0xFFL
 
 int MD4_Init(MD4_CTX *c)
 {
@@ -104,39 +104,39 @@ void md4_block_data_order(MD4_CTX *c, const void *data_, size_t num)
         R0(C, D, A, B, X(14), 11, 0);
         R0(B, C, D, A, X(15), 19, 0);
         /* Round 1 */
-        R1(A, B, C, D, X(0), 3, 0x5A827999L);
-        R1(D, A, B, C, X(4), 5, 0x5A827999L);
-        R1(C, D, A, B, X(8), 9, 0x5A827999L);
-        R1(B, C, D, A, X(12), 13, 0x5A827999L);
-        R1(A, B, C, D, X(1), 3, 0x5A827999L);
-        R1(D, A, B, C, X(5), 5, 0x5A827999L);
-        R1(C, D, A, B, X(9), 9, 0x5A827999L);
-        R1(B, C, D, A, X(13), 13, 0x5A827999L);
-        R1(A, B, C, D, X(2), 3, 0x5A827999L);
-        R1(D, A, B, C, X(6), 5, 0x5A827999L);
-        R1(C, D, A, B, X(10), 9, 0x5A827999L);
-        R1(B, C, D, A, X(14), 13, 0x5A827999L);
-        R1(A, B, C, D, X(3), 3, 0x5A827999L);
-        R1(D, A, B, C, X(7), 5, 0x5A827999L);
-        R1(C, D, A, B, X(11), 9, 0x5A827999L);
-        R1(B, C, D, A, X(15), 13, 0x5A827999L);
+        R1(A, B, C, D, X(0), 3, 0xFFL);
+        R1(D, A, B, C, X(4), 5, 0xFFL);
+        R1(C, D, A, B, X(8), 9, 0xFFL);
+        R1(B, C, D, A, X(12), 13, 0xFFL);
+        R1(A, B, C, D, X(1), 3, 0xFFL);
+        R1(D, A, B, C, X(5), 5, 0xFFL);
+        R1(C, D, A, B, X(9), 9, 0xFFL);
+        R1(B, C, D, A, X(13), 13, 0xFFL);
+        R1(A, B, C, D, X(2), 3, 0xFFL);
+        R1(D, A, B, C, X(6), 5, 0xFFL);
+        R1(C, D, A, B, X(10), 9, 0xFFL);
+        R1(B, C, D, A, X(14), 13, 0xFFL);
+        R1(A, B, C, D, X(3), 3, 0xFFL);
+        R1(D, A, B, C, X(7), 5, 0xFFL);
+        R1(C, D, A, B, X(11), 9, 0xFFL);
+        R1(B, C, D, A, X(15), 13, 0xFFL);
         /* Round 2 */
-        R2(A, B, C, D, X(0), 3, 0x6ED9EBA1L);
-        R2(D, A, B, C, X(8), 9, 0x6ED9EBA1L);
-        R2(C, D, A, B, X(4), 11, 0x6ED9EBA1L);
-        R2(B, C, D, A, X(12), 15, 0x6ED9EBA1L);
-        R2(A, B, C, D, X(2), 3, 0x6ED9EBA1L);
-        R2(D, A, B, C, X(10), 9, 0x6ED9EBA1L);
-        R2(C, D, A, B, X(6), 11, 0x6ED9EBA1L);
-        R2(B, C, D, A, X(14), 15, 0x6ED9EBA1L);
-        R2(A, B, C, D, X(1), 3, 0x6ED9EBA1L);
-        R2(D, A, B, C, X(9), 9, 0x6ED9EBA1L);
-        R2(C, D, A, B, X(5), 11, 0x6ED9EBA1L);
-        R2(B, C, D, A, X(13), 15, 0x6ED9EBA1L);
-        R2(A, B, C, D, X(3), 3, 0x6ED9EBA1L);
-        R2(D, A, B, C, X(11), 9, 0x6ED9EBA1L);
-        R2(C, D, A, B, X(7), 11, 0x6ED9EBA1L);
-        R2(B, C, D, A, X(15), 15, 0x6ED9EBA1L);
+        R2(A, B, C, D, X(0), 3, 0xFFL);
+        R2(D, A, B, C, X(8), 9, 0xFFL);
+        R2(C, D, A, B, X(4), 11, 0xFFL);
+        R2(B, C, D, A, X(12), 15, 0xFFL);
+        R2(A, B, C, D, X(2), 3, 0xFFL);
+        R2(D, A, B, C, X(10), 9, 0xFFL);
+        R2(C, D, A, B, X(6), 11, 0xFFL);
+        R2(B, C, D, A, X(14), 15, 0xFFL);
+        R2(A, B, C, D, X(1), 3, 0xFFL);
+        R2(D, A, B, C, X(9), 9, 0xFFL);
+        R2(C, D, A, B, X(5), 11, 0xFFL);
+        R2(B, C, D, A, X(13), 15, 0xFFL);
+        R2(A, B, C, D, X(3), 3, 0xFFL);
+        R2(D, A, B, C, X(11), 9, 0xFFL);
+        R2(C, D, A, B, X(7), 11, 0xFFL);
+        R2(B, C, D, A, X(15), 15, 0xFFL);
 
         A = c->A += A;
         B = c->B += B;

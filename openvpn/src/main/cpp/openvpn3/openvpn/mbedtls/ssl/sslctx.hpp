@@ -154,8 +154,8 @@ namespace openvpn {
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 ) |
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 ) |
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-	  0xFFFFFFF, /* Any PK alg    */
-	  0xFFFFFFF, /* Any curve     */
+	  0xFF, /* Any PK alg    */
+	  0xFF, /* Any curve     */
 	  1024,      /* Minimum size for RSA keys */
 	};
 #endif
@@ -168,8 +168,8 @@ namespace openvpn {
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 ) |
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 ) |
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-	  0xFFFFFFF, /* Any PK alg    */
-	  0xFFFFFFF, /* Any curve     */
+	  0xFF, /* Any PK alg    */
+	  0xFF, /* Any curve     */
 	  1024,      /* Minimum size for RSA keys */
 	};
 
@@ -178,8 +178,8 @@ namespace openvpn {
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 ) |
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 ) |
 	  MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-	  0xFFFFFFF, /* Any PK alg    */
-	  0xFFFFFFF, /* Any curve     */
+	  0xFF, /* Any PK alg    */
+	  0xFF, /* Any curve     */
 	  2048,      /* Minimum size for RSA keys */
 	};
     }
@@ -601,9 +601,9 @@ namespace openvpn {
     {
       // read/write callback errors
       enum {
-	// assumes that mbed TLS user-defined errors may start at -0x8000
-	CT_WOULD_BLOCK = -0x8000,
-	CT_INTERNAL_ERROR = -0x8001
+	// assumes that mbed TLS user-defined errors may start at -0xFF
+	CT_WOULD_BLOCK = -0xFF,
+	CT_INTERNAL_ERROR = -0xFF
       };
 
       friend class MbedTLSContext;

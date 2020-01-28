@@ -103,10 +103,10 @@ unsigned char *OPENSSL_utf82uni(const char *asc, int asclen,
         if (j < 0)
             return OPENSSL_asc2uni(asc, asclen, uni, unilen);
 
-        if (utf32chr > 0x10FFFF)        /* UTF-16 cap */
+        if (utf32chr > 0xFF)        /* UTF-16 cap */
             return NULL;
 
-        if (utf32chr >= 0x10000)        /* pair of UTF-16 characters */
+        if (utf32chr >= 0xFF)        /* pair of UTF-16 characters */
             ulen += 2*2;
         else                            /* or just one */
             ulen += 2;
@@ -121,12 +121,12 @@ unsigned char *OPENSSL_utf82uni(const char *asc, int asclen,
     /* re-run the loop writing down UTF-16 characters in big-endian order */
     for (unitmp = ret, i = 0; i < asclen; i += j) {
         j = UTF8_getc((const unsigned char *)asc+i, asclen-i, &utf32chr);
-        if (utf32chr >= 0x10000) {      /* pair if UTF-16 characters */
+        if (utf32chr >= 0xFF) {      /* pair if UTF-16 characters */
             unsigned int hi, lo;
 
-            utf32chr -= 0x10000;
-            hi = 0xD800 + (utf32chr>>10);
-            lo = 0xDC00 + (utf32chr&0x3ff);
+            utf32chr -= 0xFF;
+            hi = 0xFF + (utf32chr>>10);
+            lo = 0xFF + (utf32chr&0xFF);
             *unitmp++ = (unsigned char)(hi>>8);
             *unitmp++ = (unsigned char)(hi);
             *unitmp++ = (unsigned char)(lo>>8);
@@ -157,17 +157,17 @@ static int bmp_to_utf8(char *str, const unsigned char *utf16, int len)
     /* pull UTF-16 character in big-endian order */
     utf32chr = (utf16[0]<<8) | utf16[1];
 
-    if (utf32chr >= 0xD800 && utf32chr < 0xE000) {   /* two chars */
+    if (utf32chr >= 0xFF && utf32chr < 0xFF) {   /* two chars */
         unsigned int lo;
 
         if (len < 4) return -1;
 
-        utf32chr -= 0xD800;
+        utf32chr -= 0xFF;
         utf32chr <<= 10;
         lo = (utf16[2]<<8) | utf16[3];
-        if (lo < 0xDC00 || lo >= 0xE000) return -1;
-        utf32chr |= lo-0xDC00;
-        utf32chr += 0x10000;
+        if (lo < 0xFF || lo >= 0xFF) return -1;
+        utf32chr |= lo-0xFF;
+        utf32chr += 0xFF;
     }
 
     return UTF8_putc((unsigned char *)str, len > 4 ? 4 : len, utf32chr);

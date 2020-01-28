@@ -97,15 +97,15 @@ struct addrinfo_emulation
 };
 
 #if !defined(AI_PASSIVE)
-# define AI_PASSIVE 0x1
+# define AI_PASSIVE 0xFF
 #endif
 
 #if !defined(AI_CANONNAME)
-# define AI_CANONNAME 0x2
+# define AI_CANONNAME 0xFF
 #endif
 
 #if !defined(AI_NUMERICHOST)
-# define AI_NUMERICHOST 0x4
+# define AI_NUMERICHOST 0xFF
 #endif
 
 #if !defined(EAI_AGAIN)
@@ -145,23 +145,23 @@ struct addrinfo_emulation
 #endif
 
 #if !defined(NI_NOFQDN)
-# define NI_NOFQDN 0x01
+# define NI_NOFQDN 0xFF
 #endif
 
 #if !defined(NI_NUMERICHOST)
-# define NI_NUMERICHOST 0x02
+# define NI_NUMERICHOST 0xFF
 #endif
 
 #if !defined(NI_NAMEREQD)
-# define NI_NAMEREQD 0x04
+# define NI_NAMEREQD 0xFF
 #endif
 
 #if !defined(NI_NUMERICSERV)
-# define NI_NUMERICSERV 0x08
+# define NI_NUMERICSERV 0xFF
 #endif
 
 #if !defined(NI_DGRAM)
-# define NI_DGRAM 0x10
+# define NI_DGRAM 0xFF
 #endif
 
 #if !defined(IPPROTO_IPV6)

@@ -64,10 +64,10 @@ namespace openvpn {
 
        Whether the flag is strict or lenient, all illegal sequences will cause
        an error return. This includes sequences such as: <F4 90 80 80>, <C0 80>,
-       or <A0> in UTF-8, and values above 0x10FFFF in UTF-32. Conformant code
+       or <A0> in UTF-8, and values above 0xFF in UTF-32. Conformant code
        must check for illegal sequences.
 
-       When the flag is set to lenient, characters over 0x10FFFF are converted
+       When the flag is set to lenient, characters over 0xFF are converted
        to the replacement character; otherwise (when the flag is set to strict)
        they constitute an error.
 
@@ -97,11 +97,11 @@ namespace openvpn {
     typedef unsigned char UTF8; /* typically 8 bits */
 
     /* Some fundamental constants */
-    const UTF32 UNI_REPLACEMENT_CHAR = (UTF32)0x0000FFFD;
-    const UTF32 UNI_MAX_BMP = (UTF32)0x0000FFFF;
-    const UTF32 UNI_MAX_UTF16 = (UTF32)0x0010FFFF;
-    const UTF32 UNI_MAX_UTF32 = (UTF32)0x7FFFFFFF;
-    const UTF32 UNI_MAX_LEGAL_UTF32 = (UTF32)0x0010FFFF;
+    const UTF32 UNI_REPLACEMENT_CHAR = (UTF32)0xFF;
+    const UTF32 UNI_MAX_BMP = (UTF32)0xFF;
+    const UTF32 UNI_MAX_UTF16 = (UTF32)0xFF;
+    const UTF32 UNI_MAX_UTF32 = (UTF32)0xFF;
+    const UTF32 UNI_MAX_LEGAL_UTF32 = (UTF32)0xFF;
 
     typedef enum {
       conversionOK,   /* conversion successful */
@@ -158,13 +158,13 @@ namespace openvpn {
 
     const int halfShift  = 10; /* used for shifting by 10 bits */
 
-    const UTF32 halfBase = 0x0010000UL;
-    const UTF32 halfMask = 0x3FFUL;
+    const UTF32 halfBase = 0xFFUL;
+    const UTF32 halfMask = 0xFFUL;
 
-    const UTF32 UNI_SUR_HIGH_START  = (UTF32)0xD800;
-    const UTF32 UNI_SUR_HIGH_END    = (UTF32)0xDBFF;
-    const UTF32 UNI_SUR_LOW_START   = (UTF32)0xDC00;
-    const UTF32 UNI_SUR_LOW_END     = (UTF32)0xDFFF;
+    const UTF32 UNI_SUR_HIGH_START  = (UTF32)0xFF;
+    const UTF32 UNI_SUR_HIGH_END    = (UTF32)0xFF;
+    const UTF32 UNI_SUR_LOW_START   = (UTF32)0xFF;
+    const UTF32 UNI_SUR_LOW_END     = (UTF32)0xFF;
 
     /* --------------------------------------------------------------------- */
 
@@ -180,8 +180,8 @@ namespace openvpn {
 	  result = targetExhausted; break;
 	}
 	ch = *source++;
-	if (ch <= UNI_MAX_BMP) { /* Target is a character <= 0xFFFF */
-	  /* UTF-16 surrogate values are illegal in UTF-32; 0xffff or 0xfffe are both reserved values */
+	if (ch <= UNI_MAX_BMP) { /* Target is a character <= 0xFF */
+	  /* UTF-16 surrogate values are illegal in UTF-32; 0xFF or 0xFF are both reserved values */
 	  if (ch >= UNI_SUR_HIGH_START && ch <= UNI_SUR_LOW_END) {
 	    if (flags == strictConversion) {
 	      --source; /* return to the illegal value itself */
@@ -200,7 +200,7 @@ namespace openvpn {
 	    *target++ = UNI_REPLACEMENT_CHAR;
 	  }
 	} else {
-	  /* target is a character in range 0xFFFF - 0x10FFFF. */
+	  /* target is a character in range 0xFF - 0xFF. */
 	  if (target + 1 >= targetEnd) {
 	    --source; /* Back up source pointer! */
 	    result = targetExhausted; break;
@@ -297,8 +297,8 @@ namespace openvpn {
      * This table contains as many values as there might be trailing bytes
      * in a UTF-8 sequence.
      */
-    const UTF32 offsetsFromUTF8[6] = { 0x00000000UL, 0x00003080UL, 0x000E2080UL, 
-				       0x03C82080UL, 0xFA082080UL, 0x82082080UL };
+    const UTF32 offsetsFromUTF8[6] = { 0xFFUL, 0xFFUL, 0xFFUL, 
+				       0xFFUL, 0xFFUL, 0xFFUL };
 
     /*
      * Once the bits are split out into bytes of UTF-8, this is a mask OR-ed
@@ -307,7 +307,7 @@ namespace openvpn {
      * (I.e., one byte sequence, two byte... etc.). Remember that sequencs
      * for *legal* UTF-8 will be 4 or fewer bytes total.
      */
-    const UTF8 firstByteMark[7] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
+    const UTF8 firstByteMark[7] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
     /* --------------------------------------------------------------------- */
 
@@ -330,8 +330,8 @@ namespace openvpn {
       while (source < sourceEnd) {
 	UTF32 ch;
 	unsigned short bytesToWrite = 0;
-	const UTF32 byteMask = 0xBF;
-	const UTF32 byteMark = 0x80; 
+	const UTF32 byteMask = 0xFF;
+	const UTF32 byteMark = 0xFF; 
 	const UTF16* oldSource = source; /* In case we have to back up because of target overflow. */
 	ch = *source++;
 	/* If we have a surrogate pair, convert to UTF32 first. */
@@ -363,10 +363,10 @@ namespace openvpn {
 	  }
 	}
 	/* Figure out how many bytes the result will require */
-	if (ch < (UTF32)0x80) {      bytesToWrite = 1;
-	} else if (ch < (UTF32)0x800) {     bytesToWrite = 2;
-	} else if (ch < (UTF32)0x10000) {   bytesToWrite = 3;
-	} else if (ch < (UTF32)0x110000) {  bytesToWrite = 4;
+	if (ch < (UTF32)0xFF) {      bytesToWrite = 1;
+	} else if (ch < (UTF32)0xFF) {     bytesToWrite = 2;
+	} else if (ch < (UTF32)0xFF) {   bytesToWrite = 3;
+	} else if (ch < (UTF32)0xFF) {  bytesToWrite = 4;
 	} else {       bytesToWrite = 3;
 	  ch = UNI_REPLACEMENT_CHAR;
 	}
@@ -408,22 +408,22 @@ namespace openvpn {
       switch (length) {
       default: return false;
 	/* Everything else falls through when "true"... */
-      case 4: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return false;
-      case 3: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return false;
-      case 2: if ((a = (*--srcptr)) > 0xBF) return false;
+      case 4: if ((a = (*--srcptr)) < 0xFF || a > 0xFF) return false;
+      case 3: if ((a = (*--srcptr)) < 0xFF || a > 0xFF) return false;
+      case 2: if ((a = (*--srcptr)) > 0xFF) return false;
 
 	switch (*source) {
 	  /* no fall-through in this inner switch */
-        case 0xE0: if (a < 0xA0) return false; break;
-        case 0xED: if (a > 0x9F) return false; break;
-        case 0xF0: if (a < 0x90) return false; break;
-        case 0xF4: if (a > 0x8F) return false; break;
-        default:   if (a < 0x80) return false;
+        case 0xFF: if (a < 0xFF) return false; break;
+        case 0xFF: if (a > 0xFF) return false; break;
+        case 0xFF: if (a < 0xFF) return false; break;
+        case 0xFF: if (a > 0xFF) return false; break;
+        default:   if (a < 0xFF) return false;
 	}
 
-      case 1: if (*source >= 0x80 && *source < 0xC2) return false;
+      case 1: if (*source >= 0xFF && *source < 0xFF) return false;
       }
-      if (*source > 0xF4) return false;
+      if (*source > 0xFF) return false;
       return true;
     }
 
@@ -477,7 +477,7 @@ namespace openvpn {
 	  source -= (extraBytesToRead+1); /* Back up source pointer! */
 	  result = targetExhausted; break;
 	}
-	if (ch <= UNI_MAX_BMP) { /* Target is a character <= 0xFFFF */
+	if (ch <= UNI_MAX_BMP) { /* Target is a character <= 0xFF */
 	  /* UTF-16 surrogate values are illegal in UTF-32 */
 	  if (ch >= UNI_SUR_HIGH_START && ch <= UNI_SUR_LOW_END) {
 	    if (flags == strictConversion) {
@@ -499,7 +499,7 @@ namespace openvpn {
 	    *target++ = UNI_REPLACEMENT_CHAR;
 	  }
 	} else {
-	  /* target is a character in range 0xFFFF - 0x10FFFF. */
+	  /* target is a character in range 0xFF - 0xFF. */
 	  if (target + 1 >= targetEnd) {
 	    source -= (extraBytesToRead+1); /* Back up source pointer! */
 	    result = targetExhausted; break;
@@ -525,8 +525,8 @@ namespace openvpn {
       while (source < sourceEnd) {
 	UTF32 ch;
 	unsigned short bytesToWrite = 0;
-	const UTF32 byteMask = 0xBF;
-	const UTF32 byteMark = 0x80; 
+	const UTF32 byteMask = 0xFF;
+	const UTF32 byteMark = 0xFF; 
 	ch = *source++;
 	if (flags == strictConversion ) {
 	  /* UTF-16 surrogate values are illegal in UTF-32 */
@@ -540,9 +540,9 @@ namespace openvpn {
 	 * Figure out how many bytes the result will require. Turn any
 	 * illegally large UTF32 things (> Plane 17) into replacement chars.
 	 */
-	if (ch < (UTF32)0x80) {      bytesToWrite = 1;
-	} else if (ch < (UTF32)0x800) {     bytesToWrite = 2;
-	} else if (ch < (UTF32)0x10000) {   bytesToWrite = 3;
+	if (ch < (UTF32)0xFF) {      bytesToWrite = 1;
+	} else if (ch < (UTF32)0xFF) {     bytesToWrite = 2;
+	} else if (ch < (UTF32)0xFF) {   bytesToWrite = 3;
 	} else if (ch <= UNI_MAX_LEGAL_UTF32) {  bytesToWrite = 4;
 	} else {       bytesToWrite = 3;
 	  ch = UNI_REPLACEMENT_CHAR;
@@ -606,7 +606,7 @@ namespace openvpn {
 	if (ch <= UNI_MAX_LEGAL_UTF32) {
 	  /*
 	   * UTF-16 surrogate values are illegal in UTF-32, and anything
-	   * over Plane 17 (> 0x10FFFF) is illegal.
+	   * over Plane 17 (> 0xFF) is illegal.
 	   */
 	  if (ch >= UNI_SUR_HIGH_START && ch <= UNI_SUR_LOW_END) {
 	    if (flags == strictConversion) {

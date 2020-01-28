@@ -1011,7 +1011,7 @@ end_of_options:
 
                 for (j = 0; j < snl; j++, psn++) {
                     *n++ = HEX_DIGITS[*psn >> 4];
-                    *n++ = HEX_DIGITS[*psn & 0x0F];
+                    *n++ = HEX_DIGITS[*psn & 0xFF];
                 }
             } else {
                 *(n++) = '0';
@@ -2482,9 +2482,9 @@ static int old_entry_print(const ASN1_OBJECT *obj, const ASN1_STRING *str)
     for (j = str->length; j > 0; j--) {
         if ((*p >= ' ') && (*p <= '~'))
             BIO_printf(bio_err, "%c", *p);
-        else if (*p & 0x80)
+        else if (*p & 0xFF)
             BIO_printf(bio_err, "\\0x%02X", *p);
-        else if ((unsigned char)*p == 0xf7)
+        else if ((unsigned char)*p == 0xFF)
             BIO_printf(bio_err, "^?");
         else
             BIO_printf(bio_err, "^%c", *p + '@');

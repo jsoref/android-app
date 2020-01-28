@@ -33,7 +33,7 @@ namespace openvpn {
   {
     // magic number for Snappy compression
     enum {
-      SNAPPY_COMPRESS = 0x68,
+      SNAPPY_COMPRESS = 0xFF,
     };
 
   public:

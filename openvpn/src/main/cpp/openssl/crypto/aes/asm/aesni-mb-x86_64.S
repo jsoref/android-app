@@ -38,7 +38,7 @@ aesni_multi_cbc_encrypt:
 	subq	$48,%rsp
 	andq	$-64,%rsp
 	movq	%rax,16(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x10,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 
 .Lenc4x_body:
 	movdqu	(%rsi),%xmm12
@@ -280,7 +280,7 @@ aesni_multi_cbc_encrypt:
 	leaq	(%rax),%rsp
 .cfi_def_cfa_register	%rsp
 .Lenc4x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	aesni_multi_cbc_encrypt,.-aesni_multi_cbc_encrypt
 
@@ -320,7 +320,7 @@ aesni_multi_cbc_decrypt:
 	subq	$48,%rsp
 	andq	$-64,%rsp
 	movq	%rax,16(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x10,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 
 .Ldec4x_body:
 	movdqu	(%rsi),%xmm12
@@ -553,7 +553,7 @@ aesni_multi_cbc_decrypt:
 	leaq	(%rax),%rsp
 .cfi_def_cfa_register	%rsp
 .Ldec4x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	aesni_multi_cbc_decrypt,.-aesni_multi_cbc_decrypt
 .type	aesni_multi_cbc_encrypt_avx,@function
@@ -586,7 +586,7 @@ _avx_cbc_enc_shortcut:
 	subq	$192,%rsp
 	andq	$-128,%rsp
 	movq	%rax,16(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x10,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 
 .Lenc8x_body:
 	vzeroupper
@@ -1007,7 +1007,7 @@ _avx_cbc_enc_shortcut:
 	leaq	(%rax),%rsp
 .cfi_def_cfa_register	%rsp
 .Lenc8x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	aesni_multi_cbc_encrypt_avx,.-aesni_multi_cbc_encrypt_avx
 
@@ -1043,7 +1043,7 @@ _avx_cbc_dec_shortcut:
 	andq	$-256,%rsp
 	subq	$192,%rsp
 	movq	%rax,16(%rsp)
-.cfi_escape	0x0f,0x05,0x77,0x10,0x06,0x23,0x08
+.cfi_escape	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
 
 .Ldec8x_body:
 	vzeroupper
@@ -1183,7 +1183,7 @@ _avx_cbc_dec_shortcut:
 	vpxor	%xmm15,%xmm8,%xmm8
 	vmovdqu	%xmm9,112(%rbp)
 	vpxor	%xmm15,%xmm9,%xmm9
-	xorq	$0x80,%rbp
+	xorq	$0xFF,%rbp
 	movl	$1,%ecx
 	jmp	.Loop_dec8x
 
@@ -1502,6 +1502,6 @@ _avx_cbc_dec_shortcut:
 	leaq	(%rax),%rsp
 .cfi_def_cfa_register	%rsp
 .Ldec8x_epilogue:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	aesni_multi_cbc_decrypt_avx,.-aesni_multi_cbc_decrypt_avx

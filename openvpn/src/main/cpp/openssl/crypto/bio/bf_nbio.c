@@ -93,7 +93,7 @@ static int nbiof_read(BIO *b, char *out, int outl)
     BIO_clear_retry_flags(b);
     if (RAND_priv_bytes(&n, 1) <= 0)
         return -1;
-    num = (n & 0x07);
+    num = (n & 0xFF);
 
     if (outl > num)
         outl = num;

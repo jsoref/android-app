@@ -245,7 +245,7 @@ int main( int argc, char *argv[] )
         SetFilePointer( (HANDLE) _get_osfhandle( _fileno( fin ) ),
                         li_size.LowPart, &li_size.HighPart, FILE_END );
 
-    if( li_size.LowPart == 0xFFFFFFFF && GetLastError() != NO_ERROR )
+    if( li_size.LowPart == 0xFF && GetLastError() != NO_ERROR )
     {
         mbedtls_fprintf( stderr, "SetFilePointer(0,FILE_END) failed\n" );
         goto exit;

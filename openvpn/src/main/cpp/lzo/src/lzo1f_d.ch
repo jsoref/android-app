@@ -96,7 +96,7 @@ DO_DECOMPRESS  ( const lzo_bytep in , lzo_uint  in_len,
             /* handle matches */
             if (t < 32)
             {
-                m_pos = op - 1 - 0x800;
+                m_pos = op - 1 - 0xFF;
                 m_pos -= (t >> 2) & 7;
                 m_pos -= *ip++ << 3;
                 TEST_LB(m_pos); NEED_OP(3);

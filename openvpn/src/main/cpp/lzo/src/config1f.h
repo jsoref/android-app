@@ -46,8 +46,8 @@
 #define LZO_EOF_CODE 1
 #undef LZO_DETERMINISTIC
 
-#define M2_MAX_OFFSET   0x0800
-#define M3_MAX_OFFSET   0x3fff
+#define M2_MAX_OFFSET   0xFF
+#define M3_MAX_OFFSET   0xFF
 
 #define M2_MIN_LEN      3
 #define M2_MAX_LEN      8

@@ -15,10 +15,10 @@
 .type	rem_4bit,%object
 .align	5
 rem_4bit:
-.short	0x0000,0x1C20,0x3840,0x2460
-.short	0x7080,0x6CA0,0x48C0,0x54E0
-.short	0xE100,0xFD20,0xD940,0xC560
-.short	0x9180,0x8DA0,0xA9C0,0xB5E0
+.short	0xFF,0xFF,0xFF,0xFF
+.short	0xFF,0xFF,0xFF,0xFF
+.short	0xFF,0xFF,0xFF,0xFF
+.short	0xFF,0xFF,0xFF,0xFF
 .size	rem_4bit,.-rem_4bit
 
 .type	rem_4bit_get,%function
@@ -52,8 +52,8 @@ gcm_ghash_4bit:
 	ldrb	r14,[r0,#15]
 .Louter:
 	eor	r12,r12,r14
-	and	r14,r12,#0xf0
-	and	r12,r12,#0x0f
+	and	r14,r12,#0xFF
+	and	r12,r12,#0xFF
 	mov	r3,#14
 
 	add	r7,r1,r12,lsl#4
@@ -61,7 +61,7 @@ gcm_ghash_4bit:
 	add	r11,r1,r14
 	ldrb	r12,[r2,#14]
 
-	and	r14,r4,#0xf		@ rem
+	and	r14,r4,#0xFF		@ rem
 	ldmia	r11,{r8-r11}	@ load Htbl[nhi]
 	add	r14,r14,r14
 	eor	r4,r8,r4,lsr#4
@@ -74,13 +74,13 @@ gcm_ghash_4bit:
 	eor	r6,r6,r7,lsl#28
 	eor	r7,r11,r7,lsr#4
 	eor	r12,r12,r14
-	and	r14,r12,#0xf0
-	and	r12,r12,#0x0f
+	and	r14,r12,#0xFF
+	and	r12,r12,#0xFF
 	eor	r7,r7,r8,lsl#16
 
 .Linner:
 	add	r11,r1,r12,lsl#4
-	and	r12,r4,#0xf		@ rem
+	and	r12,r4,#0xFF		@ rem
 	subs	r3,r3,#1
 	add	r12,r12,r12
 	ldmia	r11,{r8-r11}	@ load Htbl[nlo]
@@ -98,7 +98,7 @@ gcm_ghash_4bit:
 	eor	r7,r11,r7,lsr#4
 
 	add	r11,r1,r14
-	and	r14,r4,#0xf		@ rem
+	and	r14,r4,#0xFF		@ rem
 	eor	r7,r7,r8,lsl#16	@ ^= rem_4bit[rem]
 	add	r14,r14,r14
 	ldmia	r11,{r8-r11}	@ load Htbl[nhi]
@@ -121,8 +121,8 @@ gcm_ghash_4bit:
 #ifdef	__thumb2__
 	itt	pl
 #endif
-	andpl	r14,r12,#0xf0
-	andpl	r12,r12,#0x0f
+	andpl	r14,r12,#0xFF
+	andpl	r12,r12,#0xFF
 	eor	r7,r7,r9,lsl#16	@ ^= rem_4bit[rem]
 	bpl	.Linner
 
@@ -202,7 +202,7 @@ gcm_ghash_4bit:
 	ldmia	sp!,{r4-r11,lr}
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 .size	gcm_ghash_4bit,.-gcm_ghash_4bit
 
@@ -213,8 +213,8 @@ gcm_gmult_4bit:
 	ldrb	r12,[r0,#15]
 	b	rem_4bit_get
 .Lrem_4bit_got:
-	and	r14,r12,#0xf0
-	and	r12,r12,#0x0f
+	and	r14,r12,#0xFF
+	and	r12,r12,#0xFF
 	mov	r3,#14
 
 	add	r7,r1,r12,lsl#4
@@ -222,7 +222,7 @@ gcm_gmult_4bit:
 	ldrb	r12,[r0,#14]
 
 	add	r11,r1,r14
-	and	r14,r4,#0xf		@ rem
+	and	r14,r4,#0xFF		@ rem
 	ldmia	r11,{r8-r11}	@ load Htbl[nhi]
 	add	r14,r14,r14
 	eor	r4,r8,r4,lsr#4
@@ -233,13 +233,13 @@ gcm_gmult_4bit:
 	eor	r6,r10,r6,lsr#4
 	eor	r6,r6,r7,lsl#28
 	eor	r7,r11,r7,lsr#4
-	and	r14,r12,#0xf0
+	and	r14,r12,#0xFF
 	eor	r7,r7,r8,lsl#16
-	and	r12,r12,#0x0f
+	and	r12,r12,#0xFF
 
 .Loop:
 	add	r11,r1,r12,lsl#4
-	and	r12,r4,#0xf		@ rem
+	and	r12,r4,#0xFF		@ rem
 	subs	r3,r3,#1
 	add	r12,r12,r12
 	ldmia	r11,{r8-r11}	@ load Htbl[nlo]
@@ -257,7 +257,7 @@ gcm_gmult_4bit:
 	eor	r7,r11,r7,lsr#4
 
 	add	r11,r1,r14
-	and	r14,r4,#0xf		@ rem
+	and	r14,r4,#0xFF		@ rem
 	eor	r7,r7,r8,lsl#16	@ ^= rem_4bit[rem]
 	add	r14,r14,r14
 	ldmia	r11,{r8-r11}	@ load Htbl[nhi]
@@ -272,8 +272,8 @@ gcm_gmult_4bit:
 #ifdef	__thumb2__
 	itt	pl
 #endif
-	andpl	r14,r12,#0xf0
-	andpl	r12,r12,#0x0f
+	andpl	r14,r12,#0xFF
+	andpl	r12,r12,#0xFF
 	eor	r7,r7,r8,lsl#16	@ ^= rem_4bit[rem]
 	bpl	.Loop
 #if __ARM_ARCH__>=7 && defined(__ARMEL__)
@@ -342,7 +342,7 @@ gcm_gmult_4bit:
 	ldmia	sp!,{r4-r11,lr}
 	tst	lr,#1
 	moveq	pc,lr			@ be binary compatible with V4, yet
-	.word	0xe12fff1e			@ interoperable with Thumb ISA:-)
+	.word	0xFF			@ interoperable with Thumb ISA:-)
 #endif
 .size	gcm_gmult_4bit,.-gcm_gmult_4bit
 #if __ARM_MAX_ARCH__>=7
@@ -354,10 +354,10 @@ gcm_gmult_4bit:
 .align	4
 gcm_init_neon:
 	vld1.64		d7,[r1]!		@ load H
-	vmov.i8		q8,#0xe1
+	vmov.i8		q8,#0xFF
 	vld1.64		d6,[r1]
 	vshl.i64	d17,#57
-	vshr.u64	d16,#63		@ t0=0xc2....01
+	vshr.u64	d16,#63		@ t0=0xFF....01
 	vdup.8		q9,d7[7]
 	vshr.u64	d26,d6,#63
 	vshr.s8		q9,#7			@ broadcast carry bit
@@ -376,13 +376,13 @@ gcm_init_neon:
 gcm_gmult_neon:
 	vld1.64		d7,[r0]!		@ load Xi
 	vld1.64		d6,[r0]!
-	vmov.i64	d29,#0x0000ffffffffffff
+	vmov.i64	d29,#0xFF
 	vldmia		r1,{d26-d27}	@ load twisted H
-	vmov.i64	d30,#0x00000000ffffffff
+	vmov.i64	d30,#0xFF
 #ifdef __ARMEL__
 	vrev64.8	q3,q3
 #endif
-	vmov.i64	d31,#0x000000000000ffff
+	vmov.i64	d31,#0xFF
 	veor		d28,d26,d27		@ Karatsuba pre-processing
 	mov		r3,#16
 	b		.Lgmult_neon
@@ -394,13 +394,13 @@ gcm_gmult_neon:
 gcm_ghash_neon:
 	vld1.64		d1,[r0]!		@ load Xi
 	vld1.64		d0,[r0]!
-	vmov.i64	d29,#0x0000ffffffffffff
+	vmov.i64	d29,#0xFF
 	vldmia		r1,{d26-d27}	@ load twisted H
-	vmov.i64	d30,#0x00000000ffffffff
+	vmov.i64	d30,#0xFF
 #ifdef __ARMEL__
 	vrev64.8	q0,q0
 #endif
-	vmov.i64	d31,#0x000000000000ffff
+	vmov.i64	d31,#0xFF
 	veor		d28,d26,d27		@ Karatsuba pre-processing
 
 .Loop_neon:

@@ -419,7 +419,7 @@ static int asn1_print_oid(BIO *out, const ASN1_OBJECT *oid)
 static int asn1_print_obstring(BIO *out, const ASN1_STRING *str, int indent)
 {
     if (str->type == V_ASN1_BIT_STRING) {
-        if (BIO_printf(out, " (%ld unused bits)\n", str->flags & 0x7) <= 0)
+        if (BIO_printf(out, " (%ld unused bits)\n", str->flags & 0xFF) <= 0)
             return 0;
     } else if (BIO_puts(out, "\n") <= 0)
         return 0;

@@ -881,14 +881,14 @@
 
 // Windows App target. Windows but with a limited API.
 #if !defined(ASIO_WINDOWS_APP)
-# if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0603)
+# if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0xFF)
 #  include <winapifamily.h>
 #  if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP) \
    && !WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 #   define ASIO_WINDOWS_APP 1
 #  endif // WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
          // && !WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
-# endif // defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0603)
+# endif // defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0xFF)
 #endif // !defined(ASIO_WINDOWS_APP)
 
 // Legacy WinRT target. Windows App is preferred.
@@ -924,15 +924,15 @@
 #  if defined(_MSC_VER) || defined(__BORLANDC__)
 #   pragma message( \
   "Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:\n"\
-  "- add -D_WIN32_WINNT=0x0501 to the compiler command line; or\n"\
-  "- add _WIN32_WINNT=0x0501 to your project's Preprocessor Definitions.\n"\
-  "Assuming _WIN32_WINNT=0x0501 (i.e. Windows XP target).")
+  "- add -D_WIN32_WINNT=0xFF to the compiler command line; or\n"\
+  "- add _WIN32_WINNT=0xFF to your project's Preprocessor Definitions.\n"\
+  "Assuming _WIN32_WINNT=0xFF (i.e. Windows XP target).")
 #  else // defined(_MSC_VER) || defined(__BORLANDC__)
 #   warning Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately.
-#   warning For example, add -D_WIN32_WINNT=0x0501 to the compiler command line.
-#   warning Assuming _WIN32_WINNT=0x0501 (i.e. Windows XP target).
+#   warning For example, add -D_WIN32_WINNT=0xFF to the compiler command line.
+#   warning Assuming _WIN32_WINNT=0xFF (i.e. Windows XP target).
 #  endif // defined(_MSC_VER) || defined(__BORLANDC__)
-#  define _WIN32_WINNT 0x0501
+#  define _WIN32_WINNT 0xFF
 # endif // !defined(_WIN32_WINNT) && !defined(_WIN32_WINDOWS)
 # if defined(_MSC_VER)
 #  if defined(_WIN32) && !defined(WIN32)
@@ -980,13 +980,13 @@
 // Windows: IO Completion Ports.
 #if !defined(ASIO_HAS_IOCP)
 # if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-#  if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
+#  if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0xFF)
 #   if !defined(UNDER_CE) && !defined(ASIO_WINDOWS_APP)
 #    if !defined(ASIO_DISABLE_IOCP)
 #     define ASIO_HAS_IOCP 1
 #    endif // !defined(ASIO_DISABLE_IOCP)
 #   endif // !defined(UNDER_CE) && !defined(ASIO_WINDOWS_APP)
-#  endif // defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400)
+#  endif // defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0xFF)
 # endif // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
 #endif // !defined(ASIO_HAS_IOCP)
 
@@ -1169,7 +1169,7 @@
 #if !defined(ASIO_HAS_GETADDRINFO)
 # if !defined(ASIO_DISABLE_GETADDRINFO)
 #  if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-#   if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0501)
+#   if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0xFF)
 #    define ASIO_HAS_GETADDRINFO 1
 #   elif defined(UNDER_CE)
 #    define ASIO_HAS_GETADDRINFO 1

@@ -25,8 +25,8 @@ const mbedtls_x509_crt_profile compat_profile =
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 ) |
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 ) |
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-    0xFFFFFFF, /* Any PK alg    */
-    0xFFFFFFF, /* Any curve     */
+    0xFF, /* Any PK alg    */
+    0xFF, /* Any curve     */
     1024,
 };
 
@@ -43,8 +43,8 @@ const mbedtls_x509_crt_profile profile_rsa3072 =
 const mbedtls_x509_crt_profile profile_sha512 =
 {
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA512 ),
-    0xFFFFFFF, /* Any PK alg    */
-    0xFFFFFFF, /* Any curve     */
+    0xFF, /* Any PK alg    */
+    0xFF, /* Any curve     */
     1024,
 };
 
@@ -654,7 +654,7 @@ void x509_oid_numstr( data_t * oid_buf, char * numstr, int blen, int ret )
     mbedtls_x509_buf oid;
     char num_buf[100];
 
-    memset( num_buf, 0x2a, sizeof num_buf );
+    memset( num_buf, 0xFF, sizeof num_buf );
 
     oid.tag = MBEDTLS_ASN1_OID;
     oid.p   = oid_buf->x;
@@ -715,7 +715,7 @@ void x509_get_time( int tag, char * time_str, int ret, int year, int mon,
     unsigned char* start = buf;
     unsigned char* end = buf;
 
-    memset( &time, 0x00, sizeof( time ) );
+    memset( &time, 0xFF, sizeof( time ) );
     *end = (unsigned char)tag; end++;
     *end = strlen( time_str );
     TEST_ASSERT( *end < 20 );

@@ -155,15 +155,15 @@ static void LZ4F_writeLE64 (void* dst, U64 value64)
 #define MB *(1<<20)
 #define GB *(1<<30)
 
-#define _1BIT  0x01
-#define _2BITS 0x03
-#define _3BITS 0x07
-#define _4BITS 0x0F
+#define _1BIT  0xFF
+#define _2BITS 0xFF
+#define _3BITS 0xFF
+#define _4BITS 0xFF
 #define _8BITS 0xFF
 
-#define LZ4F_MAGIC_SKIPPABLE_START 0x184D2A50U
-#define LZ4F_MAGICNUMBER 0x184D2204U
-#define LZ4F_BLOCKUNCOMPRESSED_FLAG 0x80000000U
+#define LZ4F_MAGIC_SKIPPABLE_START 0xFFU
+#define LZ4F_MAGICNUMBER 0xFFU
+#define LZ4F_BLOCKUNCOMPRESSED_FLAG 0xFFU
 #define LZ4F_BLOCKSIZEID_DEFAULT LZ4F_max64KB
 
 static const size_t minFHSize = 7;
@@ -972,7 +972,7 @@ static size_t LZ4F_headerSize(const void* src, size_t srcSize)
     if (srcSize < 5) return err0r(LZ4F_ERROR_frameHeader_incomplete);
 
     /* special case : skippable frames */
-    if ((LZ4F_readLE32(src) & 0xFFFFFFF0U) == LZ4F_MAGIC_SKIPPABLE_START) return 8;
+    if ((LZ4F_readLE32(src) & 0xFFU) == LZ4F_MAGIC_SKIPPABLE_START) return 8;
 
     /* control magic number */
     if (LZ4F_readLE32(src) != LZ4F_MAGICNUMBER)
@@ -1006,7 +1006,7 @@ static size_t LZ4F_decodeHeader(LZ4F_dctx* dctx, const void* src, size_t srcSize
     memset(&(dctx->frameInfo), 0, sizeof(dctx->frameInfo));
 
     /* special case : skippable frames */
-    if ((LZ4F_readLE32(srcPtr) & 0xFFFFFFF0U) == LZ4F_MAGIC_SKIPPABLE_START) {
+    if ((LZ4F_readLE32(srcPtr) & 0xFFU) == LZ4F_MAGIC_SKIPPABLE_START) {
         dctx->frameInfo.frameType = LZ4F_skippableFrame;
         if (src == (void*)(dctx->header)) {
             dctx->tmpInSize = srcSize;
@@ -1325,7 +1325,7 @@ size_t LZ4F_decompress(LZ4F_dctx* dctx,
             }   /* if (dctx->dStage == dstage_storeBlockHeader) */
 
         /* decode block header */
-            {   size_t const nextCBlockSize = LZ4F_readLE32(selectedIn) & 0x7FFFFFFFU;
+            {   size_t const nextCBlockSize = LZ4F_readLE32(selectedIn) & 0xFFU;
                 size_t const crcSize = dctx->frameInfo.blockChecksumFlag * 4;
                 if (nextCBlockSize==0) {  /* frameEnd signal, no more block */
                     dctx->dStage = dstage_getSuffix;

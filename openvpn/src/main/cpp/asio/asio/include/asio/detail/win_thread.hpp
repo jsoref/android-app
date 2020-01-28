@@ -32,7 +32,7 @@ namespace detail {
 
 ASIO_DECL unsigned int __stdcall win_thread_function(void* arg);
 
-#if defined(WINVER) && (WINVER < 0x0500)
+#if defined(WINVER) && (WINVER < 0xFF)
 ASIO_DECL void __stdcall apc_function(ULONG data);
 #else
 ASIO_DECL void __stdcall apc_function(ULONG_PTR data);
@@ -85,7 +85,7 @@ public:
 private:
   friend ASIO_DECL unsigned int __stdcall win_thread_function(void* arg);
 
-#if defined(WINVER) && (WINVER < 0x0500)
+#if defined(WINVER) && (WINVER < 0xFF)
   friend ASIO_DECL void __stdcall apc_function(ULONG);
 #else
   friend ASIO_DECL void __stdcall apc_function(ULONG_PTR);

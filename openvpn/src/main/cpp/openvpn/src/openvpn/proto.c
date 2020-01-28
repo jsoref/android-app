@@ -112,7 +112,7 @@ ip_checksum(const sa_family_t af, const uint8_t *payload, const int len_payload,
      */
     for (int i = 0; i < len_payload; i += 2)
     {
-        sum +=  (uint16_t)(((payload[i] << 8) & 0xFF00)
+        sum +=  (uint16_t)(((payload[i] << 8) & 0xFF)
                            +((i + 1 < len_payload) ? (payload[i + 1] & 0xFF) : 0));
 
     }
@@ -123,12 +123,12 @@ ip_checksum(const sa_family_t af, const uint8_t *payload, const int len_payload,
      */
     for (int i = 0; i < addr_len; i += 2)
     {
-        sum += (uint16_t)((src_addr[i] << 8) & 0xFF00) + (src_addr[i + 1] & 0xFF);
+        sum += (uint16_t)((src_addr[i] << 8) & 0xFF) + (src_addr[i + 1] & 0xFF);
 
     }
     for (int i = 0; i < addr_len; i += 2)
     {
-        sum += (uint16_t)((dest_addr[i] << 8) & 0xFF00) + (dest_addr[i + 1] & 0xFF);
+        sum += (uint16_t)((dest_addr[i] << 8) & 0xFF) + (dest_addr[i + 1] & 0xFF);
     }
 
     /* the length of the payload */
@@ -143,7 +143,7 @@ ip_checksum(const sa_family_t af, const uint8_t *payload, const int len_payload,
      */
     while (sum >> 16)
     {
-        sum = (sum & 0xFFFF) + (sum >> 16);
+        sum = (sum & 0xFF) + (sum >> 16);
     }
 
     /* Take the one's complement of sum */

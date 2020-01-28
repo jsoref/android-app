@@ -109,12 +109,12 @@ static const char *extensions[] = { "pem", "crt", "cer", "crl" };
 
 static void bit_set(unsigned char *set, unsigned int bit)
 {
-    set[bit >> 3] |= 1 << (bit & 0x7);
+    set[bit >> 3] |= 1 << (bit & 0xFF);
 }
 
 static int bit_isset(unsigned char *set, unsigned int bit)
 {
-    return set[bit >> 3] & (1 << (bit & 0x7));
+    return set[bit >> 3] & (1 << (bit & 0xFF));
 }
 
 

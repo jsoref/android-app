@@ -1640,7 +1640,7 @@ $code.=<<___;
 	mr	$sp,$i
 	blr
 	.long	0
-	.byte	0,12,4,0,0x8c,13,6,0
+	.byte	0,12,4,0,0xFF,13,6,0
 	.long	0
 .size	.$fname,.-.$fname
 

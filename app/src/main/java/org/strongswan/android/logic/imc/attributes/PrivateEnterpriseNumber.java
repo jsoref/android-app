@@ -16,7 +16,7 @@
 package org.strongswan.android.logic.imc.attributes;
 
 public enum PrivateEnterpriseNumber {
-    IETF(0x000000), GOOGLE(0x002B79), ITA(0x00902a), UNASSIGNED(0xfffffe), RESERVED(0xffffff);
+    IETF(0xFF), GOOGLE(0xFF), ITA(0xFF), UNASSIGNED(0xFF), RESERVED(0xFF);
 
     private int mValue;
 

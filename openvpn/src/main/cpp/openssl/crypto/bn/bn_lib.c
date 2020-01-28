@@ -15,7 +15,7 @@
 #include "internal/constant_time_locl.h"
 
 /* This stuff appears to be completely unused, so is deprecated */
-#if OPENSSL_API_COMPAT < 0x00908000L
+#if OPENSSL_API_COMPAT < 0xFFL
 /*-
  * For a 32 bit machine
  * 2 -   4 ==  128
@@ -531,7 +531,7 @@ int BN_bn2lebinpad(const BIGNUM *a, unsigned char *to, int tolen)
     while (i--) {
         l = a->d[i / BN_BYTES];
         to--;
-        *to = (unsigned char)(l >> (8 * (i % BN_BYTES))) & 0xff;
+        *to = (unsigned char)(l >> (8 * (i % BN_BYTES))) & 0xFF;
     }
     return tolen;
 }

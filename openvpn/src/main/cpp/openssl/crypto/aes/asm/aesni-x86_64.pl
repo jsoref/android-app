@@ -425,7 +425,7 @@ _aesni_${dir}rypt4:
 	$movkey	32($key),$rndkey0
 	lea	32($key,$rounds),$key
 	neg	%rax				# $rounds
-	.byte	0x0f,0x1f,0x00
+	.byte	0xFF,0xFF,0xFF
 	add	\$16,%rax
 
 .L${dir}_loop4:
@@ -615,11 +615,11 @@ aesni_ecb_encrypt:
 .cfi_startproc
 ___
 $code.=<<___ if ($win64);
-	lea	-0x58(%rsp),%rsp
+	lea	-0xFF(%rsp),%rsp
 	movaps	%xmm6,(%rsp)		# offload $inout4..7
-	movaps	%xmm7,0x10(%rsp)
-	movaps	%xmm8,0x20(%rsp)
-	movaps	%xmm9,0x30(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
 .Lecb_enc_body:
 ___
 $code.=<<___;
@@ -633,19 +633,19 @@ $code.=<<___;
 	test	%r8d,%r8d		# 5th argument
 	jz	.Lecb_decrypt
 #--------------------------- ECB ENCRYPT ------------------------------#
-	cmp	\$0x80,$len		# if ($len<8*16)
+	cmp	\$0xFF,$len		# if ($len<8*16)
 	jb	.Lecb_enc_tail		# short input
 
 	movdqu	($inp),$inout0		# load 8 input blocks
-	movdqu	0x10($inp),$inout1
-	movdqu	0x20($inp),$inout2
-	movdqu	0x30($inp),$inout3
-	movdqu	0x40($inp),$inout4
-	movdqu	0x50($inp),$inout5
-	movdqu	0x60($inp),$inout6
-	movdqu	0x70($inp),$inout7
-	lea	0x80($inp),$inp		# $inp+=8*16
-	sub	\$0x80,$len		# $len-=8*16 (can be zero)
+	movdqu	0xFF($inp),$inout1
+	movdqu	0xFF($inp),$inout2
+	movdqu	0xFF($inp),$inout3
+	movdqu	0xFF($inp),$inout4
+	movdqu	0xFF($inp),$inout5
+	movdqu	0xFF($inp),$inout6
+	movdqu	0xFF($inp),$inout7
+	lea	0xFF($inp),$inp		# $inp+=8*16
+	sub	\$0xFF,$len		# $len-=8*16 (can be zero)
 	jmp	.Lecb_enc_loop8_enter
 .align 16
 .Lecb_enc_loop8:
@@ -653,69 +653,69 @@ $code.=<<___;
 	mov	$key_,$key		# restore $key
 	movdqu	($inp),$inout0		# load 8 input blocks
 	mov	$rnds_,$rounds		# restore $rounds
-	movups	$inout1,0x10($out)
-	movdqu	0x10($inp),$inout1
-	movups	$inout2,0x20($out)
-	movdqu	0x20($inp),$inout2
-	movups	$inout3,0x30($out)
-	movdqu	0x30($inp),$inout3
-	movups	$inout4,0x40($out)
-	movdqu	0x40($inp),$inout4
-	movups	$inout5,0x50($out)
-	movdqu	0x50($inp),$inout5
-	movups	$inout6,0x60($out)
-	movdqu	0x60($inp),$inout6
-	movups	$inout7,0x70($out)
-	lea	0x80($out),$out		# $out+=8*16
-	movdqu	0x70($inp),$inout7
-	lea	0x80($inp),$inp		# $inp+=8*16
+	movups	$inout1,0xFF($out)
+	movdqu	0xFF($inp),$inout1
+	movups	$inout2,0xFF($out)
+	movdqu	0xFF($inp),$inout2
+	movups	$inout3,0xFF($out)
+	movdqu	0xFF($inp),$inout3
+	movups	$inout4,0xFF($out)
+	movdqu	0xFF($inp),$inout4
+	movups	$inout5,0xFF($out)
+	movdqu	0xFF($inp),$inout5
+	movups	$inout6,0xFF($out)
+	movdqu	0xFF($inp),$inout6
+	movups	$inout7,0xFF($out)
+	lea	0xFF($out),$out		# $out+=8*16
+	movdqu	0xFF($inp),$inout7
+	lea	0xFF($inp),$inp		# $inp+=8*16
 .Lecb_enc_loop8_enter:
 
 	call	_aesni_encrypt8
 
-	sub	\$0x80,$len
+	sub	\$0xFF,$len
 	jnc	.Lecb_enc_loop8		# loop if $len-=8*16 didn't borrow
 
 	movups	$inout0,($out)		# store 8 output blocks
 	mov	$key_,$key		# restore $key
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	mov	$rnds_,$rounds		# restore $rounds
-	movups	$inout2,0x20($out)
-	movups	$inout3,0x30($out)
-	movups	$inout4,0x40($out)
-	movups	$inout5,0x50($out)
-	movups	$inout6,0x60($out)
-	movups	$inout7,0x70($out)
-	lea	0x80($out),$out		# $out+=8*16
-	add	\$0x80,$len		# restore real remaining $len
+	movups	$inout2,0xFF($out)
+	movups	$inout3,0xFF($out)
+	movups	$inout4,0xFF($out)
+	movups	$inout5,0xFF($out)
+	movups	$inout6,0xFF($out)
+	movups	$inout7,0xFF($out)
+	lea	0xFF($out),$out		# $out+=8*16
+	add	\$0xFF,$len		# restore real remaining $len
 	jz	.Lecb_ret		# done if ($len==0)
 
 .Lecb_enc_tail:				# $len is less than 8*16
 	movups	($inp),$inout0
-	cmp	\$0x20,$len
+	cmp	\$0xFF,$len
 	jb	.Lecb_enc_one
-	movups	0x10($inp),$inout1
+	movups	0xFF($inp),$inout1
 	je	.Lecb_enc_two
-	movups	0x20($inp),$inout2
-	cmp	\$0x40,$len
+	movups	0xFF($inp),$inout2
+	cmp	\$0xFF,$len
 	jb	.Lecb_enc_three
-	movups	0x30($inp),$inout3
+	movups	0xFF($inp),$inout3
 	je	.Lecb_enc_four
-	movups	0x40($inp),$inout4
-	cmp	\$0x60,$len
+	movups	0xFF($inp),$inout4
+	cmp	\$0xFF,$len
 	jb	.Lecb_enc_five
-	movups	0x50($inp),$inout5
+	movups	0xFF($inp),$inout5
 	je	.Lecb_enc_six
-	movdqu	0x60($inp),$inout6
+	movdqu	0xFF($inp),$inout6
 	xorps	$inout7,$inout7
 	call	_aesni_encrypt8
 	movups	$inout0,($out)		# store 7 output blocks
-	movups	$inout1,0x10($out)
-	movups	$inout2,0x20($out)
-	movups	$inout3,0x30($out)
-	movups	$inout4,0x40($out)
-	movups	$inout5,0x50($out)
-	movups	$inout6,0x60($out)
+	movups	$inout1,0xFF($out)
+	movups	$inout2,0xFF($out)
+	movups	$inout3,0xFF($out)
+	movups	$inout4,0xFF($out)
+	movups	$inout5,0xFF($out)
+	movups	$inout6,0xFF($out)
 	jmp	.Lecb_ret
 .align	16
 .Lecb_enc_one:
@@ -728,59 +728,59 @@ $code.=<<___;
 .Lecb_enc_two:
 	call	_aesni_encrypt2
 	movups	$inout0,($out)		# store 2 output blocks
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	jmp	.Lecb_ret
 .align	16
 .Lecb_enc_three:
 	call	_aesni_encrypt3
 	movups	$inout0,($out)		# store 3 output blocks
-	movups	$inout1,0x10($out)
-	movups	$inout2,0x20($out)
+	movups	$inout1,0xFF($out)
+	movups	$inout2,0xFF($out)
 	jmp	.Lecb_ret
 .align	16
 .Lecb_enc_four:
 	call	_aesni_encrypt4
 	movups	$inout0,($out)		# store 4 output blocks
-	movups	$inout1,0x10($out)
-	movups	$inout2,0x20($out)
-	movups	$inout3,0x30($out)
+	movups	$inout1,0xFF($out)
+	movups	$inout2,0xFF($out)
+	movups	$inout3,0xFF($out)
 	jmp	.Lecb_ret
 .align	16
 .Lecb_enc_five:
 	xorps	$inout5,$inout5
 	call	_aesni_encrypt6
 	movups	$inout0,($out)		# store 5 output blocks
-	movups	$inout1,0x10($out)
-	movups	$inout2,0x20($out)
-	movups	$inout3,0x30($out)
-	movups	$inout4,0x40($out)
+	movups	$inout1,0xFF($out)
+	movups	$inout2,0xFF($out)
+	movups	$inout3,0xFF($out)
+	movups	$inout4,0xFF($out)
 	jmp	.Lecb_ret
 .align	16
 .Lecb_enc_six:
 	call	_aesni_encrypt6
 	movups	$inout0,($out)		# store 6 output blocks
-	movups	$inout1,0x10($out)
-	movups	$inout2,0x20($out)
-	movups	$inout3,0x30($out)
-	movups	$inout4,0x40($out)
-	movups	$inout5,0x50($out)
+	movups	$inout1,0xFF($out)
+	movups	$inout2,0xFF($out)
+	movups	$inout3,0xFF($out)
+	movups	$inout4,0xFF($out)
+	movups	$inout5,0xFF($out)
 	jmp	.Lecb_ret
 #--------------------------- ECB DECRYPT ------------------------------#
 .align	16
 .Lecb_decrypt:
-	cmp	\$0x80,$len		# if ($len<8*16)
+	cmp	\$0xFF,$len		# if ($len<8*16)
 	jb	.Lecb_dec_tail		# short input
 
 	movdqu	($inp),$inout0		# load 8 input blocks
-	movdqu	0x10($inp),$inout1
-	movdqu	0x20($inp),$inout2
-	movdqu	0x30($inp),$inout3
-	movdqu	0x40($inp),$inout4
-	movdqu	0x50($inp),$inout5
-	movdqu	0x60($inp),$inout6
-	movdqu	0x70($inp),$inout7
-	lea	0x80($inp),$inp		# $inp+=8*16
-	sub	\$0x80,$len		# $len-=8*16 (can be zero)
+	movdqu	0xFF($inp),$inout1
+	movdqu	0xFF($inp),$inout2
+	movdqu	0xFF($inp),$inout3
+	movdqu	0xFF($inp),$inout4
+	movdqu	0xFF($inp),$inout5
+	movdqu	0xFF($inp),$inout6
+	movdqu	0xFF($inp),$inout7
+	lea	0xFF($inp),$inp		# $inp+=8*16
+	sub	\$0xFF,$len		# $len-=8*16 (can be zero)
 	jmp	.Lecb_dec_loop8_enter
 .align 16
 .Lecb_dec_loop8:
@@ -788,85 +788,85 @@ $code.=<<___;
 	mov	$key_,$key		# restore $key
 	movdqu	($inp),$inout0		# load 8 input blocks
 	mov	$rnds_,$rounds		# restore $rounds
-	movups	$inout1,0x10($out)
-	movdqu	0x10($inp),$inout1
-	movups	$inout2,0x20($out)
-	movdqu	0x20($inp),$inout2
-	movups	$inout3,0x30($out)
-	movdqu	0x30($inp),$inout3
-	movups	$inout4,0x40($out)
-	movdqu	0x40($inp),$inout4
-	movups	$inout5,0x50($out)
-	movdqu	0x50($inp),$inout5
-	movups	$inout6,0x60($out)
-	movdqu	0x60($inp),$inout6
-	movups	$inout7,0x70($out)
-	lea	0x80($out),$out		# $out+=8*16
-	movdqu	0x70($inp),$inout7
-	lea	0x80($inp),$inp		# $inp+=8*16
+	movups	$inout1,0xFF($out)
+	movdqu	0xFF($inp),$inout1
+	movups	$inout2,0xFF($out)
+	movdqu	0xFF($inp),$inout2
+	movups	$inout3,0xFF($out)
+	movdqu	0xFF($inp),$inout3
+	movups	$inout4,0xFF($out)
+	movdqu	0xFF($inp),$inout4
+	movups	$inout5,0xFF($out)
+	movdqu	0xFF($inp),$inout5
+	movups	$inout6,0xFF($out)
+	movdqu	0xFF($inp),$inout6
+	movups	$inout7,0xFF($out)
+	lea	0xFF($out),$out		# $out+=8*16
+	movdqu	0xFF($inp),$inout7
+	lea	0xFF($inp),$inp		# $inp+=8*16
 .Lecb_dec_loop8_enter:
 
 	call	_aesni_decrypt8
 
 	$movkey	($key_),$rndkey0
-	sub	\$0x80,$len
+	sub	\$0xFF,$len
 	jnc	.Lecb_dec_loop8		# loop if $len-=8*16 didn't borrow
 
 	movups	$inout0,($out)		# store 8 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
 	mov	$key_,$key		# restore $key
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
 	mov	$rnds_,$rounds		# restore $rounds
-	movups	$inout2,0x20($out)
+	movups	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
-	movups	$inout3,0x30($out)
+	movups	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
-	movups	$inout4,0x40($out)
+	movups	$inout4,0xFF($out)
 	 pxor	$inout4,$inout4
-	movups	$inout5,0x50($out)
+	movups	$inout5,0xFF($out)
 	 pxor	$inout5,$inout5
-	movups	$inout6,0x60($out)
+	movups	$inout6,0xFF($out)
 	 pxor	$inout6,$inout6
-	movups	$inout7,0x70($out)
+	movups	$inout7,0xFF($out)
 	 pxor	$inout7,$inout7
-	lea	0x80($out),$out		# $out+=8*16
-	add	\$0x80,$len		# restore real remaining $len
+	lea	0xFF($out),$out		# $out+=8*16
+	add	\$0xFF,$len		# restore real remaining $len
 	jz	.Lecb_ret		# done if ($len==0)
 
 .Lecb_dec_tail:
 	movups	($inp),$inout0
-	cmp	\$0x20,$len
+	cmp	\$0xFF,$len
 	jb	.Lecb_dec_one
-	movups	0x10($inp),$inout1
+	movups	0xFF($inp),$inout1
 	je	.Lecb_dec_two
-	movups	0x20($inp),$inout2
-	cmp	\$0x40,$len
+	movups	0xFF($inp),$inout2
+	cmp	\$0xFF,$len
 	jb	.Lecb_dec_three
-	movups	0x30($inp),$inout3
+	movups	0xFF($inp),$inout3
 	je	.Lecb_dec_four
-	movups	0x40($inp),$inout4
-	cmp	\$0x60,$len
+	movups	0xFF($inp),$inout4
+	cmp	\$0xFF,$len
 	jb	.Lecb_dec_five
-	movups	0x50($inp),$inout5
+	movups	0xFF($inp),$inout5
 	je	.Lecb_dec_six
-	movups	0x60($inp),$inout6
+	movups	0xFF($inp),$inout6
 	$movkey	($key),$rndkey0
 	xorps	$inout7,$inout7
 	call	_aesni_decrypt8
 	movups	$inout0,($out)		# store 7 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
-	movups	$inout2,0x20($out)
+	movups	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
-	movups	$inout3,0x30($out)
+	movups	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
-	movups	$inout4,0x40($out)
+	movups	$inout4,0xFF($out)
 	 pxor	$inout4,$inout4
-	movups	$inout5,0x50($out)
+	movups	$inout5,0xFF($out)
 	 pxor	$inout5,$inout5
-	movups	$inout6,0x60($out)
+	movups	$inout6,0xFF($out)
 	 pxor	$inout6,$inout6
 	 pxor	$inout7,$inout7
 	jmp	.Lecb_ret
@@ -883,7 +883,7 @@ $code.=<<___;
 	call	_aesni_decrypt2
 	movups	$inout0,($out)		# store 2 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
 	jmp	.Lecb_ret
 .align	16
@@ -891,9 +891,9 @@ $code.=<<___;
 	call	_aesni_decrypt3
 	movups	$inout0,($out)		# store 3 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
-	movups	$inout2,0x20($out)
+	movups	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
 	jmp	.Lecb_ret
 .align	16
@@ -901,11 +901,11 @@ $code.=<<___;
 	call	_aesni_decrypt4
 	movups	$inout0,($out)		# store 4 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
-	movups	$inout2,0x20($out)
+	movups	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
-	movups	$inout3,0x30($out)
+	movups	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
 	jmp	.Lecb_ret
 .align	16
@@ -914,13 +914,13 @@ $code.=<<___;
 	call	_aesni_decrypt6
 	movups	$inout0,($out)		# store 5 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
-	movups	$inout2,0x20($out)
+	movups	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
-	movups	$inout3,0x30($out)
+	movups	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
-	movups	$inout4,0x40($out)
+	movups	$inout4,0xFF($out)
 	 pxor	$inout4,$inout4
 	 pxor	$inout5,$inout5
 	jmp	.Lecb_ret
@@ -929,15 +929,15 @@ $code.=<<___;
 	call	_aesni_decrypt6
 	movups	$inout0,($out)		# store 6 output blocks
 	 pxor	$inout0,$inout0		# clear register bank
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1
-	movups	$inout2,0x20($out)
+	movups	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
-	movups	$inout3,0x30($out)
+	movups	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
-	movups	$inout4,0x40($out)
+	movups	$inout4,0xFF($out)
 	 pxor	$inout4,$inout4
-	movups	$inout5,0x50($out)
+	movups	$inout5,0xFF($out)
 	 pxor	$inout5,$inout5
 
 .Lecb_ret:
@@ -947,13 +947,13 @@ ___
 $code.=<<___ if ($win64);
 	movaps	(%rsp),%xmm6
 	movaps	%xmm0,(%rsp)		# clear stack
-	movaps	0x10(%rsp),%xmm7
-	movaps	%xmm0,0x10(%rsp)
-	movaps	0x20(%rsp),%xmm8
-	movaps	%xmm0,0x20(%rsp)
-	movaps	0x30(%rsp),%xmm9
-	movaps	%xmm0,0x30(%rsp)
-	lea	0x58(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm7
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm8
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm9
+	movaps	%xmm0,0xFF(%rsp)
+	lea	0xFF(%rsp),%rsp
 .Lecb_enc_ret:
 ___
 $code.=<<___;
@@ -986,11 +986,11 @@ $code.=<<___;
 aesni_ccm64_encrypt_blocks:
 ___
 $code.=<<___ if ($win64);
-	lea	-0x58(%rsp),%rsp
+	lea	-0xFF(%rsp),%rsp
 	movaps	%xmm6,(%rsp)		# $iv
-	movaps	%xmm7,0x10(%rsp)	# $bswap_mask
-	movaps	%xmm8,0x20(%rsp)	# $in0
-	movaps	%xmm9,0x30(%rsp)	# $increment
+	movaps	%xmm7,0xFF(%rsp)	# $bswap_mask
+	movaps	%xmm8,0xFF(%rsp)	# $in0
+	movaps	%xmm9,0xFF(%rsp)	# $increment
 .Lccm64_enc_body:
 ___
 $code.=<<___;
@@ -1055,13 +1055,13 @@ ___
 $code.=<<___ if ($win64);
 	movaps	(%rsp),%xmm6
 	movaps	%xmm0,(%rsp)			# clear stack
-	movaps	0x10(%rsp),%xmm7
-	movaps	%xmm0,0x10(%rsp)
-	movaps	0x20(%rsp),%xmm8
-	movaps	%xmm0,0x20(%rsp)
-	movaps	0x30(%rsp),%xmm9
-	movaps	%xmm0,0x30(%rsp)
-	lea	0x58(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm7
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm8
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm9
+	movaps	%xmm0,0xFF(%rsp)
+	lea	0xFF(%rsp),%rsp
 .Lccm64_enc_ret:
 ___
 $code.=<<___;
@@ -1076,11 +1076,11 @@ $code.=<<___;
 aesni_ccm64_decrypt_blocks:
 ___
 $code.=<<___ if ($win64);
-	lea	-0x58(%rsp),%rsp
+	lea	-0xFF(%rsp),%rsp
 	movaps	%xmm6,(%rsp)		# $iv
-	movaps	%xmm7,0x10(%rsp)	# $bswap_mask
-	movaps	%xmm8,0x20(%rsp)	# $in8
-	movaps	%xmm9,0x30(%rsp)	# $increment
+	movaps	%xmm7,0xFF(%rsp)	# $bswap_mask
+	movaps	%xmm8,0xFF(%rsp)	# $in8
+	movaps	%xmm9,0xFF(%rsp)	# $increment
 .Lccm64_dec_body:
 ___
 $code.=<<___;
@@ -1162,13 +1162,13 @@ ___
 $code.=<<___ if ($win64);
 	movaps	(%rsp),%xmm6
 	movaps	%xmm0,(%rsp)			# clear stack
-	movaps	0x10(%rsp),%xmm7
-	movaps	%xmm0,0x10(%rsp)
-	movaps	0x20(%rsp),%xmm8
-	movaps	%xmm0,0x20(%rsp)
-	movaps	0x30(%rsp),%xmm9
-	movaps	%xmm0,0x30(%rsp)
-	lea	0x58(%rsp),%rsp
+	movaps	0xFF(%rsp),%xmm7
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm8
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm9
+	movaps	%xmm0,0xFF(%rsp)
+	lea	0xFF(%rsp),%rsp
 .Lccm64_dec_ret:
 ___
 $code.=<<___;
@@ -1191,7 +1191,7 @@ ___
 {
 my ($in0,$in1,$in2,$in3,$in4,$in5)=map("%xmm$_",(10..15));
 my ($key0,$ctr)=("%ebp","${ivp}d");
-my $frame_size = 0x80 + ($win64?160:0);
+my $frame_size = 0xFF + ($win64?160:0);
 
 $code.=<<___;
 .globl	aesni_ctr32_encrypt_blocks
@@ -1228,16 +1228,16 @@ $code.=<<___;
 	and	\$-16,%rsp	# Linux kernel stack can be incorrectly seeded
 ___
 $code.=<<___ if ($win64);
-	movaps	%xmm6,-0xa8($key_)		# offload everything
-	movaps	%xmm7,-0x98($key_)
-	movaps	%xmm8,-0x88($key_)
-	movaps	%xmm9,-0x78($key_)
-	movaps	%xmm10,-0x68($key_)
-	movaps	%xmm11,-0x58($key_)
-	movaps	%xmm12,-0x48($key_)
-	movaps	%xmm13,-0x38($key_)
-	movaps	%xmm14,-0x28($key_)
-	movaps	%xmm15,-0x18($key_)
+	movaps	%xmm6,-0xFF($key_)		# offload everything
+	movaps	%xmm7,-0xFF($key_)
+	movaps	%xmm8,-0xFF($key_)
+	movaps	%xmm9,-0xFF($key_)
+	movaps	%xmm10,-0xFF($key_)
+	movaps	%xmm11,-0xFF($key_)
+	movaps	%xmm12,-0xFF($key_)
+	movaps	%xmm13,-0xFF($key_)
+	movaps	%xmm14,-0xFF($key_)
+	movaps	%xmm15,-0xFF($key_)
 .Lctr32_body:
 ___
 $code.=<<___;
@@ -1250,16 +1250,16 @@ $code.=<<___;
 	mov	12($ivp),$ctr			# counter LSB
 	pxor	$rndkey0,$inout0
 	mov	12($key),$key0			# 0-round key LSB
-	movdqa	$inout0,0x00(%rsp)		# populate counter block
+	movdqa	$inout0,0xFF(%rsp)		# populate counter block
 	bswap	$ctr
 	movdqa	$inout0,$inout1
 	movdqa	$inout0,$inout2
 	movdqa	$inout0,$inout3
-	movdqa	$inout0,0x40(%rsp)
-	movdqa	$inout0,0x50(%rsp)
-	movdqa	$inout0,0x60(%rsp)
+	movdqa	$inout0,0xFF(%rsp)
+	movdqa	$inout0,0xFF(%rsp)
+	movdqa	$inout0,0xFF(%rsp)
 	mov	%rdx,%r10			# about to borrow %rdx
-	movdqa	$inout0,0x70(%rsp)
+	movdqa	$inout0,0xFF(%rsp)
 
 	lea	1($ctr),%rax
 	 lea	2($ctr),%rdx
@@ -1269,38 +1269,38 @@ $code.=<<___;
 	 xor	$key0,%edx
 	pinsrd	\$3,%eax,$inout1
 	lea	3($ctr),%rax
-	movdqa	$inout1,0x10(%rsp)
+	movdqa	$inout1,0xFF(%rsp)
 	 pinsrd	\$3,%edx,$inout2
 	bswap	%eax
 	 mov	%r10,%rdx			# restore %rdx
 	 lea	4($ctr),%r10
-	 movdqa	$inout2,0x20(%rsp)
+	 movdqa	$inout2,0xFF(%rsp)
 	xor	$key0,%eax
 	 bswap	%r10d
 	pinsrd	\$3,%eax,$inout3
 	 xor	$key0,%r10d
-	movdqa	$inout3,0x30(%rsp)
+	movdqa	$inout3,0xFF(%rsp)
 	lea	5($ctr),%r9
-	 mov	%r10d,0x40+12(%rsp)
+	 mov	%r10d,0xFF+12(%rsp)
 	bswap	%r9d
 	 lea	6($ctr),%r10
 	mov	240($key),$rounds		# key->rounds
 	xor	$key0,%r9d
 	 bswap	%r10d
-	mov	%r9d,0x50+12(%rsp)
+	mov	%r9d,0xFF+12(%rsp)
 	 xor	$key0,%r10d
 	lea	7($ctr),%r9
-	 mov	%r10d,0x60+12(%rsp)
+	 mov	%r10d,0xFF+12(%rsp)
 	bswap	%r9d
 	 mov	OPENSSL_ia32cap_P+4(%rip),%r10d
 	xor	$key0,%r9d
 	 and	\$`1<<26|1<<22`,%r10d		# isolate XSAVE+MOVBE
-	mov	%r9d,0x70+12(%rsp)
+	mov	%r9d,0xFF+12(%rsp)
 
-	$movkey	0x10($key),$rndkey1
+	$movkey	0xFF($key),$rndkey1
 
-	movdqa	0x40(%rsp),$inout4
-	movdqa	0x50(%rsp),$inout5
+	movdqa	0xFF(%rsp),$inout4
+	movdqa	0xFF(%rsp),$inout5
 
 	cmp	\$8,$len		# $len is in blocks
 	jb	.Lctr32_tail		# short input if ($len<8)
@@ -1309,7 +1309,7 @@ $code.=<<___;
 	cmp	\$`1<<22`,%r10d		# check for MOVBE without XSAVE
 	je	.Lctr32_6x		# [which denotes Atom Silvermont]
 
-	lea	0x80($key),$key		# size optimization
+	lea	0xFF($key),$key		# size optimization
 	sub	\$2,$len		# $len is biased by -8
 	jmp	.Lctr32_loop8
 
@@ -1330,32 +1330,32 @@ $code.=<<___;
 	 mov	$ctr,%eax
 	 xor	$key0,%eax
 	aesenc	$rndkey1,$inout1
-	 movbe	%eax,`0x00+12`(%rsp)	# store next counter value
+	 movbe	%eax,`0xFF+12`(%rsp)	# store next counter value
 	 lea	1($ctr),%eax
 	aesenc	$rndkey1,$inout2
 	 xor	$key0,%eax
-	 movbe	%eax,`0x10+12`(%rsp)
+	 movbe	%eax,`0xFF+12`(%rsp)
 	aesenc	$rndkey1,$inout3
 	 lea	2($ctr),%eax
 	 xor	$key0,%eax
 	aesenc	$rndkey1,$inout4
-	 movbe	%eax,`0x20+12`(%rsp)
+	 movbe	%eax,`0xFF+12`(%rsp)
 	 lea	3($ctr),%eax
 	aesenc	$rndkey1,$inout5
 	$movkey	-32($key,$rnds_),$rndkey1
 	 xor	$key0,%eax
 
 	aesenc	$rndkey0,$inout0
-	 movbe	%eax,`0x30+12`(%rsp)
+	 movbe	%eax,`0xFF+12`(%rsp)
 	 lea	4($ctr),%eax
 	aesenc	$rndkey0,$inout1
 	 xor	$key0,%eax
-	 movbe	%eax,`0x40+12`(%rsp)
+	 movbe	%eax,`0xFF+12`(%rsp)
 	aesenc	$rndkey0,$inout2
 	 lea	5($ctr),%eax
 	 xor	$key0,%eax
 	aesenc	$rndkey0,$inout3
-	 movbe	%eax,`0x50+12`(%rsp)
+	 movbe	%eax,`0xFF+12`(%rsp)
 	 mov	%r10,%rax		# mov	$rnds_,$rounds
 	aesenc	$rndkey0,$inout4
 	aesenc	$rndkey0,$inout5
@@ -1364,32 +1364,32 @@ $code.=<<___;
 	call	.Lenc_loop6
 
 	movdqu	($inp),$inout6		# load 6 input blocks
-	movdqu	0x10($inp),$inout7
-	movdqu	0x20($inp),$in0
-	movdqu	0x30($inp),$in1
-	movdqu	0x40($inp),$in2
-	movdqu	0x50($inp),$in3
-	lea	0x60($inp),$inp		# $inp+=6*16
+	movdqu	0xFF($inp),$inout7
+	movdqu	0xFF($inp),$in0
+	movdqu	0xFF($inp),$in1
+	movdqu	0xFF($inp),$in2
+	movdqu	0xFF($inp),$in3
+	lea	0xFF($inp),$inp		# $inp+=6*16
 	$movkey	-64($key,$rnds_),$rndkey1
 	pxor	$inout0,$inout6		# inp^=E(ctr)
-	movaps	0x00(%rsp),$inout0	# load next counter [xor-ed with 0 round]
+	movaps	0xFF(%rsp),$inout0	# load next counter [xor-ed with 0 round]
 	pxor	$inout1,$inout7
-	movaps	0x10(%rsp),$inout1
+	movaps	0xFF(%rsp),$inout1
 	pxor	$inout2,$in0
-	movaps	0x20(%rsp),$inout2
+	movaps	0xFF(%rsp),$inout2
 	pxor	$inout3,$in1
-	movaps	0x30(%rsp),$inout3
+	movaps	0xFF(%rsp),$inout3
 	pxor	$inout4,$in2
-	movaps	0x40(%rsp),$inout4
+	movaps	0xFF(%rsp),$inout4
 	pxor	$inout5,$in3
-	movaps	0x50(%rsp),$inout5
+	movaps	0xFF(%rsp),$inout5
 	movdqu	$inout6,($out)		# store 6 output blocks
-	movdqu	$inout7,0x10($out)
-	movdqu	$in0,0x20($out)
-	movdqu	$in1,0x30($out)
-	movdqu	$in2,0x40($out)
-	movdqu	$in3,0x50($out)
-	lea	0x60($out),$out		# $out+=6*16
+	movdqu	$inout7,0xFF($out)
+	movdqu	$in0,0xFF($out)
+	movdqu	$in1,0xFF($out)
+	movdqu	$in2,0xFF($out)
+	movdqu	$in3,0xFF($out)
+	lea	0xFF($out),$out		# $out+=6*16
 
 	sub	\$6,$len
 	jnc	.Lctr32_loop6		# loop if $len-=6 didn't borrow
@@ -1406,24 +1406,24 @@ $code.=<<___;
 .align	32
 .Lctr32_loop8:
 	 add		\$8,$ctr		# next counter value
-	movdqa		0x60(%rsp),$inout6
+	movdqa		0xFF(%rsp),$inout6
 	aesenc		$rndkey1,$inout0
 	 mov		$ctr,%r9d
-	movdqa		0x70(%rsp),$inout7
+	movdqa		0xFF(%rsp),$inout7
 	aesenc		$rndkey1,$inout1
 	 bswap		%r9d
-	$movkey		0x20-0x80($key),$rndkey0
+	$movkey		0xFF-0xFF($key),$rndkey0
 	aesenc		$rndkey1,$inout2
 	 xor		$key0,%r9d
 	 nop
 	aesenc		$rndkey1,$inout3
-	 mov		%r9d,0x00+12(%rsp)	# store next counter value
+	 mov		%r9d,0xFF+12(%rsp)	# store next counter value
 	 lea		1($ctr),%r9
 	aesenc		$rndkey1,$inout4
 	aesenc		$rndkey1,$inout5
 	aesenc		$rndkey1,$inout6
 	aesenc		$rndkey1,$inout7
-	$movkey		0x30-0x80($key),$rndkey1
+	$movkey		0xFF-0xFF($key),$rndkey1
 ___
 for($i=2;$i<8;$i++) {
 my $rndkeyx = ($i&1)?$rndkey1:$rndkey0;
@@ -1432,16 +1432,16 @@ $code.=<<___;
 	aesenc		$rndkeyx,$inout0
 	aesenc		$rndkeyx,$inout1
 	 xor		$key0,%r9d
-	 .byte		0x66,0x90
+	 .byte		0xFF,0xFF
 	aesenc		$rndkeyx,$inout2
 	aesenc		$rndkeyx,$inout3
-	 mov		%r9d,`0x10*($i-1)`+12(%rsp)
+	 mov		%r9d,`0xFF*($i-1)`+12(%rsp)
 	 lea		$i($ctr),%r9
 	aesenc		$rndkeyx,$inout4
 	aesenc		$rndkeyx,$inout5
 	aesenc		$rndkeyx,$inout6
 	aesenc		$rndkeyx,$inout7
-	$movkey		`0x20+0x10*$i`-0x80($key),$rndkeyx
+	$movkey		`0xFF+0xFF*$i`-0xFF($key),$rndkeyx
 ___
 }
 $code.=<<___;
@@ -1450,15 +1450,15 @@ $code.=<<___;
 	aesenc		$rndkey0,$inout1
 	aesenc		$rndkey0,$inout2
 	 xor		$key0,%r9d
-	 movdqu		0x00($inp),$in0		# start loading input
+	 movdqu		0xFF($inp),$in0		# start loading input
 	aesenc		$rndkey0,$inout3
-	 mov		%r9d,0x70+12(%rsp)
+	 mov		%r9d,0xFF+12(%rsp)
 	 cmp		\$11,$rounds
 	aesenc		$rndkey0,$inout4
 	aesenc		$rndkey0,$inout5
 	aesenc		$rndkey0,$inout6
 	aesenc		$rndkey0,$inout7
-	$movkey		0xa0-0x80($key),$rndkey0
+	$movkey		0xFF-0xFF($key),$rndkey0
 
 	jb		.Lctr32_enc_done
 
@@ -1470,7 +1470,7 @@ $code.=<<___;
 	aesenc		$rndkey1,$inout5
 	aesenc		$rndkey1,$inout6
 	aesenc		$rndkey1,$inout7
-	$movkey		0xb0-0x80($key),$rndkey1
+	$movkey		0xFF-0xFF($key),$rndkey1
 
 	aesenc		$rndkey0,$inout0
 	aesenc		$rndkey0,$inout1
@@ -1480,7 +1480,7 @@ $code.=<<___;
 	aesenc		$rndkey0,$inout5
 	aesenc		$rndkey0,$inout6
 	aesenc		$rndkey0,$inout7
-	$movkey		0xc0-0x80($key),$rndkey0
+	$movkey		0xFF-0xFF($key),$rndkey0
 	je		.Lctr32_enc_done
 
 	aesenc		$rndkey1,$inout0
@@ -1491,7 +1491,7 @@ $code.=<<___;
 	aesenc		$rndkey1,$inout5
 	aesenc		$rndkey1,$inout6
 	aesenc		$rndkey1,$inout7
-	$movkey		0xd0-0x80($key),$rndkey1
+	$movkey		0xFF-0xFF($key),$rndkey1
 
 	aesenc		$rndkey0,$inout0
 	aesenc		$rndkey0,$inout1
@@ -1501,20 +1501,20 @@ $code.=<<___;
 	aesenc		$rndkey0,$inout5
 	aesenc		$rndkey0,$inout6
 	aesenc		$rndkey0,$inout7
-	$movkey		0xe0-0x80($key),$rndkey0
+	$movkey		0xFF-0xFF($key),$rndkey0
 	jmp		.Lctr32_enc_done
 
 .align	16
 .Lctr32_enc_done:
-	movdqu		0x10($inp),$in1
+	movdqu		0xFF($inp),$in1
 	pxor		$rndkey0,$in0		# input^=round[last]
-	movdqu		0x20($inp),$in2
+	movdqu		0xFF($inp),$in2
 	pxor		$rndkey0,$in1
-	movdqu		0x30($inp),$in3
+	movdqu		0xFF($inp),$in3
 	pxor		$rndkey0,$in2
-	movdqu		0x40($inp),$in4
+	movdqu		0xFF($inp),$in4
 	pxor		$rndkey0,$in3
-	movdqu		0x50($inp),$in5
+	movdqu		0xFF($inp),$in5
 	pxor		$rndkey0,$in4
 	pxor		$rndkey0,$in5
 	aesenc		$rndkey1,$inout0
@@ -1525,50 +1525,50 @@ $code.=<<___;
 	aesenc		$rndkey1,$inout5
 	aesenc		$rndkey1,$inout6
 	aesenc		$rndkey1,$inout7
-	movdqu		0x60($inp),$rndkey1	# borrow $rndkey1 for inp[6]
-	lea		0x80($inp),$inp		# $inp+=8*16
+	movdqu		0xFF($inp),$rndkey1	# borrow $rndkey1 for inp[6]
+	lea		0xFF($inp),$inp		# $inp+=8*16
 
 	aesenclast	$in0,$inout0		# $inN is inp[N]^round[last]
 	pxor		$rndkey0,$rndkey1	# borrowed $rndkey
-	movdqu		0x70-0x80($inp),$in0
+	movdqu		0xFF-0xFF($inp),$in0
 	aesenclast	$in1,$inout1
 	pxor		$rndkey0,$in0
-	movdqa		0x00(%rsp),$in1		# load next counter block
+	movdqa		0xFF(%rsp),$in1		# load next counter block
 	aesenclast	$in2,$inout2
 	aesenclast	$in3,$inout3
-	movdqa		0x10(%rsp),$in2
-	movdqa		0x20(%rsp),$in3
+	movdqa		0xFF(%rsp),$in2
+	movdqa		0xFF(%rsp),$in3
 	aesenclast	$in4,$inout4
 	aesenclast	$in5,$inout5
-	movdqa		0x30(%rsp),$in4
-	movdqa		0x40(%rsp),$in5
+	movdqa		0xFF(%rsp),$in4
+	movdqa		0xFF(%rsp),$in5
 	aesenclast	$rndkey1,$inout6
-	movdqa		0x50(%rsp),$rndkey0
-	$movkey		0x10-0x80($key),$rndkey1#real 1st-round key
+	movdqa		0xFF(%rsp),$rndkey0
+	$movkey		0xFF-0xFF($key),$rndkey1#real 1st-round key
 	aesenclast	$in0,$inout7
 
 	movups		$inout0,($out)		# store 8 output blocks
 	movdqa		$in1,$inout0
-	movups		$inout1,0x10($out)
+	movups		$inout1,0xFF($out)
 	movdqa		$in2,$inout1
-	movups		$inout2,0x20($out)
+	movups		$inout2,0xFF($out)
 	movdqa		$in3,$inout2
-	movups		$inout3,0x30($out)
+	movups		$inout3,0xFF($out)
 	movdqa		$in4,$inout3
-	movups		$inout4,0x40($out)
+	movups		$inout4,0xFF($out)
 	movdqa		$in5,$inout4
-	movups		$inout5,0x50($out)
+	movups		$inout5,0xFF($out)
 	movdqa		$rndkey0,$inout5
-	movups		$inout6,0x60($out)
-	movups		$inout7,0x70($out)
-	lea		0x80($out),$out		# $out+=8*16
+	movups		$inout6,0xFF($out)
+	movups		$inout7,0xFF($out)
+	lea		0xFF($out),$out		# $out+=8*16
 
 	sub	\$8,$len
 	jnc	.Lctr32_loop8			# loop if $len-=8 didn't borrow
 
 	add	\$8,$len			# restore real remaining $len
 	jz	.Lctr32_done			# done if ($len==0)
-	lea	-0x80($key),$key
+	lea	-0xFF($key),$key
 
 .Lctr32_tail:
 	# note that at this point $inout0..5 are populated with
@@ -1580,7 +1580,7 @@ $code.=<<___;
 
 	# if ($len>4) compute 7 E(counter)
 	shl		\$4,$rounds
-	movdqa		0x60(%rsp),$inout6
+	movdqa		0xFF(%rsp),$inout6
 	pxor		$inout7,$inout7
 
 	$movkey		16($key),$rndkey0
@@ -1593,36 +1593,36 @@ $code.=<<___;
 	 movups		($inp),$in0
 	aesenc		$rndkey1,$inout3
 	aesenc		$rndkey1,$inout4
-	 movups		0x10($inp),$in1		# pre-load input
-	 movups		0x20($inp),$in2
+	 movups		0xFF($inp),$in1		# pre-load input
+	 movups		0xFF($inp),$in2
 	aesenc		$rndkey1,$inout5
 	aesenc		$rndkey1,$inout6
 
 	call            .Lenc_loop8_enter
 
-	movdqu	0x30($inp),$in3
+	movdqu	0xFF($inp),$in3
 	pxor	$in0,$inout0
-	movdqu	0x40($inp),$in0
+	movdqu	0xFF($inp),$in0
 	pxor	$in1,$inout1
 	movdqu	$inout0,($out)			# store output
 	pxor	$in2,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	pxor	$in3,$inout3
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	pxor	$in0,$inout4
-	movdqu	$inout3,0x30($out)
-	movdqu	$inout4,0x40($out)
+	movdqu	$inout3,0xFF($out)
+	movdqu	$inout4,0xFF($out)
 	cmp	\$6,$len
 	jb	.Lctr32_done			# $len was 5, stop store
 
-	movups	0x50($inp),$in1
+	movups	0xFF($inp),$in1
 	xorps	$in1,$inout5
-	movups	$inout5,0x50($out)
+	movups	$inout5,0xFF($out)
 	je	.Lctr32_done			# $len was 6, stop store
 
-	movups	0x60($inp),$in2
+	movups	0xFF($inp),$in2
 	xorps	$in2,$inout6
-	movups	$inout6,0x60($out)
+	movups	$inout6,0xFF($out)
 	jmp	.Lctr32_done			# $len was 7, stop store
 
 .align	32
@@ -1638,20 +1638,20 @@ $code.=<<___;
 	aesenclast	$rndkey1,$inout0
 	aesenclast	$rndkey1,$inout1
 	 movups		($inp),$in0		# load input
-	 movups		0x10($inp),$in1
+	 movups		0xFF($inp),$in1
 	aesenclast	$rndkey1,$inout2
 	aesenclast	$rndkey1,$inout3
-	 movups		0x20($inp),$in2
-	 movups		0x30($inp),$in3
+	 movups		0xFF($inp),$in2
+	 movups		0xFF($inp),$in3
 
 	xorps	$in0,$inout0
 	movups	$inout0,($out)			# store output
 	xorps	$in1,$inout1
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	pxor	$in2,$inout2
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	pxor	$in3,$inout3
-	movdqu	$inout3,0x30($out)
+	movdqu	$inout3,0xFF($out)
 	jmp	.Lctr32_done			# $len was 4, stop store
 
 .align	32
@@ -1673,14 +1673,14 @@ $code.=<<___;
 	cmp	\$2,$len
 	jb	.Lctr32_done			# $len was 1, stop store
 
-	movups	0x10($inp),$in1
+	movups	0xFF($inp),$in1
 	xorps	$in1,$inout1
-	movups	$inout1,0x10($out)
+	movups	$inout1,0xFF($out)
 	je	.Lctr32_done			# $len was 2, stop store
 
-	movups	0x20($inp),$in2
+	movups	0xFF($inp),$in2
 	xorps	$in2,$inout2
-	movups	$inout2,0x20($out)		# $len was 3, stop store
+	movups	$inout2,0xFF($out)		# $len was 3, stop store
 
 .Lctr32_done:
 	xorps	%xmm0,%xmm0			# clear register bank
@@ -1694,52 +1694,52 @@ ___
 $code.=<<___ if (!$win64);
 	pxor	%xmm6,%xmm6
 	pxor	%xmm7,%xmm7
-	movaps	%xmm0,0x00(%rsp)		# clear stack
+	movaps	%xmm0,0xFF(%rsp)		# clear stack
 	pxor	%xmm8,%xmm8
-	movaps	%xmm0,0x10(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm9,%xmm9
-	movaps	%xmm0,0x20(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm10,%xmm10
-	movaps	%xmm0,0x30(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm11,%xmm11
-	movaps	%xmm0,0x40(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm12,%xmm12
-	movaps	%xmm0,0x50(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm13,%xmm13
-	movaps	%xmm0,0x60(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm14,%xmm14
-	movaps	%xmm0,0x70(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm15,%xmm15
 ___
 $code.=<<___ if ($win64);
-	movaps	-0xa8($key_),%xmm6
-	movaps	%xmm0,-0xa8($key_)		# clear stack
-	movaps	-0x98($key_),%xmm7
-	movaps	%xmm0,-0x98($key_)
-	movaps	-0x88($key_),%xmm8
-	movaps	%xmm0,-0x88($key_)
-	movaps	-0x78($key_),%xmm9
-	movaps	%xmm0,-0x78($key_)
-	movaps	-0x68($key_),%xmm10
-	movaps	%xmm0,-0x68($key_)
-	movaps	-0x58($key_),%xmm11
-	movaps	%xmm0,-0x58($key_)
-	movaps	-0x48($key_),%xmm12
-	movaps	%xmm0,-0x48($key_)
-	movaps	-0x38($key_),%xmm13
-	movaps	%xmm0,-0x38($key_)
-	movaps	-0x28($key_),%xmm14
-	movaps	%xmm0,-0x28($key_)
-	movaps	-0x18($key_),%xmm15
-	movaps	%xmm0,-0x18($key_)
-	movaps	%xmm0,0x00(%rsp)
-	movaps	%xmm0,0x10(%rsp)
-	movaps	%xmm0,0x20(%rsp)
-	movaps	%xmm0,0x30(%rsp)
-	movaps	%xmm0,0x40(%rsp)
-	movaps	%xmm0,0x50(%rsp)
-	movaps	%xmm0,0x60(%rsp)
-	movaps	%xmm0,0x70(%rsp)
+	movaps	-0xFF($key_),%xmm6
+	movaps	%xmm0,-0xFF($key_)		# clear stack
+	movaps	-0xFF($key_),%xmm7
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm8
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm9
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm10
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm11
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm12
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm13
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm14
+	movaps	%xmm0,-0xFF($key_)
+	movaps	-0xFF($key_),%xmm15
+	movaps	%xmm0,-0xFF($key_)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 ___
 $code.=<<___;
 	mov	-8($key_),%rbp
@@ -1762,7 +1762,7 @@ ___
 my @tweak=map("%xmm$_",(10..15));
 my ($twmask,$twres,$twtmp)=("%xmm8","%xmm9",@tweak[4]);
 my ($key2,$ivp,$len_)=("%r8","%r9","%r9");
-my $frame_size = 0x70 + ($win64?160:0);
+my $frame_size = 0xFF + ($win64?160:0);
 my $key_ = "%rbp";	# override so that we can use %r11 as FP
 
 $code.=<<___;
@@ -1779,16 +1779,16 @@ aesni_xts_encrypt:
 	and	\$-16,%rsp	# Linux kernel stack can be incorrectly seeded
 ___
 $code.=<<___ if ($win64);
-	movaps	%xmm6,-0xa8(%r11)		# offload everything
-	movaps	%xmm7,-0x98(%r11)
-	movaps	%xmm8,-0x88(%r11)
-	movaps	%xmm9,-0x78(%r11)
-	movaps	%xmm10,-0x68(%r11)
-	movaps	%xmm11,-0x58(%r11)
-	movaps	%xmm12,-0x48(%r11)
-	movaps	%xmm13,-0x38(%r11)
-	movaps	%xmm14,-0x28(%r11)
-	movaps	%xmm15,-0x18(%r11)
+	movaps	%xmm6,-0xFF(%r11)		# offload everything
+	movaps	%xmm7,-0xFF(%r11)
+	movaps	%xmm8,-0xFF(%r11)
+	movaps	%xmm9,-0xFF(%r11)
+	movaps	%xmm10,-0xFF(%r11)
+	movaps	%xmm11,-0xFF(%r11)
+	movaps	%xmm12,-0xFF(%r11)
+	movaps	%xmm13,-0xFF(%r11)
+	movaps	%xmm14,-0xFF(%r11)
+	movaps	%xmm15,-0xFF(%r11)
 .Lxts_enc_body:
 ___
 $code.=<<___;
@@ -1810,7 +1810,7 @@ $code.=<<___;
 
 	movdqa	.Lxts_magic(%rip),$twmask
 	movdqa	$inout0,@tweak[5]
-	pshufd	\$0x5f,$inout0,$twres
+	pshufd	\$0xFF,$inout0,$twres
 	pxor	$rndkey0,$rndkey1
 ___
     # alternative tweak calculation algorithm is based on suggestions
@@ -1835,7 +1835,7 @@ $code.=<<___;
 	pand	$twmask,$twres
 	pxor	$rndkey0,@tweak[4]
 	pxor	$twres,@tweak[5]
-	movaps	$rndkey1,0x60(%rsp)		# save round[0]^round[last]
+	movaps	$rndkey1,0xFF(%rsp)		# save round[0]^round[last]
 
 	sub	\$16*6,$len
 	jc	.Lxts_enc_short			# if $len-=6*16 borrowed
@@ -1865,7 +1865,7 @@ $code.=<<___;
 	 aesenc		$rndkey1,$inout2
 	movdqu	`16*5`($inp),$inout5
 	pxor	@tweak[5],$twmask		# round[0]^=tweak[5]
-	 movdqa	0x60(%rsp),$twres		# load round[0]^round[last]
+	 movdqa	0xFF(%rsp),$twres		# load round[0]^round[last]
 	pxor	@tweak[4],$inout4
 	 aesenc		$rndkey1,$inout3
 	$movkey	32($key_),$rndkey0
@@ -1894,7 +1894,7 @@ $code.=<<___;
 	aesenc		$rndkey0,$inout5
 	$movkey		64($key_),$rndkey0
 	 movdqa	$twmask,`16*5`(%rsp)
-	pshufd	\$0x5f,@tweak[5],$twres
+	pshufd	\$0xFF,@tweak[5],$twres
 	jmp	.Lxts_enc_loop6
 .align	32
 .Lxts_enc_loop6:
@@ -2033,13 +2033,13 @@ $code.=<<___;
 	jz	.Lxts_enc_done			# done if ($len==0)
 
 	pxor	$rndkey0,@tweak[1]
-	cmp	\$0x20,$len
+	cmp	\$0xFF,$len
 	jb	.Lxts_enc_one			# $len is 1*16
 	pxor	$rndkey0,@tweak[2]
 	je	.Lxts_enc_two			# $len is 2*16
 
 	pxor	$rndkey0,@tweak[3]
-	cmp	\$0x40,$len
+	cmp	\$0xFF,$len
 	jb	.Lxts_enc_three			# $len is 3*16
 	pxor	$rndkey0,@tweak[4]
 	je	.Lxts_enc_four			# $len is 4*16
@@ -2192,50 +2192,50 @@ ___
 $code.=<<___ if (!$win64);
 	pxor	%xmm6,%xmm6
 	pxor	%xmm7,%xmm7
-	movaps	%xmm0,0x00(%rsp)		# clear stack
+	movaps	%xmm0,0xFF(%rsp)		# clear stack
 	pxor	%xmm8,%xmm8
-	movaps	%xmm0,0x10(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm9,%xmm9
-	movaps	%xmm0,0x20(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm10,%xmm10
-	movaps	%xmm0,0x30(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm11,%xmm11
-	movaps	%xmm0,0x40(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm12,%xmm12
-	movaps	%xmm0,0x50(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm13,%xmm13
-	movaps	%xmm0,0x60(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm14,%xmm14
 	pxor	%xmm15,%xmm15
 ___
 $code.=<<___ if ($win64);
-	movaps	-0xa8(%r11),%xmm6
-	movaps	%xmm0,-0xa8(%r11)		# clear stack
-	movaps	-0x98(%r11),%xmm7
-	movaps	%xmm0,-0x98(%r11)
-	movaps	-0x88(%r11),%xmm8
-	movaps	%xmm0,-0x88(%r11)
-	movaps	-0x78(%r11),%xmm9
-	movaps	%xmm0,-0x78(%r11)
-	movaps	-0x68(%r11),%xmm10
-	movaps	%xmm0,-0x68(%r11)
-	movaps	-0x58(%r11),%xmm11
-	movaps	%xmm0,-0x58(%r11)
-	movaps	-0x48(%r11),%xmm12
-	movaps	%xmm0,-0x48(%r11)
-	movaps	-0x38(%r11),%xmm13
-	movaps	%xmm0,-0x38(%r11)
-	movaps	-0x28(%r11),%xmm14
-	movaps	%xmm0,-0x28(%r11)
-	movaps	-0x18(%r11),%xmm15
-	movaps	%xmm0,-0x18(%r11)
-	movaps	%xmm0,0x00(%rsp)
-	movaps	%xmm0,0x10(%rsp)
-	movaps	%xmm0,0x20(%rsp)
-	movaps	%xmm0,0x30(%rsp)
-	movaps	%xmm0,0x40(%rsp)
-	movaps	%xmm0,0x50(%rsp)
-	movaps	%xmm0,0x60(%rsp)
+	movaps	-0xFF(%r11),%xmm6
+	movaps	%xmm0,-0xFF(%r11)		# clear stack
+	movaps	-0xFF(%r11),%xmm7
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm8
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm9
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm10
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm11
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm12
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm13
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm14
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm15
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 ___
 $code.=<<___;
 	mov	-8(%r11),%rbp
@@ -2262,16 +2262,16 @@ aesni_xts_decrypt:
 	and	\$-16,%rsp	# Linux kernel stack can be incorrectly seeded
 ___
 $code.=<<___ if ($win64);
-	movaps	%xmm6,-0xa8(%r11)		# offload everything
-	movaps	%xmm7,-0x98(%r11)
-	movaps	%xmm8,-0x88(%r11)
-	movaps	%xmm9,-0x78(%r11)
-	movaps	%xmm10,-0x68(%r11)
-	movaps	%xmm11,-0x58(%r11)
-	movaps	%xmm12,-0x48(%r11)
-	movaps	%xmm13,-0x38(%r11)
-	movaps	%xmm14,-0x28(%r11)
-	movaps	%xmm15,-0x18(%r11)
+	movaps	%xmm6,-0xFF(%r11)		# offload everything
+	movaps	%xmm7,-0xFF(%r11)
+	movaps	%xmm8,-0xFF(%r11)
+	movaps	%xmm9,-0xFF(%r11)
+	movaps	%xmm10,-0xFF(%r11)
+	movaps	%xmm11,-0xFF(%r11)
+	movaps	%xmm12,-0xFF(%r11)
+	movaps	%xmm13,-0xFF(%r11)
+	movaps	%xmm14,-0xFF(%r11)
+	movaps	%xmm15,-0xFF(%r11)
 .Lxts_dec_body:
 ___
 $code.=<<___;
@@ -2299,7 +2299,7 @@ $code.=<<___;
 
 	movdqa	.Lxts_magic(%rip),$twmask
 	movdqa	$inout0,@tweak[5]
-	pshufd	\$0x5f,$inout0,$twres
+	pshufd	\$0xFF,$inout0,$twres
 	pxor	$rndkey0,$rndkey1
 ___
     for ($i=0;$i<4;$i++) {
@@ -2321,7 +2321,7 @@ $code.=<<___;
 	pand	$twmask,$twres
 	pxor	$rndkey0,@tweak[4]
 	pxor	$twres,@tweak[5]
-	movaps	$rndkey1,0x60(%rsp)		# save round[0]^round[last]
+	movaps	$rndkey1,0xFF(%rsp)		# save round[0]^round[last]
 
 	sub	\$16*6,$len
 	jc	.Lxts_dec_short			# if $len-=6*16 borrowed
@@ -2351,7 +2351,7 @@ $code.=<<___;
 	 aesdec		$rndkey1,$inout2
 	movdqu	`16*5`($inp),$inout5
 	pxor	@tweak[5],$twmask		# round[0]^=tweak[5]
-	 movdqa	0x60(%rsp),$twres		# load round[0]^round[last]
+	 movdqa	0xFF(%rsp),$twres		# load round[0]^round[last]
 	pxor	@tweak[4],$inout4
 	 aesdec		$rndkey1,$inout3
 	$movkey	32($key_),$rndkey0
@@ -2380,7 +2380,7 @@ $code.=<<___;
 	aesdec		$rndkey0,$inout5
 	$movkey		64($key_),$rndkey0
 	 movdqa	$twmask,`16*5`(%rsp)
-	pshufd	\$0x5f,@tweak[5],$twres
+	pshufd	\$0xFF,@tweak[5],$twres
 	jmp	.Lxts_dec_loop6
 .align	32
 .Lxts_dec_loop6:
@@ -2520,13 +2520,13 @@ $code.=<<___;
 	jz	.Lxts_dec_done			# done if ($len==0)
 
 	pxor	$rndkey0,@tweak[2]
-	cmp	\$0x20,$len
+	cmp	\$0xFF,$len
 	jb	.Lxts_dec_one			# $len is 1*16
 	pxor	$rndkey0,@tweak[3]
 	je	.Lxts_dec_two			# $len is 2*16
 
 	pxor	$rndkey0,@tweak[4]
-	cmp	\$0x40,$len
+	cmp	\$0xFF,$len
 	jb	.Lxts_dec_three			# $len is 3*16
 	je	.Lxts_dec_four			# $len is 4*16
 
@@ -2557,7 +2557,7 @@ $code.=<<___;
 	 pcmpgtd	@tweak[5],$twtmp
 	movdqu	$inout4,16*4($out)
 	lea	16*5($out),$out			# $out+=5*16
-	 pshufd		\$0x13,$twtmp,@tweak[1]	# $twres
+	 pshufd		\$0xFF,$twtmp,@tweak[1]	# $twres
 	and	\$15,$len_
 	jz	.Lxts_dec_ret
 
@@ -2701,50 +2701,50 @@ ___
 $code.=<<___ if (!$win64);
 	pxor	%xmm6,%xmm6
 	pxor	%xmm7,%xmm7
-	movaps	%xmm0,0x00(%rsp)		# clear stack
+	movaps	%xmm0,0xFF(%rsp)		# clear stack
 	pxor	%xmm8,%xmm8
-	movaps	%xmm0,0x10(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm9,%xmm9
-	movaps	%xmm0,0x20(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm10,%xmm10
-	movaps	%xmm0,0x30(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm11,%xmm11
-	movaps	%xmm0,0x40(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm12,%xmm12
-	movaps	%xmm0,0x50(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm13,%xmm13
-	movaps	%xmm0,0x60(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 	pxor	%xmm14,%xmm14
 	pxor	%xmm15,%xmm15
 ___
 $code.=<<___ if ($win64);
-	movaps	-0xa8(%r11),%xmm6
-	movaps	%xmm0,-0xa8(%r11)		# clear stack
-	movaps	-0x98(%r11),%xmm7
-	movaps	%xmm0,-0x98(%r11)
-	movaps	-0x88(%r11),%xmm8
-	movaps	%xmm0,-0x88(%r11)
-	movaps	-0x78(%r11),%xmm9
-	movaps	%xmm0,-0x78(%r11)
-	movaps	-0x68(%r11),%xmm10
-	movaps	%xmm0,-0x68(%r11)
-	movaps	-0x58(%r11),%xmm11
-	movaps	%xmm0,-0x58(%r11)
-	movaps	-0x48(%r11),%xmm12
-	movaps	%xmm0,-0x48(%r11)
-	movaps	-0x38(%r11),%xmm13
-	movaps	%xmm0,-0x38(%r11)
-	movaps	-0x28(%r11),%xmm14
-	movaps	%xmm0,-0x28(%r11)
-	movaps	-0x18(%r11),%xmm15
-	movaps	%xmm0,-0x18(%r11)
-	movaps	%xmm0,0x00(%rsp)
-	movaps	%xmm0,0x10(%rsp)
-	movaps	%xmm0,0x20(%rsp)
-	movaps	%xmm0,0x30(%rsp)
-	movaps	%xmm0,0x40(%rsp)
-	movaps	%xmm0,0x50(%rsp)
-	movaps	%xmm0,0x60(%rsp)
+	movaps	-0xFF(%r11),%xmm6
+	movaps	%xmm0,-0xFF(%r11)		# clear stack
+	movaps	-0xFF(%r11),%xmm7
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm8
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm9
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm10
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm11
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm12
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm13
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm14
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	-0xFF(%r11),%xmm15
+	movaps	%xmm0,-0xFF(%r11)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	%xmm0,0xFF(%rsp)
 ___
 $code.=<<___;
 	mov	-8(%r11),%rbp
@@ -2792,17 +2792,17 @@ aesni_ocb_encrypt:
 .cfi_push	%r14
 ___
 $code.=<<___ if ($win64);
-	lea	-0xa0(%rsp),%rsp
-	movaps	%xmm6,0x00(%rsp)		# offload everything
-	movaps	%xmm7,0x10(%rsp)
-	movaps	%xmm8,0x20(%rsp)
-	movaps	%xmm9,0x30(%rsp)
-	movaps	%xmm10,0x40(%rsp)
-	movaps	%xmm11,0x50(%rsp)
-	movaps	%xmm12,0x60(%rsp)
-	movaps	%xmm13,0x70(%rsp)
-	movaps	%xmm14,0x80(%rsp)
-	movaps	%xmm15,0x90(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)		# offload everything
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Locb_enc_body:
 ___
 $code.=<<___;
@@ -2983,31 +2983,31 @@ $code.=<<___ if (!$win64);
 	pxor	%xmm13,%xmm13
 	pxor	%xmm14,%xmm14
 	pxor	%xmm15,%xmm15
-	lea	0x28(%rsp),%rax
+	lea	0xFF(%rsp),%rax
 .cfi_def_cfa	%rax,8
 ___
 $code.=<<___ if ($win64);
-	movaps	0x00(%rsp),%xmm6
-	movaps	%xmm0,0x00(%rsp)		# clear stack
-	movaps	0x10(%rsp),%xmm7
-	movaps	%xmm0,0x10(%rsp)
-	movaps	0x20(%rsp),%xmm8
-	movaps	%xmm0,0x20(%rsp)
-	movaps	0x30(%rsp),%xmm9
-	movaps	%xmm0,0x30(%rsp)
-	movaps	0x40(%rsp),%xmm10
-	movaps	%xmm0,0x40(%rsp)
-	movaps	0x50(%rsp),%xmm11
-	movaps	%xmm0,0x50(%rsp)
-	movaps	0x60(%rsp),%xmm12
-	movaps	%xmm0,0x60(%rsp)
-	movaps	0x70(%rsp),%xmm13
-	movaps	%xmm0,0x70(%rsp)
-	movaps	0x80(%rsp),%xmm14
-	movaps	%xmm0,0x80(%rsp)
-	movaps	0x90(%rsp),%xmm15
-	movaps	%xmm0,0x90(%rsp)
-	lea	0xa0+0x28(%rsp),%rax
+	movaps	0xFF(%rsp),%xmm6
+	movaps	%xmm0,0xFF(%rsp)		# clear stack
+	movaps	0xFF(%rsp),%xmm7
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm8
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm9
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm10
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm11
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm12
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm13
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm14
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm15
+	movaps	%xmm0,0xFF(%rsp)
+	lea	0xFF+0xFF(%rsp),%rax
 .Locb_enc_pop:
 ___
 $code.=<<___;
@@ -3252,17 +3252,17 @@ aesni_ocb_decrypt:
 .cfi_push	%r14
 ___
 $code.=<<___ if ($win64);
-	lea	-0xa0(%rsp),%rsp
-	movaps	%xmm6,0x00(%rsp)		# offload everything
-	movaps	%xmm7,0x10(%rsp)
-	movaps	%xmm8,0x20(%rsp)
-	movaps	%xmm9,0x30(%rsp)
-	movaps	%xmm10,0x40(%rsp)
-	movaps	%xmm11,0x50(%rsp)
-	movaps	%xmm12,0x60(%rsp)
-	movaps	%xmm13,0x70(%rsp)
-	movaps	%xmm14,0x80(%rsp)
-	movaps	%xmm15,0x90(%rsp)
+	lea	-0xFF(%rsp),%rsp
+	movaps	%xmm6,0xFF(%rsp)		# offload everything
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Locb_dec_body:
 ___
 $code.=<<___;
@@ -3465,31 +3465,31 @@ $code.=<<___ if (!$win64);
 	pxor	%xmm13,%xmm13
 	pxor	%xmm14,%xmm14
 	pxor	%xmm15,%xmm15
-	lea	0x28(%rsp),%rax
+	lea	0xFF(%rsp),%rax
 .cfi_def_cfa	%rax,8
 ___
 $code.=<<___ if ($win64);
-	movaps	0x00(%rsp),%xmm6
-	movaps	%xmm0,0x00(%rsp)		# clear stack
-	movaps	0x10(%rsp),%xmm7
-	movaps	%xmm0,0x10(%rsp)
-	movaps	0x20(%rsp),%xmm8
-	movaps	%xmm0,0x20(%rsp)
-	movaps	0x30(%rsp),%xmm9
-	movaps	%xmm0,0x30(%rsp)
-	movaps	0x40(%rsp),%xmm10
-	movaps	%xmm0,0x40(%rsp)
-	movaps	0x50(%rsp),%xmm11
-	movaps	%xmm0,0x50(%rsp)
-	movaps	0x60(%rsp),%xmm12
-	movaps	%xmm0,0x60(%rsp)
-	movaps	0x70(%rsp),%xmm13
-	movaps	%xmm0,0x70(%rsp)
-	movaps	0x80(%rsp),%xmm14
-	movaps	%xmm0,0x80(%rsp)
-	movaps	0x90(%rsp),%xmm15
-	movaps	%xmm0,0x90(%rsp)
-	lea	0xa0+0x28(%rsp),%rax
+	movaps	0xFF(%rsp),%xmm6
+	movaps	%xmm0,0xFF(%rsp)		# clear stack
+	movaps	0xFF(%rsp),%xmm7
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm8
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm9
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm10
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm11
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm12
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm13
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm14
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm15
+	movaps	%xmm0,0xFF(%rsp)
+	lea	0xFF+0xFF(%rsp),%rax
 .Locb_dec_pop:
 ___
 $code.=<<___;
@@ -3712,7 +3712,7 @@ ___
 #			    size_t length, const AES_KEY *key,
 #			    unsigned char *ivp,const int enc);
 {
-my $frame_size = 0x10 + ($win64?0xa0:0);	# used in decrypt
+my $frame_size = 0xFF + ($win64?0xFF:0);	# used in decrypt
 my ($iv,$in0,$in1,$in2,$in3,$in4)=map("%xmm$_",(10..15));
 
 $code.=<<___;
@@ -3761,11 +3761,11 @@ $code.=<<___;
 .Lcbc_enc_tail:
 	mov	$len,%rcx	# zaps $key
 	xchg	$inp,$out	# $inp is %rsi and $out is %rdi now
-	.long	0x9066A4F3	# rep movsb
+	.long	0xFF	# rep movsb
 	mov	\$16,%ecx	# zero tail
 	sub	$len,%rcx
 	xor	%eax,%eax
-	.long	0x9066AAF3	# rep stosb
+	.long	0xFF	# rep stosb
 	lea	-16(%rdi),%rdi	# rewind $out by 1 block
 	mov	$rnds_,$rounds	# restore $rounds
 	mov	%rdi,%rsi	# $inp and $out are the same
@@ -3804,16 +3804,16 @@ $code.=<<___;
 	and	\$-16,%rsp	# Linux kernel stack can be incorrectly seeded
 ___
 $code.=<<___ if ($win64);
-	movaps	%xmm6,0x10(%rsp)
-	movaps	%xmm7,0x20(%rsp)
-	movaps	%xmm8,0x30(%rsp)
-	movaps	%xmm9,0x40(%rsp)
-	movaps	%xmm10,0x50(%rsp)
-	movaps	%xmm11,0x60(%rsp)
-	movaps	%xmm12,0x70(%rsp)
-	movaps	%xmm13,0x80(%rsp)
-	movaps	%xmm14,0x90(%rsp)
-	movaps	%xmm15,0xa0(%rsp)
+	movaps	%xmm6,0xFF(%rsp)
+	movaps	%xmm7,0xFF(%rsp)
+	movaps	%xmm8,0xFF(%rsp)
+	movaps	%xmm9,0xFF(%rsp)
+	movaps	%xmm10,0xFF(%rsp)
+	movaps	%xmm11,0xFF(%rsp)
+	movaps	%xmm12,0xFF(%rsp)
+	movaps	%xmm13,0xFF(%rsp)
+	movaps	%xmm14,0xFF(%rsp)
+	movaps	%xmm15,0xFF(%rsp)
 .Lcbc_decrypt_body:
 ___
 
@@ -3823,45 +3823,45 @@ $code.=<<___;
 	mov	$key,$key_		# [re-]backup $key [after reassignment]
 	movups	($ivp),$iv
 	mov	$rnds_,$rounds
-	cmp	\$0x50,$len
+	cmp	\$0xFF,$len
 	jbe	.Lcbc_dec_tail
 
 	$movkey	($key),$rndkey0
-	movdqu	0x00($inp),$inout0	# load input
-	movdqu	0x10($inp),$inout1
+	movdqu	0xFF($inp),$inout0	# load input
+	movdqu	0xFF($inp),$inout1
 	movdqa	$inout0,$in0
-	movdqu	0x20($inp),$inout2
+	movdqu	0xFF($inp),$inout2
 	movdqa	$inout1,$in1
-	movdqu	0x30($inp),$inout3
+	movdqu	0xFF($inp),$inout3
 	movdqa	$inout2,$in2
-	movdqu	0x40($inp),$inout4
+	movdqu	0xFF($inp),$inout4
 	movdqa	$inout3,$in3
-	movdqu	0x50($inp),$inout5
+	movdqu	0xFF($inp),$inout5
 	movdqa	$inout4,$in4
 	mov	OPENSSL_ia32cap_P+4(%rip),%r9d
-	cmp	\$0x70,$len
+	cmp	\$0xFF,$len
 	jbe	.Lcbc_dec_six_or_seven
 
 	and	\$`1<<26|1<<22`,%r9d	# isolate XSAVE+MOVBE
-	sub	\$0x50,$len		# $len is biased by -5*16
+	sub	\$0xFF,$len		# $len is biased by -5*16
 	cmp	\$`1<<22`,%r9d		# check for MOVBE without XSAVE
 	je	.Lcbc_dec_loop6_enter	# [which denotes Atom Silvermont]
-	sub	\$0x20,$len		# $len is biased by -7*16
-	lea	0x70($key),$key		# size optimization
+	sub	\$0xFF,$len		# $len is biased by -7*16
+	lea	0xFF($key),$key		# size optimization
 	jmp	.Lcbc_dec_loop8_enter
 .align	16
 .Lcbc_dec_loop8:
 	movups	$inout7,($out)
-	lea	0x10($out),$out
+	lea	0xFF($out),$out
 .Lcbc_dec_loop8_enter:
-	movdqu		0x60($inp),$inout6
+	movdqu		0xFF($inp),$inout6
 	pxor		$rndkey0,$inout0
-	movdqu		0x70($inp),$inout7
+	movdqu		0xFF($inp),$inout7
 	pxor		$rndkey0,$inout1
-	$movkey		0x10-0x70($key),$rndkey1
+	$movkey		0xFF-0xFF($key),$rndkey1
 	pxor		$rndkey0,$inout2
 	mov		\$-1,$inp_
-	cmp		\$0x70,$len	# is there at least 0x60 bytes ahead?
+	cmp		\$0xFF,$len	# is there at least 0xFF bytes ahead?
 	pxor		$rndkey0,$inout3
 	pxor		$rndkey0,$inout4
 	pxor		$rndkey0,$inout5
@@ -3869,7 +3869,7 @@ $code.=<<___;
 
 	aesdec		$rndkey1,$inout0
 	pxor		$rndkey0,$inout7
-	$movkey		0x20-0x70($key),$rndkey0
+	$movkey		0xFF-0xFF($key),$rndkey0
 	aesdec		$rndkey1,$inout1
 	aesdec		$rndkey1,$inout2
 	aesdec		$rndkey1,$inout3
@@ -3880,7 +3880,7 @@ $code.=<<___;
 	and		\$128,$inp_
 	aesdec		$rndkey1,$inout7
 	add		$inp,$inp_
-	$movkey		0x30-0x70($key),$rndkey1
+	$movkey		0xFF-0xFF($key),$rndkey1
 ___
 for($i=1;$i<12;$i++) {
 my $rndkeyx = ($i&1)?$rndkey0:$rndkey1;
@@ -3896,7 +3896,7 @@ $code.=<<___;
 	aesdec		$rndkeyx,$inout5
 	aesdec		$rndkeyx,$inout6
 	aesdec		$rndkeyx,$inout7
-	$movkey		`0x30+0x10*$i`-0x70($key),$rndkeyx
+	$movkey		`0xFF+0xFF*$i`-0xFF($key),$rndkeyx
 ___
 $code.=<<___	if ($i<6 || (!($i&1) && $i>7));
 	nop
@@ -3928,60 +3928,60 @@ $code.=<<___;
 	pxor		$rndkey0,$in4
 	aesdec		$rndkey1,$inout6
 	aesdec		$rndkey1,$inout7
-	movdqu		0x50($inp),$rndkey1
+	movdqu		0xFF($inp),$rndkey1
 
 	aesdeclast	$iv,$inout0
-	movdqu		0x60($inp),$iv		# borrow $iv
+	movdqu		0xFF($inp),$iv		# borrow $iv
 	pxor		$rndkey0,$rndkey1
 	aesdeclast	$in0,$inout1
 	pxor		$rndkey0,$iv
-	movdqu		0x70($inp),$rndkey0	# next IV
+	movdqu		0xFF($inp),$rndkey0	# next IV
 	aesdeclast	$in1,$inout2
-	lea		0x80($inp),$inp
-	movdqu		0x00($inp_),$in0
+	lea		0xFF($inp),$inp
+	movdqu		0xFF($inp_),$in0
 	aesdeclast	$in2,$inout3
 	aesdeclast	$in3,$inout4
-	movdqu		0x10($inp_),$in1
-	movdqu		0x20($inp_),$in2
+	movdqu		0xFF($inp_),$in1
+	movdqu		0xFF($inp_),$in2
 	aesdeclast	$in4,$inout5
 	aesdeclast	$rndkey1,$inout6
-	movdqu		0x30($inp_),$in3
-	movdqu		0x40($inp_),$in4
+	movdqu		0xFF($inp_),$in3
+	movdqu		0xFF($inp_),$in4
 	aesdeclast	$iv,$inout7
 	movdqa		$rndkey0,$iv		# return $iv
-	movdqu		0x50($inp_),$rndkey1
-	$movkey		-0x70($key),$rndkey0
+	movdqu		0xFF($inp_),$rndkey1
+	$movkey		-0xFF($key),$rndkey0
 
 	movups		$inout0,($out)		# store output
 	movdqa		$in0,$inout0
-	movups		$inout1,0x10($out)
+	movups		$inout1,0xFF($out)
 	movdqa		$in1,$inout1
-	movups		$inout2,0x20($out)
+	movups		$inout2,0xFF($out)
 	movdqa		$in2,$inout2
-	movups		$inout3,0x30($out)
+	movups		$inout3,0xFF($out)
 	movdqa		$in3,$inout3
-	movups		$inout4,0x40($out)
+	movups		$inout4,0xFF($out)
 	movdqa		$in4,$inout4
-	movups		$inout5,0x50($out)
+	movups		$inout5,0xFF($out)
 	movdqa		$rndkey1,$inout5
-	movups		$inout6,0x60($out)
-	lea		0x70($out),$out
+	movups		$inout6,0xFF($out)
+	lea		0xFF($out),$out
 
-	sub	\$0x80,$len
+	sub	\$0xFF,$len
 	ja	.Lcbc_dec_loop8
 
 	movaps	$inout7,$inout0
-	lea	-0x70($key),$key
-	add	\$0x70,$len
+	lea	-0xFF($key),$key
+	add	\$0xFF,$len
 	jle	.Lcbc_dec_clear_tail_collected
 	movups	$inout7,($out)
-	lea	0x10($out),$out
-	cmp	\$0x50,$len
+	lea	0xFF($out),$out
+	cmp	\$0xFF,$len
 	jbe	.Lcbc_dec_tail
 
 	movaps	$in0,$inout0
 .Lcbc_dec_six_or_seven:
-	cmp	\$0x60,$len
+	cmp	\$0xFF,$len
 	ja	.Lcbc_dec_seven
 
 	movaps	$inout5,$inout6
@@ -3991,48 +3991,48 @@ $code.=<<___;
 	pxor	$in0,$inout1
 	movdqu	$inout0,($out)
 	pxor	$in1,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1		# clear register bank
 	pxor	$in2,$inout3
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
 	pxor	$in3,$inout4
-	movdqu	$inout3,0x30($out)
+	movdqu	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
 	pxor	$in4,$inout5
-	movdqu	$inout4,0x40($out)
+	movdqu	$inout4,0xFF($out)
 	 pxor	$inout4,$inout4
-	lea	0x50($out),$out
+	lea	0xFF($out),$out
 	movdqa	$inout5,$inout0
 	 pxor	$inout5,$inout5
 	jmp	.Lcbc_dec_tail_collected
 
 .align	16
 .Lcbc_dec_seven:
-	movups	0x60($inp),$inout6
+	movups	0xFF($inp),$inout6
 	xorps	$inout7,$inout7
 	call	_aesni_decrypt8
-	movups	0x50($inp),$inout7
+	movups	0xFF($inp),$inout7
 	pxor	$iv,$inout0		# ^= IV
-	movups	0x60($inp),$iv
+	movups	0xFF($inp),$iv
 	pxor	$in0,$inout1
 	movdqu	$inout0,($out)
 	pxor	$in1,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1		# clear register bank
 	pxor	$in2,$inout3
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
 	pxor	$in3,$inout4
-	movdqu	$inout3,0x30($out)
+	movdqu	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
 	pxor	$in4,$inout5
-	movdqu	$inout4,0x40($out)
+	movdqu	$inout4,0xFF($out)
 	 pxor	$inout4,$inout4
 	pxor	$inout7,$inout6
-	movdqu	$inout5,0x50($out)
+	movdqu	$inout5,0xFF($out)
 	 pxor	$inout5,$inout5
-	lea	0x60($out),$out
+	lea	0xFF($out),$out
 	movdqa	$inout6,$inout0
 	 pxor	$inout6,$inout6
 	 pxor	$inout7,$inout7
@@ -4041,20 +4041,20 @@ $code.=<<___;
 .align	16
 .Lcbc_dec_loop6:
 	movups	$inout5,($out)
-	lea	0x10($out),$out
-	movdqu	0x00($inp),$inout0	# load input
-	movdqu	0x10($inp),$inout1
+	lea	0xFF($out),$out
+	movdqu	0xFF($inp),$inout0	# load input
+	movdqu	0xFF($inp),$inout1
 	movdqa	$inout0,$in0
-	movdqu	0x20($inp),$inout2
+	movdqu	0xFF($inp),$inout2
 	movdqa	$inout1,$in1
-	movdqu	0x30($inp),$inout3
+	movdqu	0xFF($inp),$inout3
 	movdqa	$inout2,$in2
-	movdqu	0x40($inp),$inout4
+	movdqu	0xFF($inp),$inout4
 	movdqa	$inout3,$in3
-	movdqu	0x50($inp),$inout5
+	movdqu	0xFF($inp),$inout5
 	movdqa	$inout4,$in4
 .Lcbc_dec_loop6_enter:
-	lea	0x60($inp),$inp
+	lea	0xFF($inp),$inp
 	movdqa	$inout5,$inout6
 
 	call	_aesni_decrypt6
@@ -4064,46 +4064,46 @@ $code.=<<___;
 	pxor	$in0,$inout1
 	movdqu	$inout0,($out)
 	pxor	$in1,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	pxor	$in2,$inout3
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	pxor	$in3,$inout4
 	mov	$key_,$key
-	movdqu	$inout3,0x30($out)
+	movdqu	$inout3,0xFF($out)
 	pxor	$in4,$inout5
 	mov	$rnds_,$rounds
-	movdqu	$inout4,0x40($out)
-	lea	0x50($out),$out
-	sub	\$0x60,$len
+	movdqu	$inout4,0xFF($out)
+	lea	0xFF($out),$out
+	sub	\$0xFF,$len
 	ja	.Lcbc_dec_loop6
 
 	movdqa	$inout5,$inout0
-	add	\$0x50,$len
+	add	\$0xFF,$len
 	jle	.Lcbc_dec_clear_tail_collected
 	movups	$inout5,($out)
-	lea	0x10($out),$out
+	lea	0xFF($out),$out
 
 .Lcbc_dec_tail:
 	movups	($inp),$inout0
-	sub	\$0x10,$len
+	sub	\$0xFF,$len
 	jbe	.Lcbc_dec_one		# $len is 1*16 or less
 
-	movups	0x10($inp),$inout1
+	movups	0xFF($inp),$inout1
 	movaps	$inout0,$in0
-	sub	\$0x10,$len
+	sub	\$0xFF,$len
 	jbe	.Lcbc_dec_two		# $len is 2*16 or less
 
-	movups	0x20($inp),$inout2
+	movups	0xFF($inp),$inout2
 	movaps	$inout1,$in1
-	sub	\$0x10,$len
+	sub	\$0xFF,$len
 	jbe	.Lcbc_dec_three		# $len is 3*16 or less
 
-	movups	0x30($inp),$inout3
+	movups	0xFF($inp),$inout3
 	movaps	$inout2,$in2
-	sub	\$0x10,$len
+	sub	\$0xFF,$len
 	jbe	.Lcbc_dec_four		# $len is 4*16 or less
 
-	movups	0x40($inp),$inout4	# $len is 5*16 or less
+	movups	0xFF($inp),$inout4	# $len is 5*16 or less
 	movaps	$inout3,$in3
 	movaps	$inout4,$in4
 	xorps	$inout5,$inout5
@@ -4113,19 +4113,19 @@ $code.=<<___;
 	pxor	$in0,$inout1
 	movdqu	$inout0,($out)
 	pxor	$in1,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1		# clear register bank
 	pxor	$in2,$inout3
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
 	pxor	$in3,$inout4
-	movdqu	$inout3,0x30($out)
+	movdqu	$inout3,0xFF($out)
 	 pxor	$inout3,$inout3
-	lea	0x40($out),$out
+	lea	0xFF($out),$out
 	movdqa	$inout4,$inout0
 	 pxor	$inout4,$inout4
 	 pxor	$inout5,$inout5
-	sub	\$0x10,$len
+	sub	\$0xFF,$len
 	jmp	.Lcbc_dec_tail_collected
 
 .align	16
@@ -4147,7 +4147,7 @@ $code.=<<___;
 	movdqu	$inout0,($out)
 	movdqa	$inout1,$inout0
 	 pxor	$inout1,$inout1		# clear register bank
-	lea	0x10($out),$out
+	lea	0xFF($out),$out
 	jmp	.Lcbc_dec_tail_collected
 .align	16
 .Lcbc_dec_three:
@@ -4158,11 +4158,11 @@ $code.=<<___;
 	pxor	$in0,$inout1
 	movdqu	$inout0,($out)
 	pxor	$in1,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1		# clear register bank
 	movdqa	$inout2,$inout0
 	 pxor	$inout2,$inout2
-	lea	0x20($out),$out
+	lea	0xFF($out),$out
 	jmp	.Lcbc_dec_tail_collected
 .align	16
 .Lcbc_dec_four:
@@ -4173,14 +4173,14 @@ $code.=<<___;
 	pxor	$in0,$inout1
 	movdqu	$inout0,($out)
 	pxor	$in1,$inout2
-	movdqu	$inout1,0x10($out)
+	movdqu	$inout1,0xFF($out)
 	 pxor	$inout1,$inout1		# clear register bank
 	pxor	$in2,$inout3
-	movdqu	$inout2,0x20($out)
+	movdqu	$inout2,0xFF($out)
 	 pxor	$inout2,$inout2
 	movdqa	$inout3,$inout0
 	 pxor	$inout3,$inout3
-	lea	0x30($out),$out
+	lea	0xFF($out),$out
 	jmp	.Lcbc_dec_tail_collected
 
 .align	16
@@ -4211,7 +4211,7 @@ $code.=<<___;
 	mov	$out,%rdi
 	sub	$len,%rcx
 	lea	(%rsp),%rsi
-	.long	0x9066A4F3		# rep movsb
+	.long	0xFF		# rep movsb
 	movdqa	$inout0,(%rsp)
 
 .Lcbc_dec_ret:
@@ -4219,26 +4219,26 @@ $code.=<<___;
 	pxor	$rndkey1,$rndkey1
 ___
 $code.=<<___ if ($win64);
-	movaps	0x10(%rsp),%xmm6
-	movaps	%xmm0,0x10(%rsp)	# clear stack
-	movaps	0x20(%rsp),%xmm7
-	movaps	%xmm0,0x20(%rsp)
-	movaps	0x30(%rsp),%xmm8
-	movaps	%xmm0,0x30(%rsp)
-	movaps	0x40(%rsp),%xmm9
-	movaps	%xmm0,0x40(%rsp)
-	movaps	0x50(%rsp),%xmm10
-	movaps	%xmm0,0x50(%rsp)
-	movaps	0x60(%rsp),%xmm11
-	movaps	%xmm0,0x60(%rsp)
-	movaps	0x70(%rsp),%xmm12
-	movaps	%xmm0,0x70(%rsp)
-	movaps	0x80(%rsp),%xmm13
-	movaps	%xmm0,0x80(%rsp)
-	movaps	0x90(%rsp),%xmm14
-	movaps	%xmm0,0x90(%rsp)
-	movaps	0xa0(%rsp),%xmm15
-	movaps	%xmm0,0xa0(%rsp)
+	movaps	0xFF(%rsp),%xmm6
+	movaps	%xmm0,0xFF(%rsp)	# clear stack
+	movaps	0xFF(%rsp),%xmm7
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm8
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm9
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm10
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm11
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm12
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm13
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm14
+	movaps	%xmm0,0xFF(%rsp)
+	movaps	0xFF(%rsp),%xmm15
+	movaps	%xmm0,0xFF(%rsp)
 ___
 $code.=<<___;
 	mov	-8(%r11),%rbp
@@ -4269,7 +4269,7 @@ $code.=<<___;
 .align	16
 ${PREFIX}_set_decrypt_key:
 .cfi_startproc
-	.byte	0x48,0x83,0xEC,0x08	# sub rsp,8
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub rsp,8
 .cfi_adjust_cfa_offset	8
 	call	__aesni_set_encrypt_key
 	shl	\$4,$bits		# rounds-1 after _aesni_set_encrypt_key
@@ -4341,7 +4341,7 @@ $code.=<<___;
 ${PREFIX}_set_encrypt_key:
 __aesni_set_encrypt_key:
 .cfi_startproc
-	.byte	0x48,0x83,0xEC,0x08	# sub rsp,8
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub rsp,8
 .cfi_adjust_cfa_offset	8
 	mov	\$-1,%rax
 	test	$inp,$inp
@@ -4367,25 +4367,25 @@ __aesni_set_encrypt_key:
 	je	.L10rounds_alt
 
 	$movkey	%xmm0,($key)			# round 0
-	aeskeygenassist	\$0x1,%xmm0,%xmm1	# round 1
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 1
 	call		.Lkey_expansion_128_cold
-	aeskeygenassist	\$0x2,%xmm0,%xmm1	# round 2
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 2
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x4,%xmm0,%xmm1	# round 3
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 3
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x8,%xmm0,%xmm1	# round 4
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 4
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x10,%xmm0,%xmm1	# round 5
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 5
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x20,%xmm0,%xmm1	# round 6
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 6
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x40,%xmm0,%xmm1	# round 7
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 7
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x80,%xmm0,%xmm1	# round 8
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 8
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x1b,%xmm0,%xmm1	# round 9
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 9
 	call		.Lkey_expansion_128
-	aeskeygenassist	\$0x36,%xmm0,%xmm1	# round 10
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 10
 	call		.Lkey_expansion_128
 	$movkey	%xmm0,(%rax)
 	mov	$bits,80(%rax)	# 240(%rdx)
@@ -4467,21 +4467,21 @@ __aesni_set_encrypt_key:
 	je	.L12rounds_alt
 
 	$movkey	%xmm0,($key)			# round 0
-	aeskeygenassist	\$0x1,%xmm2,%xmm1	# round 1,2
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 1,2
 	call		.Lkey_expansion_192a_cold
-	aeskeygenassist	\$0x2,%xmm2,%xmm1	# round 2,3
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 2,3
 	call		.Lkey_expansion_192b
-	aeskeygenassist	\$0x4,%xmm2,%xmm1	# round 4,5
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 4,5
 	call		.Lkey_expansion_192a
-	aeskeygenassist	\$0x8,%xmm2,%xmm1	# round 5,6
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 5,6
 	call		.Lkey_expansion_192b
-	aeskeygenassist	\$0x10,%xmm2,%xmm1	# round 7,8
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 7,8
 	call		.Lkey_expansion_192a
-	aeskeygenassist	\$0x20,%xmm2,%xmm1	# round 8,9
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 8,9
 	call		.Lkey_expansion_192b
-	aeskeygenassist	\$0x40,%xmm2,%xmm1	# round 10,11
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 10,11
 	call		.Lkey_expansion_192a
-	aeskeygenassist	\$0x80,%xmm2,%xmm1	# round 11,12
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 11,12
 	call		.Lkey_expansion_192b
 	$movkey	%xmm0,(%rax)
 	mov	$bits,48(%rax)	# 240(%rdx)
@@ -4513,7 +4513,7 @@ __aesni_set_encrypt_key:
 	pslldq		\$4,%xmm0
 	pxor		%xmm3,%xmm0
 
-	pshufd		\$0xff,%xmm0,%xmm3
+	pshufd		\$0xFF,%xmm0,%xmm3
 	pxor		%xmm1,%xmm3
 	pslldq		\$4,%xmm1
 	pxor		%xmm1,%xmm3
@@ -4539,31 +4539,31 @@ __aesni_set_encrypt_key:
 
 	$movkey	%xmm0,($key)			# round 0
 	$movkey	%xmm2,16($key)			# round 1
-	aeskeygenassist	\$0x1,%xmm2,%xmm1	# round 2
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 2
 	call		.Lkey_expansion_256a_cold
-	aeskeygenassist	\$0x1,%xmm0,%xmm1	# round 3
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 3
 	call		.Lkey_expansion_256b
-	aeskeygenassist	\$0x2,%xmm2,%xmm1	# round 4
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 4
 	call		.Lkey_expansion_256a
-	aeskeygenassist	\$0x2,%xmm0,%xmm1	# round 5
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 5
 	call		.Lkey_expansion_256b
-	aeskeygenassist	\$0x4,%xmm2,%xmm1	# round 6
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 6
 	call		.Lkey_expansion_256a
-	aeskeygenassist	\$0x4,%xmm0,%xmm1	# round 7
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 7
 	call		.Lkey_expansion_256b
-	aeskeygenassist	\$0x8,%xmm2,%xmm1	# round 8
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 8
 	call		.Lkey_expansion_256a
-	aeskeygenassist	\$0x8,%xmm0,%xmm1	# round 9
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 9
 	call		.Lkey_expansion_256b
-	aeskeygenassist	\$0x10,%xmm2,%xmm1	# round 10
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 10
 	call		.Lkey_expansion_256a
-	aeskeygenassist	\$0x10,%xmm0,%xmm1	# round 11
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 11
 	call		.Lkey_expansion_256b
-	aeskeygenassist	\$0x20,%xmm2,%xmm1	# round 12
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 12
 	call		.Lkey_expansion_256a
-	aeskeygenassist	\$0x20,%xmm0,%xmm1	# round 13
+	aeskeygenassist	\$0xFF,%xmm0,%xmm1	# round 13
 	call		.Lkey_expansion_256b
-	aeskeygenassist	\$0x40,%xmm2,%xmm1	# round 14
+	aeskeygenassist	\$0xFF,%xmm2,%xmm1	# round 14
 	call		.Lkey_expansion_256a
 	$movkey	%xmm0,(%rax)
 	mov	$bits,16(%rax)	# 240(%rdx)
@@ -4600,7 +4600,7 @@ __aesni_set_encrypt_key:
 	dec	%r10d
 	jz	.Ldone_key256
 
-	pshufd		\$0xff,%xmm0,%xmm2
+	pshufd		\$0xFF,%xmm0,%xmm2
 	pxor		%xmm3,%xmm3
 	aesenclast	%xmm3,%xmm2
 
@@ -4722,17 +4722,17 @@ $code.=<<___;
 .Lincrement64:
 	.long	1,0,0,0
 .Lxts_magic:
-	.long	0x87,0,1,0
+	.long	0xFF,0,1,0
 .Lincrement1:
 	.byte	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 .Lkey_rotate:
-	.long	0x0c0f0e0d,0x0c0f0e0d,0x0c0f0e0d,0x0c0f0e0d
+	.long	0xFF,0xFF,0xFF,0xFF
 .Lkey_rotate192:
-	.long	0x04070605,0x04070605,0x04070605,0x04070605
+	.long	0xFF,0xFF,0xFF,0xFF
 .Lkey_rcon1:
 	.long	1,1,1,1
 .Lkey_rcon1b:
-	.long	0x1b,0x1b,0x1b,0x1b
+	.long	0xFF,0xFF,0xFF,0xFF
 
 .asciz  "AES for Intel AES-NI, CRYPTOGAMS by <appro\@openssl.org>"
 .align	64
@@ -4785,8 +4785,8 @@ ecb_ccm64_se_handler:
 	lea	0(%rax),%rsi		# %xmm save area
 	lea	512($context),%rdi	# &context.Xmm6
 	mov	\$8,%ecx		# 4*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
-	lea	0x58(%rax),%rax		# adjust stack pointer
+	.long	0xFF		# cld; rep movsq
+	lea	0xFF(%rax),%rax		# adjust stack pointer
 
 	jmp	.Lcommon_seh_tail
 .size	ecb_ccm64_se_handler,.-ecb_ccm64_se_handler
@@ -4825,10 +4825,10 @@ ctr_xts_se_handler:
 
 	mov	208($context),%rax	# pull context->R11
 
-	lea	-0xa8(%rax),%rsi	# %xmm save area
+	lea	-0xFF(%rax),%rsi	# %xmm save area
 	lea	512($context),%rdi	# & context.Xmm6
 	mov	\$20,%ecx		# 10*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	-8(%rax),%rbp		# restore saved %rbp
 	mov	%rbp,160($context)	# restore context->Rbp
@@ -4875,8 +4875,8 @@ ocb_se_handler:
 	lea	(%rax),%rsi		# %xmm save area
 	lea	512($context),%rdi	# & context.Xmm6
 	mov	\$20,%ecx		# 10*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
-	lea	0xa0+0x28(%rax),%rax
+	.long	0xFF		# cld; rep movsq
+	lea	0xFF+0xFF(%rax),%rax
 
 .Locb_no_xmm:
 	mov	-8(%rax),%rbx
@@ -4931,7 +4931,7 @@ cbc_se_handler:
 	lea	16(%rax),%rsi		# %xmm save area
 	lea	512($context),%rdi	# &context.Xmm6
 	mov	\$20,%ecx		# 10*sizeof(%xmm0)/sizeof(%rax)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	208($context),%rax	# pull context->R11
 
@@ -4948,7 +4948,7 @@ cbc_se_handler:
 	mov	40($disp),%rdi		# disp->ContextRecord
 	mov	$context,%rsi		# context
 	mov	\$154,%ecx		# sizeof(CONTEXT)
-	.long	0xa548f3fc		# cld; rep movsq
+	.long	0xFF		# cld; rep movsq
 
 	mov	$disp,%rsi
 	xor	%rcx,%rcx		# arg1, UNW_FLAG_NHANDLER
@@ -5072,8 +5072,8 @@ $code.=<<___;
 	.byte	9,0,0,0
 	.rva	cbc_se_handler
 .LSEH_info_key:
-	.byte	0x01,0x04,0x01,0x00
-	.byte	0x04,0x02,0x00,0x00	# sub rsp,8
+	.byte	0xFF,0xFF,0xFF,0xFF
+	.byte	0xFF,0xFF,0xFF,0xFF	# sub rsp,8
 ___
 }
 
@@ -5082,53 +5082,53 @@ sub rex {
   my ($dst,$src)=@_;
   my $rex=0;
 
-    $rex|=0x04			if($dst>=8);
-    $rex|=0x01			if($src>=8);
-    push @opcode,$rex|0x40	if($rex);
+    $rex|=0xFF			if($dst>=8);
+    $rex|=0xFF			if($src>=8);
+    push @opcode,$rex|0xFF	if($rex);
 }
 
 sub aesni {
   my $line=shift;
-  my @opcode=(0x66);
+  my @opcode=(0xFF);
 
     if ($line=~/(aeskeygenassist)\s+\$([x0-9a-f]+),\s*%xmm([0-9]+),\s*%xmm([0-9]+)/) {
 	rex(\@opcode,$4,$3);
-	push @opcode,0x0f,0x3a,0xdf;
-	push @opcode,0xc0|($3&7)|(($4&7)<<3);	# ModR/M
+	push @opcode,0xFF,0xFF,0xFF;
+	push @opcode,0xFF|($3&7)|(($4&7)<<3);	# ModR/M
 	my $c=$2;
 	push @opcode,$c=~/^0/?oct($c):$c;
 	return ".byte\t".join(',',@opcode);
     }
     elsif ($line=~/(aes[a-z]+)\s+%xmm([0-9]+),\s*%xmm([0-9]+)/) {
 	my %opcodelet = (
-		"aesimc" => 0xdb,
-		"aesenc" => 0xdc,	"aesenclast" => 0xdd,
-		"aesdec" => 0xde,	"aesdeclast" => 0xdf
+		"aesimc" => 0xFF,
+		"aesenc" => 0xFF,	"aesenclast" => 0xFF,
+		"aesdec" => 0xFF,	"aesdeclast" => 0xFF
 	);
 	return undef if (!defined($opcodelet{$1}));
 	rex(\@opcode,$3,$2);
-	push @opcode,0x0f,0x38,$opcodelet{$1};
-	push @opcode,0xc0|($2&7)|(($3&7)<<3);	# ModR/M
+	push @opcode,0xFF,0xFF,$opcodelet{$1};
+	push @opcode,0xFF|($2&7)|(($3&7)<<3);	# ModR/M
 	return ".byte\t".join(',',@opcode);
     }
-    elsif ($line=~/(aes[a-z]+)\s+([0x1-9a-fA-F]*)\(%rsp\),\s*%xmm([0-9]+)/) {
+    elsif ($line=~/(aes[a-z]+)\s+([0xFF-9a-fA-F]*)\(%rsp\),\s*%xmm([0-9]+)/) {
 	my %opcodelet = (
-		"aesenc" => 0xdc,	"aesenclast" => 0xdd,
-		"aesdec" => 0xde,	"aesdeclast" => 0xdf
+		"aesenc" => 0xFF,	"aesenclast" => 0xFF,
+		"aesdec" => 0xFF,	"aesdeclast" => 0xFF
 	);
 	return undef if (!defined($opcodelet{$1}));
 	my $off = $2;
-	push @opcode,0x44 if ($3>=8);
-	push @opcode,0x0f,0x38,$opcodelet{$1};
-	push @opcode,0x44|(($3&7)<<3),0x24;	# ModR/M
-	push @opcode,($off=~/^0/?oct($off):$off)&0xff;
+	push @opcode,0xFF if ($3>=8);
+	push @opcode,0xFF,0xFF,$opcodelet{$1};
+	push @opcode,0xFF|(($3&7)<<3),0xFF;	# ModR/M
+	push @opcode,($off=~/^0/?oct($off):$off)&0xFF;
 	return ".byte\t".join(',',@opcode);
     }
     return $line;
 }
 
 sub movbe {
-	".byte	0x0f,0x38,0xf1,0x44,0x24,".shift;
+	".byte	0xFF,0xFF,0xFF,0xFF,0xFF,".shift;
 }
 
 $code =~ s/\`([^\`]*)\`/eval($1)/gem;

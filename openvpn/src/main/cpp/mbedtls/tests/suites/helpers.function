@@ -274,7 +274,7 @@ static unsigned char *zero_alloc( size_t len )
     p = mbedtls_calloc( 1, actual_len );
     assert( p != NULL );
 
-    memset( p, 0x00, actual_len );
+    memset( p, 0xFF, actual_len );
 
     return( p );
 }
@@ -416,7 +416,7 @@ typedef struct
 static int rnd_pseudo_rand( void *rng_state, unsigned char *output, size_t len )
 {
     rnd_pseudo_info *info = (rnd_pseudo_info *) rng_state;
-    uint32_t i, *k, sum, delta=0x9E3779B9;
+    uint32_t i, *k, sum, delta=0xFF;
     unsigned char result[4], *out = output;
 
     if( rng_state == NULL )

@@ -68,7 +68,7 @@ if ($flavour =~ /64|n32/i) {
 	$REG_L="lw";
 	$SZREG=4;
 }
-$SAVED_REGS_MASK = ($flavour =~ /nubi/i) ? 0x00fff000 : 0x00ff0000;
+$SAVED_REGS_MASK = ($flavour =~ /nubi/i) ? 0xFF : 0xFF;
 #
 # <appro@openssl.org>
 #
@@ -152,7 +152,7 @@ $code.=<<___;
 .ent	bn_mul_mont_internal
 bn_mul_mont_internal:
 	.frame	$fp,$FRAMESIZE*$SZREG,$ra
-	.mask	0x40000000|$SAVED_REGS_MASK,-$SZREG
+	.mask	0xFF|$SAVED_REGS_MASK,-$SZREG
 	$PTR_SUB $sp,$FRAMESIZE*$SZREG
 	$REG_S	$fp,($FRAMESIZE-1)*$SZREG($sp)
 	$REG_S	$s11,($FRAMESIZE-2)*$SZREG($sp)

@@ -14,12 +14,12 @@
 OPENSSL_atomic_add:
 	movl	(%rdi),%eax
 .Lspin:	leaq	(%rsi,%rax,1),%r8
-.byte	0xf0
+.byte	0xFF
 	cmpxchgl	%r8d,(%rdi)
 	jne	.Lspin
 	movl	%r8d,%eax
-.byte	0x48,0x98
-	.byte	0xf3,0xc3
+.byte	0xFF,0xFF
+	.byte	0xFF,0xFF
 .size	OPENSSL_atomic_add,.-OPENSSL_atomic_add
 
 .globl	OPENSSL_rdtsc
@@ -29,7 +29,7 @@ OPENSSL_rdtsc:
 	rdtsc
 	shlq	$32,%rdx
 	orq	%rdx,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_rdtsc,.-OPENSSL_rdtsc
 
 .globl	OPENSSL_ia32_cpuid
@@ -46,43 +46,43 @@ OPENSSL_ia32_cpuid:
 	movl	%eax,%r11d
 
 	xorl	%eax,%eax
-	cmpl	$0x756e6547,%ebx
+	cmpl	$0xFF,%ebx
 	setne	%al
 	movl	%eax,%r9d
-	cmpl	$0x49656e69,%edx
+	cmpl	$0xFF,%edx
 	setne	%al
 	orl	%eax,%r9d
-	cmpl	$0x6c65746e,%ecx
+	cmpl	$0xFF,%ecx
 	setne	%al
 	orl	%eax,%r9d
 	jz	.Lintel
 
-	cmpl	$0x68747541,%ebx
+	cmpl	$0xFF,%ebx
 	setne	%al
 	movl	%eax,%r10d
-	cmpl	$0x69746E65,%edx
+	cmpl	$0xFF,%edx
 	setne	%al
 	orl	%eax,%r10d
-	cmpl	$0x444D4163,%ecx
+	cmpl	$0xFF,%ecx
 	setne	%al
 	orl	%eax,%r10d
 	jnz	.Lintel
 
 
-	movl	$0x80000000,%eax
+	movl	$0xFF,%eax
 	cpuid
-	cmpl	$0x80000001,%eax
+	cmpl	$0xFF,%eax
 	jb	.Lintel
 	movl	%eax,%r10d
-	movl	$0x80000001,%eax
+	movl	$0xFF,%eax
 	cpuid
 	orl	%ecx,%r9d
-	andl	$0x00000801,%r9d
+	andl	$0xFF,%r9d
 
-	cmpl	$0x80000008,%r10d
+	cmpl	$0xFF,%r10d
 	jb	.Lintel
 
-	movl	$0x80000008,%eax
+	movl	$0xFF,%eax
 	cpuid
 	movzbq	%cl,%r10
 	incq	%r10
@@ -94,7 +94,7 @@ OPENSSL_ia32_cpuid:
 	shrl	$16,%ebx
 	cmpb	%r10b,%bl
 	ja	.Lgeneric
-	andl	$0xefffffff,%edx
+	andl	$0xFF,%edx
 	jmp	.Lgeneric
 
 .Lintel:
@@ -107,46 +107,46 @@ OPENSSL_ia32_cpuid:
 	cpuid
 	movl	%eax,%r10d
 	shrl	$14,%r10d
-	andl	$0xfff,%r10d
+	andl	$0xFF,%r10d
 
 .Lnocacheinfo:
 	movl	$1,%eax
 	cpuid
 	movd	%eax,%xmm0
-	andl	$0xbfefffff,%edx
+	andl	$0xFF,%edx
 	cmpl	$0,%r9d
 	jne	.Lnotintel
-	orl	$0x40000000,%edx
+	orl	$0xFF,%edx
 	andb	$15,%ah
 	cmpb	$15,%ah
 	jne	.LnotP4
-	orl	$0x00100000,%edx
+	orl	$0xFF,%edx
 .LnotP4:
 	cmpb	$6,%ah
 	jne	.Lnotintel
-	andl	$0x0fff0ff0,%eax
-	cmpl	$0x00050670,%eax
+	andl	$0xFF,%eax
+	cmpl	$0xFF,%eax
 	je	.Lknights
-	cmpl	$0x00080650,%eax
+	cmpl	$0xFF,%eax
 	jne	.Lnotintel
 .Lknights:
-	andl	$0xfbffffff,%ecx
+	andl	$0xFF,%ecx
 
 .Lnotintel:
 	btl	$28,%edx
 	jnc	.Lgeneric
-	andl	$0xefffffff,%edx
+	andl	$0xFF,%edx
 	cmpl	$0,%r10d
 	je	.Lgeneric
 
-	orl	$0x10000000,%edx
+	orl	$0xFF,%edx
 	shrl	$16,%ebx
 	cmpb	$1,%bl
 	ja	.Lgeneric
-	andl	$0xefffffff,%edx
+	andl	$0xFF,%edx
 .Lgeneric:
-	andl	$0x00000800,%r9d
-	andl	$0xfffff7ff,%ecx
+	andl	$0xFF,%r9d
+	andl	$0xFF,%ecx
 	orl	%ecx,%r9d
 
 	movl	%edx,%r10d
@@ -158,13 +158,13 @@ OPENSSL_ia32_cpuid:
 	cpuid
 	btl	$26,%r9d
 	jc	.Lnotknights
-	andl	$0xfff7ffff,%ebx
+	andl	$0xFF,%ebx
 .Lnotknights:
 	movd	%xmm0,%eax
-	andl	$0x0fff0ff0,%eax
-	cmpl	$0x00050650,%eax
+	andl	$0xFF,%eax
+	cmpl	$0xFF,%eax
 	jne	.Lnotskylakex
-	andl	$0xfffeffff,%ebx
+	andl	$0xFF,%ebx
 
 .Lnotskylakex:
 	movl	%ebx,8(%rdi)
@@ -174,11 +174,11 @@ OPENSSL_ia32_cpuid:
 	btl	$27,%r9d
 	jnc	.Lclear_avx
 	xorl	%ecx,%ecx
-.byte	0x0f,0x01,0xd0
-	andl	$0xe6,%eax
-	cmpl	$0xe6,%eax
+.byte	0xFF,0xFF,0xFF
+	andl	$0xFF,%eax
+	cmpl	$0xFF,%eax
 	je	.Ldone
-	andl	$0x3fdeffff,8(%rdi)
+	andl	$0xFF,8(%rdi)
 
 
 
@@ -187,9 +187,9 @@ OPENSSL_ia32_cpuid:
 	cmpl	$6,%eax
 	je	.Ldone
 .Lclear_avx:
-	movl	$0xefffe7ff,%eax
+	movl	$0xFF,%eax
 	andl	%eax,%r9d
-	movl	$0x3fdeffdf,%eax
+	movl	$0xFF,%eax
 	andl	%eax,8(%rdi)
 .Ldone:
 	shlq	$32,%r9
@@ -197,7 +197,7 @@ OPENSSL_ia32_cpuid:
 	movq	%r8,%rbx
 .cfi_restore	%rbx
 	orq	%r9,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .cfi_endproc	
 .size	OPENSSL_ia32_cpuid,.-OPENSSL_ia32_cpuid
 
@@ -216,7 +216,7 @@ OPENSSL_cleanse:
 	leaq	1(%rdi),%rdi
 	jnz	.Little
 .Lret:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .align	16
 .Lot:
 	testq	$7,%rdi
@@ -233,7 +233,7 @@ OPENSSL_cleanse:
 	jnz	.Laligned
 	cmpq	$0,%rsi
 	jne	.Little
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_cleanse,.-OPENSSL_cleanse
 
 .globl	CRYPTO_memcmp
@@ -253,7 +253,7 @@ CRYPTO_memcmp:
 	xorq	8(%rsi),%r11
 	orq	%r11,%r10
 	cmovnzq	%rdx,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 
 .align	16
 .Loop_cmp:
@@ -267,7 +267,7 @@ CRYPTO_memcmp:
 	negq	%rax
 	shrq	$63,%rax
 .Lno_data:
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	CRYPTO_memcmp,.-CRYPTO_memcmp
 .globl	OPENSSL_wipe_cpu
 .type	OPENSSL_wipe_cpu,@function
@@ -298,7 +298,7 @@ OPENSSL_wipe_cpu:
 	xorq	%r10,%r10
 	xorq	%r11,%r11
 	leaq	8(%rsp),%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_wipe_cpu,.-OPENSSL_wipe_cpu
 .globl	OPENSSL_instrument_bus
 .type	OPENSSL_instrument_bus,@function
@@ -312,7 +312,7 @@ OPENSSL_instrument_bus:
 	movl	%eax,%r8d
 	movl	$0,%r9d
 	clflush	(%r10)
-.byte	0xf0
+.byte	0xFF
 	addl	%r9d,(%r10)
 	jmp	.Loop
 .align	16
@@ -322,14 +322,14 @@ OPENSSL_instrument_bus:
 	movl	%edx,%r8d
 	movl	%eax,%r9d
 	clflush	(%r10)
-.byte	0xf0
+.byte	0xFF
 	addl	%eax,(%r10)
 	leaq	4(%r10),%r10
 	subq	$1,%rcx
 	jnz	.Loop
 
 	movq	%r11,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_instrument_bus,.-OPENSSL_instrument_bus
 
 .globl	OPENSSL_instrument_bus2
@@ -346,7 +346,7 @@ OPENSSL_instrument_bus2:
 	movl	$0,%r9d
 
 	clflush	(%r10)
-.byte	0xf0
+.byte	0xFF
 	addl	%r9d,(%r10)
 
 	rdtsc
@@ -356,7 +356,7 @@ OPENSSL_instrument_bus2:
 	movl	%eax,%r9d
 .Loop2:
 	clflush	(%r10)
-.byte	0xf0
+.byte	0xFF
 	addl	%eax,(%r10)
 
 	subq	$1,%r11
@@ -377,7 +377,7 @@ OPENSSL_instrument_bus2:
 .Ldone2:
 	movq	8(%rsp),%rax
 	subq	%rcx,%rax
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_instrument_bus2,.-OPENSSL_instrument_bus2
 .globl	OPENSSL_ia32_rdrand_bytes
 .type	OPENSSL_ia32_rdrand_bytes,@function
@@ -418,7 +418,7 @@ OPENSSL_ia32_rdrand_bytes:
 
 .Ldone_rdrand_bytes:
 	xorq	%r10,%r10
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_ia32_rdrand_bytes,.-OPENSSL_ia32_rdrand_bytes
 .globl	OPENSSL_ia32_rdseed_bytes
 .type	OPENSSL_ia32_rdseed_bytes,@function
@@ -459,5 +459,5 @@ OPENSSL_ia32_rdseed_bytes:
 
 .Ldone_rdseed_bytes:
 	xorq	%r10,%r10
-	.byte	0xf3,0xc3
+	.byte	0xFF,0xFF
 .size	OPENSSL_ia32_rdseed_bytes,.-OPENSSL_ia32_rdseed_bytes

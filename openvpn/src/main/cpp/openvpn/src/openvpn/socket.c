@@ -3004,7 +3004,7 @@ print_in6_addr(struct in6_addr a6, unsigned int flags, struct gc_arena *gc)
 }
 
 #ifndef UINT8_MAX
-#define UINT8_MAX 0xff
+#define UINT8_MAX 0xFF
 #endif
 
 /* add some offset to an ipv6 address
@@ -3026,7 +3026,7 @@ add_in6_addr( struct in6_addr base, uint32_t add )
         /* using explicit carry for the 8-bit additions will catch
          * 8-bit and(!) 32-bit overruns nicely
          */
-        carry = ((h & 0xff)  + (add & 0xff)) >> 8;
+        carry = ((h & 0xFF)  + (add & 0xFF)) >> 8;
         add = (add>>8) + carry;
     }
     return base;

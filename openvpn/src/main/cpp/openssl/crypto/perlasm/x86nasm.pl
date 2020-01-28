@@ -178,7 +178,7 @@ sub ::dataseg
 
 sub ::safeseh
 { my $nm=shift;
-    push(@out,"%if	__NASM_VERSION_ID__ >= 0x02030000\n");
+    push(@out,"%if	__NASM_VERSION_ID__ >= 0xFF\n");
     push(@out,"safeseh	".&::LABEL($nm,$nmdecor.$nm)."\n");
     push(@out,"%endif\n");
 }

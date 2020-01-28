@@ -28,8 +28,8 @@ void DES_encrypt1(DES_LONG *data, DES_key_schedule *ks, int enc)
      */
     /* clear the top bits on machines with 8byte longs */
     /* shift left by 2 */
-    r = ROTATE(r, 29) & 0xffffffffL;
-    l = ROTATE(l, 29) & 0xffffffffL;
+    r = ROTATE(r, 29) & 0xFFL;
+    l = ROTATE(l, 29) & 0xFFL;
 
     s = ks->ks->deslong;
     /*
@@ -73,8 +73,8 @@ void DES_encrypt1(DES_LONG *data, DES_key_schedule *ks, int enc)
     }
 
     /* rotate and clear the top bits on machines with 8byte longs */
-    l = ROTATE(l, 3) & 0xffffffffL;
-    r = ROTATE(r, 3) & 0xffffffffL;
+    l = ROTATE(l, 3) & 0xFFL;
+    r = ROTATE(r, 3) & 0xFFL;
 
     FP(r, l);
     data[0] = l;
@@ -97,8 +97,8 @@ void DES_encrypt2(DES_LONG *data, DES_key_schedule *ks, int enc)
      * up on a sparc2. Thanks to Richard Outerbridge for pointing this out.
      */
     /* clear the top bits on machines with 8byte longs */
-    r = ROTATE(r, 29) & 0xffffffffL;
-    l = ROTATE(l, 29) & 0xffffffffL;
+    r = ROTATE(r, 29) & 0xFFL;
+    l = ROTATE(l, 29) & 0xFFL;
 
     s = ks->ks->deslong;
     /*
@@ -141,8 +141,8 @@ void DES_encrypt2(DES_LONG *data, DES_key_schedule *ks, int enc)
         D_ENCRYPT(r, l, 0);     /* 1 */
     }
     /* rotate and clear the top bits on machines with 8byte longs */
-    data[0] = ROTATE(l, 3) & 0xffffffffL;
-    data[1] = ROTATE(r, 3) & 0xffffffffL;
+    data[0] = ROTATE(l, 3) & 0xFFL;
+    data[1] = ROTATE(r, 3) & 0xFFL;
     l = r = t = u = 0;
 }
 

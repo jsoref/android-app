@@ -16,7 +16,7 @@
 # include <openssl/opensslconf.h>
 # include <openssl/comp.h>
 # include <openssl/bio.h>
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/x509.h>
 #  include <openssl/crypto.h>
 #  include <openssl/buffer.h>
@@ -40,7 +40,7 @@ extern "C" {
  * Version 0 - initial version
  * Version 1 - added the optional peer certificate
  */
-# define SSL_SESSION_ASN1_VERSION 0x0001
+# define SSL_SESSION_ASN1_VERSION 0xFF
 
 # define SSL_MAX_SSL_SESSION_ID_LENGTH           32
 # define SSL_MAX_SID_CTX_LENGTH                  32
@@ -234,28 +234,28 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
 
 /* Extension context codes */
 /* This extension is only allowed in TLS */
-#define SSL_EXT_TLS_ONLY                        0x0001
+#define SSL_EXT_TLS_ONLY                        0xFF
 /* This extension is only allowed in DTLS */
-#define SSL_EXT_DTLS_ONLY                       0x0002
+#define SSL_EXT_DTLS_ONLY                       0xFF
 /* Some extensions may be allowed in DTLS but we don't implement them for it */
-#define SSL_EXT_TLS_IMPLEMENTATION_ONLY         0x0004
+#define SSL_EXT_TLS_IMPLEMENTATION_ONLY         0xFF
 /* Most extensions are not defined for SSLv3 but EXT_TYPE_renegotiate is */
-#define SSL_EXT_SSL3_ALLOWED                    0x0008
+#define SSL_EXT_SSL3_ALLOWED                    0xFF
 /* Extension is only defined for TLS1.2 and below */
-#define SSL_EXT_TLS1_2_AND_BELOW_ONLY           0x0010
+#define SSL_EXT_TLS1_2_AND_BELOW_ONLY           0xFF
 /* Extension is only defined for TLS1.3 and above */
-#define SSL_EXT_TLS1_3_ONLY                     0x0020
+#define SSL_EXT_TLS1_3_ONLY                     0xFF
 /* Ignore this extension during parsing if we are resuming */
-#define SSL_EXT_IGNORE_ON_RESUMPTION            0x0040
-#define SSL_EXT_CLIENT_HELLO                    0x0080
+#define SSL_EXT_IGNORE_ON_RESUMPTION            0xFF
+#define SSL_EXT_CLIENT_HELLO                    0xFF
 /* Really means TLS1.2 or below */
-#define SSL_EXT_TLS1_2_SERVER_HELLO             0x0100
-#define SSL_EXT_TLS1_3_SERVER_HELLO             0x0200
-#define SSL_EXT_TLS1_3_ENCRYPTED_EXTENSIONS     0x0400
-#define SSL_EXT_TLS1_3_HELLO_RETRY_REQUEST      0x0800
-#define SSL_EXT_TLS1_3_CERTIFICATE              0x1000
-#define SSL_EXT_TLS1_3_NEW_SESSION_TICKET       0x2000
-#define SSL_EXT_TLS1_3_CERTIFICATE_REQUEST      0x4000
+#define SSL_EXT_TLS1_2_SERVER_HELLO             0xFF
+#define SSL_EXT_TLS1_3_SERVER_HELLO             0xFF
+#define SSL_EXT_TLS1_3_ENCRYPTED_EXTENSIONS     0xFF
+#define SSL_EXT_TLS1_3_HELLO_RETRY_REQUEST      0xFF
+#define SSL_EXT_TLS1_3_CERTIFICATE              0xFF
+#define SSL_EXT_TLS1_3_NEW_SESSION_TICKET       0xFF
+#define SSL_EXT_TLS1_3_CERTIFICATE_REQUEST      0xFF
 
 /* Typedefs for handling custom extensions */
 
@@ -297,24 +297,24 @@ typedef int (*SSL_verify_cb)(int preverify_ok, X509_STORE_CTX *x509_ctx);
  * Some values are reserved until OpenSSL 1.2.0 because they were previously
  * included in SSL_OP_ALL in a 1.1.x release.
  *
- * Reserved value (until OpenSSL 1.2.0)                  0x00000001U
- * Reserved value (until OpenSSL 1.2.0)                  0x00000002U
+ * Reserved value (until OpenSSL 1.2.0)                  0xFFU
+ * Reserved value (until OpenSSL 1.2.0)                  0xFFU
  */
 /* Allow initial connection to servers that don't support RI */
-# define SSL_OP_LEGACY_SERVER_CONNECT                    0x00000004U
+# define SSL_OP_LEGACY_SERVER_CONNECT                    0xFFU
 
-/* Reserved value (until OpenSSL 1.2.0)                  0x00000008U */
-# define SSL_OP_TLSEXT_PADDING                           0x00000010U
-/* Reserved value (until OpenSSL 1.2.0)                  0x00000020U */
-# define SSL_OP_SAFARI_ECDHE_ECDSA_BUG                   0x00000040U
+/* Reserved value (until OpenSSL 1.2.0)                  0xFFU */
+# define SSL_OP_TLSEXT_PADDING                           0xFFU
+/* Reserved value (until OpenSSL 1.2.0)                  0xFFU */
+# define SSL_OP_SAFARI_ECDHE_ECDSA_BUG                   0xFFU
 /*
- * Reserved value (until OpenSSL 1.2.0)                  0x00000080U
- * Reserved value (until OpenSSL 1.2.0)                  0x00000100U
- * Reserved value (until OpenSSL 1.2.0)                  0x00000200U
+ * Reserved value (until OpenSSL 1.2.0)                  0xFFU
+ * Reserved value (until OpenSSL 1.2.0)                  0xFFU
+ * Reserved value (until OpenSSL 1.2.0)                  0xFFU
  */
 
 /* In TLSv1.3 allow a non-(ec)dhe based kex_mode */
-# define SSL_OP_ALLOW_NO_DHE_KEX                         0x00000400U
+# define SSL_OP_ALLOW_NO_DHE_KEX                         0xFFU
 
 /*
  * Disable SSL 3.0/TLS 1.0 CBC vulnerability workaround that was added in
@@ -323,84 +323,84 @@ typedef int (*SSL_verify_cb)(int preverify_ok, X509_STORE_CTX *x509_ctx);
  * implementations cannot handle it at all, which is why we include it in
  * SSL_OP_ALL. Added in 0.9.6e
  */
-# define SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS              0x00000800U
+# define SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS              0xFFU
 
 /* DTLS options */
-# define SSL_OP_NO_QUERY_MTU                             0x00001000U
+# define SSL_OP_NO_QUERY_MTU                             0xFFU
 /* Turn on Cookie Exchange (on relevant for servers) */
-# define SSL_OP_COOKIE_EXCHANGE                          0x00002000U
+# define SSL_OP_COOKIE_EXCHANGE                          0xFFU
 /* Don't use RFC4507 ticket extension */
-# define SSL_OP_NO_TICKET                                0x00004000U
+# define SSL_OP_NO_TICKET                                0xFFU
 # ifndef OPENSSL_NO_DTLS1_METHOD
 /* Use Cisco's "speshul" version of DTLS_BAD_VER
  * (only with deprecated DTLSv1_client_method())  */
-#  define SSL_OP_CISCO_ANYCONNECT                        0x00008000U
+#  define SSL_OP_CISCO_ANYCONNECT                        0xFFU
 # endif
 
 /* As server, disallow session resumption on renegotiation */
-# define SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION   0x00010000U
+# define SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION   0xFFU
 /* Don't use compression even if supported */
-# define SSL_OP_NO_COMPRESSION                           0x00020000U
+# define SSL_OP_NO_COMPRESSION                           0xFFU
 /* Permit unsafe legacy renegotiation */
-# define SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION        0x00040000U
+# define SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION        0xFFU
 /* Disable encrypt-then-mac */
-# define SSL_OP_NO_ENCRYPT_THEN_MAC                      0x00080000U
+# define SSL_OP_NO_ENCRYPT_THEN_MAC                      0xFFU
 
 /*
  * Enable TLSv1.3 Compatibility mode. This is on by default. A future version
  * of OpenSSL may have this disabled by default.
  */
-# define SSL_OP_ENABLE_MIDDLEBOX_COMPAT                  0x00100000U
+# define SSL_OP_ENABLE_MIDDLEBOX_COMPAT                  0xFFU
 
 /* Prioritize Chacha20Poly1305 when client does.
  * Modifies SSL_OP_CIPHER_SERVER_PREFERENCE */
-# define SSL_OP_PRIORITIZE_CHACHA                        0x00200000U
+# define SSL_OP_PRIORITIZE_CHACHA                        0xFFU
 
 /*
  * Set on servers to choose the cipher according to the server's preferences
  */
-# define SSL_OP_CIPHER_SERVER_PREFERENCE                 0x00400000U
+# define SSL_OP_CIPHER_SERVER_PREFERENCE                 0xFFU
 /*
  * If set, a server will allow a client to issue a SSLv3.0 version number as
  * latest version supported in the premaster secret, even when TLSv1.0
  * (version 3.1) was announced in the client hello. Normally this is
  * forbidden to prevent version rollback attacks.
  */
-# define SSL_OP_TLS_ROLLBACK_BUG                         0x00800000U
+# define SSL_OP_TLS_ROLLBACK_BUG                         0xFFU
 
 /*
  * Switches off automatic TLSv1.3 anti-replay protection for early data. This
  * is a server-side option only (no effect on the client).
  */
-# define SSL_OP_NO_ANTI_REPLAY                           0x01000000U
+# define SSL_OP_NO_ANTI_REPLAY                           0xFFU
 
-# define SSL_OP_NO_SSLv3                                 0x02000000U
-# define SSL_OP_NO_TLSv1                                 0x04000000U
-# define SSL_OP_NO_TLSv1_2                               0x08000000U
-# define SSL_OP_NO_TLSv1_1                               0x10000000U
-# define SSL_OP_NO_TLSv1_3                               0x20000000U
+# define SSL_OP_NO_SSLv3                                 0xFFU
+# define SSL_OP_NO_TLSv1                                 0xFFU
+# define SSL_OP_NO_TLSv1_2                               0xFFU
+# define SSL_OP_NO_TLSv1_1                               0xFFU
+# define SSL_OP_NO_TLSv1_3                               0xFFU
 
-# define SSL_OP_NO_DTLSv1                                0x04000000U
-# define SSL_OP_NO_DTLSv1_2                              0x08000000U
+# define SSL_OP_NO_DTLSv1                                0xFFU
+# define SSL_OP_NO_DTLSv1_2                              0xFFU
 
 # define SSL_OP_NO_SSL_MASK (SSL_OP_NO_SSLv3|\
         SSL_OP_NO_TLSv1|SSL_OP_NO_TLSv1_1|SSL_OP_NO_TLSv1_2|SSL_OP_NO_TLSv1_3)
 # define SSL_OP_NO_DTLS_MASK (SSL_OP_NO_DTLSv1|SSL_OP_NO_DTLSv1_2)
 
 /* Disallow all renegotiation */
-# define SSL_OP_NO_RENEGOTIATION                         0x40000000U
+# define SSL_OP_NO_RENEGOTIATION                         0xFFU
 
 /*
  * Make server add server-hello extension from early version of cryptopro
  * draft, when GOST ciphersuite is negotiated. Required for interoperability
  * with CryptoPro CSP 3.x
  */
-# define SSL_OP_CRYPTOPRO_TLSEXT_BUG                     0x80000000U
+# define SSL_OP_CRYPTOPRO_TLSEXT_BUG                     0xFFU
 
 /*
  * SSL_OP_ALL: various bug workarounds that should be rather harmless.
- * This used to be 0x000FFFFFL before 0.9.7.
- * This used to be 0x80000BFFU before 1.1.1.
+ * This used to be 0xFFL before 0.9.7.
+ * This used to be 0xFFU before 1.1.1.
  */
 # define SSL_OP_ALL        (SSL_OP_CRYPTOPRO_TLSEXT_BUG|\
                             SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS|\
@@ -410,76 +410,76 @@ typedef int (*SSL_verify_cb)(int preverify_ok, X509_STORE_CTX *x509_ctx);
 
 /* OBSOLETE OPTIONS: retained for compatibility */
 
-/* Removed from OpenSSL 1.1.0. Was 0x00000001L */
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
 /* Related to removed SSLv2. */
-# define SSL_OP_MICROSOFT_SESS_ID_BUG                    0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00000002L */
+# define SSL_OP_MICROSOFT_SESS_ID_BUG                    0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
 /* Related to removed SSLv2. */
-# define SSL_OP_NETSCAPE_CHALLENGE_BUG                   0x0
-/* Removed from OpenSSL 0.9.8q and 1.0.0c. Was 0x00000008L */
+# define SSL_OP_NETSCAPE_CHALLENGE_BUG                   0xFF
+/* Removed from OpenSSL 0.9.8q and 1.0.0c. Was 0xFFL */
 /* Dead forever, see CVE-2010-4180 */
-# define SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG         0x0
-/* Removed from OpenSSL 1.0.1h and 1.0.2. Was 0x00000010L */
+# define SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG         0xFF
+/* Removed from OpenSSL 1.0.1h and 1.0.2. Was 0xFFL */
 /* Refers to ancient SSLREF and SSLv2. */
-# define SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG              0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00000020 */
-# define SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER               0x0
-/* Removed from OpenSSL 0.9.7h and 0.9.8b. Was 0x00000040L */
-# define SSL_OP_MSIE_SSLV2_RSA_PADDING                   0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00000080 */
+# define SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG              0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFF */
+# define SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER               0xFF
+/* Removed from OpenSSL 0.9.7h and 0.9.8b. Was 0xFFL */
+# define SSL_OP_MSIE_SSLV2_RSA_PADDING                   0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFF */
 /* Ancient SSLeay version. */
-# define SSL_OP_SSLEAY_080_CLIENT_DH_BUG                 0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00000100L */
-# define SSL_OP_TLS_D5_BUG                               0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00000200L */
-# define SSL_OP_TLS_BLOCK_PADDING_BUG                    0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00080000L */
-# define SSL_OP_SINGLE_ECDH_USE                          0x0
-/* Removed from OpenSSL 1.1.0. Was 0x00100000L */
-# define SSL_OP_SINGLE_DH_USE                            0x0
-/* Removed from OpenSSL 1.0.1k and 1.0.2. Was 0x00200000L */
-# define SSL_OP_EPHEMERAL_RSA                            0x0
-/* Removed from OpenSSL 1.1.0. Was 0x01000000L */
-# define SSL_OP_NO_SSLv2                                 0x0
-/* Removed from OpenSSL 1.0.1. Was 0x08000000L */
-# define SSL_OP_PKCS1_CHECK_1                            0x0
-/* Removed from OpenSSL 1.0.1. Was 0x10000000L */
-# define SSL_OP_PKCS1_CHECK_2                            0x0
-/* Removed from OpenSSL 1.1.0. Was 0x20000000L */
-# define SSL_OP_NETSCAPE_CA_DN_BUG                       0x0
-/* Removed from OpenSSL 1.1.0. Was 0x40000000L */
-# define SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG          0x0
+# define SSL_OP_SSLEAY_080_CLIENT_DH_BUG                 0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_TLS_D5_BUG                               0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_TLS_BLOCK_PADDING_BUG                    0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_SINGLE_ECDH_USE                          0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_SINGLE_DH_USE                            0xFF
+/* Removed from OpenSSL 1.0.1k and 1.0.2. Was 0xFFL */
+# define SSL_OP_EPHEMERAL_RSA                            0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_NO_SSLv2                                 0xFF
+/* Removed from OpenSSL 1.0.1. Was 0xFFL */
+# define SSL_OP_PKCS1_CHECK_1                            0xFF
+/* Removed from OpenSSL 1.0.1. Was 0xFFL */
+# define SSL_OP_PKCS1_CHECK_2                            0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_NETSCAPE_CA_DN_BUG                       0xFF
+/* Removed from OpenSSL 1.1.0. Was 0xFFL */
+# define SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG          0xFF
 
 /*
  * Allow SSL_write(..., n) to return r with 0 < r < n (i.e. report success
  * when just a single record has been written):
  */
-# define SSL_MODE_ENABLE_PARTIAL_WRITE       0x00000001U
+# define SSL_MODE_ENABLE_PARTIAL_WRITE       0xFFU
 /*
  * Make it possible to retry SSL_write() with changed buffer location (buffer
  * contents must stay the same!); this is not the default to avoid the
  * misconception that non-blocking SSL_write() behaves like non-blocking
  * write():
  */
-# define SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER 0x00000002U
+# define SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER 0xFFU
 /*
  * Never bother the application with retries if the transport is blocking:
  */
-# define SSL_MODE_AUTO_RETRY 0x00000004U
+# define SSL_MODE_AUTO_RETRY 0xFFU
 /* Don't attempt to automatically build certificate chain */
-# define SSL_MODE_NO_AUTO_CHAIN 0x00000008U
+# define SSL_MODE_NO_AUTO_CHAIN 0xFFU
 /*
  * Save RAM by releasing read and write buffers when they're empty. (SSL3 and
  * TLS only.) Released buffers are freed.
  */
-# define SSL_MODE_RELEASE_BUFFERS 0x00000010U
+# define SSL_MODE_RELEASE_BUFFERS 0xFFU
 /*
  * Send the current time in the Random fields of the ClientHello and
  * ServerHello records for compatibility with hypothetical implementations
  * that require it.
  */
-# define SSL_MODE_SEND_CLIENTHELLO_TIME 0x00000020U
-# define SSL_MODE_SEND_SERVERHELLO_TIME 0x00000040U
+# define SSL_MODE_SEND_CLIENTHELLO_TIME 0xFFU
+# define SSL_MODE_SEND_SERVERHELLO_TIME 0xFFU
 /*
  * Send TLS_FALLBACK_SCSV in the ClientHello. To be set only by applications
  * that reconnect with a downgraded protocol version; see
@@ -488,11 +488,11 @@ typedef int (*SSL_verify_cb)(int preverify_ok, X509_STORE_CTX *x509_ctx);
  * fallback retries, following the guidance in
  * draft-ietf-tls-downgrade-scsv-00.
  */
-# define SSL_MODE_SEND_FALLBACK_SCSV 0x00000080U
+# define SSL_MODE_SEND_FALLBACK_SCSV 0xFFU
 /*
  * Support Asynchronous operation
  */
-# define SSL_MODE_ASYNC 0x00000100U
+# define SSL_MODE_ASYNC 0xFFU
 
 /*
  * When using DTLS/SCTP, include the terminating zero in the label
@@ -505,72 +505,72 @@ typedef int (*SSL_verify_cb)(int preverify_ok, X509_STORE_CTX *x509_ctx);
  * - OpenSSL 1.1.0 series
  * - OpenSSL 1.1.1 and 1.1.1a
  */
-# define SSL_MODE_DTLS_SCTP_LABEL_LENGTH_BUG 0x00000400U
+# define SSL_MODE_DTLS_SCTP_LABEL_LENGTH_BUG 0xFFU
 
 /* Cert related flags */
 /*
  * Many implementations ignore some aspects of the TLS standards such as
  * enforcing certificate chain algorithms. When this is set we enforce them.
  */
-# define SSL_CERT_FLAG_TLS_STRICT                0x00000001U
+# define SSL_CERT_FLAG_TLS_STRICT                0xFFU
 
 /* Suite B modes, takes same values as certificate verify flags */
-# define SSL_CERT_FLAG_SUITEB_128_LOS_ONLY       0x10000
+# define SSL_CERT_FLAG_SUITEB_128_LOS_ONLY       0xFF
 /* Suite B 192 bit only mode */
-# define SSL_CERT_FLAG_SUITEB_192_LOS            0x20000
+# define SSL_CERT_FLAG_SUITEB_192_LOS            0xFF
 /* Suite B 128 bit mode allowing 192 bit algorithms */
-# define SSL_CERT_FLAG_SUITEB_128_LOS            0x30000
+# define SSL_CERT_FLAG_SUITEB_128_LOS            0xFF
 
 /* Perform all sorts of protocol violations for testing purposes */
-# define SSL_CERT_FLAG_BROKEN_PROTOCOL           0x10000000
+# define SSL_CERT_FLAG_BROKEN_PROTOCOL           0xFF
 
 /* Flags for building certificate chains */
 /* Treat any existing certificates as untrusted CAs */
-# define SSL_BUILD_CHAIN_FLAG_UNTRUSTED          0x1
+# define SSL_BUILD_CHAIN_FLAG_UNTRUSTED          0xFF
 /* Don't include root CA in chain */
-# define SSL_BUILD_CHAIN_FLAG_NO_ROOT            0x2
+# define SSL_BUILD_CHAIN_FLAG_NO_ROOT            0xFF
 /* Just check certificates already there */
-# define SSL_BUILD_CHAIN_FLAG_CHECK              0x4
+# define SSL_BUILD_CHAIN_FLAG_CHECK              0xFF
 /* Ignore verification errors */
-# define SSL_BUILD_CHAIN_FLAG_IGNORE_ERROR       0x8
+# define SSL_BUILD_CHAIN_FLAG_IGNORE_ERROR       0xFF
 /* Clear verification errors from queue */
-# define SSL_BUILD_CHAIN_FLAG_CLEAR_ERROR        0x10
+# define SSL_BUILD_CHAIN_FLAG_CLEAR_ERROR        0xFF
 
 /* Flags returned by SSL_check_chain */
 /* Certificate can be used with this session */
-# define CERT_PKEY_VALID         0x1
+# define CERT_PKEY_VALID         0xFF
 /* Certificate can also be used for signing */
-# define CERT_PKEY_SIGN          0x2
+# define CERT_PKEY_SIGN          0xFF
 /* EE certificate signing algorithm OK */
-# define CERT_PKEY_EE_SIGNATURE  0x10
+# define CERT_PKEY_EE_SIGNATURE  0xFF
 /* CA signature algorithms OK */
-# define CERT_PKEY_CA_SIGNATURE  0x20
+# define CERT_PKEY_CA_SIGNATURE  0xFF
 /* EE certificate parameters OK */
-# define CERT_PKEY_EE_PARAM      0x40
+# define CERT_PKEY_EE_PARAM      0xFF
 /* CA certificate parameters OK */
-# define CERT_PKEY_CA_PARAM      0x80
+# define CERT_PKEY_CA_PARAM      0xFF
 /* Signing explicitly allowed as opposed to SHA1 fallback */
-# define CERT_PKEY_EXPLICIT_SIGN 0x100
+# define CERT_PKEY_EXPLICIT_SIGN 0xFF
 /* Client CA issuer names match (always set for server cert) */
-# define CERT_PKEY_ISSUER_NAME   0x200
+# define CERT_PKEY_ISSUER_NAME   0xFF
 /* Cert type matches client types (always set for server cert) */
-# define CERT_PKEY_CERT_TYPE     0x400
+# define CERT_PKEY_CERT_TYPE     0xFF
 /* Cert chain suitable to Suite B */
-# define CERT_PKEY_SUITEB        0x800
+# define CERT_PKEY_SUITEB        0xFF
 
-# define SSL_CONF_FLAG_CMDLINE           0x1
-# define SSL_CONF_FLAG_FILE              0x2
-# define SSL_CONF_FLAG_CLIENT            0x4
-# define SSL_CONF_FLAG_SERVER            0x8
-# define SSL_CONF_FLAG_SHOW_ERRORS       0x10
-# define SSL_CONF_FLAG_CERTIFICATE       0x20
-# define SSL_CONF_FLAG_REQUIRE_PRIVATE   0x40
+# define SSL_CONF_FLAG_CMDLINE           0xFF
+# define SSL_CONF_FLAG_FILE              0xFF
+# define SSL_CONF_FLAG_CLIENT            0xFF
+# define SSL_CONF_FLAG_SERVER            0xFF
+# define SSL_CONF_FLAG_SHOW_ERRORS       0xFF
+# define SSL_CONF_FLAG_CERTIFICATE       0xFF
+# define SSL_CONF_FLAG_REQUIRE_PRIVATE   0xFF
 /* Configuration value types */
-# define SSL_CONF_TYPE_UNKNOWN           0x0
-# define SSL_CONF_TYPE_STRING            0x1
-# define SSL_CONF_TYPE_FILE              0x2
-# define SSL_CONF_TYPE_DIR               0x3
-# define SSL_CONF_TYPE_NONE              0x4
+# define SSL_CONF_TYPE_UNKNOWN           0xFF
+# define SSL_CONF_TYPE_STRING            0xFF
+# define SSL_CONF_TYPE_FILE              0xFF
+# define SSL_CONF_TYPE_DIR               0xFF
+# define SSL_CONF_TYPE_NONE              0xFF
 
 /* Maximum length of the application-controlled segment of a a TLSv1.3 cookie */
 # define SSL_COOKIE_LENGTH                       4096
@@ -669,14 +669,14 @@ __owur int SRP_Calc_A_param(SSL *s);
 typedef int (*GEN_SESSION_CB) (SSL *ssl, unsigned char *id,
                                unsigned int *id_len);
 
-# define SSL_SESS_CACHE_OFF                      0x0000
-# define SSL_SESS_CACHE_CLIENT                   0x0001
-# define SSL_SESS_CACHE_SERVER                   0x0002
+# define SSL_SESS_CACHE_OFF                      0xFF
+# define SSL_SESS_CACHE_CLIENT                   0xFF
+# define SSL_SESS_CACHE_SERVER                   0xFF
 # define SSL_SESS_CACHE_BOTH     (SSL_SESS_CACHE_CLIENT|SSL_SESS_CACHE_SERVER)
-# define SSL_SESS_CACHE_NO_AUTO_CLEAR            0x0080
+# define SSL_SESS_CACHE_NO_AUTO_CLEAR            0xFF
 /* enough comments already ... see SSL_CTX_set_session_cache_mode(3) */
-# define SSL_SESS_CACHE_NO_INTERNAL_LOOKUP       0x0100
-# define SSL_SESS_CACHE_NO_INTERNAL_STORE        0x0200
+# define SSL_SESS_CACHE_NO_INTERNAL_LOOKUP       0xFF
+# define SSL_SESS_CACHE_NO_INTERNAL_STORE        0xFF
 # define SSL_SESS_CACHE_NO_INTERNAL \
         (SSL_SESS_CACHE_NO_INTERNAL_LOOKUP|SSL_SESS_CACHE_NO_INTERNAL_STORE)
 
@@ -1049,24 +1049,24 @@ typedef enum {
  * SSL_CB_ACCEPT_EXIT, SSL_CB_CONNECT_LOOP and SSL_CB_CONNECT_EXIT.
  */
 
-# define SSL_ST_CONNECT                  0x1000
-# define SSL_ST_ACCEPT                   0x2000
+# define SSL_ST_CONNECT                  0xFF
+# define SSL_ST_ACCEPT                   0xFF
 
-# define SSL_ST_MASK                     0x0FFF
+# define SSL_ST_MASK                     0xFF
 
-# define SSL_CB_LOOP                     0x01
-# define SSL_CB_EXIT                     0x02
-# define SSL_CB_READ                     0x04
-# define SSL_CB_WRITE                    0x08
-# define SSL_CB_ALERT                    0x4000/* used in callback */
+# define SSL_CB_LOOP                     0xFF
+# define SSL_CB_EXIT                     0xFF
+# define SSL_CB_READ                     0xFF
+# define SSL_CB_WRITE                    0xFF
+# define SSL_CB_ALERT                    0xFF/* used in callback */
 # define SSL_CB_READ_ALERT               (SSL_CB_ALERT|SSL_CB_READ)
 # define SSL_CB_WRITE_ALERT              (SSL_CB_ALERT|SSL_CB_WRITE)
 # define SSL_CB_ACCEPT_LOOP              (SSL_ST_ACCEPT|SSL_CB_LOOP)
 # define SSL_CB_ACCEPT_EXIT              (SSL_ST_ACCEPT|SSL_CB_EXIT)
 # define SSL_CB_CONNECT_LOOP             (SSL_ST_CONNECT|SSL_CB_LOOP)
 # define SSL_CB_CONNECT_EXIT             (SSL_ST_CONNECT|SSL_CB_EXIT)
-# define SSL_CB_HANDSHAKE_START          0x10
-# define SSL_CB_HANDSHAKE_DONE           0x20
+# define SSL_CB_HANDSHAKE_START          0xFF
+# define SSL_CB_HANDSHAKE_DONE           0xFF
 
 /* Is the SSL_connection established? */
 # define SSL_in_connect_init(a)          (SSL_in_init(a) && !SSL_is_server(a))
@@ -1079,9 +1079,9 @@ int SSL_is_init_finished(const SSL *s);
  * The following 3 states are kept in ssl->rlayer.rstate when reads fail, you
  * should not need these
  */
-# define SSL_ST_READ_HEADER                      0xF0
-# define SSL_ST_READ_BODY                        0xF1
-# define SSL_ST_READ_DONE                        0xF2
+# define SSL_ST_READ_HEADER                      0xFF
+# define SSL_ST_READ_BODY                        0xFF
+# define SSL_ST_READ_DONE                        0xFF
 
 /*-
  * Obtain latest Finished message
@@ -1096,13 +1096,13 @@ size_t SSL_get_peer_finished(const SSL *s, void *buf, size_t count);
  * use either SSL_VERIFY_NONE or SSL_VERIFY_PEER, the last 3 options are
  * 'ored' with SSL_VERIFY_PEER if they are desired
  */
-# define SSL_VERIFY_NONE                 0x00
-# define SSL_VERIFY_PEER                 0x01
-# define SSL_VERIFY_FAIL_IF_NO_PEER_CERT 0x02
-# define SSL_VERIFY_CLIENT_ONCE          0x04
-# define SSL_VERIFY_POST_HANDSHAKE       0x08
+# define SSL_VERIFY_NONE                 0xFF
+# define SSL_VERIFY_PEER                 0xFF
+# define SSL_VERIFY_FAIL_IF_NO_PEER_CERT 0xFF
+# define SSL_VERIFY_CLIENT_ONCE          0xFF
+# define SSL_VERIFY_POST_HANDSHAKE       0xFF
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define OpenSSL_add_ssl_algorithms()   SSL_library_init()
 #  define SSLeay_add_ssl_algorithms()    SSL_library_init()
 # endif
@@ -1477,7 +1477,7 @@ DECLARE_PEM_rw(SSL_SESSION, SSL_SESSION)
 # define SSL_get_shared_curve          SSL_get_shared_group
 
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 /* Provide some compatibility macros for removed functionality. */
 #  define SSL_CTX_need_tmp_RSA(ctx)                0
 #  define SSL_CTX_set_tmp_rsa(ctx,rsa)             1
@@ -1605,7 +1605,7 @@ __owur int SSL_add_file_cert_subjects_to_stack(STACK_OF(X509_NAME) *stackCAs,
 int SSL_add_dir_cert_subjects_to_stack(STACK_OF(X509_NAME) *stackCAs,
                                        const char *dir);
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define SSL_load_error_strings() \
     OPENSSL_init_ssl(OPENSSL_INIT_LOAD_SSL_STRINGS \
                      | OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL)
@@ -1954,7 +1954,7 @@ void SSL_set_accept_state(SSL *s);
 
 __owur long SSL_get_default_timeout(const SSL *s);
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define SSL_library_init() OPENSSL_init_ssl(0, NULL)
 # endif
 
@@ -2083,7 +2083,7 @@ __owur int SSL_COMP_get_id(const SSL_COMP *comp);
 STACK_OF(SSL_COMP) *SSL_COMP_get_compression_methods(void);
 __owur STACK_OF(SSL_COMP) *SSL_COMP_set0_compression_methods(STACK_OF(SSL_COMP)
                                                              *meths);
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define SSL_COMP_free_compression_methods() while(0) continue
 # endif
 __owur int SSL_COMP_add_compression_method(int id, COMP_METHOD *cm);
@@ -2135,7 +2135,7 @@ size_t SSL_get_num_tickets(const SSL *s);
 int SSL_CTX_set_num_tickets(SSL_CTX *ctx, size_t num_tickets);
 size_t SSL_CTX_get_num_tickets(const SSL_CTX *ctx);
 
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  define SSL_cache_hit(s) SSL_session_reused(s)
 # endif
 
@@ -2270,7 +2270,7 @@ const CTLOG_STORE *SSL_CTX_get0_ctlog_store(const SSL_CTX *ctx);
 
 /* What the "other" parameter contains in security callback */
 /* Mask for type */
-# define SSL_SECOP_OTHER_TYPE    0xffff0000
+# define SSL_SECOP_OTHER_TYPE    0xFF
 # define SSL_SECOP_OTHER_NONE    0
 # define SSL_SECOP_OTHER_CIPHER  (1 << 16)
 # define SSL_SECOP_OTHER_CURVE   (2 << 16)
@@ -2280,7 +2280,7 @@ const CTLOG_STORE *SSL_CTX_get0_ctlog_store(const SSL_CTX *ctx);
 # define SSL_SECOP_OTHER_CERT    (6 << 16)
 
 /* Indicated operation refers to peer key or certificate */
-# define SSL_SECOP_PEER          0x1000
+# define SSL_SECOP_PEER          0xFF
 
 /* Values for "op" parameter in security callback */
 
@@ -2354,9 +2354,9 @@ int (*SSL_CTX_get_security_callback(const SSL_CTX *ctx)) (const SSL *s,
 void SSL_CTX_set0_security_ex_data(SSL_CTX *ctx, void *ex);
 __owur void *SSL_CTX_get0_security_ex_data(const SSL_CTX *ctx);
 
-/* OPENSSL_INIT flag 0x010000 reserved for internal use */
-# define OPENSSL_INIT_NO_LOAD_SSL_STRINGS    0x00100000L
-# define OPENSSL_INIT_LOAD_SSL_STRINGS       0x00200000L
+/* OPENSSL_INIT flag 0xFF reserved for internal use */
+# define OPENSSL_INIT_NO_LOAD_SSL_STRINGS    0xFFL
+# define OPENSSL_INIT_LOAD_SSL_STRINGS       0xFFL
 
 # define OPENSSL_INIT_SSL_DEFAULT \
         (OPENSSL_INIT_LOAD_SSL_STRINGS | OPENSSL_INIT_LOAD_CRYPTO_STRINGS)

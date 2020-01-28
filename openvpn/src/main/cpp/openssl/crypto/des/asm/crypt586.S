@@ -42,9 +42,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -52,23 +52,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -92,9 +92,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -102,23 +102,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -142,9 +142,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -152,23 +152,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -192,9 +192,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -202,23 +202,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -242,9 +242,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -252,23 +252,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -292,9 +292,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -302,23 +302,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -342,9 +342,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -352,23 +352,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -392,9 +392,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -402,23 +402,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -442,9 +442,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -452,23 +452,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -492,9 +492,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -502,23 +502,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -542,9 +542,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -552,23 +552,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -592,9 +592,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -602,23 +602,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -642,9 +642,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -652,23 +652,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -692,9 +692,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -702,23 +702,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 
@@ -742,9 +742,9 @@ fcrypt_body:
 	xorl	%esi,%eax
 	xorl	%esi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -752,23 +752,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%edi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%edi
 	movl	32(%esp),%ebp
 
@@ -792,9 +792,9 @@ fcrypt_body:
 	xorl	%edi,%eax
 	xorl	%edi,%edx
 	xorl	%ecx,%edx
-	andl	$0xfcfcfcfc,%eax
+	andl	$0xFF,%eax
 	xorl	%ebx,%ebx
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%edx
 	xorl	%ecx,%ecx
 	movb	%al,%bl
 	movb	%ah,%cl
@@ -802,23 +802,23 @@ fcrypt_body:
 	movl	4(%esp),%ebp
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	movl	0x600(%ebp,%ebx,1),%ebx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	movl	0xFF(%ebp,%ebx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x700(%ebp,%ecx,1),%ebx
+	movl	0xFF(%ebp,%ecx,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x400(%ebp,%eax,1),%ebx
+	movl	0xFF(%ebp,%eax,1),%ebx
 	xorl	%ebx,%esi
-	movl	0x500(%ebp,%edx,1),%ebx
+	movl	0xFF(%ebp,%edx,1),%ebx
 	xorl	%ebx,%esi
 	movl	32(%esp),%ebp
 	movl	(%esp),%ebx
@@ -834,35 +834,35 @@ fcrypt_body:
 	rorl	$1,%edi
 	movl	%esi,%eax
 	xorl	%edi,%esi
-	andl	$0xaaaaaaaa,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%eax
 	xorl	%esi,%edi
 
 	roll	$23,%eax
 	movl	%eax,%esi
 	xorl	%edi,%eax
-	andl	$0x03fc03fc,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%esi
 	xorl	%eax,%edi
 
 	roll	$10,%esi
 	movl	%esi,%eax
 	xorl	%edi,%esi
-	andl	$0x33333333,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%eax
 	xorl	%esi,%edi
 
 	roll	$18,%edi
 	movl	%edi,%esi
 	xorl	%eax,%edi
-	andl	$0xfff0000f,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%esi
 	xorl	%edi,%eax
 
 	roll	$12,%esi
 	movl	%esi,%edi
 	xorl	%eax,%esi
-	andl	$0xf0f0f0f0,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%edi
 	xorl	%esi,%eax
 

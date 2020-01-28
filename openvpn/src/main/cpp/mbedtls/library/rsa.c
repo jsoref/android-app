@@ -1345,7 +1345,7 @@ int mbedtls_rsa_rsaes_oaep_decrypt( mbedtls_rsa_context *ctx,
     }
 
     p += pad_len;
-    bad |= *p++ ^ 0x01;
+    bad |= *p++ ^ 0xFF;
 
     /*
      * The only information "leaked" is whether the padding was correct or not
@@ -1564,7 +1564,7 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
     /* Note: EMSA-PSS encoding is over the length of N - 1 bits */
     msb = mbedtls_mpi_bitlen( &ctx->N ) - 1;
     p += olen - hlen * 2 - 2;
-    *p++ = 0x01;
+    *p++ = 0xFF;
     memcpy( p, salt, slen );
     p += slen;
 
@@ -1597,7 +1597,7 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
     sig[0] &= 0xFF >> ( olen * 8 - msb );
 
     p += hlen;
-    *p++ = 0xBC;
+    *p++ = 0xFF;
 
     mbedtls_platform_zeroize( salt, sizeof( salt ) );
 
@@ -1661,7 +1661,7 @@ static int rsa_rsassa_pkcs1_v15_encode( mbedtls_md_type_t md_alg,
 
         /* Double-check that 8 + hashlen + oid_size can be used as a
          * 1-byte ASN.1 length encoding and that there's no overflow. */
-        if( 8 + hashlen + oid_size  >= 0x80         ||
+        if( 8 + hashlen + oid_size  >= 0xFF         ||
             10 + hashlen            <  hashlen      ||
             10 + hashlen + oid_size <  10 + hashlen )
             return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
@@ -1723,15 +1723,15 @@ static int rsa_rsassa_pkcs1_v15_encode( mbedtls_md_type_t md_alg,
      *                 TAG-OCTET + LEN [ HASH ] ]
      */
     *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-    *p++ = (unsigned char)( 0x08 + oid_size + hashlen );
+    *p++ = (unsigned char)( 0xFF + oid_size + hashlen );
     *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-    *p++ = (unsigned char)( 0x04 + oid_size );
+    *p++ = (unsigned char)( 0xFF + oid_size );
     *p++ = MBEDTLS_ASN1_OID;
     *p++ = (unsigned char) oid_size;
     memcpy( p, oid, oid_size );
     p += oid_size;
     *p++ = MBEDTLS_ASN1_NULL;
-    *p++ = 0x00;
+    *p++ = 0xFF;
     *p++ = MBEDTLS_ASN1_OCTET_STRING;
     *p++ = (unsigned char) hashlen;
     memcpy( p, hash, hashlen );
@@ -1895,7 +1895,7 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
 
     p = buf;
 
-    if( buf[siglen - 1] != 0xBC )
+    if( buf[siglen - 1] != 0xFF )
         return( MBEDTLS_ERR_RSA_INVALID_PADDING );
 
     if( md_alg != MBEDTLS_MD_NONE )
@@ -1948,7 +1948,7 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
     while( p < hash_start - 1 && *p == 0 )
         p++;
 
-    if( *p++ != 0x01 )
+    if( *p++ != 0xFF )
     {
         ret = MBEDTLS_ERR_RSA_INVALID_PADDING;
         goto exit;

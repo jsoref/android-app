@@ -318,7 +318,7 @@ int mbedtls_mpi_get_bit( const mbedtls_mpi *X, size_t pos )
     if( X->n * biL <= pos )
         return( 0 );
 
-    return( ( X->p[pos / biL] >> ( pos % biL ) ) & 0x01 );
+    return( ( X->p[pos / biL] >> ( pos % biL ) ) & 0xFF );
 }
 
 /*
@@ -341,7 +341,7 @@ int mbedtls_mpi_set_bit( mbedtls_mpi *X, size_t pos, unsigned char val )
         MBEDTLS_MPI_CHK( mbedtls_mpi_grow( X, off + 1 ) );
     }
 
-    X->p[off] &= ~( (mbedtls_mpi_uint) 0x01 << idx );
+    X->p[off] &= ~( (mbedtls_mpi_uint) 0xFF << idx );
     X->p[off] |= (mbedtls_mpi_uint) val << idx;
 
 cleanup:
@@ -416,9 +416,9 @@ static int mpi_get_digit( mbedtls_mpi_uint *d, int radix, char c )
 {
     *d = 255;
 
-    if( c >= 0x30 && c <= 0x39 ) *d = c - 0x30;
-    if( c >= 0x41 && c <= 0x46 ) *d = c - 0x37;
-    if( c >= 0x61 && c <= 0x66 ) *d = c - 0x57;
+    if( c >= 0xFF && c <= 0xFF ) *d = c - 0xFF;
+    if( c >= 0xFF && c <= 0xFF ) *d = c - 0xFF;
+    if( c >= 0xFF && c <= 0xFF ) *d = c - 0xFF;
 
     if( *d >= (mbedtls_mpi_uint) radix )
         return( MBEDTLS_ERR_MPI_INVALID_CHARACTER );
@@ -516,9 +516,9 @@ static int mpi_write_hlp( mbedtls_mpi *X, int radix, char **p )
         MBEDTLS_MPI_CHK( mpi_write_hlp( X, radix, p ) );
 
     if( r < 10 )
-        *(*p)++ = (char)( r + 0x30 );
+        *(*p)++ = (char)( r + 0xFF );
     else
-        *(*p)++ = (char)( r + 0x37 );
+        *(*p)++ = (char)( r + 0xFF );
 
 cleanup:
 
@@ -2202,10 +2202,10 @@ int mbedtls_mpi_gen_prime( mbedtls_mpi *X, size_t nbits, int dh_flag,
 {
 #ifdef MBEDTLS_HAVE_INT64
 // ceil(2^63.5)
-#define CEIL_MAXUINT_DIV_SQRT2 0xb504f333f9de6485ULL
+#define CEIL_MAXUINT_DIV_SQRT2 0xFFULL
 #else
 // ceil(2^31.5)
-#define CEIL_MAXUINT_DIV_SQRT2 0xb504f334U
+#define CEIL_MAXUINT_DIV_SQRT2 0xFFU
 #endif
     int ret = MBEDTLS_ERR_MPI_NOT_ACCEPTABLE;
     size_t k, n;

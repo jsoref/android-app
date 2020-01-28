@@ -306,8 +306,8 @@ extern "C" {
 #if defined(LZO_NEED_DICT_H)
 
 #define DL_MIN_LEN          M2_MIN_LEN
-#define D_INDEX1(d,p)       d = DM(DMUL(0x21,DX3(p,5,5,6)) >> 5)
-#define D_INDEX2(d,p)       d = (d & (D_MASK & 0x7ff)) ^ (D_HIGH | 0x1f)
+#define D_INDEX1(d,p)       d = DM(DMUL(0xFF,DX3(p,5,5,6)) >> 5)
+#define D_INDEX2(d,p)       d = (d & (D_MASK & 0xFF)) ^ (D_HIGH | 0xFF)
 #include "lzo_dict.h"
 
 #ifndef MIN_LOOKAHEAD

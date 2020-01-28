@@ -11,7 +11,7 @@
 #include "internal/cryptlib.h"
 #include <openssl/asn1t.h>
 
-#if !(OPENSSL_API_COMPAT < 0x10200000L)
+#if !(OPENSSL_API_COMPAT < 0xFFL)
 NON_EMPTY_TRANSLATION_UNIT
 #else
 
@@ -102,7 +102,7 @@ static int long_i2c(ASN1_VALUE **pval, unsigned char *cont, int *putype,
      * set.
      */
     if (ltmp < 0) {
-        sign = 0xff;
+        sign = 0xFF;
         utmp = 0 - (unsigned long)ltmp - 1;
     } else {
         sign = 0;
@@ -110,7 +110,7 @@ static int long_i2c(ASN1_VALUE **pval, unsigned char *cont, int *putype,
     }
     clen = num_bits_ulong(utmp);
     /* If MSB of leading octet set we need to pad */
-    if (!(clen & 0x7))
+    if (!(clen & 0xFF))
         pad = 1;
     else
         pad = 0;
@@ -134,19 +134,19 @@ static int long_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
 {
     int i;
     long ltmp;
-    unsigned long utmp = 0, sign = 0x100;
+    unsigned long utmp = 0, sign = 0xFF;
 
     if (len > 1) {
         /*
          * Check possible pad byte.  Worst case, we're skipping past actual
-         * content, but since that's only with 0x00 and 0xff and we set neg
+         * content, but since that's only with 0xFF and 0xFF and we set neg
          * accordingly, the result will be correct in the end anyway.
          */
         switch (cont[0]) {
-        case 0xff:
+        case 0xFF:
             cont++;
             len--;
-            sign = 0xff;
+            sign = 0xFF;
             break;
         case 0:
             cont++;
@@ -160,13 +160,13 @@ static int long_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
         return 0;
     }
 
-    if (sign == 0x100) {
+    if (sign == 0xFF) {
         /* Is it negative? */
-        if (len && (cont[0] & 0x80))
-            sign = 0xff;
+        if (len && (cont[0] & 0xFF))
+            sign = 0xFF;
         else
             sign = 0;
-    } else if (((sign ^ cont[0]) & 0x80) == 0) { /* same sign bit? */
+    } else if (((sign ^ cont[0]) & 0xFF) == 0) { /* same sign bit? */
         ASN1err(ASN1_F_LONG_C2I, ASN1_R_ILLEGAL_PADDING);
         return 0;
     }

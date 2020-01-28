@@ -90,7 +90,7 @@ for(1..37) {
 	for($i=0;$i<64;$i++) {
 		undef @line;
 		for($j=0;$j<64;$j++) {
-			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xff;
+			push @line,(@tbl[$j*16+$i/4]>>(($i%4)*8))&0xFF;
 		}
 		$code.=".byte\t";
 		$code.=join(',',map { sprintf "0x%02x",$_} @line);
@@ -101,17 +101,17 @@ $code.=<<___;
 .size	ecp_nistz256_precomputed,.-ecp_nistz256_precomputed
 .align	5
 .Lpoly:
-.quad	0xffffffffffffffff,0x00000000ffffffff,0x0000000000000000,0xffffffff00000001
+.quad	0xFF,0xFF,0xFF,0xFF
 .LRR:	// 2^512 mod P precomputed for NIST P256 polynomial
-.quad	0x0000000000000003,0xfffffffbffffffff,0xfffffffffffffffe,0x00000004fffffffd
+.quad	0xFF,0xFF,0xFF,0xFF
 .Lone_mont:
-.quad	0x0000000000000001,0xffffffff00000000,0xffffffffffffffff,0x00000000fffffffe
+.quad	0xFF,0xFF,0xFF,0xFF
 .Lone:
 .quad	1,0,0,0
 .Lord:
-.quad	0xf3b9cac2fc632551,0xbce6faada7179e84,0xffffffffffffffff,0xffffffff00000000
+.quad	0xFF,0xFF,0xFF,0xFF
 .LordK:
-.quad	0xccd1c8aaee00bc4f
+.quad	0xFF
 .asciz	"ECP_NISTZ256 for ARMv8, CRYPTOGAMS by <appro\@openssl.org>"
 
 // void	ecp_nistz256_to_mont(BN_ULONG x0[4],const BN_ULONG x1[4]);
@@ -119,7 +119,7 @@ $code.=<<___;
 .type	ecp_nistz256_to_mont,%function
 .align	6
 ecp_nistz256_to_mont:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-32]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -135,7 +135,7 @@ ecp_nistz256_to_mont:
 
 	ldp	x19,x20,[sp,#16]
 	ldp	x29,x30,[sp],#32
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_to_mont,.-ecp_nistz256_to_mont
 
@@ -144,7 +144,7 @@ ecp_nistz256_to_mont:
 .type	ecp_nistz256_from_mont,%function
 .align	4
 ecp_nistz256_from_mont:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-32]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -160,7 +160,7 @@ ecp_nistz256_from_mont:
 
 	ldp	x19,x20,[sp,#16]
 	ldp	x29,x30,[sp],#32
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_from_mont,.-ecp_nistz256_from_mont
 
@@ -170,7 +170,7 @@ ecp_nistz256_from_mont:
 .type	ecp_nistz256_mul_mont,%function
 .align	4
 ecp_nistz256_mul_mont:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-32]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -185,7 +185,7 @@ ecp_nistz256_mul_mont:
 
 	ldp	x19,x20,[sp,#16]
 	ldp	x29,x30,[sp],#32
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_mul_mont,.-ecp_nistz256_mul_mont
 
@@ -194,7 +194,7 @@ ecp_nistz256_mul_mont:
 .type	ecp_nistz256_sqr_mont,%function
 .align	4
 ecp_nistz256_sqr_mont:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-32]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -208,7 +208,7 @@ ecp_nistz256_sqr_mont:
 
 	ldp	x19,x20,[sp,#16]
 	ldp	x29,x30,[sp],#32
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_sqr_mont,.-ecp_nistz256_sqr_mont
 
@@ -218,7 +218,7 @@ ecp_nistz256_sqr_mont:
 .type	ecp_nistz256_add,%function
 .align	4
 ecp_nistz256_add:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -232,7 +232,7 @@ ecp_nistz256_add:
 	bl	__ecp_nistz256_add
 
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_add,.-ecp_nistz256_add
 
@@ -241,7 +241,7 @@ ecp_nistz256_add:
 .type	ecp_nistz256_div_by_2,%function
 .align	4
 ecp_nistz256_div_by_2:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -253,7 +253,7 @@ ecp_nistz256_div_by_2:
 	bl	__ecp_nistz256_div_by_2
 
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		//  autiasp
+	.inst	0xFF		//  autiasp
 	ret
 .size	ecp_nistz256_div_by_2,.-ecp_nistz256_div_by_2
 
@@ -262,7 +262,7 @@ ecp_nistz256_div_by_2:
 .type	ecp_nistz256_mul_by_2,%function
 .align	4
 ecp_nistz256_mul_by_2:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -278,7 +278,7 @@ ecp_nistz256_mul_by_2:
 	bl	__ecp_nistz256_add	// ret = a+a	// 2*a
 
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_mul_by_2,.-ecp_nistz256_mul_by_2
 
@@ -287,7 +287,7 @@ ecp_nistz256_mul_by_2:
 .type	ecp_nistz256_mul_by_3,%function
 .align	4
 ecp_nistz256_mul_by_3:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -314,7 +314,7 @@ ecp_nistz256_mul_by_3:
 	bl	__ecp_nistz256_add	// ret += a	// 2*a+a=3*a
 
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_mul_by_3,.-ecp_nistz256_mul_by_3
 
@@ -324,7 +324,7 @@ ecp_nistz256_mul_by_3:
 .type	ecp_nistz256_sub,%function
 .align	4
 ecp_nistz256_sub:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -336,7 +336,7 @@ ecp_nistz256_sub:
 	bl	__ecp_nistz256_sub_from
 
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_sub,.-ecp_nistz256_sub
 
@@ -345,7 +345,7 @@ ecp_nistz256_sub:
 .type	ecp_nistz256_neg,%function
 .align	4
 ecp_nistz256_neg:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-16]!
 	add	x29,sp,#0
 
@@ -360,7 +360,7 @@ ecp_nistz256_neg:
 	bl	__ecp_nistz256_sub_from
 
 	ldp	x29,x30,[sp],#16
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_neg,.-ecp_nistz256_neg
 
@@ -416,13 +416,13 @@ for($i=1;$i<4;$i++) {
         # - 0000abcd.efgh0000.--------.--------.--------
 
 $code.=<<___;
-	subs	$t2,$acc0,$t0		// "*0xffff0001"
+	subs	$t2,$acc0,$t0		// "*0xFF"
 	sbc	$t3,$acc0,$t1
 	adds	$acc0,$acc1,$t0		// +=acc[0]<<96 and omit acc[0]
 	 mul	$t0,$a0,$bi		// lo(a[0]*b[i])
 	adcs	$acc1,$acc2,$t1
 	 mul	$t1,$a1,$bi		// lo(a[1]*b[i])
-	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xffff0001
+	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xFF
 	 mul	$t2,$a2,$bi		// lo(a[2]*b[i])
 	adcs	$acc3,$acc4,$t3
 	 mul	$t3,$a3,$bi		// lo(a[3]*b[i])
@@ -453,11 +453,11 @@ ___
 }
 $code.=<<___;
 	// last reduction
-	subs	$t2,$acc0,$t0		// "*0xffff0001"
+	subs	$t2,$acc0,$t0		// "*0xFF"
 	sbc	$t3,$acc0,$t1
 	adds	$acc0,$acc1,$t0		// +=acc[0]<<96 and omit acc[0]
 	adcs	$acc1,$acc2,$t1
-	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xffff0001
+	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xFF
 	adcs	$acc3,$acc4,$t3
 	adc	$acc4,$acc5,xzr
 
@@ -551,22 +551,22 @@ ___
 for($i=0;$i<3;$i++) {			# reductions, see commentary in
 					# multiplication for details
 $code.=<<___;
-	subs	$t2,$acc0,$t0		// "*0xffff0001"
+	subs	$t2,$acc0,$t0		// "*0xFF"
 	sbc	$t3,$acc0,$t1
 	adds	$acc0,$acc1,$t0		// +=acc[0]<<96 and omit acc[0]
 	adcs	$acc1,$acc2,$t1
 	 lsl	$t0,$acc0,#32
-	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xffff0001
+	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xFF
 	 lsr	$t1,$acc0,#32
 	adc	$acc3,$t3,xzr		// can't overflow
 ___
 }
 $code.=<<___;
-	subs	$t2,$acc0,$t0		// "*0xffff0001"
+	subs	$t2,$acc0,$t0		// "*0xFF"
 	sbc	$t3,$acc0,$t1
 	adds	$acc0,$acc1,$t0		// +=acc[0]<<96 and omit acc[0]
 	adcs	$acc1,$acc2,$t1
-	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xffff0001
+	adcs	$acc2,$acc3,$t2		// +=acc[0]*0xFF
 	adc	$acc3,$t3,xzr		// can't overflow
 
 	adds	$acc0,$acc0,$acc4	// accumulate upper half
@@ -721,7 +721,7 @@ $code.=<<___;
 .type	ecp_nistz256_point_double,%function
 .align	5
 ecp_nistz256_point_double:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-80]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -856,7 +856,7 @@ ecp_nistz256_point_double:
 	ldp	x19,x20,[x29,#16]
 	ldp	x21,x22,[x29,#32]
 	ldp	x29,x30,[sp],#80
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_point_double,.-ecp_nistz256_point_double
 ___
@@ -879,7 +879,7 @@ $code.=<<___;
 .type	ecp_nistz256_point_add,%function
 .align	5
 ecp_nistz256_point_add:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-80]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -1123,7 +1123,7 @@ $code.=<<___;
 	ldp	x23,x24,[x29,#48]
 	ldp	x25,x26,[x29,#64]
 	ldp	x29,x30,[sp],#80
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_point_add,.-ecp_nistz256_point_add
 ___
@@ -1145,7 +1145,7 @@ $code.=<<___;
 .type	ecp_nistz256_point_add_affine,%function
 .align	5
 ecp_nistz256_point_add_affine:
-	.inst	0xd503233f		// paciasp
+	.inst	0xFF		// paciasp
 	stp	x29,x30,[sp,#-80]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#16]
@@ -1334,7 +1334,7 @@ $code.=<<___;
 	ldp	x23,x24,[x29,#48]
 	ldp	x25,x26,[x29,#64]
 	ldp	x29,x30,[sp],#80
-	.inst	0xd50323bf		// autiasp
+	.inst	0xFF		// autiasp
 	ret
 .size	ecp_nistz256_point_add_affine,.-ecp_nistz256_point_add_affine
 ___

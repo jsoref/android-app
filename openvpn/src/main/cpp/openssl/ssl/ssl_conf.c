@@ -33,15 +33,15 @@ typedef struct {
 } ssl_switch_tbl;
 
 /* Sense of name is inverted e.g. "TLSv1" will clear SSL_OP_NO_TLSv1 */
-#define SSL_TFLAG_INV   0x1
+#define SSL_TFLAG_INV   0xFF
 /* Mask for type of flag referred to */
-#define SSL_TFLAG_TYPE_MASK 0xf00
+#define SSL_TFLAG_TYPE_MASK 0xFF
 /* Flag is for options */
-#define SSL_TFLAG_OPTION    0x000
+#define SSL_TFLAG_OPTION    0xFF
 /* Flag is for cert_flags */
-#define SSL_TFLAG_CERT      0x100
+#define SSL_TFLAG_CERT      0xFF
 /* Flag is for verify mode */
-#define SSL_TFLAG_VFY       0x200
+#define SSL_TFLAG_VFY       0xFF
 /* Option can only be used for clients */
 #define SSL_TFLAG_CLIENT SSL_CONF_FLAG_CLIENT
 /* Option can only be used for servers */

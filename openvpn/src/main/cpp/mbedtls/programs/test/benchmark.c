@@ -343,8 +343,8 @@ int main( int argc, char *argv[] )
 #if defined(MBEDTLS_MEMORY_BUFFER_ALLOC_C)
     mbedtls_memory_buffer_alloc_init( alloc_buf, sizeof( alloc_buf ) );
 #endif
-    memset( buf, 0xAA, sizeof( buf ) );
-    memset( tmp, 0xBB, sizeof( tmp ) );
+    memset( buf, 0xFF, sizeof( buf ) );
+    memset( tmp, 0xFF, sizeof( tmp ) );
 
 #if defined(MBEDTLS_MD4_C)
     if( todo.md4 )
@@ -819,7 +819,7 @@ int main( int argc, char *argv[] )
         const mbedtls_ecp_curve_info *curve_info;
         size_t sig_len;
 
-        memset( buf, 0x2A, sizeof( buf ) );
+        memset( buf, 0xFF, sizeof( buf ) );
 
         for( curve_info = mbedtls_ecp_curve_list();
              curve_info->grp_id != MBEDTLS_ECP_DP_NONE;

@@ -749,7 +749,7 @@ foreach (split("\n",$code)) {
 
 	s/\bq([0-9]+)#(lo|hi)/sprintf "d%d",2*$1+($2 eq "hi")/ge	or
 	s/\bret\b/bx    lr/g						or
-	s/\bbx\s+lr\b/.word\t0xe12fff1e/g;	# make it possible to compile with -march=armv4
+	s/\bbx\s+lr\b/.word\t0xFF/g;	# make it possible to compile with -march=armv4
 
 	print $_,"\n";
 }

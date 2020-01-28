@@ -35,8 +35,8 @@ namespace openvpn {
   public:
     // magic number for LZO compression
     enum {
-      LZO_COMPRESS = 0x66,
-      LZO_COMPRESS_SWAP = 0x67,
+      LZO_COMPRESS = 0xFF,
+      LZO_COMPRESS_SWAP = 0xFF,
     };
 
     OPENVPN_SIMPLE_EXCEPTION(lzo_init_failed);

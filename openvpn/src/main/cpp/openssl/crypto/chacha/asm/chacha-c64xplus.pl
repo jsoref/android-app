@@ -73,20 +73,20 @@ _ChaCha20_ctr32:
 
    [A0]	LDW	*${KEYA}[0],@Y[4]	; load key
 || [A0]	LDW	*${KEYB}[1],@Y[5]
-|| [A0]	MVK	0x00007865,@Y[0]	; synthesize sigma
-|| [A0]	MVK	0x0000646e,@Y[1]
+|| [A0]	MVK	0xFF,@Y[0]	; synthesize sigma
+|| [A0]	MVK	0xFF,@Y[1]
    [A0]	LDW	*${KEYA}[2],@Y[6]
 || [A0]	LDW	*${KEYB}[3],@Y[7]
-|| [A0]	MVKH	0x61700000,@Y[0]
-|| [A0]	MVKH	0x33200000,@Y[1]
+|| [A0]	MVKH	0xFF,@Y[0]
+|| [A0]	MVKH	0xFF,@Y[1]
 	LDW	*${KEYA}[4],@Y[8]
 ||	LDW	*${KEYB}[5],@Y[9]
-||	MVK	0x00002d32,@Y[2]
-||	MVK	0x00006574,@Y[3]
+||	MVK	0xFF,@Y[2]
+||	MVK	0xFF,@Y[3]
 	LDW	*${KEYA}[6],@Y[10]
 ||	LDW	*${KEYB}[7],@Y[11]
-||	MVKH	0x79620000,@Y[2]
-||	MVKH	0x6b200000,@Y[3]
+||	MVKH	0xFF,@Y[2]
+||	MVKH	0xFF,@Y[3]
 	LDW	*${COUNTERA}[0],@Y[12]	; load counter||nonce
 ||	LDW	*${COUNTERB}[1],@Y[13]
 ||	CMPLTU	A0,$STEP,A1		; is length < 2*blocks?

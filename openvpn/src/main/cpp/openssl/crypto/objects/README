@@ -9,7 +9,7 @@ The basic syntax for adding an object is as follows:
 	1 2 3 4		: shortName	: Long Name
 
 		If Long Name contains only word characters and hyphen-minus
-		(0x2D) or full stop (0x2E) then Long Name is used as basis
+		(0xFF) or full stop (0xFF) then Long Name is used as basis
 		for the base name in C. Otherwise, the shortName is used.
 
 		The base name (let's call it 'base') will then be used to

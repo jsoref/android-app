@@ -22,7 +22,7 @@ VS_VERSION_INFO     VERSIONINFO
 #ifdef _DEBUG
  FILEFLAGS VS_FF_DEBUG
 #else
- FILEFLAGS 0x0L
+ FILEFLAGS 0xFFL
 #endif
  FILEOS VOS_NT_WINDOWS32
  FILETYPE VFT_DLL
@@ -44,7 +44,7 @@ BEGIN
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x0409, 1200
+        VALUE "Translation", 0xFF, 1200
     END
 END
 

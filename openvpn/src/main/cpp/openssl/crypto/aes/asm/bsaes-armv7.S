@@ -54,7 +54,7 @@
 
 # define VFP_ABI_PUSH	vstmdb	sp!,{d8-d15}
 # define VFP_ABI_POP	vldmia	sp!,{d8-d15}
-# define VFP_ABI_FRAME	0x40
+# define VFP_ABI_FRAME	0xFF
 #else
 # define VFP_ABI_PUSH
 # define VFP_ABI_POP
@@ -118,8 +118,8 @@ _bsaes_decrypt8:
 	 vtbl.8	d13, {q10}, d17
 	 vtbl.8	d14, {q11}, d16
 	 vtbl.8	d15, {q11}, d17
-	vmov.i8	q8,#0x55			@ compose .LBS0
-	vmov.i8	q9,#0x33			@ compose .LBS1
+	vmov.i8	q8,#0xFF			@ compose .LBS0
+	vmov.i8	q9,#0xFF			@ compose .LBS1
 	vshr.u64	q10, q6, #1
 	 vshr.u64	q11, q4, #1
 	veor		q10, q10, q7
@@ -144,7 +144,7 @@ _bsaes_decrypt8:
 	 vshl.u64	q11, q11, #1
 	veor		q2, q2, q10
 	 veor		q0, q0, q11
-	vmov.i8	q8,#0x0f			@ compose .LBS2
+	vmov.i8	q8,#0xFF			@ compose .LBS2
 	vshr.u64	q10, q5, #2
 	 vshr.u64	q11, q4, #2
 	veor		q10, q10, q7
@@ -376,7 +376,7 @@ _bsaes_decrypt8:
 	veor	q7, q7, q3
 	subs	r5,r5,#1
 	bcc	.Ldec_done
-	@ multiplication by 0x05-0x00-0x04-0x00
+	@ multiplication by 0xFF-0xFF-0xFF-0xFF
 	vext.8	q8, q0, q0, #8
 	vext.8	q14, q3, q3, #8
 	vext.8	q15, q5, q5, #8
@@ -456,14 +456,14 @@ _bsaes_decrypt8:
 	 @ vmov	q5, q9
 	vldmia	r6, {q12}		@ .LISR
 	ite	eq				@ Thumb2 thing, sanity check in ARM
-	addeq	r6,r6,#0x10
+	addeq	r6,r6,#0xFF
 	bne	.Ldec_loop
 	vldmia	r6, {q12}		@ .LISRM0
 	b	.Ldec_loop
 .align	4
 .Ldec_done:
-	vmov.i8	q8,#0x55			@ compose .LBS0
-	vmov.i8	q9,#0x33			@ compose .LBS1
+	vmov.i8	q8,#0xFF			@ compose .LBS0
+	vmov.i8	q9,#0xFF			@ compose .LBS1
 	vshr.u64	q10, q3, #1
 	 vshr.u64	q11, q2, #1
 	veor		q10, q10, q5
@@ -488,7 +488,7 @@ _bsaes_decrypt8:
 	 vshl.u64	q11, q11, #1
 	veor		q6, q6, q10
 	 veor		q0, q0, q11
-	vmov.i8	q8,#0x0f			@ compose .LBS2
+	vmov.i8	q8,#0xFF			@ compose .LBS2
 	vshr.u64	q10, q7, #2
 	 vshr.u64	q11, q2, #2
 	veor		q10, q10, q5
@@ -553,21 +553,21 @@ _bsaes_decrypt8:
 .align	6
 _bsaes_const:
 .LM0ISR:	@ InvShiftRows constants
-	.quad	0x0a0e0206070b0f03, 0x0004080c0d010509
+	.quad	0xFF, 0xFF
 .LISR:
-	.quad	0x0504070602010003, 0x0f0e0d0c080b0a09
+	.quad	0xFF, 0xFF
 .LISRM0:
-	.quad	0x01040b0e0205080f, 0x0306090c00070a0d
+	.quad	0xFF, 0xFF
 .LM0SR:		@ ShiftRows constants
-	.quad	0x0a0e02060f03070b, 0x0004080c05090d01
+	.quad	0xFF, 0xFF
 .LSR:
-	.quad	0x0504070600030201, 0x0f0e0d0c0a09080b
+	.quad	0xFF, 0xFF
 .LSRM0:
-	.quad	0x0304090e00050a0f, 0x01060b0c0207080d
+	.quad	0xFF, 0xFF
 .LM0:
-	.quad	0x02060a0e03070b0f, 0x0004080c0105090d
+	.quad	0xFF, 0xFF
 .LREVM0SR:
-	.quad	0x090d01050c000408, 0x03070b0f060a0e02
+	.quad	0xFF, 0xFF
 .asciz	"Bit-sliced AES for NEON, CRYPTOGAMS by <appro@openssl.org>"
 .align	6
 .size	_bsaes_const,.-_bsaes_const
@@ -610,8 +610,8 @@ _bsaes_encrypt8_alt:
 	 vtbl.8	d14, {q11}, d16
 	 vtbl.8	d15, {q11}, d17
 _bsaes_encrypt8_bitslice:
-	vmov.i8	q8,#0x55			@ compose .LBS0
-	vmov.i8	q9,#0x33			@ compose .LBS1
+	vmov.i8	q8,#0xFF			@ compose .LBS0
+	vmov.i8	q9,#0xFF			@ compose .LBS1
 	vshr.u64	q10, q6, #1
 	 vshr.u64	q11, q4, #1
 	veor		q10, q10, q7
@@ -636,7 +636,7 @@ _bsaes_encrypt8_bitslice:
 	 vshl.u64	q11, q11, #1
 	veor		q2, q2, q10
 	 veor		q0, q0, q11
-	vmov.i8	q8,#0x0f			@ compose .LBS2
+	vmov.i8	q8,#0xFF			@ compose .LBS2
 	vshr.u64	q10, q5, #2
 	 vshr.u64	q11, q4, #2
 	veor		q10, q10, q7
@@ -915,14 +915,14 @@ _bsaes_encrypt8_bitslice:
 	 @ vmov	q5, q9
 	vldmia	r6, {q12}		@ .LSR
 	ite	eq				@ Thumb2 thing, samity check in ARM
-	addeq	r6,r6,#0x10
+	addeq	r6,r6,#0xFF
 	bne	.Lenc_loop
 	vldmia	r6, {q12}		@ .LSRM0
 	b	.Lenc_loop
 .align	4
 .Lenc_done:
-	vmov.i8	q8,#0x55			@ compose .LBS0
-	vmov.i8	q9,#0x33			@ compose .LBS1
+	vmov.i8	q8,#0xFF			@ compose .LBS0
+	vmov.i8	q9,#0xFF			@ compose .LBS1
 	vshr.u64	q10, q2, #1
 	 vshr.u64	q11, q3, #1
 	veor		q10, q10, q5
@@ -947,7 +947,7 @@ _bsaes_encrypt8_bitslice:
 	 vshl.u64	q11, q11, #1
 	veor		q4, q4, q10
 	 veor		q0, q0, q11
-	vmov.i8	q8,#0x0f			@ compose .LBS2
+	vmov.i8	q8,#0xFF			@ compose .LBS2
 	vshr.u64	q10, q7, #2
 	 vshr.u64	q11, q3, #2
 	veor		q10, q10, q5
@@ -1019,12 +1019,12 @@ _bsaes_key_convert:
 #endif
 	vld1.8	{q15}, [r4]!		@ load round 1 key
 
-	vmov.i8	q8,  #0x01			@ bit masks
-	vmov.i8	q9,  #0x02
-	vmov.i8	q10, #0x04
-	vmov.i8	q11, #0x08
-	vmov.i8	q12, #0x10
-	vmov.i8	q13, #0x20
+	vmov.i8	q8,  #0xFF			@ bit masks
+	vmov.i8	q9,  #0xFF
+	vmov.i8	q10, #0xFF
+	vmov.i8	q11, #0xFF
+	vmov.i8	q12, #0xFF
+	vmov.i8	q13, #0xFF
 	vldmia	r6, {q14}		@ .LM0
 
 #ifdef __ARMEL__
@@ -1039,8 +1039,8 @@ _bsaes_key_convert:
 .Lkey_loop:
 	vtbl.8	d14,{q15},d28
 	vtbl.8	d15,{q15},d29
-	vmov.i8	q6,  #0x40
-	vmov.i8	q15, #0x80
+	vmov.i8	q6,  #0xFF
+	vmov.i8	q15, #0xFF
 
 	vtst.8	q0, q7, q8
 	vtst.8	q1, q7, q9
@@ -1062,7 +1062,7 @@ _bsaes_key_convert:
 	vstmia	r12!,{q0-q7}		@ write bit-sliced round key
 	bne	.Lkey_loop
 
-	vmov.i8	q7,#0x63			@ compose .L63
+	vmov.i8	q7,#0xFF			@ compose .L63
 	@ don't save last round key
 	bx	lr
 .size	_bsaes_key_convert,.-_bsaes_key_convert
@@ -1091,7 +1091,7 @@ bsaes_cbc_encrypt:
 	VFP_ABI_PUSH
 	ldr	r8, [ip]			@ IV is 1st arg on the stack
 	mov	r2, r2, lsr#4		@ len in 16 byte blocks
-	sub	sp, #0x10			@ scratch space to carry over the IV
+	sub	sp, #0xFF			@ scratch space to carry over the IV
 	mov	r9, sp				@ save sp
 
 	ldr	r10, [r3, #240]		@ get # of rounds
@@ -1135,7 +1135,7 @@ bsaes_cbc_encrypt:
 
 .align	4
 .Lcbc_dec_loop:
-	subs	r2, r2, #0x8
+	subs	r2, r2, #0xFF
 	bmi	.Lcbc_dec_loop_finish
 
 	vld1.8	{q0-q1}, [r0]!	@ load input
@@ -1148,7 +1148,7 @@ bsaes_cbc_encrypt:
 	vld1.8	{q4-q5}, [r0]!
 	mov	r5, r10
 	vld1.8	{q6-q7}, [r0]
-	sub	r0, r0, #0x60
+	sub	r0, r0, #0xFF
 	vstmia	r9, {q15}			@ put aside IV
 
 	bl	_bsaes_decrypt8
@@ -1203,7 +1203,7 @@ bsaes_cbc_encrypt:
 	vld1.8	{q5}, [r0]!
 	beq	.Lcbc_dec_six
 	vld1.8	{q6}, [r0]!
-	sub	r0, r0, #0x70
+	sub	r0, r0, #0xFF
 
 	bl	_bsaes_decrypt8
 
@@ -1228,7 +1228,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_six:
-	sub	r0, r0, #0x60
+	sub	r0, r0, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	r9,{q14}			@ reload IV
 	vld1.8	{q8-q9}, [r0]!	@ reload input
@@ -1249,7 +1249,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_five:
-	sub	r0, r0, #0x50
+	sub	r0, r0, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	r9, {q14}			@ reload IV
 	vld1.8	{q8-q9}, [r0]!	@ reload input
@@ -1267,7 +1267,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_four:
-	sub	r0, r0, #0x40
+	sub	r0, r0, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	r9, {q14}			@ reload IV
 	vld1.8	{q8-q9}, [r0]!	@ reload input
@@ -1283,7 +1283,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_three:
-	sub	r0, r0, #0x30
+	sub	r0, r0, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	r9, {q14}			@ reload IV
 	vld1.8	{q8-q9}, [r0]!	@ reload input
@@ -1296,7 +1296,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_two:
-	sub	r0, r0, #0x20
+	sub	r0, r0, #0xFF
 	bl	_bsaes_decrypt8
 	vldmia	r9, {q14}			@ reload IV
 	vld1.8	{q8}, [r0]!		@ reload input
@@ -1307,7 +1307,7 @@ bsaes_cbc_encrypt:
 	b	.Lcbc_dec_done
 .align	4
 .Lcbc_dec_one:
-	sub	r0, r0, #0x10
+	sub	r0, r0, #0xFF
 	mov	r10, r1			@ save original out pointer
 	mov	r1, r9			@ use the iv scratch space as out buffer
 	mov	r2, r3
@@ -1330,7 +1330,7 @@ bsaes_cbc_encrypt:
 #endif
 
 	mov	sp, r9
-	add	sp, #0x10			@ add sp,r9,#0x10 is no good for thumb
+	add	sp, #0xFF			@ add sp,r9,#0xFF is no good for thumb
 	vst1.8	{q15}, [r8]		@ return IV
 	VFP_ABI_POP
 	ldmia	sp!, {r4-r10, pc}
@@ -1347,7 +1347,7 @@ bsaes_ctr32_encrypt_blocks:
 	stmdb	sp!, {r4-r10, lr}
 	VFP_ABI_PUSH
 	ldr	r8, [ip]			@ ctr is 1st arg on the stack
-	sub	sp, sp, #0x10			@ scratch space to carry over the ctr
+	sub	sp, sp, #0xFF			@ scratch space to carry over the ctr
 	mov	r9, sp				@ save sp
 
 	ldr	r10, [r3, #240]		@ get # of rounds
@@ -1391,7 +1391,7 @@ bsaes_ctr32_encrypt_blocks:
 	vld1.8	{q0}, [r8]		@ load counter
 	adrl	r8, .LREVM0SR			@ borrow r8
 	vldmia	r12, {q4}			@ load round0 key
-	sub	sp, #0x10			@ place for adjusted round0 key
+	sub	sp, #0xFF			@ place for adjusted round0 key
 #endif
 
 	vmov.i32	q8,#1		@ compose 1<<96
@@ -1420,7 +1420,7 @@ bsaes_ctr32_encrypt_blocks:
 
 	vldmia		sp, {q9}		@ load round0 key
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x10		@ pass next round key
+	add		r4, sp, #0xFF		@ pass next round key
 #else
 	add		r4, r3, #264
 #endif
@@ -1514,7 +1514,7 @@ bsaes_ctr32_encrypt_blocks:
 #endif
 
 	mov	sp, r9
-	add	sp, #0x10		@ add sp,r9,#0x10 is no good for thumb
+	add	sp, #0xFF		@ add sp,r9,#0xFF is no good for thumb
 	VFP_ABI_POP
 	ldmia	sp!, {r4-r10, pc}	@ return
 
@@ -1532,12 +1532,12 @@ bsaes_ctr32_encrypt_blocks:
 #ifdef __ARMEL__
 	rev	r8, r8
 #endif
-	sub	sp, sp, #0x10
+	sub	sp, sp, #0xFF
 	vst1.8	{q1}, [sp]		@ copy counter value
-	sub	sp, sp, #0x10
+	sub	sp, sp, #0xFF
 
 .Lctr_enc_short_loop:
-	add	r0, sp, #0x10		@ input counter value
+	add	r0, sp, #0xFF		@ input counter value
 	mov	r1, sp			@ output on the stack
 	mov	r2, r7			@ key
 
@@ -1548,9 +1548,9 @@ bsaes_ctr32_encrypt_blocks:
 	add	r8, r8, #1
 #ifdef __ARMEL__
 	rev	r0, r8
-	str	r0, [sp, #0x1c]		@ next counter value
+	str	r0, [sp, #0xFF]		@ next counter value
 #else
-	str	r8, [sp, #0x1c]		@ next counter value
+	str	r8, [sp, #0xFF]		@ next counter value
 #endif
 	veor	q0,q0,q1
 	vst1.8	{q0}, [r5]!	@ store output
@@ -1568,7 +1568,7 @@ bsaes_ctr32_encrypt_blocks:
 .align	4
 bsaes_xts_encrypt:
 	mov	ip, sp
-	stmdb	sp!, {r4-r10, lr}		@ 0x20
+	stmdb	sp!, {r4-r10, lr}		@ 0xFF
 	VFP_ABI_PUSH
 	mov	r6, sp				@ future r3
 
@@ -1577,8 +1577,8 @@ bsaes_xts_encrypt:
 	mov	r9, r2
 	mov	r10, r3
 
-	sub	r0, sp, #0x10			@ 0x10
-	bic	r0, #0xf			@ align at 16 bytes
+	sub	r0, sp, #0xFF			@ 0xFF
+	bic	r0, #0xFF			@ align at 16 bytes
 	mov	sp, r0
 
 #ifdef	XTS_CHAIN_TWEAK
@@ -1604,7 +1604,7 @@ bsaes_xts_encrypt:
 	mov	r4, r10			@ pass key
 	mov	r5, r1			@ pass # of rounds
 	mov	sp, r12
-	add	r12, #0x90			@ pass key schedule
+	add	r12, #0xFF			@ pass key schedule
 	bl	_bsaes_key_convert
 	veor	q7, q7, q15	@ fix up last round key
 	vstmia	r12, {q7}			@ save last round key
@@ -1622,13 +1622,13 @@ bsaes_xts_encrypt:
 	vstmia	r12, {q7}
 
 .align	2
-0:	sub	sp, #0x90			@ place for tweak[9]
+0:	sub	sp, #0xFF			@ place for tweak[9]
 #endif
 
 	vld1.8	{q8}, [r0]			@ initial tweak
 	adr	r2, .Lxts_magic
 
-	subs	r9, #0x80
+	subs	r9, #0xFF
 	blo	.Lxts_enc_short
 	b	.Lxts_enc_loop
 
@@ -1700,7 +1700,7 @@ bsaes_xts_encrypt:
 	vld1.8		{q6-q7}, [r7]!
 	veor		q5, q5, q13
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1730,11 +1730,11 @@ bsaes_xts_encrypt:
 
 	vld1.64		{q8}, [r0,:128]		@ next round tweak
 
-	subs		r9, #0x80
+	subs		r9, #0xFF
 	bpl		.Lxts_enc_loop
 
 .Lxts_enc_short:
-	adds		r9, #0x70
+	adds		r9, #0xFF
 	bmi		.Lxts_enc_done
 
 	vldmia		r2, {q5}	@ load XTS magic
@@ -1754,7 +1754,7 @@ bsaes_xts_encrypt:
 	veor		q10, q10, q6
 	vand		q7, q7, q5
 	vld1.8		{q0}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_enc_1
 	vadd.u64	q11, q10, q10
 	vst1.64		{q10}, [r0,:128]!
@@ -1763,7 +1763,7 @@ bsaes_xts_encrypt:
 	veor		q11, q11, q7
 	vand		q6, q6, q5
 	vld1.8		{q1}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_enc_2
 	veor		q0, q0, q8
 	vadd.u64	q12, q11, q11
@@ -1773,7 +1773,7 @@ bsaes_xts_encrypt:
 	veor		q12, q12, q6
 	vand		q7, q7, q5
 	vld1.8		{q2}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_enc_3
 	veor		q1, q1, q9
 	vadd.u64	q13, q12, q12
@@ -1783,7 +1783,7 @@ bsaes_xts_encrypt:
 	veor		q13, q13, q7
 	vand		q6, q6, q5
 	vld1.8		{q3}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_enc_4
 	veor		q2, q2, q10
 	vadd.u64	q14, q13, q13
@@ -1793,7 +1793,7 @@ bsaes_xts_encrypt:
 	veor		q14, q14, q6
 	vand		q7, q7, q5
 	vld1.8		{q4}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_enc_5
 	veor		q3, q3, q11
 	vadd.u64	q15, q14, q14
@@ -1803,16 +1803,16 @@ bsaes_xts_encrypt:
 	veor		q15, q15, q7
 	vand		q6, q6, q5
 	vld1.8		{q5}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_enc_6
 	veor		q4, q4, q12
-	sub		r9, #0x10
+	sub		r9, #0xFF
 	vst1.64		{q15}, [r0,:128]		@ next round tweak
 
 	vld1.8		{q6}, [r7]!
 	veor		q5, q5, q13
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1844,7 +1844,7 @@ bsaes_xts_encrypt:
 .Lxts_enc_6:
 	veor		q4, q4, q12
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1873,13 +1873,13 @@ bsaes_xts_encrypt:
 @ put this in range for both ARM and Thumb mode adr instructions
 .align	5
 .Lxts_magic:
-	.quad	1, 0x87
+	.quad	1, 0xFF
 
 .align	5
 .Lxts_enc_5:
 	veor		q3, q3, q11
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1907,7 +1907,7 @@ bsaes_xts_encrypt:
 .Lxts_enc_4:
 	veor		q2, q2, q10
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1932,7 +1932,7 @@ bsaes_xts_encrypt:
 .Lxts_enc_3:
 	veor		q1, q1, q9
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1956,7 +1956,7 @@ bsaes_xts_encrypt:
 .Lxts_enc_2:
 	veor		q0, q0, q8
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -1993,14 +1993,14 @@ bsaes_xts_encrypt:
 
 .Lxts_enc_done:
 #ifndef	XTS_CHAIN_TWEAK
-	adds		r9, #0x10
+	adds		r9, #0xFF
 	beq		.Lxts_enc_ret
-	sub		r6, r8, #0x10
+	sub		r6, r8, #0xFF
 
 .Lxts_enc_steal:
 	ldrb		r0, [r7], #1
-	ldrb		r1, [r8, #-0x10]
-	strb		r0, [r8, #-0x10]
+	ldrb		r1, [r8, #-0xFF]
+	strb		r0, [r8, #-0xFF]
 	strb		r1, [r8], #1
 
 	subs		r9, #1
@@ -2023,11 +2023,11 @@ bsaes_xts_encrypt:
 #endif
 
 .Lxts_enc_ret:
-	bic		r0, r3, #0xf
+	bic		r0, r3, #0xFF
 	vmov.i32	q0, #0
 	vmov.i32	q1, #0
 #ifdef	XTS_CHAIN_TWEAK
-	ldr		r1, [r3, #0x20+VFP_ABI_FRAME]	@ chain tweak
+	ldr		r1, [r3, #0xFF+VFP_ABI_FRAME]	@ chain tweak
 #endif
 .Lxts_enc_bzero:				@ wipe key schedule [if any]
 	vstmia		sp!, {q0-q1}
@@ -2048,7 +2048,7 @@ bsaes_xts_encrypt:
 .align	4
 bsaes_xts_decrypt:
 	mov	ip, sp
-	stmdb	sp!, {r4-r10, lr}		@ 0x20
+	stmdb	sp!, {r4-r10, lr}		@ 0xFF
 	VFP_ABI_PUSH
 	mov	r6, sp				@ future r3
 
@@ -2057,8 +2057,8 @@ bsaes_xts_decrypt:
 	mov	r9, r2
 	mov	r10, r3
 
-	sub	r0, sp, #0x10			@ 0x10
-	bic	r0, #0xf			@ align at 16 bytes
+	sub	r0, sp, #0xFF			@ 0xFF
+	bic	r0, #0xFF			@ align at 16 bytes
 	mov	sp, r0
 
 #ifdef	XTS_CHAIN_TWEAK
@@ -2084,9 +2084,9 @@ bsaes_xts_decrypt:
 	mov	r4, r10			@ pass key
 	mov	r5, r1			@ pass # of rounds
 	mov	sp, r12
-	add	r12, #0x90			@ pass key schedule
+	add	r12, #0xFF			@ pass key schedule
 	bl	_bsaes_key_convert
-	add	r4, sp, #0x90
+	add	r4, sp, #0xFF
 	vldmia	r4, {q6}
 	vstmia	r12,  {q15}		@ save last round key
 	veor	q7, q7, q6	@ fix up round 0 key
@@ -2108,17 +2108,17 @@ bsaes_xts_decrypt:
 	vstmia	r4, {q7}
 
 .align	2
-0:	sub	sp, #0x90			@ place for tweak[9]
+0:	sub	sp, #0xFF			@ place for tweak[9]
 #endif
 	vld1.8	{q8}, [r0]			@ initial tweak
 	adr	r2, .Lxts_magic
 
 #ifndef	XTS_CHAIN_TWEAK
-	tst	r9, #0xf			@ if not multiple of 16
+	tst	r9, #0xFF			@ if not multiple of 16
 	it	ne				@ Thumb2 thing, sanity check in ARM
-	subne	r9, #0x10			@ subtract another 16 bytes
+	subne	r9, #0xFF			@ subtract another 16 bytes
 #endif
-	subs	r9, #0x80
+	subs	r9, #0xFF
 
 	blo	.Lxts_dec_short
 	b	.Lxts_dec_loop
@@ -2191,7 +2191,7 @@ bsaes_xts_decrypt:
 	vld1.8		{q6-q7}, [r7]!
 	veor		q5, q5, q13
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2221,11 +2221,11 @@ bsaes_xts_decrypt:
 
 	vld1.64		{q8}, [r0,:128]		@ next round tweak
 
-	subs		r9, #0x80
+	subs		r9, #0xFF
 	bpl		.Lxts_dec_loop
 
 .Lxts_dec_short:
-	adds		r9, #0x70
+	adds		r9, #0xFF
 	bmi		.Lxts_dec_done
 
 	vldmia		r2, {q5}	@ load XTS magic
@@ -2245,7 +2245,7 @@ bsaes_xts_decrypt:
 	veor		q10, q10, q6
 	vand		q7, q7, q5
 	vld1.8		{q0}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_dec_1
 	vadd.u64	q11, q10, q10
 	vst1.64		{q10}, [r0,:128]!
@@ -2254,7 +2254,7 @@ bsaes_xts_decrypt:
 	veor		q11, q11, q7
 	vand		q6, q6, q5
 	vld1.8		{q1}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_dec_2
 	veor		q0, q0, q8
 	vadd.u64	q12, q11, q11
@@ -2264,7 +2264,7 @@ bsaes_xts_decrypt:
 	veor		q12, q12, q6
 	vand		q7, q7, q5
 	vld1.8		{q2}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_dec_3
 	veor		q1, q1, q9
 	vadd.u64	q13, q12, q12
@@ -2274,7 +2274,7 @@ bsaes_xts_decrypt:
 	veor		q13, q13, q7
 	vand		q6, q6, q5
 	vld1.8		{q3}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_dec_4
 	veor		q2, q2, q10
 	vadd.u64	q14, q13, q13
@@ -2284,7 +2284,7 @@ bsaes_xts_decrypt:
 	veor		q14, q14, q6
 	vand		q7, q7, q5
 	vld1.8		{q4}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_dec_5
 	veor		q3, q3, q11
 	vadd.u64	q15, q14, q14
@@ -2294,16 +2294,16 @@ bsaes_xts_decrypt:
 	veor		q15, q15, q7
 	vand		q6, q6, q5
 	vld1.8		{q5}, [r7]!
-	subs		r9, #0x10
+	subs		r9, #0xFF
 	bmi		.Lxts_dec_6
 	veor		q4, q4, q12
-	sub		r9, #0x10
+	sub		r9, #0xFF
 	vst1.64		{q15}, [r0,:128]		@ next round tweak
 
 	vld1.8		{q6}, [r7]!
 	veor		q5, q5, q13
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2337,7 +2337,7 @@ bsaes_xts_decrypt:
 
 	veor		q4, q4, q12
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2366,7 +2366,7 @@ bsaes_xts_decrypt:
 .Lxts_dec_5:
 	veor		q3, q3, q11
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2394,7 +2394,7 @@ bsaes_xts_decrypt:
 .Lxts_dec_4:
 	veor		q2, q2, q10
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2419,7 +2419,7 @@ bsaes_xts_decrypt:
 .Lxts_dec_3:
 	veor		q1, q1, q9
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2443,7 +2443,7 @@ bsaes_xts_decrypt:
 .Lxts_dec_2:
 	veor		q0, q0, q8
 #ifndef	BSAES_ASM_EXTENDED_KEY
-	add		r4, sp, #0x90			@ pass key schedule
+	add		r4, sp, #0xFF			@ pass key schedule
 #else
 	add		r4, r10, #248			@ pass key schedule
 #endif
@@ -2482,7 +2482,7 @@ bsaes_xts_decrypt:
 
 .Lxts_dec_done:
 #ifndef	XTS_CHAIN_TWEAK
-	adds		r9, #0x10
+	adds		r9, #0xFF
 	beq		.Lxts_dec_ret
 
 	@ calculate one round of extra tweak for the stolen ciphertext
@@ -2512,7 +2512,7 @@ bsaes_xts_decrypt:
 .Lxts_dec_steal:
 	ldrb		r1, [r8]
 	ldrb		r0, [r7], #1
-	strb		r1, [r8, #0x10]
+	strb		r1, [r8, #0xFF]
 	strb		r0, [r8], #1
 
 	subs		r9, #1
@@ -2534,11 +2534,11 @@ bsaes_xts_decrypt:
 #endif
 
 .Lxts_dec_ret:
-	bic		r0, r3, #0xf
+	bic		r0, r3, #0xFF
 	vmov.i32	q0, #0
 	vmov.i32	q1, #0
 #ifdef	XTS_CHAIN_TWEAK
-	ldr		r1, [r3, #0x20+VFP_ABI_FRAME]	@ chain tweak
+	ldr		r1, [r3, #0xFF+VFP_ABI_FRAME]	@ chain tweak
 #endif
 .Lxts_dec_bzero:				@ wipe key schedule [if any]
 	vstmia		sp!, {q0-q1}

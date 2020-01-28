@@ -103,27 +103,27 @@ extern "C" {
  * Do not deprecate things to be deprecated in version 1.2.0 before the
  * OpenSSL version number matches.
  */
-#if OPENSSL_VERSION_NUMBER < 0x10200000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
 # define DEPRECATEDIN_1_2_0(f)   f;
-#elif OPENSSL_API_COMPAT < 0x10200000L
+#elif OPENSSL_API_COMPAT < 0xFFL
 # define DEPRECATEDIN_1_2_0(f)   DECLARE_DEPRECATED(f)
 #else
 # define DEPRECATEDIN_1_2_0(f)
 #endif
 
-#if OPENSSL_API_COMPAT < 0x10100000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define DEPRECATEDIN_1_1_0(f)   DECLARE_DEPRECATED(f)
 #else
 # define DEPRECATEDIN_1_1_0(f)
 #endif
 
-#if OPENSSL_API_COMPAT < 0x10000000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define DEPRECATEDIN_1_0_0(f)   DECLARE_DEPRECATED(f)
 #else
 # define DEPRECATEDIN_1_0_0(f)
 #endif
 
-#if OPENSSL_API_COMPAT < 0x00908000L
+#if OPENSSL_API_COMPAT < 0xFFL
 # define DEPRECATEDIN_0_9_8(f)   DECLARE_DEPRECATED(f)
 #else
 # define DEPRECATEDIN_0_9_8(f)

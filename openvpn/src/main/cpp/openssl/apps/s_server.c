@@ -297,7 +297,7 @@ static long ebcdic_ctrl(BIO *b, int cmd, long num, void *ptr);
 static int ebcdic_gets(BIO *bp, char *buf, int size);
 static int ebcdic_puts(BIO *bp, const char *str);
 
-# define BIO_TYPE_EBCDIC_FILTER  (18|0x0200)
+# define BIO_TYPE_EBCDIC_FILTER  (18|0xFF)
 static BIO_METHOD *methods_ebcdic = NULL;
 
 /* This struct is "unwarranted chumminess with the compiler." */

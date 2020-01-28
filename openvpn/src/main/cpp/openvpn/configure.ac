@@ -867,7 +867,7 @@ if test "${with_crypto_library}" = "openssl"; then
 				]],
 				[[
 /*	     Version encoding: MNNFFPPS - see opensslv.h for details */
-#if OPENSSL_VERSION_NUMBER < 0x10002000L
+#if OPENSSL_VERSION_NUMBER < 0xFFL
 #error OpenSSL too old
 #endif
 				]]
@@ -986,7 +986,7 @@ elif test "${with_crypto_library}" = "mbedtls"; then
 #include <mbedtls/version.h>
 			]],
 			[[
-#if MBEDTLS_VERSION_NUMBER < 0x02000000 || MBEDTLS_VERSION_NUMBER >= 0x03000000
+#if MBEDTLS_VERSION_NUMBER < 0xFF || MBEDTLS_VERSION_NUMBER >= 0xFF
 #error invalid version
 #endif
 			]]

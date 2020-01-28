@@ -152,13 +152,13 @@ static int des_cfb1_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
 
     while (inl && inl >= chunk) {
         for (n = 0; n < chunk * 8; ++n) {
-            c[0] = (in[n / 8] & (1 << (7 - n % 8))) ? 0x80 : 0;
+            c[0] = (in[n / 8] & (1 << (7 - n % 8))) ? 0xFF : 0;
             DES_cfb_encrypt(c, d, 1, 1, EVP_CIPHER_CTX_get_cipher_data(ctx),
                             (DES_cblock *)EVP_CIPHER_CTX_iv_noconst(ctx),
                             EVP_CIPHER_CTX_encrypting(ctx));
             out[n / 8] =
-                (out[n / 8] & ~(0x80 >> (unsigned int)(n % 8))) |
-                ((d[0] & 0x80) >> (unsigned int)(n % 8));
+                (out[n / 8] & ~(0xFF >> (unsigned int)(n % 8))) |
+                ((d[0] & 0xFF) >> (unsigned int)(n % 8));
         }
         inl -= chunk;
         in += chunk;

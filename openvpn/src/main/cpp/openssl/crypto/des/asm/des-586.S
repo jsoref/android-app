@@ -11,28 +11,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	8(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -40,28 +40,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	16(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -69,28 +69,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	24(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -98,28 +98,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	32(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -127,28 +127,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	40(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -156,28 +156,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	48(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -185,28 +185,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	56(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -214,28 +214,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	64(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -243,28 +243,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	72(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -272,28 +272,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	80(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -301,28 +301,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	88(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -330,28 +330,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	96(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -359,28 +359,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	104(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -388,28 +388,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	112(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -417,28 +417,28 @@ _x86_DES_encrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	120(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -446,28 +446,28 @@ _x86_DES_encrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 	addl	$4,%esp
 	ret
 .size	_x86_DES_encrypt,.-_x86_DES_encrypt
@@ -482,28 +482,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	112(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -511,28 +511,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	104(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -540,28 +540,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	96(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -569,28 +569,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	88(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -598,28 +598,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	80(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -627,28 +627,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	72(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -656,28 +656,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	64(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -685,28 +685,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	56(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -714,28 +714,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	48(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -743,28 +743,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	40(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -772,28 +772,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	32(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -801,28 +801,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	24(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -830,28 +830,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	16(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -859,28 +859,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 
 	movl	8(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -888,28 +888,28 @@ _x86_DES_decrypt:
 	xorl	%esi,%eax
 	xorl	%ecx,%ecx
 	xorl	%esi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%edi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ebx,1),%edi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%edi
-	xorl	0x700(%ebp,%ecx,1),%edi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%edi
+	xorl	0xFF(%ebp,%ecx,1),%edi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%edi
-	xorl	0x500(%ebp,%edx,1),%edi
+	xorl	0xFF(%ebp,%eax,1),%edi
+	xorl	0xFF(%ebp,%edx,1),%edi
 
 	movl	(%ecx),%eax
 	xorl	%ebx,%ebx
@@ -917,28 +917,28 @@ _x86_DES_decrypt:
 	xorl	%edi,%eax
 	xorl	%ecx,%ecx
 	xorl	%edi,%edx
-	andl	$0xfcfcfcfc,%eax
-	andl	$0xcfcfcfcf,%edx
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
 	movb	%al,%bl
 	movb	%ah,%cl
 	rorl	$4,%edx
 	xorl	(%ebp,%ebx,1),%esi
 	movb	%dl,%bl
-	xorl	0x200(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
 	shrl	$16,%eax
-	xorl	0x100(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ebx,1),%esi
 	movb	%ah,%bl
 	shrl	$16,%edx
-	xorl	0x300(%ebp,%ecx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movb	%dh,%cl
-	andl	$0xff,%eax
-	andl	$0xff,%edx
-	xorl	0x600(%ebp,%ebx,1),%esi
-	xorl	0x700(%ebp,%ecx,1),%esi
+	andl	$0xFF,%eax
+	andl	$0xFF,%edx
+	xorl	0xFF(%ebp,%ebx,1),%esi
+	xorl	0xFF(%ebp,%ecx,1),%esi
 	movl	(%esp),%ecx
-	xorl	0x400(%ebp,%eax,1),%esi
-	xorl	0x500(%ebp,%edx,1),%esi
+	xorl	0xFF(%ebp,%eax,1),%esi
+	xorl	0xFF(%ebp,%edx,1),%esi
 	addl	$4,%esp
 	ret
 .size	_x86_DES_decrypt,.-_x86_DES_decrypt
@@ -963,35 +963,35 @@ DES_encrypt1:
 	roll	$4,%eax
 	movl	%eax,%esi
 	xorl	%edi,%eax
-	andl	$0xf0f0f0f0,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%esi
 	xorl	%eax,%edi
 
 	roll	$20,%edi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0xfff0000f,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$14,%eax
 	movl	%eax,%edi
 	xorl	%esi,%eax
-	andl	$0x33333333,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%edi
 	xorl	%eax,%esi
 
 	roll	$22,%esi
 	movl	%esi,%eax
 	xorl	%edi,%esi
-	andl	$0x03fc03fc,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%eax
 	xorl	%esi,%edi
 
 	roll	$9,%eax
 	movl	%eax,%esi
 	xorl	%edi,%eax
-	andl	$0xaaaaaaaa,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%esi
 	xorl	%eax,%edi
 
@@ -1014,35 +1014,35 @@ DES_encrypt1:
 	rorl	$1,%esi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0xaaaaaaaa,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$23,%eax
 	movl	%eax,%edi
 	xorl	%esi,%eax
-	andl	$0x03fc03fc,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%edi
 	xorl	%eax,%esi
 
 	roll	$10,%edi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0x33333333,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$18,%esi
 	movl	%esi,%edi
 	xorl	%eax,%esi
-	andl	$0xfff0000f,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%edi
 	xorl	%esi,%eax
 
 	roll	$12,%edi
 	movl	%edi,%esi
 	xorl	%eax,%edi
-	andl	$0xf0f0f0f0,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%esi
 	xorl	%edi,%eax
 
@@ -1118,35 +1118,35 @@ DES_encrypt3:
 	roll	$4,%edi
 	movl	%edi,%edx
 	xorl	%esi,%edi
-	andl	$0xf0f0f0f0,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%edx
 	xorl	%edi,%esi
 
 	roll	$20,%esi
 	movl	%esi,%edi
 	xorl	%edx,%esi
-	andl	$0xfff0000f,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%edi
 	xorl	%esi,%edx
 
 	roll	$14,%edi
 	movl	%edi,%esi
 	xorl	%edx,%edi
-	andl	$0x33333333,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%esi
 	xorl	%edi,%edx
 
 	roll	$22,%edx
 	movl	%edx,%edi
 	xorl	%esi,%edx
-	andl	$0x03fc03fc,%edx
+	andl	$0xFF,%edx
 	xorl	%edx,%edi
 	xorl	%edx,%esi
 
 	roll	$9,%edi
 	movl	%edi,%edx
 	xorl	%esi,%edi
-	andl	$0xaaaaaaaa,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%edx
 	xorl	%edi,%esi
 
@@ -1178,35 +1178,35 @@ DES_encrypt3:
 	roll	$3,%edi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0xaaaaaaaa,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$23,%eax
 	movl	%eax,%edi
 	xorl	%esi,%eax
-	andl	$0x03fc03fc,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%edi
 	xorl	%eax,%esi
 
 	roll	$10,%edi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0x33333333,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$18,%esi
 	movl	%esi,%edi
 	xorl	%eax,%esi
-	andl	$0xfff0000f,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%edi
 	xorl	%esi,%eax
 
 	roll	$12,%edi
 	movl	%edi,%esi
 	xorl	%eax,%edi
-	andl	$0xf0f0f0f0,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%esi
 	xorl	%edi,%eax
 
@@ -1239,35 +1239,35 @@ DES_decrypt3:
 	roll	$4,%edi
 	movl	%edi,%edx
 	xorl	%esi,%edi
-	andl	$0xf0f0f0f0,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%edx
 	xorl	%edi,%esi
 
 	roll	$20,%esi
 	movl	%esi,%edi
 	xorl	%edx,%esi
-	andl	$0xfff0000f,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%edi
 	xorl	%esi,%edx
 
 	roll	$14,%edi
 	movl	%edi,%esi
 	xorl	%edx,%edi
-	andl	$0x33333333,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%esi
 	xorl	%edi,%edx
 
 	roll	$22,%edx
 	movl	%edx,%edi
 	xorl	%esi,%edx
-	andl	$0x03fc03fc,%edx
+	andl	$0xFF,%edx
 	xorl	%edx,%edi
 	xorl	%edx,%esi
 
 	roll	$9,%edi
 	movl	%edi,%edx
 	xorl	%esi,%edi
-	andl	$0xaaaaaaaa,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%edx
 	xorl	%edi,%esi
 
@@ -1299,35 +1299,35 @@ DES_decrypt3:
 	roll	$3,%edi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0xaaaaaaaa,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$23,%eax
 	movl	%eax,%edi
 	xorl	%esi,%eax
-	andl	$0x03fc03fc,%eax
+	andl	$0xFF,%eax
 	xorl	%eax,%edi
 	xorl	%eax,%esi
 
 	roll	$10,%edi
 	movl	%edi,%eax
 	xorl	%esi,%edi
-	andl	$0x33333333,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%eax
 	xorl	%edi,%esi
 
 	roll	$18,%esi
 	movl	%esi,%edi
 	xorl	%eax,%esi
-	andl	$0xfff0000f,%esi
+	andl	$0xFF,%esi
 	xorl	%esi,%edi
 	xorl	%esi,%eax
 
 	roll	$12,%edi
 	movl	%edi,%esi
 	xorl	%eax,%edi
-	andl	$0xf0f0f0f0,%edi
+	andl	$0xFF,%edi
 	xorl	%edi,%esi
 	xorl	%edi,%eax
 

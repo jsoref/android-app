@@ -16,7 +16,7 @@
 # ifndef OPENSSL_NO_EC
 # include <openssl/asn1.h>
 # include <openssl/symhacks.h>
-# if OPENSSL_API_COMPAT < 0x10100000L
+# if OPENSSL_API_COMPAT < 0xFFL
 #  include <openssl/bn.h>
 # endif
 # include <openssl/ecerr.h>
@@ -34,7 +34,7 @@ typedef enum {
         /** the point is encoded as z||x, where the octet z specifies
          *  which solution of the quadratic equation y is  */
     POINT_CONVERSION_COMPRESSED = 2,
-        /** the point is encoded as z||x||y, where z is the octet 0x04  */
+        /** the point is encoded as z||x||y, where z is the octet 0xFF  */
     POINT_CONVERSION_UNCOMPRESSED = 4,
         /** the point is encoded as z||x||y, where the octet z specifies
          *  which solution of the quadratic equation y is  */
@@ -787,8 +787,8 @@ int EC_GROUP_get_pentanomial_basis(const EC_GROUP *, unsigned int *k1,
                                    unsigned int *k2, unsigned int *k3);
 # endif
 
-# define OPENSSL_EC_EXPLICIT_CURVE  0x000
-# define OPENSSL_EC_NAMED_CURVE     0x001
+# define OPENSSL_EC_EXPLICIT_CURVE  0xFF
+# define OPENSSL_EC_NAMED_CURVE     0xFF
 
 EC_GROUP *d2i_ECPKParameters(EC_GROUP **, const unsigned char **in, long len);
 int i2d_ECPKParameters(const EC_GROUP *, unsigned char **out);
@@ -810,13 +810,13 @@ int ECPKParameters_print_fp(FILE *fp, const EC_GROUP *x, int off);
 /********************************************************************/
 
 /* some values for the encoding_flag */
-# define EC_PKEY_NO_PARAMETERS   0x001
-# define EC_PKEY_NO_PUBKEY       0x002
+# define EC_PKEY_NO_PARAMETERS   0xFF
+# define EC_PKEY_NO_PUBKEY       0xFF
 
 /* some values for the flags field */
-# define EC_FLAG_NON_FIPS_ALLOW  0x1
-# define EC_FLAG_FIPS_CHECKED    0x2
-# define EC_FLAG_COFACTOR_ECDH   0x1000
+# define EC_FLAG_NON_FIPS_ALLOW  0xFF
+# define EC_FLAG_FIPS_CHECKED    0xFF
+# define EC_FLAG_COFACTOR_ECDH   0xFF
 
 /** Creates a new EC_KEY object.
  *  \return EC_KEY object or NULL if an error occurred.
@@ -1367,7 +1367,7 @@ void EC_KEY_METHOD_get_verify(const EC_KEY_METHOD *meth,
 
 # ifndef __cplusplus
 #  if defined(__SUNPRO_C)
-#   if __SUNPRO_C >= 0x520
+#   if __SUNPRO_C >= 0xFF
 #    pragma error_messages (default,E_ARRAY_OF_INCOMPLETE_NONAME,E_ARRAY_OF_INCOMPLETE)
 #   endif
 #  endif

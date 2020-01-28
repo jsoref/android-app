@@ -31,27 +31,27 @@ typedef struct {
 /* pick 64-bit unsigned integer in little endian order */
 static u64 U8TOU64(const unsigned char *p)
 {
-    return (((u64)(p[0] & 0xff)) |
-            ((u64)(p[1] & 0xff) << 8) |
-            ((u64)(p[2] & 0xff) << 16) |
-            ((u64)(p[3] & 0xff) << 24) |
-            ((u64)(p[4] & 0xff) << 32) |
-            ((u64)(p[5] & 0xff) << 40) |
-            ((u64)(p[6] & 0xff) << 48) |
-            ((u64)(p[7] & 0xff) << 56));
+    return (((u64)(p[0] & 0xFF)) |
+            ((u64)(p[1] & 0xFF) << 8) |
+            ((u64)(p[2] & 0xFF) << 16) |
+            ((u64)(p[3] & 0xFF) << 24) |
+            ((u64)(p[4] & 0xFF) << 32) |
+            ((u64)(p[5] & 0xFF) << 40) |
+            ((u64)(p[6] & 0xFF) << 48) |
+            ((u64)(p[7] & 0xFF) << 56));
 }
 
 /* store a 64-bit unsigned integer in little endian */
 static void U64TO8(unsigned char *p, u64 v)
 {
-    p[0] = (unsigned char)((v) & 0xff);
-    p[1] = (unsigned char)((v >> 8) & 0xff);
-    p[2] = (unsigned char)((v >> 16) & 0xff);
-    p[3] = (unsigned char)((v >> 24) & 0xff);
-    p[4] = (unsigned char)((v >> 32) & 0xff);
-    p[5] = (unsigned char)((v >> 40) & 0xff);
-    p[6] = (unsigned char)((v >> 48) & 0xff);
-    p[7] = (unsigned char)((v >> 56) & 0xff);
+    p[0] = (unsigned char)((v) & 0xFF);
+    p[1] = (unsigned char)((v >> 8) & 0xFF);
+    p[2] = (unsigned char)((v >> 16) & 0xFF);
+    p[3] = (unsigned char)((v >> 24) & 0xFF);
+    p[4] = (unsigned char)((v >> 32) & 0xFF);
+    p[5] = (unsigned char)((v >> 40) & 0xFF);
+    p[6] = (unsigned char)((v >> 48) & 0xFF);
+    p[7] = (unsigned char)((v >> 56) & 0xFF);
 }
 
 int poly1305_init(void *ctx, const unsigned char key[16])
@@ -64,12 +64,12 @@ int poly1305_init(void *ctx, const unsigned char key[16])
     st->h[1] = 0;
     st->h[2] = 0;
 
-    r0 = U8TOU64(&key[0]) & 0x0ffffffc0fffffff;
-    r1 = U8TOU64(&key[8]) & 0x0ffffffc0ffffffc;
+    r0 = U8TOU64(&key[0]) & 0xFF;
+    r1 = U8TOU64(&key[8]) & 0xFF;
 
     /* break r1:r0 to three 44-bit digits, masks are 1<<44-1 */
-    st->r[0] = r0 & 0x0fffffffffff;
-    st->r[1] = ((r0 >> 44) | (r1 << 20))  & 0x0fffffffffff;
+    st->r[0] = r0 & 0xFF;
+    st->r[1] = ((r0 >> 44) | (r1 << 20))  & 0xFF;
     st->r[2] = (r1 >> 24);
 
     st->s[0] = (st->r[1] + (st->r[1] << 2)) << 2;
@@ -106,8 +106,8 @@ void poly1305_blocks(void *ctx, const unsigned char *inp, size_t len,
         m1 = U8TOU64(inp + 8);
 
         /* h += m[i], m[i] is broken to 44-bit digits */
-        h0 += m0 & 0x0fffffffffff;
-        h1 += ((m0 >> 44) | (m1 << 20))  & 0x0fffffffffff;
+        h0 += m0 & 0xFF;
+        h1 += ((m0 >> 44) | (m1 << 20))  & 0xFF;
         h2 +=  (m1 >> 24) + pad;
 
         /* h *= r "%" p, where "%" stands for "partial remainder" */
@@ -116,9 +116,9 @@ void poly1305_blocks(void *ctx, const unsigned char *inp, size_t len,
         d2 = ((u128)h0 * r2) + ((u128)h1 * r1) + ((u128)h2 * r0);
 
         /* "lazy" reduction step */
-        h0 = (u64)d0 & 0x0fffffffffff;
-        h1 = (u64)(d1 += (u64)(d0 >> 44)) & 0x0fffffffffff;
-        h2 = (u64)(d2 += (u64)(d1 >> 44)) & 0x03ffffffffff; /* last 42 bits */
+        h0 = (u64)d0 & 0xFF;
+        h1 = (u64)(d1 += (u64)(d0 >> 44)) & 0xFF;
+        h2 = (u64)(d2 += (u64)(d1 >> 44)) & 0xFF; /* last 42 bits */
 
         c = (d2 >> 42);
         h0 += c + (c << 2);

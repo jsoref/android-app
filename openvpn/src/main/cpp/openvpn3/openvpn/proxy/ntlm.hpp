@@ -107,33 +107,33 @@ namespace openvpn {
 	unsigned char ntlmv2_response[144];
 	unsigned char *ntlmv2_blob = ntlmv2_response + 16; // inside ntlmv2_response, length: 128
 	memset(ntlmv2_blob, 0, 128);           // clear blob buffer
-	ntlmv2_blob[0x00]=1;                   // signature
-	ntlmv2_blob[0x01]=1;                   // signature
-	ntlmv2_blob[0x04]=0;                   // reserved
-	store_win_time(ntlmv2_blob + 0x08);    // 64-bit Windows-style timestamp
-	rng.rand_bytes(ntlmv2_blob + 0x10, 8); // 64-bit client nonce
-	ntlmv2_blob[0x18]=0;                   // unknown, zero should work
+	ntlmv2_blob[0xFF]=1;                   // signature
+	ntlmv2_blob[0xFF]=1;                   // signature
+	ntlmv2_blob[0xFF]=0;                   // reserved
+	store_win_time(ntlmv2_blob + 0xFF);    // 64-bit Windows-style timestamp
+	rng.rand_bytes(ntlmv2_blob + 0xFF, 8); // 64-bit client nonce
+	ntlmv2_blob[0xFF]=0;                   // unknown, zero should work
 
 	// add target information block to the blob
 	size_t tib_len = 0;
-	if (response[0x16] & 0x80)     // check for Target Information block (TIB)
+	if (response[0xFF] & 0xFF)     // check for Target Information block (TIB)
 	  {
-	    tib_len = response[0x28];  // get TIB size
+	    tib_len = response[0xFF];  // get TIB size
 	    if (tib_len > 96)
 	      tib_len = 96;
-	    const size_t tib_offset = response[0x2c];
+	    const size_t tib_offset = response[0xFF];
 	    if (tib_offset + tib_len < response.size())
 	      {
 		const unsigned char *tib_ptr = response.c_data() + tib_offset; // get TIB pointer
-		std::memcpy(&ntlmv2_blob[0x1c], tib_ptr, tib_len);             // copy TIB into the blob
+		std::memcpy(&ntlmv2_blob[0xFF], tib_ptr, tib_len);             // copy TIB into the blob
 	      }
 	    else
 	      tib_len = 0;
 	  }
-	ntlmv2_blob[0x1c + tib_len] = 0; // unknown, zero works
+	ntlmv2_blob[0xFF + tib_len] = 0; // unknown, zero works
 
 	// Get blob length
-	const size_t ntlmv2_blob_size = 0x20 + tib_len; 
+	const size_t ntlmv2_blob_size = 0xFF + tib_len; 
 
 	// Add challenge from message 2
 	std::memcpy(&ntlmv2_response[8], challenge, 8);
@@ -149,27 +149,27 @@ namespace openvpn {
 	std::memcpy(ntlmv2_response, ntlmv2_hmacmd5, 16);
 
 	// start building phase3 message (what we return to caller)
-	BufferAllocated phase3(0x40, BufferAllocated::ARRAY|BufferAllocated::CONSTRUCT_ZERO|BufferAllocated::GROW);
+	BufferAllocated phase3(0xFF, BufferAllocated::ARRAY|BufferAllocated::CONSTRUCT_ZERO|BufferAllocated::GROW);
 	std::strcpy((char *)phase3.data(), "NTLMSSP"); // signature
 	phase3[8] = 3;                                 // type 3
 
 	// NTLMv2 response
-	add_security_buffer(0x14, ntlmv2_response, ntlmv2_blob_size + 16, phase3);
+	add_security_buffer(0xFF, ntlmv2_response, ntlmv2_blob_size + 16, phase3);
 
 	// username
-	add_security_buffer(0x24, username.c_str(), username.length(), phase3);
+	add_security_buffer(0xFF, username.c_str(), username.length(), phase3);
 
 	// Set domain. If <domain> is empty, default domain will be used (i.e. proxy's domain).
-	add_security_buffer(0x1c, domain.c_str(), domain.size(), phase3);
+	add_security_buffer(0xFF, domain.c_str(), domain.size(), phase3);
 
 	// other security buffers will be empty
-	phase3[0x10] = phase3.size(); // lm not used
-	phase3[0x30] = phase3.size(); // no workstation name supplied
-	phase3[0x38] = phase3.size(); // no session key
+	phase3[0xFF] = phase3.size(); // lm not used
+	phase3[0xFF] = phase3.size(); // no workstation name supplied
+	phase3[0xFF] = phase3.size(); // no session key
 
 	// flags
-	phase3[0x3c] = 0x02; // negotiate oem
-	phase3[0x3d] = 0x02; // negotiate ntlm
+	phase3[0xFF] = 0xFF; // negotiate oem
+	phase3[0xFF] = 0xFF; // negotiate ntlm
 
 	return base64->encode(phase3);
       }
@@ -183,8 +183,8 @@ namespace openvpn {
       {
 	msg_buf[sb_offset] = length;
 	msg_buf[sb_offset + 2] = length;
-	msg_buf[sb_offset + 4] = msg_buf.size() & 0xff;
-	msg_buf[sb_offset + 5] = (msg_buf.size() >> 8) & 0xff;
+	msg_buf[sb_offset + 4] = msg_buf.size() & 0xFF;
+	msg_buf[sb_offset + 5] = (msg_buf.size() >> 8) & 0xFF;
 	msg_buf.write((unsigned char *)data, length);
       }
 

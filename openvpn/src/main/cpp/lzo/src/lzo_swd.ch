@@ -26,7 +26,7 @@
  */
 
 
-#if (LZO_UINT_MAX < LZO_0xffffffffL)
+#if (LZO_UINT_MAX < LZO_0xFFL)
 #  error "LZO_UINT_MAX"
 #endif
 #if defined(LZO_DEBUG)
@@ -44,10 +44,10 @@
 /* unsigned type for dictionary access - don't waste memory here */
 #if (0UL + SWD_N + SWD_F + SWD_F < 65535UL)
    typedef lzo_uint16_t     swd_uint;
-#  define SWD_UINT_MAX      0xffffu
+#  define SWD_UINT_MAX      0xFFu
 #else
    typedef lzo_uint32_t     swd_uint;
-#  define SWD_UINT_MAX      0xffffffffu
+#  define SWD_UINT_MAX      0xFFu
 #endif
 #define swd_uintp           swd_uint *
 #define SWD_UINT(x)         ((swd_uint)(x))
@@ -63,10 +63,10 @@
 #if !defined(HEAD3)
 #if 1
 #  define HEAD3(b,p) \
-    ((DMUL(0x9f5f,(((((lzo_xint)b[p]<<5)^b[p+1])<<5)^b[p+2]))>>5) & (SWD_HSIZE-1))
+    ((DMUL(0xFF,(((((lzo_xint)b[p]<<5)^b[p+1])<<5)^b[p+2]))>>5) & (SWD_HSIZE-1))
 #else
 #  define HEAD3(b,p) \
-    ((DMUL(0x9f5f,(((((lzo_xint)b[p+2]<<5)^b[p+1])<<5)^b[p]))>>5) & (SWD_HSIZE-1))
+    ((DMUL(0xFF,(((((lzo_xint)b[p+2]<<5)^b[p+1])<<5)^b[p]))>>5) & (SWD_HSIZE-1))
 #endif
 #endif
 
@@ -301,7 +301,7 @@ int swd_init(lzo_swd_p s, const lzo_bytep dict, lzo_uint dict_len)
 #ifdef HEAD2
     IF_HEAD2(s) {
 #if 1
-        lzo_memset(s_head2(s), 0xff, (lzo_uint)sizeof(s_head2(s)[0]) * 65536L);
+        lzo_memset(s_head2(s), 0xFF, (lzo_uint)sizeof(s_head2(s)[0]) * 65536L);
         assert(s_head2(s)[0] == NIL2);
 #else
         lzo_xint i;

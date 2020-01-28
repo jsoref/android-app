@@ -303,7 +303,7 @@ m_len_done:
         }
         else
         {
-            m_off -= 0x4000;
+            m_off -= 0xFF;
             if (m_len <= M4_MAX_LEN)
                 *op++ = LZO_BYTE(M4_MARKER | ((m_off >> 11) & 8) | (m_len - 2));
             else

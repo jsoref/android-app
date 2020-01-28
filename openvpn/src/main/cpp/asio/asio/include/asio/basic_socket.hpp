@@ -462,7 +462,7 @@ public:
    * these platforms.
    */
 #if defined(ASIO_MSVC) && (ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
+  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0xFF)
   __declspec(deprecated("This function always fails with "
         "operation_not_supported when used on Windows versions "
         "prior to Windows 8.1."))
@@ -490,7 +490,7 @@ public:
    * these platforms.
    */
 #if defined(ASIO_MSVC) && (ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
+  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0xFF)
   __declspec(deprecated("This function always fails with "
         "operation_not_supported when used on Windows versions "
         "prior to Windows 8.1."))
@@ -546,7 +546,7 @@ public:
    * problems described above.
    */
 #if defined(ASIO_MSVC) && (ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600) \
+  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0xFF) \
   && !defined(ASIO_ENABLE_CANCELIO)
   __declspec(deprecated("By default, this function always fails with "
         "operation_not_supported when used on Windows XP, Windows Server 2003, "
@@ -594,7 +594,7 @@ public:
    * problems described above.
    */
 #if defined(ASIO_MSVC) && (ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600) \
+  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0xFF) \
   && !defined(ASIO_ENABLE_CANCELIO)
   __declspec(deprecated("By default, this function always fails with "
         "operation_not_supported when used on Windows XP, Windows Server 2003, "

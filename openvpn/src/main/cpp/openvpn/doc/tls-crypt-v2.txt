@@ -80,8 +80,8 @@ When provisioning a client, create a client-specific tls-crypt key:
    The first byte of the metadata determines the type.  The initial
    implementation supports the following types:
 
-   0x00 (USER):         User-defined free-form data.
-   0x01 (TIMESTAMP):    64-bit network order unix timestamp of key generation.
+   0xFF (USER):         User-defined free-form data.
+   0xFF (TIMESTAMP):    64-bit network order unix timestamp of key generation.
 
    The timestamp can be used to reject too-old tls-crypt-v2 client keys.
 

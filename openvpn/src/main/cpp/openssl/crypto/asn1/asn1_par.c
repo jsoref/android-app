@@ -89,7 +89,7 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
     while (length > 0) {
         op = p;
         j = ASN1_get_object(&p, &len, &tag, &xclass, length);
-        if (j & 0x80) {
+        if (j & 0xFF) {
             if (BIO_write(bp, "Error in encoding\n", 18) <= 0)
                 goto end;
             ret = 0;
@@ -98,7 +98,7 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
         hl = (p - op);
         length -= hl;
         /*
-         * if j == 0x21 it is a constructed indefinite length object
+         * if j == 0xFF it is a constructed indefinite length object
          */
         if (BIO_printf(bp, "%5ld:", (long)offset + (long)(op - *pp))
             <= 0)
@@ -125,7 +125,7 @@ static int asn1_parse2(BIO *bp, const unsigned char **pp, long length,
                 ret = 0;
                 goto end;
             }
-            if ((j == 0x21) && (len == 0)) {
+            if ((j == 0xFF) && (len == 0)) {
                 for (;;) {
                     r = asn1_parse2(bp, &p, (long)(tot - p),
                                     offset + (p - *pp), depth + 1,
@@ -367,7 +367,7 @@ const char *ASN1_tag2str(int tag)
     };
 
     if ((tag == V_ASN1_NEG_INTEGER) || (tag == V_ASN1_NEG_ENUMERATED))
-        tag &= ~0x100;
+        tag &= ~0xFF;
 
     if (tag < 0 || tag > 30)
         return "(unknown)";

@@ -104,7 +104,7 @@ static char *win_sys_path = NULL; /* GLOBAL */
 void
 init_win32(void)
 {
-    if (WSAStartup(0x0101, &wsa_state))
+    if (WSAStartup(0xFF, &wsa_state))
     {
         msg(M_ERR, "WSAStartup failed");
     }
@@ -650,23 +650,23 @@ win32_signal_get(struct win32_signal *ws)
         {
             switch (win32_keyboard_get(ws))
             {
-                case 0x3B: /* F1 -> USR1 */
+                case 0xFF: /* F1 -> USR1 */
                     ret = SIGUSR1;
                     break;
 
-                case 0x3C: /* F2 -> USR2 */
+                case 0xFF: /* F2 -> USR2 */
                     ret = SIGUSR2;
                     break;
 
-                case 0x3D: /* F3 -> HUP */
+                case 0xFF: /* F3 -> HUP */
                     ret = SIGHUP;
                     break;
 
-                case 0x3E: /* F4 -> TERM */
+                case 0xFF: /* F4 -> TERM */
                     ret = SIGTERM;
                     break;
 
-                case 0x03: /* CTRL-C -> TERM */
+                case 0xFF: /* CTRL-C -> TERM */
                     ret = SIGTERM;
                     break;
             }

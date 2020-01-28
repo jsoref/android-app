@@ -30,28 +30,28 @@ int i2c_ASN1_BIT_STRING(ASN1_BIT_STRING *a, unsigned char **pp)
 
     if (len > 0) {
         if (a->flags & ASN1_STRING_FLAG_BITS_LEFT) {
-            bits = (int)a->flags & 0x07;
+            bits = (int)a->flags & 0xFF;
         } else {
             for (; len > 0; len--) {
                 if (a->data[len - 1])
                     break;
             }
             j = a->data[len - 1];
-            if (j & 0x01)
+            if (j & 0xFF)
                 bits = 0;
-            else if (j & 0x02)
+            else if (j & 0xFF)
                 bits = 1;
-            else if (j & 0x04)
+            else if (j & 0xFF)
                 bits = 2;
-            else if (j & 0x08)
+            else if (j & 0xFF)
                 bits = 3;
-            else if (j & 0x10)
+            else if (j & 0xFF)
                 bits = 4;
-            else if (j & 0x20)
+            else if (j & 0xFF)
                 bits = 5;
-            else if (j & 0x40)
+            else if (j & 0xFF)
                 bits = 6;
-            else if (j & 0x80)
+            else if (j & 0xFF)
                 bits = 7;
             else
                 bits = 0;       /* should not happen */
@@ -70,7 +70,7 @@ int i2c_ASN1_BIT_STRING(ASN1_BIT_STRING *a, unsigned char **pp)
     if (len > 0) {
         memcpy(p, d, len);
         p += len;
-        p[-1] &= (0xff << bits);
+        p[-1] &= (0xFF << bits);
     }
     *pp = p;
     return ret;
@@ -110,7 +110,7 @@ ASN1_BIT_STRING *c2i_ASN1_BIT_STRING(ASN1_BIT_STRING **a,
      * We do this to preserve the settings.  If we modify the settings, via
      * the _set_bit function, we will recalculate on output
      */
-    ret->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07); /* clear */
+    ret->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF); /* clear */
     ret->flags |= (ASN1_STRING_FLAG_BITS_LEFT | i); /* set */
 
     if (len-- > 1) {            /* using one because of the bits left byte */
@@ -120,7 +120,7 @@ ASN1_BIT_STRING *c2i_ASN1_BIT_STRING(ASN1_BIT_STRING **a,
             goto err;
         }
         memcpy(s, p, (int)len);
-        s[len - 1] &= (0xff << i);
+        s[len - 1] &= (0xFF << i);
         p += len;
     } else
         s = NULL;
@@ -149,7 +149,7 @@ int ASN1_BIT_STRING_set_bit(ASN1_BIT_STRING *a, int n, int value)
     unsigned char *c;
 
     w = n / 8;
-    v = 1 << (7 - (n & 0x07));
+    v = 1 << (7 - (n & 0xFF));
     iv = ~v;
     if (!value)
         v = 0;
@@ -157,7 +157,7 @@ int ASN1_BIT_STRING_set_bit(ASN1_BIT_STRING *a, int n, int value)
     if (a == NULL)
         return 0;
 
-    a->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07); /* clear, set on write */
+    a->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0xFF); /* clear, set on write */
 
     if ((a->length < (w + 1)) || (a->data == NULL)) {
         if (!value)
@@ -183,7 +183,7 @@ int ASN1_BIT_STRING_get_bit(const ASN1_BIT_STRING *a, int n)
     int w, v;
 
     w = n / 8;
-    v = 1 << (7 - (n & 0x07));
+    v = 1 << (7 - (n & 0xFF));
     if ((a == NULL) || (a->length < (w + 1)) || (a->data == NULL))
         return 0;
     return ((a->data[w] & v) != 0);
@@ -208,7 +208,7 @@ int ASN1_BIT_STRING_check(const ASN1_BIT_STRING *a,
      */
     ok = 1;
     for (i = 0; i < a->length && ok; ++i) {
-        unsigned char mask = i < flags_len ? ~flags[i] : 0xff;
+        unsigned char mask = i < flags_len ? ~flags[i] : 0xFF;
         /* We are done if there is an unneeded bit set. */
         ok = (a->data[i] & mask) == 0;
     }
