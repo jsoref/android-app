@@ -5895,7 +5895,7 @@ $as_echo_n "checking for a sed that does not truncate output... " >&6; }
 if ${ac_cv_path_SED+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
+            ac_script=s/a/b/
      for ac_i in 1 2 3 4 5 6 7; do
        ac_script="$ac_script$as_nl$ac_script"
      done
