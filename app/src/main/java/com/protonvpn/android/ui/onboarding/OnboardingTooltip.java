@@ -241,10 +241,10 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         mRootView.addView(mOverlay);
     }
 
-    private PointF calculePopupLocation() {
+    private PointF calculatePopupLocation() {
         PointF location = new PointF();
 
-        final RectF anchorRect = SimpleTooltipUtils.calculeRectInWindow(mAnchorView);
+        final RectF anchorRect = SimpleTooltipUtils.calculateRectInWindow(mAnchorView);
         final PointF anchorCenter = new PointF(anchorRect.centerX(), anchorRect.centerY());
 
         switch (mGravity) {
@@ -426,7 +426,7 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
 
                 SimpleTooltipUtils.removeOnGlobalLayoutListener(popup.getContentView(), this);
                 popup.getContentView().getViewTreeObserver().addOnGlobalLayoutListener(mArrowLayoutListener);
-                PointF location = calculePopupLocation();
+                PointF location = calculatePopupLocation();
                 popup.setClippingEnabled(true);
                 popup.update((int) location.x, (int) location.y, popup.getWidth(), popup.getHeight());
                 popup.getContentView().requestLayout();
@@ -450,8 +450,8 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
                     .addOnGlobalLayoutListener(mAnimationLayoutListener);
                 popup.getContentView().getViewTreeObserver().addOnGlobalLayoutListener(mShowLayoutListener);
                 if (mShowArrow) {
-                    RectF anchorRect = SimpleTooltipUtils.calculeRectOnScreen(mAnchorView);
-                    RectF contentViewRect = SimpleTooltipUtils.calculeRectOnScreen(mContentLayout);
+                    RectF anchorRect = SimpleTooltipUtils.calculateRectOnScreen(mAnchorView);
+                    RectF contentViewRect = SimpleTooltipUtils.calculateRectOnScreen(mContentLayout);
                     float x, y;
                     if (mArrowDirection == ArrowDrawable.TOP || mArrowDirection == ArrowDrawable.BOTTOM) {
                         x = mContentLayout.getPaddingLeft() + SimpleTooltipUtils.pxFromDp(2);
