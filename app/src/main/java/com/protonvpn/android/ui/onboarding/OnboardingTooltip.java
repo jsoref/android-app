@@ -349,11 +349,8 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
     }
 
     /**
-     * <div class="pt">Indica se o tooltip está sendo exibido na tela.</div>
      * <div class=en">Indicate whether this tooltip is showing on screen.</div>
      *
-     * @return <div class="pt"><tt>true</tt> se o tooltip estiver sendo exibido, <tt>false</tt> caso
-     * contrário</div>
      * <div class="en"><tt>true</tt> if the popup is showing, <tt>false</tt> otherwise</div>
      */
     public boolean isShowing() {
@@ -558,9 +555,6 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
     }
 
     /**
-     * <div class="pt">Listener utilizado para chamar o <tt>SimpleTooltip#dismiss()</tt> quando a
-     * <tt>View</tt> root é encerrada sem que a tooltip seja fechada.
-     * Pode ocorrer quando a tooltip é utilizada dentro de Dialogs.</div>
      */
     private final ViewTreeObserver.OnGlobalLayoutListener mAutoDismissLayoutListener =
         new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -588,7 +582,6 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
     }
 
     /**
-     * <div class="pt">Classe responsável por facilitar a criação do objeto <tt>SimpleTooltip</tt>.</div>
      * <div class="en">Class responsible for making it easier to build the object <tt>SimpleTooltip</tt>
      * .</div>
      *
@@ -741,10 +734,6 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         }
 
         /**
-         * <div class="pt">Define o texto que sera exibido no <tt>{@link TextView}</tt> dentro do tooltip
-         * .</div>
-         *
-         * @param text <div class="pt">texto que sera exibido.</div>
          * @return this
          */
         public Builder text(CharSequence text) {
@@ -753,10 +742,7 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         }
 
         /**
-         * <div class="pt">Define o texto que sera exibido no <tt>{@link TextView}</tt> dentro do tooltip
-         * .</div>
          *
-         * @param textRes <div class="pt">id do resource da String.</div>
          * @return this
          */
         public Builder text(@StringRes int textRes) {
@@ -849,11 +835,8 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         }
 
         /**
-         * <div class="pt">Indica se deve ser gerada a seta indicativa. Padrão é <tt>true</tt>.</div>
          * <div class="en">Indicates whether to be generated indicative arrow. Default is <tt>true</tt>.</div>
          *
-         * @param showArrow <div class="pt"><tt>true</tt> para exibir a seta, <tt>false</tt> caso contrário
-         *                  .</div>
          *                  <div class="en"><tt>true</tt> to show arrow, <tt>false</tt> otherwise.</div>
          * @return this
          */
@@ -898,10 +881,8 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         }
 
         /**
-         * <div class="pt">Habilita o foco no conteúdo da tooltip. Padrão é <tt>false</tt>.</div>
          * <div class="en">Enables focus in the tooltip content. Default is <tt>false</tt>.</div>
          *
-         * @param focusable <div class="pt">Pode receber o foco.</div>
          *                  <div class="en">Can receive focus.</div>
          * @return this
          */
@@ -911,17 +892,12 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         }
 
         /**
-         * <div class="pt">Configura o formato do Shape em destaque. <br/>
-         * <tt>{@link OverlayView#HIGHLIGHT_SHAPE_OVAL}</tt> - Destaque oval (padrão). <br/>
-         * <tt>{@link OverlayView#HIGHLIGHT_SHAPE_RECTANGULAR}</tt> - Destaque retangular. <br/>
-         * </div>
          * <p>
          * <div class="en">Configure the the Shape type. <br/>
          * <tt>{@link OverlayView#HIGHLIGHT_SHAPE_OVAL}</tt> - Shape oval (default). <br/>
          * <tt>{@link OverlayView#HIGHLIGHT_SHAPE_RECTANGULAR}</tt> - Shape rectangular. <br/>
          * </div>
          *
-         * @param highlightShape <div class="pt">Formato do Shape.</div>
          *                       <div class="en">Shape type.</div>
          * @return this
          * @see OverlayView#HIGHLIGHT_SHAPE_OVAL
@@ -939,15 +915,10 @@ public final class OnboardingTooltip implements PopupWindow.OnDismissListener {
         }
 
         /**
-         * <div class="pt">Define o comportamento do overlay. Utilizado para casos onde a view de Overlay
-         * não pode ser MATCH_PARENT.
-         * Como em uma Dialog ou DialogFragment.</div>
          * <div class="en">Sets the behavior of the overlay view. Used for cases where the Overlay view can
          * not be MATCH_PARENT.
          * Like in a Dialog or DialogFragment.</div>
          *
-         * @param overlayMatchParent <div class="pt">True se o overlay deve ser MATCH_PARENT. False se ele
-         *                           deve obter o mesmo tamanho do pai.</div>
          *                           <div class="en">True if the overlay should be MATCH_PARENT. False if
          *                           it should get the same size as the parent.</div>
          * @return this
